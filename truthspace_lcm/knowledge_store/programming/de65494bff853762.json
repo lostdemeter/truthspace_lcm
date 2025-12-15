@@ -1,0 +1,32 @@
+{
+  "id": "de65494bff853762",
+  "name": "element.get",
+  "domain": "programming",
+  "entry_type": "method",
+  "description": "Get attribute value from HTML element",
+  "position": [
+    1.0170588235294118,
+    0.006608131225818668,
+    -0.009840886070104055,
+    -0.05357815749278873,
+    0.9980012332135687,
+    -0.006703212250650589,
+    0.030283306408967536,
+    -0.0045163486795163485
+  ],
+  "keywords": [
+    "attribute",
+    "get",
+    "href",
+    "src",
+    "class"
+  ],
+  "metadata": {
+    "syntax": "element.get(attr_name)",
+    "returns": "str",
+    "example": "url = link.get('href')"
+  },
+  "created_at": "2025-12-14T19:06:00.274714",
+  "updated_at": "2025-12-14T19:06:00.274714",
+  "version": 1
+}

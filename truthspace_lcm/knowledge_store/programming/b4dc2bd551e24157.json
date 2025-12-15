@@ -1,0 +1,35 @@
+{
+  "id": "b4dc2bd551e24157",
+  "name": "mkdir",
+  "domain": "programming",
+  "entry_type": "command",
+  "description": "Create new directory/folder",
+  "position": [
+    1.0170588235294118,
+    -0.10257447302555638,
+    -0.4388090076077315,
+    -0.007537421340536086,
+    -0.016713412537710505,
+    0.5390894828339942,
+    -0.24742404835238027,
+    -0.6668979316517801
+  ],
+  "keywords": [
+    "bash",
+    "shell",
+    "command",
+    "create",
+    "directory",
+    "folder",
+    "mkdir",
+    "make"
+  ],
+  "metadata": {
+    "syntax": "mkdir <dirname>",
+    "example": "mkdir new_folder",
+    "flags": "-p (create parents), -v (verbose)"
+  },
+  "created_at": "2025-12-15T08:42:26.902414",
+  "updated_at": "2025-12-15T08:42:26.902414",
+  "version": 1
+}

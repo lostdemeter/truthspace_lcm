@@ -1,0 +1,31 @@
+{
+  "id": "3563a701a2ca3f3b",
+  "name": "os",
+  "domain": "programming",
+  "entry_type": "library",
+  "description": "Operating system interface - files, directories, environment",
+  "position": [
+    1.0170588235294118,
+    -0.0683092116572396,
+    0.034320137036189864,
+    -0.000993187245420277,
+    0.027036763903107754,
+    0.15570968925422468,
+    0.9844280569713654,
+    0.008938685208782568
+  ],
+  "keywords": [
+    "os",
+    "file",
+    "directory",
+    "path",
+    "system",
+    "environment"
+  ],
+  "metadata": {
+    "import": "import os"
+  },
+  "created_at": "2025-12-14T19:06:00.270723",
+  "updated_at": "2025-12-14T19:06:00.270723",
+  "version": 1
+}

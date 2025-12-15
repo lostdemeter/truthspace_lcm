@@ -1,0 +1,32 @@
+{
+  "id": "e5c9e01710e8503b",
+  "name": "create_file_with_content_pattern",
+  "domain": "programming",
+  "entry_type": "pattern",
+  "description": "Create file with content using echo",
+  "position": [
+    1.0170588235294118,
+    0.18792840025883736,
+    -0.31567937002334223,
+    0.00907704258853063,
+    -0.26592372916769297,
+    0.6713649647887266,
+    0.1670848209814708,
+    -0.561768080201283
+  ],
+  "keywords": [
+    "bash",
+    "shell",
+    "command",
+    "create",
+    "file",
+    "content",
+    "write"
+  ],
+  "metadata": {
+    "code": "echo 'content here' > filename.txt"
+  },
+  "created_at": "2025-12-15T08:42:26.907320",
+  "updated_at": "2025-12-15T08:42:26.907320",
+  "version": 1
+}

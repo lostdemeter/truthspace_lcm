@@ -1,0 +1,35 @@
+{
+  "id": "da33d5d143cb768a",
+  "name": "scp",
+  "domain": "programming",
+  "entry_type": "command",
+  "description": "Secure copy files over SSH",
+  "position": [
+    1.0170588235294118,
+    0.07747971352927738,
+    -0.6482213656657367,
+    -0.422686357966652,
+    0.41808360270748696,
+    0.21863087481033724,
+    -0.2431789028592171,
+    -0.3367682597955721
+  ],
+  "keywords": [
+    "bash",
+    "shell",
+    "command",
+    "scp",
+    "copy",
+    "remote",
+    "secure",
+    "transfer"
+  ],
+  "metadata": {
+    "syntax": "scp <source> <dest>",
+    "example": "scp file.txt user@host:/path/",
+    "flags": "-r (recursive), -P (port)"
+  },
+  "created_at": "2025-12-15T08:42:26.906653",
+  "updated_at": "2025-12-15T08:42:26.906653",
+  "version": 1
+}

@@ -1,0 +1,15 @@
+# TruthSpace LCM Dependencies
+
+# Core dependencies
+numpy>=1.20.0
+
+# Web requests
+requests>=2.25.0
+
+# HTML parsing
+beautifulsoup4>=4.9.0
+
+# Development dependencies (optional)
+# pytest>=7.0.0
+# black>=22.0.0
+# flake8>=4.0.0

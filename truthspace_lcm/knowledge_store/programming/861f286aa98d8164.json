@@ -1,0 +1,30 @@
+{
+  "id": "861f286aa98d8164",
+  "name": "BeautifulSoup",
+  "domain": "programming",
+  "entry_type": "class",
+  "description": "Parse HTML/XML document for extraction",
+  "position": [
+    1.618033988749895,
+    0.15013727401068055,
+    0.10548105917673448,
+    0.3164431775302035,
+    -0.26562748478812714,
+    0.6582942014314452,
+    0.19633335832165907,
+    0.5689817717635534
+  ],
+  "keywords": [
+    "parse",
+    "html",
+    "dom",
+    "soup"
+  ],
+  "metadata": {
+    "syntax": "BeautifulSoup(markup, 'html.parser')",
+    "example": "soup = BeautifulSoup(html_content, 'html.parser')"
+  },
+  "created_at": "2025-12-14T19:06:00.274283",
+  "updated_at": "2025-12-14T19:06:00.274283",
+  "version": 1
+}

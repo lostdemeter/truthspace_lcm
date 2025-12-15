@@ -1,0 +1,31 @@
+{
+  "id": "599998b5adcc1ae3",
+  "name": "list.append",
+  "domain": "programming",
+  "entry_type": "method",
+  "description": "Add item to end of list",
+  "position": [
+    1.0170588235294118,
+    -0.06040190495116464,
+    -0.009094219397141643,
+    -0.01732878621445398,
+    0.9947830789506508,
+    -0.007465403982728216,
+    -0.05958749724395792,
+    0.05261978686007827
+  ],
+  "keywords": [
+    "append",
+    "add",
+    "push",
+    "insert",
+    "end"
+  ],
+  "metadata": {
+    "syntax": "list.append(item)",
+    "example": "my_list.append(new_item)"
+  },
+  "created_at": "2025-12-14T19:06:00.272380",
+  "updated_at": "2025-12-14T19:06:00.272380",
+  "version": 1
+}

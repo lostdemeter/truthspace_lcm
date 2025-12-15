@@ -1,0 +1,32 @@
+{
+  "id": "cc6eb89a6a9eb29a",
+  "name": "response.text",
+  "domain": "programming",
+  "entry_type": "attribute",
+  "description": "Get response body as string (HTML, text content)",
+  "position": [
+    1.0170588235294118,
+    -0.22918442668544778,
+    -0.3745884436157924,
+    0.19179482233193063,
+    -0.6543180761865504,
+    0.3510468408746889,
+    0.3787428440995164,
+    0.27488283200641317
+  ],
+  "keywords": [
+    "text",
+    "html",
+    "content",
+    "body",
+    "string",
+    "response"
+  ],
+  "metadata": {
+    "returns": "str",
+    "example": "html_content = response.text"
+  },
+  "created_at": "2025-12-14T19:06:00.269554",
+  "updated_at": "2025-12-14T19:06:00.269554",
+  "version": 1
+}

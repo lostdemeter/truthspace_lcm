@@ -1,0 +1,32 @@
+{
+  "id": "5fb5cf4ad7d2a607",
+  "name": "response.json",
+  "domain": "programming",
+  "entry_type": "method",
+  "description": "Parse response body as JSON",
+  "position": [
+    1.0170588235294118,
+    0.04951910492120336,
+    -0.0224070455946367,
+    0.028556172452208522,
+    0.997958931255905,
+    0.0028416419569081875,
+    -0.012158500832017003,
+    -0.012344838009519184
+  ],
+  "keywords": [
+    "json",
+    "parse",
+    "data",
+    "api",
+    "response"
+  ],
+  "metadata": {
+    "syntax": "response.json()",
+    "returns": "dict or list",
+    "example": "data = response.json()"
+  },
+  "created_at": "2025-12-14T19:06:00.269624",
+  "updated_at": "2025-12-14T19:06:00.269624",
+  "version": 1
+}

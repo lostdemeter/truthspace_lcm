@@ -1,0 +1,32 @@
+{
+  "id": "ac0600dd4249c718",
+  "name": "list_large_files_pattern",
+  "domain": "programming",
+  "entry_type": "pattern",
+  "description": "Find largest files in directory",
+  "position": [
+    1.0170588235294118,
+    -0.12748915257406787,
+    0.044865520592267734,
+    -0.30250910419142923,
+    -0.5077355449204166,
+    0.6863092011391455,
+    -0.12837757872440972,
+    -0.3806906054215198
+  ],
+  "keywords": [
+    "bash",
+    "shell",
+    "command",
+    "large",
+    "files",
+    "size",
+    "biggest"
+  ],
+  "metadata": {
+    "code": "du -ah . | sort -rh | head -20"
+  },
+  "created_at": "2025-12-15T08:42:26.907834",
+  "updated_at": "2025-12-15T08:42:26.907834",
+  "version": 1
+}

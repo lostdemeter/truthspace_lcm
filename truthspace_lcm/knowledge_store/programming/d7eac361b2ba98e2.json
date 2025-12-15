@@ -1,0 +1,30 @@
+{
+  "id": "d7eac361b2ba98e2",
+  "name": "element.text",
+  "domain": "programming",
+  "entry_type": "attribute",
+  "description": "Get text content of HTML element",
+  "position": [
+    1.0170588235294118,
+    -0.1630775259217544,
+    -0.33969113107021554,
+    0.45313636649404476,
+    -0.2339807980616476,
+    0.5575575491000692,
+    0.5047023825957853,
+    -0.17983648115482
+  ],
+  "keywords": [
+    "text",
+    "content",
+    "inner",
+    "string"
+  ],
+  "metadata": {
+    "returns": "str",
+    "example": "title_text = title_element.text"
+  },
+  "created_at": "2025-12-14T19:06:00.274608",
+  "updated_at": "2025-12-14T19:06:00.274608",
+  "version": 1
+}
