@@ -21,6 +21,8 @@ from enum import Enum
 from truthspace_lcm.core.code_generator import CodeGenerator
 from truthspace_lcm.core.bash_generator import BashGenerator
 from truthspace_lcm.core.executor import CodeExecutor, ExecutionResult, ExecutionStatus, ValidationRule
+from truthspace_lcm.core.knowledge_acquisition import KnowledgeAcquisitionSystem, KnowledgeDomain
+from truthspace_lcm.core.intent_manager import IntentManager, StepType as IntentStepType
 
 
 class StepType(Enum):
@@ -50,6 +52,7 @@ class TaskStep:
     generated_code: str = ""
     output: str = ""
     error: str = ""
+    knowledge_acquired: bool = False  # True if we had to learn something new
 
 
 @dataclass
@@ -61,6 +64,7 @@ class TaskPlan:
     current_step: int = 0
     status: StepStatus = StepStatus.PENDING
     final_output: str = ""
+    knowledge_gaps_filled: List[str] = field(default_factory=list)  # Knowledge acquired during planning
 
 
 class TaskPlanner:
@@ -74,9 +78,13 @@ class TaskPlanner:
                 os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
                 "knowledge_store"
             )
+        self.storage_dir = storage_dir
         self.code_generator = CodeGenerator(storage_dir)
         self.bash_generator = BashGenerator(storage_dir)
         self.executor = CodeExecutor(working_dir=working_dir)
+        self.knowledge_system = KnowledgeAcquisitionSystem(storage_dir)
+        self.intent_manager = IntentManager(storage_dir)
+        self.auto_learn = True  # Automatically acquire missing knowledge
         self._init_task_patterns()
     
     def _init_task_patterns(self):
@@ -156,6 +164,18 @@ class TaskPlanner:
         """Determine if a step should use Python or Bash."""
         step_lower = step_desc.lower()
         
+        # FIRST: Check learned intents from knowledge base
+        # This allows newly learned commands to determine step type without code changes
+        intent_result = self.intent_manager.get_best_intent(step_desc)
+        if intent_result:
+            intent, confidence = intent_result
+            if confidence >= 0.7:
+                if intent.step_type == IntentStepType.BASH:
+                    return StepType.BASH
+                elif intent.step_type == IntentStepType.PYTHON:
+                    return StepType.PYTHON
+        
+        # FALLBACK: Use hardcoded patterns
         # Bash indicators
         bash_indicators = [
             r"(?:create|make)\s+(?:a\s+)?(?:directory|folder)",
@@ -166,6 +186,16 @@ class TaskPlanner:
             r"(?:compress|archive|tar|zip)",
             r"(?:extract|unzip|untar)",
             r"(?:mkdir|rmdir|rm|cp|mv|ls|cd|pwd)",
+            r"(?:show|display|list|get)\s+(?:my\s+)?(?:network|ip|interface)",
+            r"ifconfig",
+            r"\bip\s+(?:addr|address|link|route)",
+            r"(?:ping|traceroute|netstat|ss)\b",
+            r"(?:systemctl|service)\s+",
+            r"(?:ps|top|htop|kill)\b",
+            r"(?:dmesg|journalctl|syslog)\b",
+            r"(?:kernel|system)\s+(?:messages?|logs?)",
+            r"\blsof\b",
+            r"(?:using|with)\s+(?:ifconfig|ip|dmesg|lsof|ps|netstat)",
         ]
         
         for pattern in bash_indicators:
@@ -351,14 +381,72 @@ class TaskPlanner:
             steps=steps,
         )
     
-    def generate_step_code(self, step: TaskStep) -> str:
-        """Generate code for a single step."""
+    def generate_step_code(self, step: TaskStep, plan: TaskPlan = None) -> Tuple[str, bool]:
+        """
+        Generate code for a single step.
+        
+        Returns:
+            Tuple of (code, knowledge_acquired) where knowledge_acquired is True
+            if we had to learn something new to generate the code.
+        """
+        knowledge_acquired = False
+        
         if step.step_type == StepType.BASH:
             result = self.bash_generator.generate(step.description)
-            return result.command
+            code = result.command
+            
+            # Check if we got a useful result
+            if not result.success or result.confidence < 0.3 or code.startswith("# Could not"):
+                # Knowledge gap detected - try to acquire
+                if self.auto_learn:
+                    print(f"  🧠 Low confidence ({result.confidence:.2f}) - checking for knowledge gaps...")
+                    acq_result = self.knowledge_system.check_and_acquire(
+                        step.description, 
+                        domain=KnowledgeDomain.PROGRAMMING
+                    )
+                    
+                    if acq_result['entry_created']:
+                        knowledge_acquired = True
+                        if plan:
+                            plan.knowledge_gaps_filled.append(acq_result['entry_created'].name)
+                        
+                        # Reload generators to pick up new knowledge
+                        self.bash_generator = BashGenerator(self.storage_dir)
+                        
+                        # Try generating again with new knowledge
+                        result = self.bash_generator.generate(step.description)
+                        code = result.command
+                        print(f"  🔄 Regenerated with new knowledge: {code[:50]}...")
+            
+            return code, knowledge_acquired
         else:
             result = self.code_generator.generate(step.description)
-            return result.code
+            code = result.code
+            
+            # Check if we got a useful result
+            if not code or code.strip() == '"""' or len(code.strip()) < 10:
+                # Knowledge gap detected - try to acquire
+                if self.auto_learn:
+                    print(f"  🧠 Empty/minimal code - checking for knowledge gaps...")
+                    acq_result = self.knowledge_system.check_and_acquire(
+                        step.description,
+                        domain=KnowledgeDomain.PROGRAMMING
+                    )
+                    
+                    if acq_result['entry_created']:
+                        knowledge_acquired = True
+                        if plan:
+                            plan.knowledge_gaps_filled.append(acq_result['entry_created'].name)
+                        
+                        # Reload generators to pick up new knowledge
+                        self.code_generator = CodeGenerator(self.storage_dir)
+                        
+                        # Try generating again with new knowledge
+                        result = self.code_generator.generate(step.description)
+                        code = result.code
+                        print(f"  🔄 Regenerated with new knowledge")
+            
+            return code, knowledge_acquired
     
     def execute_plan(self, plan: TaskPlan, dry_run: bool = True) -> TaskPlan:
         """
@@ -389,8 +477,8 @@ class TaskPlanner:
             plan.current_step = step.id
             
             try:
-                # Generate code for this step
-                step.generated_code = self.generate_step_code(step)
+                # Generate code for this step (with potential knowledge acquisition)
+                step.generated_code, step.knowledge_acquired = self.generate_step_code(step, plan)
                 
                 if dry_run:
                     step.output = f"[DRY RUN] Would execute: {step.generated_code[:100]}..."
@@ -453,8 +541,18 @@ class TaskPlanner:
                 code_preview = step.generated_code.split('\n')[0][:60]
                 lines.append(f"   Code: {code_preview}...")
             
+            if step.knowledge_acquired:
+                lines.append(f"   📚 Knowledge acquired for this step")
+            
             if step.error:
                 lines.append(f"   Error: {step.error}")
+        
+        # Show knowledge gaps filled
+        if plan.knowledge_gaps_filled:
+            lines.append("")
+            lines.append("KNOWLEDGE ACQUIRED:")
+            for name in plan.knowledge_gaps_filled:
+                lines.append(f"  📚 Learned: {name}")
         
         lines.append("-" * 40)
         return "\n".join(lines)

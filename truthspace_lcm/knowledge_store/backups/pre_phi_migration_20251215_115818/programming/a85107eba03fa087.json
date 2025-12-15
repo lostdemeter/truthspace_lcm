@@ -1,0 +1,33 @@
+{
+  "id": "a85107eba03fa087",
+  "name": "unzip",
+  "domain": "programming",
+  "entry_type": "command",
+  "description": "Extract zip archives",
+  "position": [
+    0.2,
+    0.0,
+    -0.8,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "keywords": [
+    "bash",
+    "shell",
+    "command",
+    "unzip",
+    "extract",
+    "decompress"
+  ],
+  "metadata": {
+    "syntax": "unzip <archive.zip>",
+    "example": "unzip archive.zip -d /path/",
+    "flags": "-d (destination), -l (list)"
+  },
+  "created_at": "2025-12-15T08:42:26.907160",
+  "updated_at": "2025-12-15T11:49:02.867400",
+  "version": 1
+}

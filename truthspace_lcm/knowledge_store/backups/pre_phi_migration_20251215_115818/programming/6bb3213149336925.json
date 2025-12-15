@@ -1,0 +1,31 @@
+{
+  "id": "6bb3213149336925",
+  "name": "response.status_code",
+  "domain": "programming",
+  "entry_type": "attribute",
+  "description": "HTTP status code of response (200=OK, 404=Not Found, etc.)",
+  "position": [
+    0.2,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.8,
+    0.0
+  ],
+  "keywords": [
+    "status",
+    "code",
+    "http",
+    "error",
+    "success"
+  ],
+  "metadata": {
+    "returns": "int",
+    "example": "if response.status_code == 200:"
+  },
+  "created_at": "2025-12-14T19:06:00.270228",
+  "updated_at": "2025-12-15T11:49:02.877415",
+  "version": 1
+}

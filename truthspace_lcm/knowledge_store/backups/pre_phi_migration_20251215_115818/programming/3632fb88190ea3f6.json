@@ -1,0 +1,31 @@
+{
+  "id": "3632fb88190ea3f6",
+  "name": "soup.select",
+  "domain": "programming",
+  "entry_type": "method",
+  "description": "Find elements using CSS selector",
+  "position": [
+    0.2,
+    0.0,
+    0.8,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "keywords": [
+    "select",
+    "css",
+    "selector",
+    "query"
+  ],
+  "metadata": {
+    "syntax": "soup.select(css_selector)",
+    "returns": "list",
+    "example": "items = soup.select('div.item')"
+  },
+  "created_at": "2025-12-14T19:06:00.274528",
+  "updated_at": "2025-12-15T11:49:02.872762",
+  "version": 1
+}

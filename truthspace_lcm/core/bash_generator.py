@@ -12,6 +12,7 @@ from typing import Dict, List, Tuple, Optional, Any
 from dataclasses import dataclass
 
 from truthspace_lcm.core.knowledge_manager import KnowledgeManager, KnowledgeDomain, KnowledgeEntry
+from truthspace_lcm.core.intent_manager import IntentManager, StepType
 
 
 @dataclass
@@ -23,6 +24,7 @@ class BashGenerationResult:
     knowledge_used: List[str]
     confidence: float
     warnings: List[str]
+    from_learned_intent: bool = False  # True if resolved via learned intent
 
 
 class BashGenerator:
@@ -34,7 +36,9 @@ class BashGenerator:
                 os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
                 "knowledge_store"
             )
+        self.storage_dir = storage_dir
         self.manager = KnowledgeManager(storage_dir=storage_dir)
+        self.intent_manager = IntentManager(storage_dir=storage_dir)
         self._init_intent_patterns()
     
     def _init_intent_patterns(self):
@@ -77,10 +81,11 @@ class BashGenerator:
                 r"what(?:'s|\s+is)\s+in\s+(?:the\s+)?(?:directory|folder)",
             ],
             "view_file": [
-                r"(?:view|show|display|print|read)\s+(?:the\s+)?(?:contents?\s+of\s+)?",
-                r"contents?\s+of\s+",
-                r"cat\s+",
+                r"(?:view|show|display|print|read)\s+(?:the\s+)?(?:contents?\s+of\s+)[\w./]+",
+                r"contents?\s+of\s+[\w./]+",
+                r"cat\s+[\w./]+",
                 r"what(?:'s|\s+is)\s+in\s+(?:the\s+)?file",
+                r"(?:view|read)\s+(?:the\s+)?(?:file\s+)?[\w./]+\.\w+",  # view readme.md
             ],
             "search_text": [
                 r"search\s+for\s+['\"]",  # search for 'something'
@@ -113,6 +118,27 @@ class BashGenerator:
                 r"unzip\s+",
                 r"decompress\s+",
                 r"unpack\s+",
+            ],
+            "network": [
+                r"(?:show|display|list|get)\s+(?:my\s+)?(?:network|ip|interface)",
+                r"ifconfig",
+                r"\bip\s+(?:addr|address|link|route)",
+                r"network\s+(?:interface|config|status)",
+                r"(?:check|view)\s+(?:my\s+)?(?:ip|network)",
+            ],
+            "process_info": [
+                r"(?:list|show)\s+(?:open\s+)?files?\s+(?:using\s+)?lsof",
+                r"\blsof\b",
+                r"(?:list|show)\s+(?:running\s+)?process",
+                r"\bps\b\s+",
+                r"(?:check|view)\s+(?:running\s+)?process",
+            ],
+            "system_info": [
+                r"\bdmesg\b",
+                r"(?:kernel|system)\s+(?:messages?|logs?|ring\s*buffer)",
+                r"\bjournalctl\b",
+                r"(?:show|view|display)\s+(?:kernel|system)\s+",
+                r"(?:using|with)\s+dmesg",
             ],
         }
     
@@ -199,9 +225,46 @@ class BashGenerator:
         
         return bash_results
     
+    def _try_learned_intent(self, request: str) -> Optional[BashGenerationResult]:
+        """
+        Try to resolve the request using learned intents from the knowledge base.
+        
+        This is checked FIRST, before hardcoded patterns, allowing the LCM
+        to use newly learned commands without code changes.
+        """
+        result = self.intent_manager.get_command_for_request(request, StepType.BASH)
+        
+        if result:
+            command, confidence, intent = result
+            
+            # Only use if confidence is high enough
+            if confidence >= 0.7:
+                return BashGenerationResult(
+                    success=True,
+                    command=command,
+                    explanation=intent.description,
+                    knowledge_used=intent.target_commands,
+                    confidence=confidence,
+                    warnings=[],
+                    from_learned_intent=True
+                )
+        
+        return None
+    
+    def reload_intents(self):
+        """Reload intents from knowledge base (call after learning new commands)."""
+        self.intent_manager = IntentManager(storage_dir=self.storage_dir)
+    
     def generate(self, request: str) -> BashGenerationResult:
         """Generate Bash command from natural language request."""
         
+        # FIRST: Check learned intents from knowledge base
+        # This allows newly learned commands to work without code changes
+        intent_result = self._try_learned_intent(request)
+        if intent_result:
+            return intent_result
+        
+        # FALLBACK: Use hardcoded intent patterns
         intents = self._detect_intents(request)
         path = self._extract_path(request)
         search_term = self._extract_search_term(request)
@@ -347,6 +410,93 @@ class BashGenerator:
                 explanation = "Extract archive (specify archive file)"
                 confidence = 0.5
             knowledge_used = ["tar"]
+        
+        elif "system_info" in intents:
+            # Handle system/kernel info commands
+            request_lower = request.lower()
+            if "dmesg" in request_lower:
+                command = "dmesg"
+                explanation = "Print kernel ring buffer messages"
+                knowledge_used = ["dmesg"]
+                confidence = 0.9
+            elif "journalctl" in request_lower:
+                command = "journalctl -xe"
+                explanation = "View systemd journal logs"
+                knowledge_used = ["journalctl"]
+            else:
+                # Default to dmesg for kernel messages
+                command = "dmesg | tail -50"
+                explanation = "Show recent kernel messages"
+                knowledge_used = ["dmesg"]
+        
+        elif "process_info" in intents:
+            # Handle process/file listing commands
+            request_lower = request.lower()
+            if "lsof" in request_lower:
+                # Query knowledge base for lsof
+                results = self._query_bash_knowledge(["lsof", "open", "files", "process"])
+                for sim, entry in results:
+                    if entry.name == "lsof":
+                        # Use just the command name - the synopsis is too verbose
+                        command = "lsof"
+                        explanation = entry.description[:100]
+                        knowledge_used = ["lsof"]
+                        confidence = 0.9
+                        break
+                else:
+                    command = "lsof"
+                    explanation = "List open files"
+                    knowledge_used = ["lsof"]
+            elif "ps" in request_lower:
+                command = "ps aux"
+                explanation = "List running processes"
+                knowledge_used = ["ps"]
+            else:
+                command = "ps aux"
+                explanation = "List running processes"
+                knowledge_used = ["ps"]
+        
+        elif "network" in intents:
+            # Check for specific commands mentioned
+            request_lower = request.lower()
+            if "ifconfig" in request_lower:
+                # Query knowledge base for ifconfig
+                results = self._query_bash_knowledge(["ifconfig", "network", "interface"])
+                if results and results[0][1].name == "ifconfig":
+                    entry = results[0][1]
+                    command = entry.metadata.get("code", "ifconfig")
+                    explanation = entry.description[:100]
+                    knowledge_used = ["ifconfig"]
+                    confidence = 0.9
+                else:
+                    command = "ifconfig"
+                    explanation = "Show network interface configuration"
+                    knowledge_used = ["ifconfig"]
+            elif "ip addr" in request_lower or "ip address" in request_lower:
+                command = "ip addr"
+                explanation = "Show IP addresses for all interfaces"
+                knowledge_used = ["ip"]
+            elif "ip link" in request_lower:
+                command = "ip link"
+                explanation = "Show network link status"
+                knowledge_used = ["ip"]
+            elif "ip route" in request_lower:
+                command = "ip route"
+                explanation = "Show routing table"
+                knowledge_used = ["ip"]
+            else:
+                # Generic network query - check knowledge base
+                results = self._query_bash_knowledge(["network", "interface", "ip"])
+                if results:
+                    best_entry = results[0][1]
+                    command = best_entry.metadata.get("code", best_entry.metadata.get("syntax", "ip addr"))
+                    explanation = best_entry.description[:100]
+                    knowledge_used = [best_entry.name]
+                    confidence = results[0][0]
+                else:
+                    command = "ip addr"
+                    explanation = "Show network interface addresses"
+                    knowledge_used = ["ip"]
         
         else:
             # Fallback: query knowledge base

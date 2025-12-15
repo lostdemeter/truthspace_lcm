@@ -5,14 +5,14 @@
   "entry_type": "pattern",
   "description": "Read environment variable with default",
   "position": [
-    1.0170588235294118,
-    -0.06368267709133663,
-    -0.608879696794146,
-    -0.22586733673402107,
-    -0.343153418283533,
-    0.38255421130407213,
-    0.3568978809651165,
-    0.4274527893972446
+    0.2,
+    0.0,
+    0.0,
+    0.0,
+    0.8,
+    0.0,
+    0.0,
+    0.0
   ],
   "keywords": [
     "environment",
@@ -25,6 +25,6 @@
     "code": "import os\n\napi_key = os.environ.get('API_KEY', 'default_value')\nif not api_key:\n    raise ValueError('API_KEY not set')"
   },
   "created_at": "2025-12-14T19:06:00.275879",
-  "updated_at": "2025-12-14T19:06:00.275879",
+  "updated_at": "2025-12-15T11:58:18.172613",
   "version": 1
 }

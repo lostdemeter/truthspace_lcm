@@ -1,0 +1,31 @@
+{
+  "id": "544443f8198521da",
+  "name": "function_def",
+  "domain": "programming",
+  "entry_type": "pattern",
+  "description": "Define a reusable function",
+  "position": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "keywords": [
+    "def",
+    "function",
+    "define",
+    "create",
+    "method"
+  ],
+  "metadata": {
+    "syntax": "def function_name(params):\n    ...\n    return result",
+    "example": "def greet(name):\n    return f'Hello, {name}!'"
+  },
+  "created_at": "2025-12-14T19:06:00.273918",
+  "updated_at": "2025-12-15T11:49:02.874812",
+  "version": 1
+}

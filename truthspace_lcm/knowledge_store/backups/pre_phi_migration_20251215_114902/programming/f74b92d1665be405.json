@@ -1,0 +1,35 @@
+{
+  "id": "f74b92d1665be405",
+  "name": "wget",
+  "domain": "programming",
+  "entry_type": "command",
+  "description": "Download files from web",
+  "position": [
+    1.0170588235294118,
+    -0.20194256245568706,
+    -0.6228650251424791,
+    0.07366143097018861,
+    -0.3081753744671156,
+    0.5988123129889482,
+    -0.32421051590280286,
+    0.08468559070722353
+  ],
+  "keywords": [
+    "bash",
+    "shell",
+    "command",
+    "wget",
+    "download",
+    "http",
+    "file",
+    "web"
+  ],
+  "metadata": {
+    "syntax": "wget <url>",
+    "example": "wget https://example.com/file.zip",
+    "flags": "-O (output), -c (continue), -r (recursive)"
+  },
+  "created_at": "2025-12-15T08:42:26.906394",
+  "updated_at": "2025-12-15T08:42:26.906394",
+  "version": 1
+}

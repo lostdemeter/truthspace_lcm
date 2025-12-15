@@ -1,0 +1,31 @@
+{
+  "id": "99b4ec5ea05fc436",
+  "name": "json.dump",
+  "domain": "programming",
+  "entry_type": "function",
+  "description": "Write Python object as JSON to file",
+  "position": [
+    0.2,
+    -0.5740171412253885,
+    0.0,
+    0.0,
+    0.28700857061269425,
+    0.0,
+    0.4776299843752386,
+    0.0
+  ],
+  "keywords": [
+    "json",
+    "file",
+    "write",
+    "save",
+    "dump"
+  ],
+  "metadata": {
+    "syntax": "json.dump(obj, fp, indent=None)",
+    "example": "with open('data.json', 'w') as f: json.dump(data, f)"
+  },
+  "created_at": "2025-12-14T19:06:00.270647",
+  "updated_at": "2025-12-15T11:49:02.871214",
+  "version": 1
+}

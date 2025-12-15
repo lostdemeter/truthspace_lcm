@@ -1,0 +1,32 @@
+{
+  "id": "54d9b96f77b4bfeb",
+  "name": "fetch_url_pattern",
+  "domain": "programming",
+  "entry_type": "pattern",
+  "description": "Fetch webpage content from URL using requests",
+  "position": [
+    1.0170588235294118,
+    0.49461458397125047,
+    -0.1436685376945318,
+    0.1049182450848107,
+    0.2145888845462853,
+    0.10564938268122054,
+    0.2555325899452359,
+    0.7753714209926256
+  ],
+  "keywords": [
+    "fetch",
+    "url",
+    "web",
+    "http",
+    "download",
+    "get",
+    "html"
+  ],
+  "metadata": {
+    "code": "import requests\n\nresponse = requests.get(url)\nif response.status_code == 200:\n    content = response.text\nelse:\n    print(f'Error: {response.status_code}')"
+  },
+  "created_at": "2025-12-14T19:06:00.274825",
+  "updated_at": "2025-12-14T19:06:00.274825",
+  "version": 1
+}

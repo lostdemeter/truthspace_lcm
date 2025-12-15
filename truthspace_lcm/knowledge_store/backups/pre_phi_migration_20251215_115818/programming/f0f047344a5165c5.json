@@ -1,0 +1,30 @@
+{
+  "id": "f0f047344a5165c5",
+  "name": "list.insert",
+  "domain": "programming",
+  "entry_type": "method",
+  "description": "Insert item at specific position",
+  "position": [
+    0.7656854249492382,
+    -0.5656854249492381,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "keywords": [
+    "insert",
+    "add",
+    "position",
+    "index"
+  ],
+  "metadata": {
+    "syntax": "list.insert(index, item)",
+    "example": "my_list.insert(0, first_item)"
+  },
+  "created_at": "2025-12-14T19:06:00.272727",
+  "updated_at": "2025-12-15T11:49:02.874197",
+  "version": 1
+}

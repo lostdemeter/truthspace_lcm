@@ -1,0 +1,31 @@
+{
+  "id": "2fc413669e7b8f52",
+  "name": "f-string",
+  "domain": "programming",
+  "entry_type": "pattern",
+  "description": "Format string with embedded expressions",
+  "position": [
+    1.0170588235294118,
+    -0.5725552911713057,
+    -0.2912535026931671,
+    -0.26206180766241693,
+    0.445173349218941,
+    0.2249087412596438,
+    -0.2700231790344397,
+    0.44384645399027056
+  ],
+  "keywords": [
+    "format",
+    "string",
+    "interpolation",
+    "template",
+    "variable"
+  ],
+  "metadata": {
+    "syntax": "f'text {variable} more text'",
+    "example": "message = f'Hello, {name}!'"
+  },
+  "created_at": "2025-12-14T19:06:00.272264",
+  "updated_at": "2025-12-14T19:06:00.272264",
+  "version": 1
+}

@@ -1,0 +1,35 @@
+{
+  "id": "34bd3dd54d3fb94b",
+  "name": "df",
+  "domain": "programming",
+  "entry_type": "command",
+  "description": "Display disk space usage",
+  "position": [
+    0.2,
+    0.0,
+    0.0,
+    0.0,
+    0.8,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "keywords": [
+    "bash",
+    "shell",
+    "command",
+    "disk",
+    "space",
+    "usage",
+    "df",
+    "storage"
+  ],
+  "metadata": {
+    "syntax": "df -h",
+    "example": "df -h",
+    "flags": "-h (human readable), -T (filesystem type)"
+  },
+  "created_at": "2025-12-15T08:42:26.905307",
+  "updated_at": "2025-12-15T11:49:02.870576",
+  "version": 1
+}

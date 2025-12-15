@@ -1,0 +1,31 @@
+{
+  "id": "fe0fa4c208562c76",
+  "name": "int",
+  "domain": "programming",
+  "entry_type": "function",
+  "description": "Convert value to integer",
+  "position": [
+    1.0170588235294118,
+    0.026578856219035475,
+    -0.022461649575811395,
+    0.007731199141165226,
+    0.9984064988198753,
+    -0.020814766918521767,
+    0.004620420788507024,
+    0.03819852830102344
+  ],
+  "keywords": [
+    "integer",
+    "convert",
+    "number",
+    "parse"
+  ],
+  "metadata": {
+    "syntax": "int(x)",
+    "returns": "int",
+    "example": "num = int('42')"
+  },
+  "created_at": "2025-12-14T19:06:00.268731",
+  "updated_at": "2025-12-14T19:06:00.268731",
+  "version": 1
+}

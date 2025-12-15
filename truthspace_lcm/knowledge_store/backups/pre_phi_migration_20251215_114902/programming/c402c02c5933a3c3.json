@@ -1,0 +1,36 @@
+{
+  "id": "c402c02c5933a3c3",
+  "name": "curl",
+  "domain": "programming",
+  "entry_type": "command",
+  "description": "Transfer data from/to URL",
+  "position": [
+    1.0170588235294118,
+    0.28813667371236446,
+    -0.059923816326232754,
+    -0.024041291579985625,
+    0.23287758560314378,
+    0.6641855330530343,
+    0.6354795132560368,
+    -0.11661820542530324
+  ],
+  "keywords": [
+    "bash",
+    "shell",
+    "command",
+    "curl",
+    "http",
+    "download",
+    "url",
+    "request",
+    "api"
+  ],
+  "metadata": {
+    "syntax": "curl <url>",
+    "example": "curl -O https://example.com/file.txt",
+    "flags": "-O (save), -o (output), -X (method), -d (data), -H (header)"
+  },
+  "created_at": "2025-12-15T08:42:26.906316",
+  "updated_at": "2025-12-15T08:42:26.906316",
+  "version": 1
+}

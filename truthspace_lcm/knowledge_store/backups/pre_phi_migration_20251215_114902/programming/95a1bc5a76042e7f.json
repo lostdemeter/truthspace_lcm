@@ -1,0 +1,29 @@
+{
+  "id": "95a1bc5a76042e7f",
+  "name": "list.remove",
+  "domain": "programming",
+  "entry_type": "method",
+  "description": "Remove first occurrence of item",
+  "position": [
+    1.0170588235294118,
+    -0.013898806723165406,
+    -0.007298035637247393,
+    0.00943631359465745,
+    0.998698887086553,
+    -0.0016269506197685258,
+    -0.04188235738318406,
+    0.022544887159649578
+  ],
+  "keywords": [
+    "remove",
+    "delete",
+    "item"
+  ],
+  "metadata": {
+    "syntax": "list.remove(item)",
+    "example": "my_list.remove(item_to_remove)"
+  },
+  "created_at": "2025-12-14T19:06:00.272875",
+  "updated_at": "2025-12-14T19:06:00.272875",
+  "version": 1
+}

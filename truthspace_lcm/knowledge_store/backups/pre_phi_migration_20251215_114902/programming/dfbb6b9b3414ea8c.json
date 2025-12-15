@@ -1,0 +1,33 @@
+{
+  "id": "dfbb6b9b3414ea8c",
+  "name": "download_file_pattern",
+  "domain": "programming",
+  "entry_type": "pattern",
+  "description": "Download file from URL",
+  "position": [
+    1.0170588235294118,
+    0.20416915917569883,
+    -0.07540142640721424,
+    0.05887508637275629,
+    -0.1559673340751966,
+    0.850073615522429,
+    0.4217659696293948,
+    -0.1559673340751966
+  ],
+  "keywords": [
+    "bash",
+    "shell",
+    "command",
+    "download",
+    "url",
+    "file",
+    "wget",
+    "curl"
+  ],
+  "metadata": {
+    "code": "curl -O https://example.com/file.txt"
+  },
+  "created_at": "2025-12-15T08:42:26.907977",
+  "updated_at": "2025-12-15T08:42:26.907977",
+  "version": 1
+}

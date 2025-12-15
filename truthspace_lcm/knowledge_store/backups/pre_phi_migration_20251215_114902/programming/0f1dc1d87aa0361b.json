@@ -1,0 +1,34 @@
+{
+  "id": "0f1dc1d87aa0361b",
+  "name": "cut",
+  "domain": "programming",
+  "entry_type": "command",
+  "description": "Extract columns/fields from text",
+  "position": [
+    1.0170588235294118,
+    0.2653123275807013,
+    0.27522212589441175,
+    0.21125888223318998,
+    -0.12927782345613115,
+    0.217565117523733,
+    -0.14549385706038456,
+    -0.8508913188454071
+  ],
+  "keywords": [
+    "bash",
+    "shell",
+    "command",
+    "cut",
+    "extract",
+    "columns",
+    "fields"
+  ],
+  "metadata": {
+    "syntax": "cut -d',' -f1 <file>",
+    "example": "cut -d':' -f1 /etc/passwd",
+    "flags": "-d (delimiter), -f (fields), -c (characters)"
+  },
+  "created_at": "2025-12-15T08:42:26.904157",
+  "updated_at": "2025-12-15T08:42:26.904157",
+  "version": 1
+}

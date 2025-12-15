@@ -1,0 +1,31 @@
+{
+  "id": "d027e1dd0b45f9b0",
+  "name": "if_statement",
+  "domain": "programming",
+  "entry_type": "pattern",
+  "description": "Conditional execution based on boolean expression",
+  "position": [
+    0.2,
+    0.8,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "keywords": [
+    "if",
+    "condition",
+    "check",
+    "branch",
+    "when"
+  ],
+  "metadata": {
+    "syntax": "if condition:\n    ...\nelif other:\n    ...\nelse:\n    ...",
+    "example": "if x > 0:\n    print('positive')"
+  },
+  "created_at": "2025-12-14T19:06:00.273450",
+  "updated_at": "2025-12-15T11:49:02.875546",
+  "version": 1
+}

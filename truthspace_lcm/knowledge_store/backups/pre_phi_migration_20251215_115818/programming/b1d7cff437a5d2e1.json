@@ -1,0 +1,30 @@
+{
+  "id": "b1d7cff437a5d2e1",
+  "name": "class_def",
+  "domain": "programming",
+  "entry_type": "pattern",
+  "description": "Define a class with attributes and methods",
+  "position": [
+    0.2,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "keywords": [
+    "class",
+    "object",
+    "define",
+    "oop"
+  ],
+  "metadata": {
+    "syntax": "class ClassName:\n    def __init__(self):\n        ...",
+    "example": "class Person:\n    def __init__(self, name):\n        self.name = name"
+  },
+  "created_at": "2025-12-14T19:06:00.273999",
+  "updated_at": "2025-12-15T11:49:02.869590",
+  "version": 1
+}

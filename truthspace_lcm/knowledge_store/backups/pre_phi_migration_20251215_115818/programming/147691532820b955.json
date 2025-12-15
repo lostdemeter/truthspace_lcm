@@ -1,0 +1,99 @@
+{
+  "id": "147691532820b955",
+  "name": "display_process_top",
+  "domain": "programming",
+  "entry_type": "intent",
+  "description": "Intent to use top: top - display Linux processes",
+  "position": [
+    0.2,
+    0.5004345937369794,
+    0.0,
+    0.0,
+    0.3336230624913196,
+    0.5004345937369794,
+    0.1668115312456598,
+    0.0
+  ],
+  "keywords": [
+    "view",
+    "files",
+    "display",
+    "file",
+    "linux",
+    "networking",
+    "command",
+    "shell",
+    "network",
+    "show",
+    "bash",
+    "process",
+    "processes",
+    "pid",
+    "running",
+    "top"
+  ],
+  "metadata": {
+    "intent_data": {
+      "id": "8257ccbf1f741ec5",
+      "name": "display_process_top",
+      "description": "Intent to use top: top - display Linux processes",
+      "triggers": [
+        "\\btop\\b",
+        "using\\s+top",
+        "with\\s+top",
+        "show\\s+(?:my\\s+)?(?:the\\s+)?network",
+        "show\\s+(?:my\\s+)?(?:the\\s+)?interface",
+        "show\\s+(?:my\\s+)?(?:the\\s+)?ip",
+        "display\\s+(?:my\\s+)?(?:the\\s+)?network",
+        "display\\s+(?:my\\s+)?(?:the\\s+)?interface",
+        "display\\s+(?:my\\s+)?(?:the\\s+)?ip",
+        "view\\s+(?:my\\s+)?(?:the\\s+)?network"
+      ],
+      "trigger_keywords": [
+        "view",
+        "files",
+        "display",
+        "file",
+        "linux",
+        "networking",
+        "command",
+        "shell",
+        "network",
+        "show",
+        "bash",
+        "process",
+        "processes",
+        "pid",
+        "running",
+        "top"
+      ],
+      "target_commands": [
+        "top"
+      ],
+      "step_type": "bash",
+      "priority": 50,
+      "knowledge_entry_ids": [
+        "4ca36bb28072f561"
+      ]
+    },
+    "triggers": [
+      "\\btop\\b",
+      "using\\s+top",
+      "with\\s+top",
+      "show\\s+(?:my\\s+)?(?:the\\s+)?network",
+      "show\\s+(?:my\\s+)?(?:the\\s+)?interface",
+      "show\\s+(?:my\\s+)?(?:the\\s+)?ip",
+      "display\\s+(?:my\\s+)?(?:the\\s+)?network",
+      "display\\s+(?:my\\s+)?(?:the\\s+)?interface",
+      "display\\s+(?:my\\s+)?(?:the\\s+)?ip",
+      "view\\s+(?:my\\s+)?(?:the\\s+)?network"
+    ],
+    "target_commands": [
+      "top"
+    ],
+    "step_type": "bash"
+  },
+  "created_at": "2025-12-15T10:24:35.906188",
+  "updated_at": "2025-12-15T11:49:02.868969",
+  "version": 1
+}

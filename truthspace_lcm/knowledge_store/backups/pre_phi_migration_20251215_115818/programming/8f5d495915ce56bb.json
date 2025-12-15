@@ -1,0 +1,35 @@
+{
+  "id": "8f5d495915ce56bb",
+  "name": "uniq",
+  "domain": "programming",
+  "entry_type": "command",
+  "description": "Report or filter repeated lines",
+  "position": [
+    0.2,
+    0.0,
+    0.8,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "keywords": [
+    "bash",
+    "shell",
+    "command",
+    "unique",
+    "duplicate",
+    "filter",
+    "lines",
+    "uniq"
+  ],
+  "metadata": {
+    "syntax": "uniq <file>",
+    "example": "sort file.txt | uniq -c",
+    "flags": "-c (count), -d (duplicates only), -u (unique only)"
+  },
+  "created_at": "2025-12-15T08:42:26.903992",
+  "updated_at": "2025-12-15T11:49:02.873165",
+  "version": 1
+}

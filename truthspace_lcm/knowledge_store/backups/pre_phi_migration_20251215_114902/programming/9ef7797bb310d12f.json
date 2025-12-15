@@ -1,0 +1,45 @@
+{
+  "id": "9ef7797bb310d12f",
+  "name": "ifconfig",
+  "domain": "programming",
+  "entry_type": "command",
+  "description": "ifconfig - configure a network interface",
+  "position": [
+    1.0170588235294118,
+    0.11777522008565283,
+    -0.11233525610941027,
+    -0.06283158392560234,
+    -0.08839941461394271,
+    0.8380264505401768,
+    0.2020946617174136,
+    -0.4675649037580539
+  ],
+  "keywords": [
+    "file",
+    "linux",
+    "files",
+    "ifconfig",
+    "bash",
+    "network",
+    "networking",
+    "shell",
+    "command"
+  ],
+  "metadata": {
+    "syntax": "ifconfig [-v] [-a] [-s] [interface]\n       ifconfig [-v] interface [aftype] options | address ...",
+    "example": "",
+    "examples": [],
+    "source": "man_page",
+    "type": "bash_command",
+    "man_section": "1",
+    "options": [
+      "-a",
+      "-v",
+      "-s"
+    ],
+    "code": "ifconfig [-v] [-a] [-s] [interface]"
+  },
+  "created_at": "2025-12-15T10:07:18.982112",
+  "updated_at": "2025-12-15T10:07:18.982112",
+  "version": 1
+}

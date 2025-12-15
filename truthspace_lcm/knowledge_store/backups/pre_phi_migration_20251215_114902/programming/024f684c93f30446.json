@@ -1,0 +1,30 @@
+{
+  "id": "024f684c93f30446",
+  "name": "os.environ",
+  "domain": "programming",
+  "entry_type": "attribute",
+  "description": "Access environment variables",
+  "position": [
+    1.0170588235294118,
+    -0.284125229784029,
+    -0.4670477586735561,
+    -0.07630791885628208,
+    -0.4832834860897864,
+    0.48003634060654027,
+    0.31659668461648943,
+    0.36205672138193395
+  ],
+  "keywords": [
+    "environment",
+    "variable",
+    "env",
+    "config"
+  ],
+  "metadata": {
+    "returns": "dict-like",
+    "example": "api_key = os.environ.get('API_KEY')"
+  },
+  "created_at": "2025-12-14T19:06:00.271218",
+  "updated_at": "2025-12-14T19:06:00.271218",
+  "version": 1
+}

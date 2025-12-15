@@ -1,0 +1,31 @@
+{
+  "id": "cac3b02f02864981",
+  "name": "soup.find",
+  "domain": "programming",
+  "entry_type": "method",
+  "description": "Find first element matching selector",
+  "position": [
+    1.0170588235294118,
+    -0.010659865932123433,
+    -0.0467191655049854,
+    -0.01794191426435589,
+    0.9976690388980506,
+    -0.006097618784218754,
+    -0.03829655538577677,
+    0.023118310066786205
+  ],
+  "keywords": [
+    "find",
+    "element",
+    "tag",
+    "first",
+    "select"
+  ],
+  "metadata": {
+    "syntax": "soup.find(tag, attrs={})",
+    "example": "title = soup.find('h1')"
+  },
+  "created_at": "2025-12-14T19:06:00.274361",
+  "updated_at": "2025-12-14T19:06:00.274361",
+  "version": 1
+}

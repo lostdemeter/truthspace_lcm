@@ -1,0 +1,35 @@
+{
+  "id": "893bd8211cb07950",
+  "name": "which",
+  "domain": "programming",
+  "entry_type": "command",
+  "description": "Locate command executable",
+  "position": [
+    0.2,
+    0.0,
+    0.6750373474580292,
+    0.0,
+    0.4293303850612346,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "keywords": [
+    "bash",
+    "shell",
+    "command",
+    "which",
+    "locate",
+    "find",
+    "command",
+    "path"
+  ],
+  "metadata": {
+    "syntax": "which <command>",
+    "example": "which python",
+    "returns": "Path to executable"
+  },
+  "created_at": "2025-12-15T08:42:26.905637",
+  "updated_at": "2025-12-15T11:49:02.873342",
+  "version": 1
+}

@@ -1,0 +1,30 @@
+{
+  "id": "4595eb51d70c3091",
+  "name": "str.endswith",
+  "domain": "programming",
+  "entry_type": "method",
+  "description": "Check if string ends with suffix",
+  "position": [
+    0.2,
+    0.8,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "keywords": [
+    "ends",
+    "suffix",
+    "check"
+  ],
+  "metadata": {
+    "syntax": "str.endswith(suffix)",
+    "returns": "bool",
+    "example": "if filename.endswith('.txt'):"
+  },
+  "created_at": "2025-12-14T19:06:00.272185",
+  "updated_at": "2025-12-15T11:49:02.877765",
+  "version": 1
+}

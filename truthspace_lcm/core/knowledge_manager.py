@@ -30,7 +30,9 @@ from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
 
-# Universal constants
+from truthspace_lcm.core.phi_encoder import PhiEncoder
+
+# Universal constants (exported for compatibility)
 PHI = (1 + np.sqrt(5)) / 2
 PI = np.pi
 E = np.e
@@ -39,17 +41,6 @@ SQRT3 = np.sqrt(3)
 LN2 = np.log(2)
 GAMMA = 0.5772156649
 ZETA3 = 1.2020569
-
-
-class SemanticDimension(Enum):
-    IDENTITY = 0
-    SPATIAL = 1
-    TEMPORAL = 2
-    CAUSAL = 3
-    METHOD = 4
-    ATTRIBUTE = 5
-    RELATION = 6
-    CONTROL = 7
 
 
 class KnowledgeDomain(Enum):
@@ -69,18 +60,7 @@ class KnowledgeDomain(Enum):
     CUSTOM = "custom"
 
 
-DIMENSION_CONSTANTS = {
-    SemanticDimension.IDENTITY: PHI,
-    SemanticDimension.SPATIAL: PI,
-    SemanticDimension.TEMPORAL: E,
-    SemanticDimension.CAUSAL: GAMMA,
-    SemanticDimension.METHOD: SQRT3,
-    SemanticDimension.ATTRIBUTE: SQRT2,
-    SemanticDimension.RELATION: LN2,
-    SemanticDimension.CONTROL: ZETA3,
-}
-
-# Domain constants - orthogonal to semantic dimensions
+# Domain constants for domain isolation in TruthSpace
 DOMAIN_CONSTANTS = {
     KnowledgeDomain.PROGRAMMING: 1.0,
     KnowledgeDomain.HISTORY: 2.0,
@@ -170,6 +150,9 @@ class KnowledgeManager:
     def __init__(self, storage_dir: str = None, dim: int = 8):
         self.dim = dim
         
+        # Initialize φ-encoder for semantic position computation
+        self._phi_encoder = PhiEncoder()
+        
         # Default storage directory
         if storage_dir is None:
             storage_dir = os.path.join(
@@ -201,50 +184,26 @@ class KnowledgeManager:
     def _compute_position(self, name: str, domain: KnowledgeDomain,
                           entry_type: str, keywords: List[str]) -> np.ndarray:
         """
-        Compute geometric position for knowledge entry.
+        Compute geometric position for knowledge entry using φ-encoder.
         
-        Key insight: Position includes DOMAIN component to ensure isolation.
+        The φ-encoder maps semantic primitives to well-defined positions
+        using the golden ratio as the fundamental anchor constant.
         """
-        position = np.zeros(self.dim)
+        # Combine name and keywords for encoding
+        text_to_encode = f"{name} {' '.join(keywords)}"
         
-        # Domain component (first dimension reserved for domain)
-        # This ensures entries from different domains are orthogonal
-        domain_hash = hashlib.sha256(domain.value.encode()).digest()
-        position[0] = DOMAIN_CONSTANTS[domain] + (domain_hash[0] / 255.0 - 0.5) * 0.1
+        # Get semantic decomposition from φ-encoder
+        decomposition = self._phi_encoder.encode(text_to_encode)
+        position = decomposition.position.copy()
         
-        # Entry type component
-        if entry_type in ["function", "method"]:
-            position[SemanticDimension.METHOD.value] = DIMENSION_CONSTANTS[SemanticDimension.METHOD]
-        elif entry_type in ["class", "person", "entity"]:
-            position[SemanticDimension.IDENTITY.value] = DIMENSION_CONSTANTS[SemanticDimension.IDENTITY]
-        elif entry_type in ["library", "module", "relation"]:
-            position[SemanticDimension.RELATION.value] = DIMENSION_CONSTANTS[SemanticDimension.RELATION]
-        elif entry_type in ["fact", "event"]:
-            position[SemanticDimension.TEMPORAL.value] = DIMENSION_CONSTANTS[SemanticDimension.TEMPORAL]
-        elif entry_type in ["place", "location"]:
-            position[SemanticDimension.SPATIAL.value] = DIMENSION_CONSTANTS[SemanticDimension.SPATIAL]
+        # Add domain component to dimension 0 for domain isolation
+        # This ensures entries from different domains remain separated
+        domain_offset = DOMAIN_CONSTANTS[domain]
         
-        # Keyword influence
-        for kw in keywords:
-            h = hashlib.sha256(kw.lower().encode()).digest()
-            for i in range(1, self.dim):  # Skip domain dimension
-                position[i] += (h[i] / 255.0 - 0.5) * 0.08
-        
-        # Name uniqueness
-        h = hashlib.sha256(name.lower().encode()).digest()
-        for i in range(1, self.dim):
-            position[i] += (h[i] / 255.0 - 0.5) * 0.04
-        
-        # Normalize (but preserve domain component magnitude)
-        domain_component = position[0]
-        semantic_components = position[1:]
-        
-        semantic_norm = np.linalg.norm(semantic_components)
-        if semantic_norm > 0:
-            semantic_components = semantic_components / semantic_norm
-        
-        position[0] = domain_component
-        position[1:] = semantic_components
+        # Scale semantic components and add domain
+        # Domain goes in a separate "layer" by adding to the magnitude
+        position = position * 0.8  # Scale semantic to leave room for domain
+        position[0] += domain_offset * 0.2  # Add domain signal
         
         return position
     
@@ -422,50 +381,55 @@ class KnowledgeManager:
     def query(self, keywords: List[str], domain: KnowledgeDomain = None,
               top_k: int = 10) -> List[Tuple[float, KnowledgeEntry]]:
         """
-        Query knowledge by keywords.
+        Query using φ-encoder for semantic matching.
         
-        If domain is specified, only searches within that domain.
-        This ensures cross-domain isolation.
+        Combines geometric similarity with keyword boosting for best results.
         """
-        # Build query vector
-        query_vec = np.zeros(self.dim)
+        # Encode query using φ-encoder
+        query_text = " ".join(keywords)
+        decomposition = self._phi_encoder.encode(query_text)
+        query_vec = decomposition.position
         
         # Add domain component if specified
         if domain:
-            domain_hash = hashlib.sha256(domain.value.encode()).digest()
-            query_vec[0] = DOMAIN_CONSTANTS[domain] + (domain_hash[0] / 255.0 - 0.5) * 0.1
+            query_vec = query_vec.copy()
+            query_vec[0] += DOMAIN_CONSTANTS[domain] * 0.2
         
-        # Add keyword components
-        for kw in keywords:
-            h = hashlib.sha256(kw.lower().encode()).digest()
-            for i in range(1, self.dim):
-                query_vec[i] += (h[i] / 255.0 - 0.5) * 0.15
-        
-        # Normalize semantic components
-        if domain:
-            semantic_norm = np.linalg.norm(query_vec[1:])
-            if semantic_norm > 0:
-                query_vec[1:] = query_vec[1:] / semantic_norm
-        else:
-            norm = np.linalg.norm(query_vec)
-            if norm > 0:
-                query_vec = query_vec / norm
-        
-        # Find similar entries
+        # Find similar entries with keyword boosting
         results = []
         for entry in self.entries.values():
             # Filter by domain if specified
             if domain and entry.domain != domain:
                 continue
             
-            # Compute similarity
-            if domain:
-                # Within-domain similarity (ignore domain component)
-                sim = float(np.dot(query_vec[1:], entry.position[1:]))
-            else:
-                sim = float(np.dot(query_vec, entry.position))
+            # Compute geometric similarity
+            entry_norm = np.linalg.norm(entry.position)
+            query_norm = np.linalg.norm(query_vec)
             
-            results.append((sim, entry))
+            if entry_norm > 0 and query_norm > 0:
+                geo_sim = float(np.dot(query_vec, entry.position) / (query_norm * entry_norm))
+            else:
+                geo_sim = 0.0
+            
+            # Keyword boost: check if query keywords appear in entry keywords or name
+            keyword_boost = 0.0
+            entry_kw_set = set(kw.lower() for kw in entry.keywords)
+            entry_kw_set.add(entry.name.lower())
+            
+            for qkw in keywords:
+                qkw_lower = qkw.lower()
+                if qkw_lower in entry_kw_set:
+                    keyword_boost += 0.15
+                else:
+                    # Partial match
+                    for ekw in entry_kw_set:
+                        if qkw_lower in ekw or ekw in qkw_lower:
+                            keyword_boost += 0.05
+                            break
+            
+            # Combined score
+            combined_sim = geo_sim + min(keyword_boost, 0.4)
+            results.append((combined_sim, entry))
         
         results.sort(key=lambda x: -x[0])
         return results[:top_k]

@@ -1,0 +1,32 @@
+{
+  "id": "d8a26e80b22c35b6",
+  "name": "append_to_file_pattern",
+  "domain": "programming",
+  "entry_type": "pattern",
+  "description": "Append content to existing file",
+  "position": [
+    1.0170588235294118,
+    -0.07330368711232575,
+    -0.5191272812457689,
+    0.18218752644876288,
+    -0.31421989855751337,
+    0.6974567188991462,
+    0.10845516280361653,
+    -0.3082184270980247
+  ],
+  "keywords": [
+    "bash",
+    "shell",
+    "command",
+    "append",
+    "add",
+    "file",
+    "content"
+  ],
+  "metadata": {
+    "code": "echo 'new content' >> filename.txt"
+  },
+  "created_at": "2025-12-15T08:42:26.907395",
+  "updated_at": "2025-12-15T08:42:26.907395",
+  "version": 1
+}

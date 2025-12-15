@@ -1,0 +1,32 @@
+{
+  "id": "87e38df1223b8b21",
+  "name": "count_files_pattern",
+  "domain": "programming",
+  "entry_type": "pattern",
+  "description": "Count files in directory",
+  "position": [
+    1.0170588235294118,
+    -0.29201137090904666,
+    -0.07197726000695534,
+    -0.09584536695226692,
+    -0.4590881195262279,
+    0.35093575993028464,
+    -0.25471745380699723,
+    -0.7082114857679177
+  ],
+  "keywords": [
+    "bash",
+    "shell",
+    "command",
+    "count",
+    "files",
+    "number",
+    "directory"
+  ],
+  "metadata": {
+    "code": "find . -type f | wc -l"
+  },
+  "created_at": "2025-12-15T08:42:26.907905",
+  "updated_at": "2025-12-15T08:42:26.907905",
+  "version": 1
+}

@@ -1,0 +1,56 @@
+{
+  "id": "1b360fd08b508403",
+  "name": "socket",
+  "domain": "programming",
+  "entry_type": "library",
+  "description": "This module provides socket operations and some related functions. On Unix, it supports IP (Internet Protocol) and Unix domain sockets. On other systems, it only supports IP. Functions specific for a",
+  "position": [
+    0.2,
+    0.0,
+    0.0,
+    0.0,
+    0.3072988519102494,
+    0.0,
+    0.7386253553829862,
+    0.0
+  ],
+  "keywords": [
+    "socket",
+    "python",
+    "module",
+    "library"
+  ],
+  "metadata": {
+    "syntax": "import socket",
+    "example": "",
+    "examples": [],
+    "source": "python_help",
+    "type": "python_module",
+    "functions": [
+      "inet_ntop",
+      "getdefaulttimeout",
+      "send_fds",
+      "gethostbyname",
+      "getnameinfo",
+      "setdefaulttimeout",
+      "inet_ntoa",
+      "if_nametoindex",
+      "ntohs",
+      "CMSG_SPACE",
+      "inet_aton",
+      "getservbyport",
+      "recv_fds",
+      "create_connection",
+      "create_server",
+      "inet_pton",
+      "fromshare",
+      "getfqdn",
+      "dup",
+      "socketpair"
+    ],
+    "classes": []
+  },
+  "created_at": "2025-12-15T10:07:19.059891",
+  "updated_at": "2025-12-15T11:58:18.168319",
+  "version": 1
+}

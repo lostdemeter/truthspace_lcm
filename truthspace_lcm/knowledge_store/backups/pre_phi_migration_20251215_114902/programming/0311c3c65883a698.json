@@ -1,0 +1,97 @@
+{
+  "id": "0311c3c65883a698",
+  "name": "execute_process_uptime",
+  "domain": "programming",
+  "entry_type": "intent",
+  "description": "Intent to use uptime: uptime - Tell how long the system has been running.",
+  "position": [
+    1.0170588235294118,
+    0.5481139893080023,
+    -0.09677995961840029,
+    0.1343911287592006,
+    0.01880558457040007,
+    0.5673782466728022,
+    0.017888238981600073,
+    -0.5912292319816025
+  ],
+  "keywords": [
+    "processes",
+    "start",
+    "run",
+    "kernel",
+    "files",
+    "uptime",
+    "os",
+    "shell",
+    "linux",
+    "bash",
+    "file",
+    "command",
+    "system",
+    "execute",
+    "process"
+  ],
+  "metadata": {
+    "intent_data": {
+      "id": "555dc951eec4f30d",
+      "name": "execute_process_uptime",
+      "description": "Intent to use uptime: uptime - Tell how long the system has been running.",
+      "triggers": [
+        "\\buptime\\b",
+        "using\\s+uptime",
+        "with\\s+uptime",
+        "run\\s+(?:my\\s+)?(?:the\\s+)?process",
+        "run\\s+(?:my\\s+)?(?:the\\s+)?pid",
+        "run\\s+(?:my\\s+)?(?:the\\s+)?running",
+        "execute\\s+(?:my\\s+)?(?:the\\s+)?process",
+        "execute\\s+(?:my\\s+)?(?:the\\s+)?pid",
+        "execute\\s+(?:my\\s+)?(?:the\\s+)?running",
+        "start\\s+(?:my\\s+)?(?:the\\s+)?process"
+      ],
+      "trigger_keywords": [
+        "processes",
+        "start",
+        "run",
+        "kernel",
+        "files",
+        "uptime",
+        "os",
+        "shell",
+        "linux",
+        "bash",
+        "file",
+        "command",
+        "system",
+        "execute",
+        "process"
+      ],
+      "target_commands": [
+        "uptime"
+      ],
+      "step_type": "bash",
+      "priority": 50,
+      "knowledge_entry_ids": [
+        "b190c349ebbface2"
+      ]
+    },
+    "triggers": [
+      "\\buptime\\b",
+      "using\\s+uptime",
+      "with\\s+uptime",
+      "run\\s+(?:my\\s+)?(?:the\\s+)?process",
+      "run\\s+(?:my\\s+)?(?:the\\s+)?pid",
+      "run\\s+(?:my\\s+)?(?:the\\s+)?running",
+      "execute\\s+(?:my\\s+)?(?:the\\s+)?process",
+      "execute\\s+(?:my\\s+)?(?:the\\s+)?pid",
+      "execute\\s+(?:my\\s+)?(?:the\\s+)?running",
+      "start\\s+(?:my\\s+)?(?:the\\s+)?process"
+    ],
+    "target_commands": [
+      "uptime"
+    ],
+    "step_type": "bash"
+  },
+  "created_at": "2025-12-15T10:26:08.016694",
+  "updated_at": "2025-12-15T10:26:08.016694",
+  "version": 1
+}

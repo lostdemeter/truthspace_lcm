@@ -1,0 +1,32 @@
+{
+  "id": "ac6b7e797702d2d7",
+  "name": "open",
+  "domain": "programming",
+  "entry_type": "function",
+  "description": "Open a file for reading or writing",
+  "position": [
+    0.2,
+    0.0,
+    0.0,
+    0.0,
+    0.8,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "keywords": [
+    "open",
+    "file",
+    "read",
+    "write",
+    "disk"
+  ],
+  "metadata": {
+    "syntax": "open(filename, mode)",
+    "returns": "file object",
+    "example": "with open('file.txt', 'r') as f:"
+  },
+  "created_at": "2025-12-14T19:06:00.268651",
+  "updated_at": "2025-12-15T11:49:02.876452",
+  "version": 1
+}

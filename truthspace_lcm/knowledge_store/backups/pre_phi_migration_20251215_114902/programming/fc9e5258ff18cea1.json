@@ -1,0 +1,30 @@
+{
+  "id": "fc9e5258ff18cea1",
+  "name": "write_csv_pattern",
+  "domain": "programming",
+  "entry_type": "pattern",
+  "description": "Write list of dictionaries to CSV file",
+  "position": [
+    1.0170588235294118,
+    0.621033802457835,
+    0.31673455413927276,
+    -0.22895592481661062,
+    -0.021213168752976606,
+    0.06217652910355244,
+    -0.4176799778603343,
+    -0.5317921959797951
+  ],
+  "keywords": [
+    "csv",
+    "write",
+    "file",
+    "save",
+    "table"
+  ],
+  "metadata": {
+    "code": "import csv\n\nwith open('data.csv', 'w', newline='') as f:\n    writer = csv.DictWriter(f, fieldnames=data[0].keys())\n    writer.writeheader()\n    writer.writerows(data)"
+  },
+  "created_at": "2025-12-14T19:06:00.275638",
+  "updated_at": "2025-12-14T19:06:00.275638",
+  "version": 1
+}

@@ -5,14 +5,14 @@
   "entry_type": "pattern",
   "description": "Parse command line arguments",
   "position": [
-    1.0170588235294118,
-    -0.14381372723148403,
-    -0.08366349911185195,
-    0.47846772367889157,
-    -0.7048513095109616,
-    -0.06179068888653112,
-    -0.14162644620895193,
-    -0.4719058806112955
+    0.2,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
   ],
   "keywords": [
     "args",
@@ -25,6 +25,6 @@
     "code": "import sys\n\nif len(sys.argv) > 1:\n    arg1 = sys.argv[1]\nelse:\n    print('Usage: python script.py <arg>')"
   },
   "created_at": "2025-12-14T19:06:00.275781",
-  "updated_at": "2025-12-14T19:06:00.275781",
+  "updated_at": "2025-12-15T11:58:18.170376",
   "version": 1
 }

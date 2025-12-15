@@ -1,0 +1,32 @@
+{
+  "id": "f67950e3e97d1c19",
+  "name": "redirect_output_pattern",
+  "domain": "programming",
+  "entry_type": "pattern",
+  "description": "Redirect stdout and stderr to file",
+  "position": [
+    0.2,
+    0.0,
+    0.0,
+    0.0,
+    0.4120510529290924,
+    0.0,
+    0.6857214666174791,
+    0.0
+  ],
+  "keywords": [
+    "bash",
+    "shell",
+    "command",
+    "redirect",
+    "output",
+    "file",
+    "log"
+  ],
+  "metadata": {
+    "code": "command > output.log 2>&1"
+  },
+  "created_at": "2025-12-15T08:42:26.908264",
+  "updated_at": "2025-12-15T11:49:02.871130",
+  "version": 1
+}

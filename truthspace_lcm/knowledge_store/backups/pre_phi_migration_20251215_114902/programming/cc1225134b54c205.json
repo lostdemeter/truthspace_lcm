@@ -1,0 +1,60 @@
+{
+  "id": "cc1225134b54c205",
+  "name": "dmesg",
+  "domain": "programming",
+  "entry_type": "command",
+  "description": "dmesg - print or control the kernel ring buffer",
+  "position": [
+    1.0170588235294118,
+    0.2904600486443769,
+    -0.13772988222104257,
+    -0.24245913919704326,
+    -0.15463929350362599,
+    0.7006496384670462,
+    0.017727608602708445,
+    -0.5681016726067954
+  ],
+  "keywords": [
+    "shell",
+    "dmesg",
+    "file",
+    "command",
+    "files",
+    "bash",
+    "linux"
+  ],
+  "metadata": {
+    "syntax": "dmesg [options]\n\n       dmesg --clear\n\n       dmesg --read-clear [options]\n\n       dmesg --console-level level\n\n       dmesg --console-on\n\n       dmesg --console-off",
+    "example": "",
+    "examples": [],
+    "source": "man_page",
+    "type": "bash_command",
+    "man_section": "1",
+    "options": [
+      "-p",
+      "-e",
+      "-c",
+      "-u",
+      "-k",
+      "-L",
+      "-r",
+      "-S",
+      "-l",
+      "-f",
+      "-J",
+      "-n",
+      "--until",
+      "--raw",
+      "-h",
+      "-D",
+      "-T",
+      "-d",
+      "-w",
+      "-C"
+    ],
+    "code": "dmesg [options]"
+  },
+  "created_at": "2025-12-15T10:13:41.619999",
+  "updated_at": "2025-12-15T10:13:41.619999",
+  "version": 1
+}

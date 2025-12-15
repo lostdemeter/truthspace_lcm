@@ -1,0 +1,30 @@
+{
+  "id": "c34f95ef3f76c62f",
+  "name": "str.lower",
+  "domain": "programming",
+  "entry_type": "method",
+  "description": "Convert string to lowercase",
+  "position": [
+    1.0170588235294118,
+    0.031223801163596025,
+    0.053412829276856144,
+    -0.020831471540929875,
+    0.996944971887782,
+    -0.00154480575472064,
+    -0.0013575565723302598,
+    0.042833250471799623
+  ],
+  "keywords": [
+    "lower",
+    "lowercase",
+    "case"
+  ],
+  "metadata": {
+    "syntax": "str.lower()",
+    "returns": "str",
+    "example": "lower_text = text.lower()"
+  },
+  "created_at": "2025-12-14T19:06:00.271975",
+  "updated_at": "2025-12-14T19:06:00.271975",
+  "version": 1
+}

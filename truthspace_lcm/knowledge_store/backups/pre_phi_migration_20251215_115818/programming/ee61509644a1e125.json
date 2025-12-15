@@ -1,0 +1,32 @@
+{
+  "id": "ee61509644a1e125",
+  "name": "conditional_pattern",
+  "domain": "programming",
+  "entry_type": "pattern",
+  "description": "Conditional execution with if",
+  "position": [
+    0.2,
+    0.8,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "keywords": [
+    "bash",
+    "shell",
+    "command",
+    "if",
+    "condition",
+    "check",
+    "test"
+  ],
+  "metadata": {
+    "code": "if [ -f file.txt ]; then echo 'exists'; fi"
+  },
+  "created_at": "2025-12-15T08:42:26.908410",
+  "updated_at": "2025-12-15T11:49:02.867909",
+  "version": 1
+}

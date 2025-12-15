@@ -1,0 +1,32 @@
+{
+  "id": "3d987ff9375c99c4",
+  "name": "str.split",
+  "domain": "programming",
+  "entry_type": "method",
+  "description": "Split string into list by separator",
+  "position": [
+    1.0170588235294118,
+    -0.006725689410070133,
+    -0.0313425918260131,
+    -0.003824411625333999,
+    0.9974526117161611,
+    0.01877038809215651,
+    0.028177561515391854,
+    0.05384947403487523
+  ],
+  "keywords": [
+    "split",
+    "divide",
+    "separate",
+    "words",
+    "list"
+  ],
+  "metadata": {
+    "syntax": "str.split(sep)",
+    "returns": "list",
+    "example": "words = text.split(' ')"
+  },
+  "created_at": "2025-12-14T19:06:00.271651",
+  "updated_at": "2025-12-14T19:06:00.271651",
+  "version": 1
+}

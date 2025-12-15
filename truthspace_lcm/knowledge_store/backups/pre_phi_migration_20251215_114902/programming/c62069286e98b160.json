@@ -1,0 +1,31 @@
+{
+  "id": "c62069286e98b160",
+  "name": "zip",
+  "domain": "programming",
+  "entry_type": "function",
+  "description": "Combine multiple iterables element-wise",
+  "position": [
+    1.0170588235294118,
+    0.040427445738589085,
+    -0.002871895052468075,
+    -0.023372807427009437,
+    0.9975924138184118,
+    -0.03883685770952985,
+    -0.030265355552932822,
+    -0.014006011255882777
+  ],
+  "keywords": [
+    "zip",
+    "combine",
+    "pair",
+    "parallel",
+    "iterate"
+  ],
+  "metadata": {
+    "syntax": "zip(*iterables)",
+    "example": "for a, b in zip(list1, list2):"
+  },
+  "created_at": "2025-12-14T19:06:00.269246",
+  "updated_at": "2025-12-14T19:06:00.269246",
+  "version": 1
+}

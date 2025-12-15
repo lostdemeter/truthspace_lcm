@@ -1,0 +1,31 @@
+{
+  "id": "f978e7915cfaec26",
+  "name": "range",
+  "domain": "programming",
+  "entry_type": "function",
+  "description": "Generate sequence of numbers for iteration",
+  "position": [
+    0.2,
+    0.0,
+    0.8,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "keywords": [
+    "range",
+    "sequence",
+    "numbers",
+    "loop",
+    "iterate"
+  ],
+  "metadata": {
+    "syntax": "range(stop) or range(start, stop, step)",
+    "example": "for i in range(10):"
+  },
+  "created_at": "2025-12-14T19:06:00.268571",
+  "updated_at": "2025-12-15T11:49:02.877163",
+  "version": 1
+}
