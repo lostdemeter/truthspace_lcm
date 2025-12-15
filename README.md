@@ -1,17 +1,21 @@
 # TruthSpace LCM
 
-**Language-Code Model** - A natural language to code system that uses φ-based geometric knowledge encoding to translate human requests into executable Python and Bash code.
+**Language-Code Model** - A minimal natural language to code system using φ-based geometric knowledge encoding.
+
+## Philosophy
+
+> *"Code is just a geometric interpreter. All logic lives in TruthSpace as knowledge."*
+
+This system is designed with a **minimal code footprint** and **maximum knowledge-space usage**. The bootstrap code (~2,400 lines) is irreducible - everything else is knowledge that can be added, modified, or reset without changing code.
 
 ## Features
 
-- **φ-Based Semantic Encoding** - Uses the golden ratio (φ) as the fundamental anchor for positioning knowledge in geometric space
-- **Natural Language Understanding** - Describe what you want in plain English
-- **Multi-Step Task Planning** - Complex tasks are automatically decomposed into steps
-- **Python Code Generation** - Generate complete, runnable Python scripts
-- **Bash Command Generation** - Generate shell commands for file/system operations
-- **SQLite Knowledge Database** - Fast, ACID-compliant storage with optimized vector queries
-- **Safe Execution** - Code runs in isolated environments with timeout protection
-- **Autonomous Learning** - System can learn new commands and expand its knowledge base
+- **Minimal Bootstrap** - Only ~2,400 lines of irreducible code
+- **φ-Based Semantic Encoding** - Golden ratio anchored primitives for geometric positioning
+- **Knowledge-First Architecture** - Primitives, intents, and commands are all knowledge entries
+- **Fail Fast** - No fallbacks; query succeeds or raises `KnowledgeGapError`
+- **Auto-Learning** - System can acquire new knowledge from man pages and pydoc
+- **SQLite Backend** - Fast, ACID-compliant knowledge storage
 
 ## Installation
 
@@ -20,142 +24,138 @@
 git clone https://github.com/yourusername/truthspace-lcm.git
 cd truthspace-lcm
 
-# Create virtual environment (recommended)
+# Create virtual environment
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source venv/bin/activate
 
 # Install dependencies
 pip install -r requirements.txt
 
 # Install package in development mode
 pip install -e .
+
+# Seed the knowledge base
+python scripts/seed_truthspace.py
 ```
 
 ## Quick Start
 
-### Command Line
+### Interactive Mode
 
 ```bash
-# Execute a task
-python truthspace_lcm_cli.py "create a python project called myapp"
+python run.py
+```
 
-# Dry run (generate code without executing)
-python truthspace_lcm_cli.py --dry-run "backup the project folder"
+```
+============================================================
+TruthSpace LCM - Natural Language to Code
+============================================================
 
-# Show generated code
-python truthspace_lcm_cli.py --show-code "list all files"
+Enter natural language requests (type 'quit' to exit)
 
-# Interactive mode
-python truthspace_lcm_cli.py --interactive
+>>> write a hello world python program
+
+Request: "write a hello world python program"
+----------------------------------------
+Generated (python):
+  print("Hello, World!")
+
+Execute? (y/N): y
+
+Output:
+----------------------------------------
+Hello, World!
+```
+
+### Single Query Mode
+
+```bash
+python run.py "list files in directory"
 ```
 
 ### Python API
 
 ```python
-from truthspace_lcm import TaskPlanner, StepStatus
+from truthspace_lcm import TruthSpace, Resolver
 
-# Create planner
-planner = TaskPlanner()
+# Initialize
+ts = TruthSpace()
+resolver = Resolver(ts, auto_learn=True)
 
-# Plan and execute a task
-plan = planner.plan("create a python project called myapp")
-plan = planner.execute_plan(plan, dry_run=False)
+# Resolve natural language to code
+result = resolver.resolve("list files in directory")
+print(result.output)       # ls -la
+print(result.output_type)  # OutputType.BASH
 
-# Check results
-if plan.status == StepStatus.COMPLETED:
-    print("Task completed successfully!")
-    for step in plan.steps:
-        print(f"  {step.id}. {step.description}")
-        print(f"     Code: {step.generated_code}")
+# Resolve and execute
+resolution, exec_result = resolver.resolve_and_execute("show current directory")
+print(exec_result.stdout)  # /home/user/...
 ```
 
 ## Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                    TruthSpace LCM CLI                       │
+│                      run.py                                 │
+│                 Interactive Interface                       │
 └─────────────────────────────────────────────────────────────┘
                             │
                             ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                     Task Planner                            │
-│   - Decomposes complex requests into steps                  │
-│   - Tracks dependencies between steps                       │
-│   - Orchestrates execution                                  │
+│                     Resolver                                │
+│   - NL → Knowledge → Output (no fallbacks)                  │
+│   - Fail fast: KnowledgeGapError if no match                │
+│   - Optional auto-learning on gaps                          │
+└─────────────────────────────────────────────────────────────┘
+                            │
+                            ▼
+┌─────────────────────────────────────────────────────────────┐
+│                    TruthSpace                               │
+│   - Unified knowledge storage + query                       │
+│   - Everything is a KnowledgeEntry                          │
+│   - Primitives, intents, commands all in one place          │
 └─────────────────────────────────────────────────────────────┘
                             │
               ┌─────────────┴─────────────┐
               ▼                           ▼
 ┌─────────────────────┐     ┌─────────────────────┐
-│   Python Generator  │     │    Bash Generator   │
+│     φ-Encoder       │     │   SQLite Database   │
+│  (semantic math)    │     │   (persistence)     │
 └─────────────────────┘     └─────────────────────┘
-              │                           │
-              └─────────────┬─────────────┘
-                            ▼
-┌─────────────────────────────────────────────────────────────┐
-│                    φ-Encoder                                │
-│   - Semantic primitives (ACTIONS, DOMAINS, MODIFIERS)       │
-│   - Golden ratio (φ) based position computation             │
-│   - Bidirectional mapping (NL ↔ Code)                       │
-└─────────────────────────────────────────────────────────────┘
-                            │
-                            ▼
-┌─────────────────────────────────────────────────────────────┐
-│                 SQLite Knowledge Database                   │
-│   - 160+ entries with φ-encoded positions                   │
-│   - Indexed queries with keyword boosting                   │
-│   - ACID transactions for safe updates                      │
-└─────────────────────────────────────────────────────────────┘
                             │
                             ▼
 ┌─────────────────────────────────────────────────────────────┐
 │                      Executor                               │
-│   - Safe execution in isolated environment                  │
-│   - Output capture and validation                           │
-│   - Error diagnosis and suggestions                         │
+│   - Safe bash/python execution                              │
+│   - Timeout protection                                      │
+│   - Output capture                                          │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-## Supported Tasks
+### Core Components (~2,400 lines total)
 
-### Project Setup
-```bash
-python truthspace_lcm_cli.py "create a python project called webapp"
-```
-Creates: `webapp/`, `webapp/src/`, `__init__.py`, `main.py`, `README.md`
-
-### File Operations
-```bash
-python truthspace_lcm_cli.py "create a directory called data"
-python truthspace_lcm_cli.py "create a file called config.json"
-python truthspace_lcm_cli.py "list all files in the current directory"
-python truthspace_lcm_cli.py "copy file.txt to backup"
-```
-
-### Web Operations
-```bash
-python truthspace_lcm_cli.py "fetch https://api.github.com and parse JSON"
-python truthspace_lcm_cli.py "scrape titles from https://example.com"
-```
-
-### Multi-Step Tasks
-```bash
-python truthspace_lcm_cli.py "create a directory called data, then create config.json inside it"
-python truthspace_lcm_cli.py "backup the project folder"
-```
+| File | Lines | Purpose |
+|------|-------|---------|
+| `truthspace.py` | 647 | Unified knowledge storage + query |
+| `resolver.py` | 321 | NL → Knowledge → Output |
+| `ingestor.py` | 497 | Knowledge acquisition |
+| `encoder.py` | 365 | φ-based semantic encoding |
+| `executor.py` | 513 | Code execution |
 
 ## Knowledge Base
 
-The system includes 160+ knowledge entries stored in a SQLite database with φ-encoded positions:
+The system starts with minimal seed knowledge (~40 entries):
 
-| Category | Examples |
-|----------|----------|
-| Python Core | print, input, len, range, open |
-| Python Libraries | requests, json, os, sys |
-| Python Patterns | file reading, JSON parsing, loops |
-| Bash Commands | mkdir, cp, mv, rm, grep, find |
-| Bash Patterns | backup, search, compress |
-| Learned Commands | uptime, ifconfig, ping (autonomously acquired) |
+| Type | Count | Examples |
+|------|-------|----------|
+| **Primitives** | 19 | CREATE, READ, WRITE, FILE, NETWORK, RECURSIVE |
+| **Intents** | 17 | list_files → `ls -la`, hello_world → `print("Hello, World!")` |
+| **Commands** | 5 | ls, cd, cat, grep, find |
+
+Knowledge can be expanded by:
+1. **Seeding** - Run `python scripts/seed_truthspace.py` to reset to minimal
+2. **Auto-learning** - System learns from man pages when it encounters gaps
+3. **Manual addition** - Use `TruthSpace.store()` to add custom knowledge
 
 ## Project Structure
 
@@ -163,25 +163,19 @@ The system includes 160+ knowledge entries stored in a SQLite database with φ-e
 truthspace-lcm/
 ├── truthspace_lcm/           # Main package
 │   ├── __init__.py
-│   ├── knowledge.db          # SQLite knowledge database
-│   └── core/                 # Core modules
-│       ├── phi_encoder.py        # φ-based semantic encoder
-│       ├── knowledge_db.py       # SQLite database backend
-│       ├── knowledge_manager.py  # Knowledge CRUD operations
-│       ├── code_generator.py     # Python code generation
-│       ├── bash_generator.py     # Bash command generation
-│       ├── task_planner.py       # Multi-step task planning
-│       ├── executor.py           # Safe code execution
-│       ├── intent_manager.py     # Intent pattern management
-│       └── engine.py             # TruthSpace engine
-├── tests/                    # Test suite
-├── examples/                 # Example scripts
-├── docs/                     # Documentation
-├── scripts/                  # Utility scripts
-├── truthspace_lcm_cli.py     # Command line interface
+│   ├── truthspace.db         # SQLite knowledge database
+│   └── core/                 # Core modules (~2,400 lines)
+│       ├── truthspace.py         # Unified knowledge storage + query
+│       ├── resolver.py           # NL → Knowledge → Output
+│       ├── ingestor.py           # Knowledge acquisition
+│       ├── encoder.py            # φ-based semantic encoding
+│       └── executor.py           # Safe code execution
+├── scripts/
+│   └── seed_truthspace.py    # Reset knowledge to minimal state
+├── run.py                    # Interactive runner
+├── tests/
+├── docs/
 ├── requirements.txt
-├── pyproject.toml
-├── LICENSE
 └── README.md
 ```
 
@@ -192,34 +186,49 @@ truthspace-lcm/
 Knowledge is encoded using the **φ-encoder**, which maps natural language to geometric positions using semantic primitives:
 
 **Primitive Types:**
-- **ACTIONS** - CREATE, DESTROY, READ, WRITE, MOVE, CONNECT, EXECUTE, TRANSFORM, SEARCH, COMPARE
-- **DOMAINS** - FILE, PROCESS, NETWORK, SYSTEM, USER, DATA, TEXT
-- **MODIFIERS** - ALL, RECURSIVE, VERBOSE, FORCE, QUIET
+- **ACTIONS** (dims 0-3) - CREATE, DESTROY, READ, WRITE, MOVE, CONNECT, EXECUTE, SEARCH
+- **DOMAINS** (dims 4-6) - FILE, PROCESS, NETWORK, SYSTEM, USER, DATA
+- **MODIFIERS** (dim 7) - ALL, RECURSIVE, VERBOSE, FORCE
 
 **Position Computation:**
 ```
 position = Σ (primitive_position × relevance_weight)
+primitive_position[dim] = φ^level  (where φ = 1.618...)
 ```
-
-Each primitive has a fixed position derived from the golden ratio (φ = 1.618...), ensuring:
-- Semantically similar queries → nearby positions
-- Domain isolation prevents cross-domain interference
-- Deterministic, reproducible encodings
 
 This allows semantic similarity search without neural networks.
 
-### Task Decomposition
+### Resolution Pipeline
 
-Complex requests are broken into atomic steps:
-1. Detect task type (project setup, file operation, web scraping, etc.)
-2. Decompose into steps with dependencies
-3. Generate code for each step
-4. Execute in dependency order
-5. Validate results
+```
+"list files in directory"
+        │
+        ▼
+   ┌─────────────┐
+   │  φ-Encoder  │  → position = [0.62, 0.38, 0, 0, 0.85, 0, 0, 0]
+   └─────────────┘
+        │
+        ▼
+   ┌─────────────┐
+   │ TruthSpace  │  → query(position) → best match: list_files intent
+   │   Query     │
+   └─────────────┘
+        │
+        ▼
+   ┌─────────────┐
+   │  Extract    │  → "ls -la"
+   │   Output    │
+   └─────────────┘
+        │
+        ▼
+   ┌─────────────┐
+   │  Execute    │  → stdout: "total 48\ndrwxr-xr-x..."
+   └─────────────┘
+```
 
 ## Contributing
 
-Contributions are welcome! Please read our contributing guidelines first.
+Contributions are welcome!
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)

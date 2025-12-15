@@ -1,31 +1,71 @@
 """
 TruthSpace LCM Core Module
 
-Contains the main components:
-- KnowledgeManager: Geometric knowledge storage and retrieval
-- CodeGenerator: Python code generation from natural language
-- BashGenerator: Bash command generation from natural language
-- TaskPlanner: Multi-step task decomposition and orchestration
-- Executor: Safe code execution with validation
+Minimal architecture with maximum knowledge-space usage.
+
+Components:
+- TruthSpace: Unified knowledge storage and query interface
+- Resolver: Thin NL → Knowledge → Output resolver
+- Ingestor: Knowledge acquisition from various sources
+- PhiEncoder: φ-based semantic encoding
+- CodeExecutor: Safe code execution
 """
 
-from truthspace_lcm.core.knowledge_manager import KnowledgeManager, KnowledgeDomain, KnowledgeEntry
-from truthspace_lcm.core.code_generator import CodeGenerator
-from truthspace_lcm.core.bash_generator import BashGenerator
-from truthspace_lcm.core.task_planner import TaskPlanner, TaskPlan, TaskStep, StepType, StepStatus
-from truthspace_lcm.core.executor import CodeExecutor, ExecutionResult, ExecutionStatus
+from truthspace_lcm.core.truthspace import (
+    TruthSpace,
+    KnowledgeEntry,
+    KnowledgeDomain,
+    EntryType,
+    KnowledgeGapError,
+    QueryResult,
+)
+from truthspace_lcm.core.resolver import (
+    Resolver,
+    Resolution,
+    ExecutionResult as ResolverExecutionResult,
+    OutputType,
+)
+from truthspace_lcm.core.ingestor import (
+    Ingestor,
+    SourceType,
+    ParsedKnowledge,
+    IngestionError,
+)
+from truthspace_lcm.core.encoder import (
+    PhiEncoder,
+    SemanticDecomposition,
+    Primitive,
+    PrimitiveType,
+)
+from truthspace_lcm.core.executor import (
+    CodeExecutor,
+    ExecutionResult,
+    ExecutionStatus,
+)
 
 __all__ = [
-    "KnowledgeManager",
-    "KnowledgeDomain",
+    # TruthSpace
+    "TruthSpace",
     "KnowledgeEntry",
-    "CodeGenerator", 
-    "BashGenerator",
-    "TaskPlanner",
-    "TaskPlan",
-    "TaskStep",
-    "StepType",
-    "StepStatus",
+    "KnowledgeDomain",
+    "EntryType",
+    "KnowledgeGapError",
+    "QueryResult",
+    # Resolver
+    "Resolver",
+    "Resolution",
+    "OutputType",
+    # Ingestor
+    "Ingestor",
+    "SourceType",
+    "ParsedKnowledge",
+    "IngestionError",
+    # Encoder
+    "PhiEncoder",
+    "SemanticDecomposition",
+    "Primitive",
+    "PrimitiveType",
+    # Executor
     "CodeExecutor",
     "ExecutionResult",
     "ExecutionStatus",

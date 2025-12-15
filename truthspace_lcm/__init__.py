@@ -1,61 +1,70 @@
 """
 TruthSpace LCM - Language-Code Model
 
-A natural language to code system that uses geometric knowledge encoding
+A natural language to code system that uses φ-based geometric knowledge encoding
 to translate human requests into executable Python and Bash code.
 
-Features:
-- Natural language understanding
-- Multi-step task planning
-- Python code generation
-- Bash command generation
-- Safe code execution
-- Output validation
+Minimal architecture with maximum knowledge-space usage.
 
 Example:
-    from truthspace_lcm import TruthSpaceLCM
+    from truthspace_lcm import TruthSpace, Resolver
     
-    lcm = TruthSpaceLCM()
-    plan = lcm.process("create a python project called myapp")
+    ts = TruthSpace()
+    resolver = Resolver(ts)
+    result = resolver.resolve("list files in directory")
+    print(result.output)  # ls -la
 """
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 __author__ = "TruthSpace Team"
 
-from truthspace_lcm.core.knowledge_manager import KnowledgeManager, KnowledgeDomain, KnowledgeEntry
-from truthspace_lcm.core.code_generator import CodeGenerator
-from truthspace_lcm.core.bash_generator import BashGenerator
-from truthspace_lcm.core.task_planner import TaskPlanner, TaskPlan, TaskStep, StepType, StepStatus
-from truthspace_lcm.core.executor import CodeExecutor, ExecutionResult, ExecutionStatus
-from truthspace_lcm.core.knowledge_acquisition import (
-    KnowledgeAcquisitionSystem,
-    KnowledgeGapDetector,
-    KnowledgeAcquirer,
-    KnowledgeBuilder,
-    KnowledgeGap,
-    AcquiredKnowledge,
-    KnowledgeSource
+from truthspace_lcm.core.truthspace import (
+    TruthSpace,
+    KnowledgeEntry,
+    KnowledgeDomain,
+    EntryType,
+    KnowledgeGapError,
+)
+from truthspace_lcm.core.resolver import (
+    Resolver,
+    Resolution,
+    OutputType,
+)
+from truthspace_lcm.core.ingestor import (
+    Ingestor,
+    SourceType,
+    IngestionError,
+)
+from truthspace_lcm.core.encoder import (
+    PhiEncoder,
+    SemanticDecomposition,
+)
+from truthspace_lcm.core.executor import (
+    CodeExecutor,
+    ExecutionResult,
+    ExecutionStatus,
 )
 
 __all__ = [
-    "KnowledgeManager",
-    "KnowledgeDomain", 
+    # TruthSpace
+    "TruthSpace",
     "KnowledgeEntry",
-    "CodeGenerator",
-    "BashGenerator",
-    "TaskPlanner",
-    "TaskPlan",
-    "TaskStep",
-    "StepType",
-    "StepStatus",
+    "KnowledgeDomain",
+    "EntryType",
+    "KnowledgeGapError",
+    # Resolver
+    "Resolver",
+    "Resolution",
+    "OutputType",
+    # Ingestor
+    "Ingestor",
+    "SourceType",
+    "IngestionError",
+    # Encoder
+    "PhiEncoder",
+    "SemanticDecomposition",
+    # Executor
     "CodeExecutor",
     "ExecutionResult",
     "ExecutionStatus",
-    "KnowledgeAcquisitionSystem",
-    "KnowledgeGapDetector",
-    "KnowledgeAcquirer",
-    "KnowledgeBuilder",
-    "KnowledgeGap",
-    "AcquiredKnowledge",
-    "KnowledgeSource",
 ]

@@ -2,6 +2,11 @@
 
 **A comprehensive guide for understanding and continuing development of the TruthSpace Language-Code Model**
 
+> **Version 0.2.0** - Minimal Architecture Refactor
+> 
+> The system has been consolidated from ~6,000 lines to ~2,400 lines.
+> All logic now lives in knowledge space; code is just a geometric interpreter.
+
 ---
 
 ## Table of Contents
@@ -9,16 +14,13 @@
 1. [Philosophy & Vision](#philosophy--vision)
 2. [What is an LCM vs LLM?](#what-is-an-lcm-vs-llm)
 3. [Mathematical Foundations](#mathematical-foundations)
-4. [Geometric Knowledge Encoding](#geometric-knowledge-encoding)
-5. [Architecture Overview](#architecture-overview)
-6. [Component Deep Dives](#component-deep-dives)
-7. [Knowledge Base Structure](#knowledge-base-structure)
-8. [Code Generation Pipeline](#code-generation-pipeline)
-9. [Current State & Capabilities](#current-state--capabilities)
-10. [Design Decisions & Rationale](#design-decisions--rationale)
-11. [Known Limitations](#known-limitations)
-12. [Future Directions](#future-directions)
-13. [Development Guidelines](#development-guidelines)
+4. [Minimal Architecture](#minimal-architecture)
+5. [Core Components](#core-components)
+6. [Knowledge Base Structure](#knowledge-base-structure)
+7. [Resolution Pipeline](#resolution-pipeline)
+8. [Current State & Capabilities](#current-state--capabilities)
+9. [Design Decisions & Rationale](#design-decisions--rationale)
+10. [Development Guidelines](#development-guidelines)
 
 ---
 
@@ -267,301 +269,280 @@ Benefits over JSON files:
 
 ---
 
-## Architecture Overview
+## Minimal Architecture
+
+> **Design Principle**: Code is just a geometric interpreter. All logic lives in TruthSpace as knowledge.
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                         User Request                            │
-│              "create a python project called myapp"             │
+│              "write a hello world python program"               │
 └─────────────────────────────────────────────────────────────────┘
                                 │
                                 ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│                        Task Planner                             │
+│                        Resolver                                 │
+│   - NO hardcoded patterns                                       │
+│   - NO fallbacks (fail fast)                                    │
+│   - Just: query → extract → return                              │
+└─────────────────────────────────────────────────────────────────┘
+                                │
+                                ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                       TruthSpace                                │
 │  ┌─────────────────────────────────────────────────────────┐   │
-│  │ 1. Detect task type (project setup, file op, web, etc.) │   │
-│  │ 2. Decompose into atomic steps                          │   │
-│  │ 3. Establish dependencies between steps                 │   │
-│  │ 4. Determine step type (Python vs Bash)                 │   │
-│  └─────────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────────┘
-                                │
-                                ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                      Code Generators                            │
-│  ┌──────────────────────┐    ┌──────────────────────┐          │
-│  │   Python Generator   │    │    Bash Generator    │          │
-│  │  ┌────────────────┐  │    │  ┌────────────────┐  │          │
-│  │  │ Intent Detection│  │    │  │ Intent Detection│  │          │
-│  │  │ Keyword Extract │  │    │  │ Path Extraction │  │          │
-│  │  │ Knowledge Query │  │    │  │ Knowledge Query │  │          │
-│  │  │ Code Composition│  │    │  │ Cmd Composition │  │          │
-│  │  └────────────────┘  │    │  └────────────────┘  │          │
-│  └──────────────────────┘    └──────────────────────┘          │
-└─────────────────────────────────────────────────────────────────┘
-                                │
-                                ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                      Knowledge Manager                          │
-│  ┌─────────────────────────────────────────────────────────┐   │
-│  │              Geometric Similarity Search                 │   │
-│  │  query_keywords → position → cosine_similarity → top_k  │   │
+│  │              φ-Encoder (semantic math)                   │   │
+│  │  text → primitives → position in 8D space               │   │
 │  └─────────────────────────────────────────────────────────┘   │
 │  ┌─────────────────────────────────────────────────────────┐   │
-│  │                   Knowledge Store                        │   │
-│  │  77 Python entries │ 74 Bash entries │ Domain isolation │   │
+│  │              SQLite Knowledge Store                      │   │
+│  │  ~40 entries: primitives + intents + commands           │   │
+│  └─────────────────────────────────────────────────────────┘   │
+│  ┌─────────────────────────────────────────────────────────┐   │
+│  │              Geometric Query                             │   │
+│  │  cosine_similarity(query_pos, entry_pos) → best match   │   │
 │  └─────────────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────────┘
                                 │
                                 ▼
 ┌─────────────────────────────────────────────────────────────────┐
 │                         Executor                                │
-│  ┌─────────────────────────────────────────────────────────┐   │
-│  │ • Isolated temp directory                                │   │
-│  │ • Subprocess execution with timeout                      │   │
-│  │ • Output capture (stdout, stderr)                        │   │
-│  │ • Error diagnosis and suggestions                        │   │
-│  │ • Validation rules                                       │   │
-│  └─────────────────────────────────────────────────────────┘   │
+│   - Subprocess execution with timeout                           │
+│   - Output capture (stdout, stderr)                             │
 └─────────────────────────────────────────────────────────────────┘
                                 │
                                 ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│                          Results                                │
-│  ✅ Step 1: mkdir -p myapp                                      │
-│  ✅ Step 2: mkdir -p myapp/src                                  │
-│  ✅ Step 3: touch myapp/src/__init__.py                        │
-│  ✅ Step 4: touch myapp/src/main.py                            │
-│  ✅ Step 5: touch myapp/README.md                              │
+│                          Output                                 │
+│  print("Hello, World!")                                         │
+│  → Hello, World!                                                │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Component Deep Dives
+## Core Components
 
-### 1. Knowledge Manager (`knowledge_manager.py`)
+### File Structure (~2,400 lines total)
 
-**Purpose**: Store, retrieve, and manage knowledge entries using geometric encoding.
+| File | Lines | Purpose |
+|------|-------|---------|
+| `truthspace.py` | 647 | Unified knowledge storage + query |
+| `resolver.py` | 321 | NL → Knowledge → Output |
+| `ingestor.py` | 497 | Knowledge acquisition |
+| `encoder.py` | 365 | φ-based semantic encoding |
+| `executor.py` | 513 | Safe code execution |
+
+### 1. TruthSpace (`truthspace.py`)
+
+**Purpose**: Unified knowledge storage and query interface.
+
+**Key Classes**:
+```python
+class EntryType(Enum):
+    PRIMITIVE = "primitive"   # Semantic anchors (CREATE, READ, FILE)
+    INTENT = "intent"         # NL trigger → command mapping
+    COMMAND = "command"       # Executable command knowledge
+    PATTERN = "pattern"       # Code templates
+    CONCEPT = "concept"       # General knowledge
+
+class KnowledgeEntry:
+    id: str
+    name: str
+    entry_type: EntryType
+    domain: KnowledgeDomain
+    description: str
+    position: np.ndarray      # 8D φ-encoded position
+    keywords: List[str]
+    metadata: Dict[str, Any]
+```
 
 **Key Methods**:
 ```python
-# Create new knowledge
-entry = manager.create(name, domain, entry_type, description, keywords, metadata)
+# Store knowledge
+entry = ts.store(name, entry_type, domain, description, keywords, metadata)
 
-# Query by keywords (returns sorted by similarity)
-results = manager.query(keywords, domain=None, top_k=10)
+# Query (raises KnowledgeGapError if no match)
+results = ts.query(text, entry_type=None, domain=None, threshold=0.3)
 
-# CRUD operations
-entry = manager.read(entry_id)
-entry = manager.update(entry_id, updates)
-manager.delete(entry_id)  # Creates backup first
-
-# Persistence
-manager.save()  # Save all to disk
-manager.load()  # Load from disk
+# Resolve to executable output
+output, output_type, entry = ts.resolve(text)
 ```
 
-**Design Principles**:
-- **Additive**: New entries add to space, never overwrite
-- **Versioned**: Updates create backups with version numbers
-- **Safe Deletes**: Deleted entries are backed up, not destroyed
+### 2. Resolver (`resolver.py`)
 
-### 2. Code Generator (`code_generator.py`)
+**Purpose**: Thin NL → Knowledge → Output interface.
 
-**Purpose**: Translate natural language to Python code.
+**Design**: NO hardcoded patterns. Everything comes from TruthSpace.
 
-**Key Components**:
-
-1. **Intent Detection**: Regex patterns to identify what the user wants
 ```python
-self.intent_patterns = {
-    "fetch_url": [r"fetch\s+(?:the\s+)?(?:url|page|website)", ...],
-    "read_file": [r"read\s+(?:the\s+)?(?:file|json|data)", ...],
-    "write_file": [r"write\s+(?:to\s+)?(?:a\s+)?file", ...],
-    # ... more patterns
-}
+class Resolver:
+    def resolve(self, request: str) -> Resolution:
+        # 1. Query TruthSpace
+        # 2. If KnowledgeGapError and auto_learn, try to learn
+        # 3. Extract output from best match
+        # 4. Return Resolution with output + metadata
+    
+    def resolve_and_execute(self, request: str) -> Tuple[Resolution, ExecutionResult]:
+        # Resolve + execute in one step
 ```
 
-2. **Keyword Extraction**: Pull relevant terms from request
-3. **Knowledge Query**: Find matching entries in knowledge base
-4. **Code Composition**: Assemble code from templates and knowledge
+### 3. Encoder (`encoder.py`)
 
-### 3. Bash Generator (`bash_generator.py`)
+**Purpose**: φ-based semantic encoding.
 
-**Purpose**: Translate natural language to Bash commands.
+**Primitives** (loaded from TruthSpace or bootstrap):
+- **ACTIONS** (dims 0-3): CREATE, DESTROY, READ, WRITE, MOVE, CONNECT, SEARCH, EXECUTE
+- **DOMAINS** (dims 4-6): FILE, PROCESS, NETWORK, SYSTEM, DATA, USER
+- **MODIFIERS** (dim 7): ALL, RECURSIVE, FORCE, VERBOSE
 
-**Similar structure to Code Generator but optimized for shell commands**:
-- Path extraction from requests
-- Command composition
-- Flag handling
-
-### 4. Task Planner (`task_planner.py`)
-
-**Purpose**: Decompose complex tasks into executable steps.
-
-**Task Types**:
 ```python
-self.task_patterns = {
-    "create_project": [...],    # Multi-step project setup
-    "scrape_and_save": [...],   # Fetch → Parse → Save
-    "backup_task": [...],       # Create dir → Compress → Verify
-    "organize_files": [...],    # File organization
-}
+encoder = PhiEncoder()
+result = encoder.encode("list files in directory")
+# result.primitives = [READ, FILE]
+# result.position = [0.62, 0.38, 0, 0, 0.85, 0, 0, 0]
 ```
 
-**Decomposition Example**:
-```
-"create a python project called myapp"
-    ↓
-Step 1: mkdir -p myapp
-Step 2: mkdir -p myapp/src         [depends on 1]
-Step 3: touch myapp/src/__init__.py [depends on 2]
-Step 4: touch myapp/src/main.py     [depends on 2]
-Step 5: touch myapp/README.md       [depends on 1]
+### 4. Ingestor (`ingestor.py`)
+
+**Purpose**: Knowledge acquisition from various sources.
+
+```python
+ingestor = Ingestor(ts)
+
+# Auto-detect and ingest
+entry = ingestor.ingest("ls")  # From man page
+
+# Custom knowledge
+entry = ingestor.ingest_custom(
+    name="backup_dir",
+    description="Create timestamped backup",
+    keywords=["backup", "tar", "archive"],
+    output_type="bash",
+    syntax="tar -czf backup_$(date +%Y%m%d).tar.gz <dir>"
+)
 ```
 
 ### 5. Executor (`executor.py`)
 
-**Purpose**: Safely execute generated code and validate results.
+**Purpose**: Safe code execution.
 
-**Safety Features**:
-- Isolated temporary directory
-- Subprocess execution (not `exec()`)
-- Timeout protection
-- Output capture
-- Error diagnosis
-
-**Validation System**:
 ```python
-ValidationRule(
-    name="file_exists",
-    check_type="file_exists",
-    expected="output.json",
-    message="Expected file was not created"
-)
+executor = CodeExecutor()
+result = executor.execute_python('print("Hello")')
+result = executor.execute_bash('ls -la')
 ```
 
 ---
 
 ## Knowledge Base Structure
 
-### Python Knowledge (77 entries)
+### Minimal Seed (~40 entries)
 
-| Category | Count | Examples |
-|----------|-------|----------|
-| Core Functions | 10 | print, input, len, range, type, str, int, list, dict, open |
-| Requests Library | 8 | get, post, response handling, headers, JSON |
-| JSON Library | 6 | load, dump, loads, dumps, file operations |
-| OS Library | 8 | path operations, environment, file system |
-| File Operations | 10 | read, write, append, binary, context managers |
-| String Operations | 8 | split, join, format, strip, replace |
-| List Operations | 8 | append, extend, sort, filter, map, comprehensions |
-| Control Flow | 6 | if/else, for, while, try/except |
-| Web Scraping | 6 | BeautifulSoup, selectors, parsing |
-| Common Patterns | 7 | file reading, JSON handling, error handling |
+The system starts with minimal knowledge that can be expanded:
 
-### Bash Knowledge (74 entries)
+| Type | Count | Examples |
+|------|-------|----------|
+| **Primitives** | 19 | CREATE, READ, WRITE, FILE, NETWORK, RECURSIVE |
+| **Intents** | 17 | list_files → `ls -la`, hello_world → `print("Hello, World!")` |
+| **Commands** | 5 | ls, cd, cat, grep, find |
 
-| Category | Count | Examples |
-|----------|-------|----------|
-| File Operations | 6 | touch, cp, mv, rm, ln, file |
-| Directory Operations | 7 | mkdir, rmdir, cd, pwd, ls, tree, find |
-| Text Processing | 8 | grep, sed, awk, sort, uniq, wc, cut, tr |
-| File Viewing | 5 | cat, less, head, tail, diff |
-| Permissions | 3 | chmod, chown, chgrp |
-| System Info | 9 | echo, whoami, hostname, uname, df, du, date, env, which |
-| Process Management | 7 | ps, top, kill, killall, bg, fg, nohup |
-| Networking | 6 | curl, wget, ping, ssh, scp, netstat |
-| Compression | 5 | tar, gzip, gunzip, zip, unzip |
-| Common Patterns | 18 | backup, search, loops, conditionals |
+### Entry Types
+
+```python
+PRIMITIVE   # Semantic anchors - the building blocks of meaning
+INTENT      # NL trigger → command mapping (high precision)
+COMMAND     # Executable command with syntax/examples
+PATTERN     # Code templates
+CONCEPT     # General knowledge
+META        # Stop words, config, etc.
+```
+
+### Expanding Knowledge
+
+1. **Seed script**: `python scripts/seed_truthspace.py` - Reset to minimal
+2. **Auto-learning**: System learns from man pages on `KnowledgeGapError`
+3. **Manual**: Use `TruthSpace.store()` or `Ingestor.ingest_custom()`
 
 ---
 
-## Code Generation Pipeline
+## Resolution Pipeline
 
 ### Step-by-Step Example
 
-**Input**: "fetch https://api.github.com and parse the JSON"
+**Input**: "list files in directory"
 
-**1. Intent Detection**:
+**1. Encode**:
 ```python
-intents = ["fetch_url"]  # Matches "fetch ... url" pattern
+encoder.encode("list files in directory")
+# Primitives: [READ, FILE]
+# Position: [0.62, 0.38, 0, 0, 0.85, 0, 0, 0]
 ```
 
-**2. URL Extraction**:
+**2. Query TruthSpace**:
 ```python
-url = "https://api.github.com"  # Extracted via regex
+ts.query("list files in directory", entry_type=EntryType.INTENT)
+# Best match: list_files intent (similarity: 0.87)
 ```
 
-**3. Knowledge Query**:
+**3. Extract Output**:
 ```python
-keywords = ["fetch", "url", "json", "parse", "api"]
-results = manager.query(keywords, domain=PROGRAMMING)
-# Returns: requests.get, json parsing patterns, etc.
+entry.metadata["target_commands"][0]  # "ls -la"
+entry.metadata["output_type"]         # "bash"
 ```
 
-**4. Code Composition**:
+**4. Execute** (optional):
 ```python
-code = '''
-import requests
-
-url = 'https://api.github.com'
-
-response = requests.get(url)
-
-if response.status_code == 200:
-    data = response.json()
-    print(data)
-else:
-    print(f'Error: {response.status_code}')
-'''
-```
-
-**5. Import Inference**:
-```python
-# Scans code for library usage
-imports = ["import requests"]  # Added automatically
+subprocess.run("ls -la", shell=True)
+# stdout: "total 48\ndrwxr-xr-x..."
 ```
 
 ---
 
 ## Current State & Capabilities
 
-### What Works Well ✅
+### What Works ✅
 
-1. **Project Setup**: "create a python project called X" → Full directory structure
-2. **File Operations**: Create, copy, move, delete files and directories
-3. **Simple Code Generation**: Print statements, file I/O, JSON handling
-4. **Web Requests**: Fetch URLs, parse JSON responses
-5. **Multi-Step Tasks**: Automatic decomposition and dependency tracking
-6. **Safe Execution**: Isolated environment, timeout protection
-7. **Error Diagnosis**: Helpful error messages with fix suggestions
+1. **Hello World**: `"write a hello world python program"` → `print("Hello, World!")`
+2. **File Operations**: List, create, delete files and directories
+3. **Network**: Show interfaces, download files
+4. **Search**: Find files, grep patterns
+5. **System**: Disk usage, process list, system info
+6. **Safe Execution**: Timeout protection, output capture
+
+### Design Philosophy
+
+- **Fail Fast**: No fallbacks - `KnowledgeGapError` if no match
+- **Minimal Code**: ~2,400 lines of irreducible bootstrap
+- **Maximum Knowledge**: Everything else is in TruthSpace
+- **Auto-Learning**: Can acquire knowledge from man pages/pydoc
 
 ### Current Limitations ⚠️
 
-1. **No Learning**: Knowledge must be manually added (by design, for control)
-2. **Template-Based**: Code comes from templates, not generated creatively
-3. **Limited Complexity**: Can't handle highly complex or novel requests
-4. **No Context Memory**: Each request is independent (no conversation state)
-5. **English Only**: Intent patterns are English-specific
-
-### Test Results
-
-```
-✅ KnowledgeManager tests passed
-✅ CodeGenerator tests passed  
-✅ BashGenerator tests passed
-✅ TaskPlanner tests passed
-✅ CodeExecutor tests passed
-✅ End-to-End tests passed
-
-Results: 6 passed, 0 failed
-```
+1. **Minimal Knowledge**: Only ~40 seed entries (by design - expandable)
+2. **No Context Memory**: Each request is independent
+3. **English Only**: Primitives are English keywords
 
 ---
 
 ## Design Decisions & Rationale
+
+### Why Minimal Code + Maximum Knowledge?
+
+The previous architecture had ~6,000 lines with hardcoded patterns scattered across:
+- `bash_generator.py` - 15 intent patterns
+- `code_generator.py` - 9 intent patterns
+- `task_planner.py` - 6 task patterns
+- `phi_encoder.py` - 22 hardcoded primitives
+
+**Problem**: Adding new capabilities required code changes.
+
+**Solution**: Move everything to knowledge space:
+- Primitives are now knowledge entries (type=PRIMITIVE)
+- Intents are knowledge entries (type=INTENT)
+- Commands are knowledge entries (type=COMMAND)
+
+Now adding capabilities = adding knowledge, not code.
 
 ### Why Geometric Encoding Instead of Embeddings?
 
@@ -576,149 +557,68 @@ Results: 6 passed, 0 failed
 - Stable: adding new knowledge doesn't change existing positions
 - Fast: just hash + arithmetic, no neural forward pass
 
-### Why Regex for Intent Detection?
+### Why Fail Fast?
 
-**Pros**:
-- Explicit and debuggable
-- No training required
-- Easy to add new patterns
-- Predictable behavior
+**Previous approach**: Multiple fallback layers
+- Try intent patterns → Try knowledge query → Try auto-learn → Return generic error
 
-**Cons**:
-- Doesn't handle paraphrasing well
-- Requires manual pattern creation
-- Can miss edge cases
+**Problem**: Hard to debug, unpredictable behavior, code complexity.
 
-**Future**: Could add fuzzy matching or simple ML classifier as enhancement.
-
-### Why Separate Python and Bash Generators?
-
-Different domains have different:
-- Syntax requirements
-- Common patterns
-- Error handling
-- Output expectations
-
-Keeping them separate allows specialized handling while sharing the knowledge infrastructure.
-
-### Why Template-Based Code Generation?
-
-**Templates are**:
-- Correct by construction
-- Easy to verify
-- Predictable
-- Maintainable
-
-**The tradeoff**: Less flexible than neural generation, but much more reliable for the supported use cases.
-
----
-
-## Known Limitations
-
-### Intent Detection Gaps
-
-Some requests don't match patterns well:
-- "show me what's in the folder" (informal phrasing)
-- "make a backup of everything" (vague scope)
-- "do the same thing but for CSV" (requires context)
-
-### Code Generation Limitations
-
-1. **No variable tracking**: Can't reference results from previous steps
-2. **Fixed templates**: Can't combine patterns in novel ways
-3. **No type inference**: Doesn't understand data types flowing through code
-
-### Knowledge Base Gaps
-
-- No database operations (SQL, MongoDB)
-- No async/await patterns
-- No class definitions
-- No testing frameworks
-- Limited error handling patterns
-
----
-
-## Future Directions
-
-### Short-Term Improvements
-
-1. **More Knowledge Entries**: Add SQL, async, classes, testing
-2. **Better Intent Detection**: Fuzzy matching, synonyms
-3. **Variable Passing**: Track outputs between steps
-4. **Interactive Refinement**: Ask clarifying questions
-
-### Medium-Term Goals
-
-1. **Learning from Execution**: If code fails, remember the fix
-2. **User Customization**: Let users add their own patterns
-3. **Context Window**: Remember recent requests for follow-ups
-4. **Code Explanation**: Explain what generated code does
-
-### Long-Term Vision
-
-1. **Self-Improving Knowledge**: Automatically extract patterns from successful executions
-2. **Multi-Language Support**: JavaScript, Go, Rust generators
-3. **IDE Integration**: VS Code extension
-4. **Collaborative Knowledge**: Share knowledge bases between users
+**New approach**: Query succeeds or raises `KnowledgeGapError`
+- Clear signal that knowledge is missing
+- Triggers auto-learning opportunity
+- No silent failures
 
 ---
 
 ## Development Guidelines
 
-### Adding New Knowledge
+### Adding Knowledge
 
 ```python
-# In python_knowledge_builder.py or bash_knowledge_builder.py
+from truthspace_lcm import TruthSpace, EntryType, KnowledgeDomain
 
-def _build_new_category(self) -> int:
-    entries = [
-        ("entry_name", "entry_type",
-         "Description of what it does",
-         ["keyword1", "keyword2", "keyword3"],
-         {"syntax": "...", "example": "..."}),
-    ]
-    for name, etype, desc, kw, meta in entries:
-        self._create(name, etype, desc, kw, meta)
-    return len(entries)
+ts = TruthSpace()
+
+# Add an intent
+ts.store(
+    name="my_intent",
+    entry_type=EntryType.INTENT,
+    domain=KnowledgeDomain.PROGRAMMING,
+    description="What this does",
+    keywords=["keyword1", "keyword2"],
+    metadata={
+        "target_commands": ["actual_command"],
+        "output_type": "bash",  # or "python"
+    }
+)
 ```
 
-### Adding New Intent Patterns
-
-```python
-# In code_generator.py or bash_generator.py
-
-self.intent_patterns["new_intent"] = [
-    r"pattern1\s+with\s+groups?",
-    r"alternative\s+pattern",
-]
-
-# Then add handler in generate() method
-if "new_intent" in intents:
-    code, entries = self._generate_new_intent(request)
-    # ...
-```
-
-### Testing Changes
+### Testing
 
 ```bash
-# Run test suite
-python tests/test_basic.py
+# Interactive test
+python run.py
 
-# Test specific functionality
+# Single query
+python run.py "your test request"
+
+# Python API test
 python -c "
-from truthspace_lcm import TaskPlanner
-p = TaskPlanner()
-plan = p.plan('your test request')
-print(plan.steps)
+from truthspace_lcm import TruthSpace, Resolver
+ts = TruthSpace()
+resolver = Resolver(ts)
+result = resolver.resolve('your test request')
+print(result.output)
 "
 ```
 
-### Code Style
+### Resetting Knowledge
 
-- Type hints on all public methods
-- Docstrings for classes and public methods
-- Keep methods focused (single responsibility)
-- Prefer explicit over implicit
+```bash
+# Reset to minimal seed
+python scripts/seed_truthspace.py
+```
 
 ---
 
@@ -728,82 +628,85 @@ print(plan.steps)
 
 | File | Purpose |
 |------|---------|
-| `truthspace_lcm/core/knowledge_manager.py` | Geometric knowledge storage |
-| `truthspace_lcm/core/code_generator.py` | Python code generation |
-| `truthspace_lcm/core/bash_generator.py` | Bash command generation |
-| `truthspace_lcm/core/task_planner.py` | Multi-step task decomposition |
+| `truthspace_lcm/core/truthspace.py` | Unified knowledge storage + query |
+| `truthspace_lcm/core/resolver.py` | NL → Knowledge → Output |
+| `truthspace_lcm/core/ingestor.py` | Knowledge acquisition |
+| `truthspace_lcm/core/encoder.py` | φ-based semantic encoding |
 | `truthspace_lcm/core/executor.py` | Safe code execution |
-| `truthspace_lcm/core/python_knowledge_builder.py` | Python knowledge entries |
-| `truthspace_lcm/core/bash_knowledge_builder.py` | Bash knowledge entries |
-| `truthspace_lcm/knowledge_store/` | Persisted knowledge (JSON) |
-| `truthspace_lcm_cli.py` | Command-line interface |
+| `truthspace_lcm/truthspace.db` | SQLite knowledge database |
+| `scripts/seed_truthspace.py` | Reset knowledge to minimal |
+| `run.py` | Interactive runner |
 
 ### Key Classes
 
 ```python
 from truthspace_lcm import (
-    KnowledgeManager,    # Store and query knowledge
-    KnowledgeDomain,     # Domain enum (PROGRAMMING, HISTORY, etc.)
+    TruthSpace,          # Unified knowledge interface
     KnowledgeEntry,      # Single knowledge item
-    CodeGenerator,       # Natural language → Python
-    BashGenerator,       # Natural language → Bash
-    TaskPlanner,         # Complex task decomposition
-    TaskPlan,            # Plan with steps
-    TaskStep,            # Single step in plan
-    StepType,            # PYTHON or BASH
-    StepStatus,          # PENDING, COMPLETED, FAILED, etc.
+    KnowledgeDomain,     # Domain enum (PROGRAMMING, SYSTEM, GENERAL)
+    EntryType,           # Entry type enum (PRIMITIVE, INTENT, COMMAND, etc.)
+    KnowledgeGapError,   # Raised when no match found
+    Resolver,            # NL → Knowledge → Output
+    Resolution,          # Result of resolution
+    OutputType,          # BASH, PYTHON, TEXT
+    Ingestor,            # Knowledge acquisition
+    PhiEncoder,          # Semantic encoding
     CodeExecutor,        # Safe execution
     ExecutionResult,     # Execution output
-    ExecutionStatus,     # SUCCESS, FAILED, TIMEOUT, etc.
+    ExecutionStatus,     # SUCCESS, FAILED, TIMEOUT
 )
 ```
 
 ### Common Operations
 
 ```python
-# Plan and execute a task
-planner = TaskPlanner()
-plan = planner.plan("create a python project called myapp")
-plan = planner.execute_plan(plan, dry_run=False)
+from truthspace_lcm import TruthSpace, Resolver
 
-# Generate Python code only
-generator = CodeGenerator()
-result = generator.generate("read a json file called config.json")
-print(result.code)
+# Initialize
+ts = TruthSpace()
+resolver = Resolver(ts, auto_learn=True)
 
-# Generate Bash command only
-bash_gen = BashGenerator()
-result = bash_gen.generate("list all .py files")
-print(result.command)
+# Resolve natural language
+result = resolver.resolve("list files in directory")
+print(result.output)       # ls -la
+print(result.output_type)  # OutputType.BASH
 
-# Query knowledge directly
-manager = KnowledgeManager()
-results = manager.query(["http", "request", "get"])
-for similarity, entry in results:
-    print(f"{entry.name}: {similarity:.3f}")
+# Resolve and execute
+resolution, exec_result = resolver.resolve_and_execute("show current directory")
+print(exec_result.stdout)
+
+# Add custom knowledge
+ts.store(
+    name="my_command",
+    entry_type=EntryType.INTENT,
+    domain=KnowledgeDomain.PROGRAMMING,
+    description="My custom command",
+    keywords=["my", "custom"],
+    metadata={"target_commands": ["echo 'custom'"], "output_type": "bash"}
+)
 ```
 
 ---
 
 ## Summary
 
-TruthSpace LCM is an experiment in **interpretable, geometric knowledge representation** for code generation. Instead of training a neural network on code, we:
+TruthSpace LCM v0.2.0 is a **minimal, knowledge-first** system for code generation:
 
-1. **Encode knowledge geometrically** using mathematical constants
-2. **Isolate domains** using orthogonal subspaces
-3. **Retrieve by similarity** using cosine distance
-4. **Generate from templates** for reliability
-5. **Execute safely** with validation
+| Aspect | Description |
+|--------|-------------|
+| **Code** | ~2,400 lines of irreducible bootstrap |
+| **Knowledge** | ~40 seed entries (expandable) |
+| **Philosophy** | Code is a geometric interpreter; logic lives in knowledge |
+| **Fail Mode** | Fast - `KnowledgeGapError` if no match |
+| **Learning** | Auto-acquire from man pages/pydoc |
 
 The result is a system that's:
 - **Transparent**: We know exactly what it knows
-- **Controllable**: We can add/remove knowledge precisely
-- **Reliable**: No hallucinations, predictable output
+- **Minimal**: Only essential code, everything else is knowledge
+- **Extensible**: Add capabilities by adding knowledge, not code
 - **Fast**: No GPU required, runs on any machine
-
-The tradeoff is flexibility - it can only do what's in its knowledge base. But for the supported use cases, it's rock solid.
 
 ---
 
 *Last updated: December 2024*
-*Version: 0.1.0*
+*Version: 0.2.0*
