@@ -51,31 +51,36 @@ Everything else - patterns, intents, transformations, domain logic - should be *
 
 ## Current Implementation State
 
-### What Works (Hash-Based Encoding)
+### φ-Based Encoding (Current)
 
-The current implementation uses hash-based encoding to demonstrate the conceptual direction:
+The system now uses **φ-based semantic encoding** with hand-crafted primitives:
 
 ```python
-position[i] = hash(keyword)[i] × mathematical_constant[i]
+# Encode text using φ-encoder
+decomposition = phi_encoder.encode("show network interfaces")
+# → primitives: [READ, NETWORK]
+# → position: [0.0, 1.618, 0.0, 1.294, 0.0, 0.0, 0.0, 0.0]
 ```
 
 **Strengths:**
-- Deterministic - same input always produces same position
-- Fast - O(1) encoding
-- Demonstrates the architecture
+- Semantic proximity = geometric proximity
+- "show files" and "list directory" encode to similar positions
+- Deterministic and interpretable
+- Bidirectional mapping (NL ↔ Code)
 
-**Weaknesses:**
-- Hash proximity ≠ semantic proximity
-- "cat" and "kill" may hash similarly despite being unrelated
-- Doesn't capture relationships between concepts
+**Storage:**
+- SQLite database with indexed queries
+- Pre-computed position norms for fast similarity
+- ACID transactions for safe updates
 
 ### What We've Built
 
-1. **KnowledgeManager** - CRUD operations with geometric positioning
-2. **IntentManager** - Learned patterns that trigger commands
-3. **KnowledgeAcquisitionSystem** - Learns from man pages, pydoc, etc.
-4. **TruthSpaceEngine** - Minimal bootstrap (encode → query → decode)
-5. **SemanticMesh** (experimental) - Concept anchors using φ
+1. **φ-Encoder** - Semantic primitives with φ-anchored positions
+2. **KnowledgeDB** - SQLite backend optimized for vector queries
+3. **KnowledgeManager** - CRUD operations with φ-based positioning
+4. **IntentManager** - Learned patterns that trigger commands
+5. **KnowledgeAcquisitionSystem** - Learns from man pages, pydoc, etc.
+6. **TruthSpaceEngine** - Minimal bootstrap (encode → query → decode)
 
 ### The Intent System
 

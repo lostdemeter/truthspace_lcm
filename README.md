@@ -1,16 +1,17 @@
 # TruthSpace LCM
 
-**Language-Code Model** - A natural language to code system that uses geometric knowledge encoding to translate human requests into executable Python and Bash code.
+**Language-Code Model** - A natural language to code system that uses φ-based geometric knowledge encoding to translate human requests into executable Python and Bash code.
 
 ## Features
 
+- **φ-Based Semantic Encoding** - Uses the golden ratio (φ) as the fundamental anchor for positioning knowledge in geometric space
 - **Natural Language Understanding** - Describe what you want in plain English
 - **Multi-Step Task Planning** - Complex tasks are automatically decomposed into steps
 - **Python Code Generation** - Generate complete, runnable Python scripts
 - **Bash Command Generation** - Generate shell commands for file/system operations
+- **SQLite Knowledge Database** - Fast, ACID-compliant storage with optimized vector queries
 - **Safe Execution** - Code runs in isolated environments with timeout protection
-- **Output Validation** - Verify results match expectations
-- **Error Diagnosis** - Intelligent error messages with fix suggestions
+- **Autonomous Learning** - System can learn new commands and expand its knowledge base
 
 ## Installation
 
@@ -92,8 +93,18 @@ if plan.status == StepStatus.COMPLETED:
               └─────────────┬─────────────┘
                             ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                   Knowledge Base                            │
-│            77 Python + 74 Bash = 151 entries                │
+│                    φ-Encoder                                │
+│   - Semantic primitives (ACTIONS, DOMAINS, MODIFIERS)       │
+│   - Golden ratio (φ) based position computation             │
+│   - Bidirectional mapping (NL ↔ Code)                       │
+└─────────────────────────────────────────────────────────────┘
+                            │
+                            ▼
+┌─────────────────────────────────────────────────────────────┐
+│                 SQLite Knowledge Database                   │
+│   - 160+ entries with φ-encoded positions                   │
+│   - Indexed queries with keyword boosting                   │
+│   - ACID transactions for safe updates                      │
 └─────────────────────────────────────────────────────────────┘
                             │
                             ▼
@@ -135,15 +146,16 @@ python truthspace_lcm_cli.py "backup the project folder"
 
 ## Knowledge Base
 
-The system includes 151 knowledge entries:
+The system includes 160+ knowledge entries stored in a SQLite database with φ-encoded positions:
 
-| Category | Entries | Examples |
-|----------|---------|----------|
-| Python Core | 20 | print, input, len, range, open |
-| Python Libraries | 30 | requests, json, os, sys |
-| Python Patterns | 27 | file reading, JSON parsing, loops |
-| Bash Commands | 50 | mkdir, cp, mv, rm, grep, find |
-| Bash Patterns | 24 | backup, search, compress |
+| Category | Examples |
+|----------|----------|
+| Python Core | print, input, len, range, open |
+| Python Libraries | requests, json, os, sys |
+| Python Patterns | file reading, JSON parsing, loops |
+| Bash Commands | mkdir, cp, mv, rm, grep, find |
+| Bash Patterns | backup, search, compress |
+| Learned Commands | uptime, ifconfig, ping (autonomously acquired) |
 
 ## Project Structure
 
@@ -151,19 +163,21 @@ The system includes 151 knowledge entries:
 truthspace-lcm/
 ├── truthspace_lcm/           # Main package
 │   ├── __init__.py
-│   ├── core/                 # Core modules
-│   │   ├── __init__.py
-│   │   ├── knowledge_manager.py    # Geometric knowledge storage
-│   │   ├── code_generator.py       # Python code generation
-│   │   ├── bash_generator.py       # Bash command generation
-│   │   ├── task_planner.py         # Multi-step task planning
-│   │   ├── executor.py             # Safe code execution
-│   │   ├── python_knowledge_builder.py
-│   │   └── bash_knowledge_builder.py
-│   └── knowledge_store/      # Persistent knowledge (JSON)
+│   ├── knowledge.db          # SQLite knowledge database
+│   └── core/                 # Core modules
+│       ├── phi_encoder.py        # φ-based semantic encoder
+│       ├── knowledge_db.py       # SQLite database backend
+│       ├── knowledge_manager.py  # Knowledge CRUD operations
+│       ├── code_generator.py     # Python code generation
+│       ├── bash_generator.py     # Bash command generation
+│       ├── task_planner.py       # Multi-step task planning
+│       ├── executor.py           # Safe code execution
+│       ├── intent_manager.py     # Intent pattern management
+│       └── engine.py             # TruthSpace engine
 ├── tests/                    # Test suite
 ├── examples/                 # Example scripts
 ├── docs/                     # Documentation
+├── scripts/                  # Utility scripts
 ├── truthspace_lcm_cli.py     # Command line interface
 ├── requirements.txt
 ├── pyproject.toml
@@ -173,13 +187,24 @@ truthspace-lcm/
 
 ## How It Works
 
-### Geometric Knowledge Encoding
+### φ-Based Semantic Encoding
 
-Knowledge is encoded using semantic dimensions based on mathematical constants:
-- **φ (phi)** - Identity/naming
-- **π (pi)** - Spatial relationships
-- **e** - Temporal aspects
-- **γ (gamma)** - Causal relationships
+Knowledge is encoded using the **φ-encoder**, which maps natural language to geometric positions using semantic primitives:
+
+**Primitive Types:**
+- **ACTIONS** - CREATE, DESTROY, READ, WRITE, MOVE, CONNECT, EXECUTE, TRANSFORM, SEARCH, COMPARE
+- **DOMAINS** - FILE, PROCESS, NETWORK, SYSTEM, USER, DATA, TEXT
+- **MODIFIERS** - ALL, RECURSIVE, VERBOSE, FORCE, QUIET
+
+**Position Computation:**
+```
+position = Σ (primitive_position × relevance_weight)
+```
+
+Each primitive has a fixed position derived from the golden ratio (φ = 1.618...), ensuring:
+- Semantically similar queries → nearby positions
+- Domain isolation prevents cross-domain interference
+- Deterministic, reproducible encodings
 
 This allows semantic similarity search without neural networks.
 

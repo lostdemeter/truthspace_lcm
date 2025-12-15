@@ -71,7 +71,7 @@ class TruthSpaceEngine:
                 "knowledge_store"
             )
         self.storage_dir = storage_dir
-        self.manager = KnowledgeManager(storage_dir=storage_dir, use_phi_encoder=True)
+        self.manager = KnowledgeManager()  # Uses SQLite backend
         self.intent_manager = IntentManager(storage_dir=storage_dir)
         self.phi_encoder = PhiEncoder()  # φ-based semantic encoder
         self.dim = 8  # Dimensionality of TruthSpace

@@ -102,55 +102,55 @@ ZETA3 = 1.2020569           # Apéry's constant
 
 5. **√2, √3** - Geometric constants. Used for **methods and attributes**.
 
-### Semantic Dimensions
+### φ-Encoder: Semantic Primitives
 
-Each piece of knowledge is encoded across 8 semantic dimensions:
+The system uses a **φ-encoder** that maps natural language to geometric positions using hand-crafted semantic primitives:
 
 ```python
-class SemanticDimension(Enum):
-    IDENTITY = 0    # What is it? (name, type)
-    SPATIAL = 1     # Where does it apply? (context, scope)
-    TEMPORAL = 2    # When is it relevant? (sequence, timing)
-    CAUSAL = 3      # Why does it work? (cause-effect)
-    METHOD = 4      # How does it work? (procedure, algorithm)
-    ATTRIBUTE = 5   # What properties? (characteristics)
-    RELATION = 6    # How does it connect? (relationships)
-    DOMAIN = 7      # What field? (programming, history, etc.)
+class PrimitiveType(Enum):
+    ACTION = "action"      # Verbs: CREATE, DESTROY, READ, WRITE, etc.
+    DOMAIN = "domain"      # Nouns: FILE, PROCESS, NETWORK, SYSTEM, etc.
+    MODIFIER = "modifier"  # Adjectives: ALL, RECURSIVE, VERBOSE, etc.
+
+# 17 core primitives with φ-anchored positions
+PRIMITIVES = {
+    # Actions
+    "CREATE": (ACTION, [φ, 0, 0, 0, 0, 0, 0, 0]),
+    "DESTROY": (ACTION, [-φ, 0, 0, 0, 0, 0, 0, 0]),
+    "READ": (ACTION, [0, φ, 0, 0, 0, 0, 0, 0]),
+    "WRITE": (ACTION, [0, -φ, 0, 0, 0, 0, 0, 0]),
+    # ... etc
+}
 ```
 
 ### The Encoding Formula
 
-For a knowledge entry with keywords, we compute its position in truth space:
+For a knowledge entry, we compute its position using the φ-encoder:
 
 ```python
-def _compute_position(self, keywords: List[str], domain: KnowledgeDomain) -> np.ndarray:
-    """Compute geometric position from keywords."""
-    position = np.zeros(8)
+def _compute_position(self, name: str, domain: KnowledgeDomain,
+                      keywords: List[str]) -> np.ndarray:
+    """Compute geometric position using φ-encoder."""
+    # Combine name and keywords for encoding
+    text_to_encode = f"{name} {' '.join(keywords)}"
     
-    # Each keyword contributes to the position
-    for i, keyword in enumerate(keywords):
-        # Hash keyword to get deterministic values
-        h = int(hashlib.md5(keyword.encode()).hexdigest(), 16)
-        
-        # Distribute across dimensions using constants
-        position[0] += (h % 1000) / 1000 * PHI      # Identity
-        position[1] += ((h >> 10) % 1000) / 1000 * PI   # Spatial
-        position[2] += ((h >> 20) % 1000) / 1000 * E    # Temporal
-        position[3] += ((h >> 30) % 1000) / 1000 * GAMMA # Causal
-        position[4] += ((h >> 40) % 1000) / 1000 * SQRT3 # Method
-        position[5] += ((h >> 50) % 1000) / 1000 * SQRT2 # Attribute
-        position[6] += ((h >> 60) % 1000) / 1000 * LN2   # Relation
+    # Get semantic decomposition from φ-encoder
+    decomposition = self._phi_encoder.encode(text_to_encode)
+    position = decomposition.position.copy()
     
-    # Domain dimension - orthogonal subspaces
-    position[7] = domain.value * PHI
-    
-    # Normalize
-    norm = np.linalg.norm(position)
-    if norm > 0:
-        position = position / norm
+    # Add domain component for isolation
+    domain_offset = DOMAIN_CONSTANTS[domain]
+    position = position * 0.8  # Scale semantic components
+    position[0] += domain_offset * 0.2  # Add domain signal
     
     return position
 ```
+
+The φ-encoder:
+1. Tokenizes the input text
+2. Matches tokens to semantic primitives
+3. Computes weighted sum of primitive positions
+4. Returns 8-dimensional position vector
 
 ### Domain Isolation
 
@@ -234,18 +234,36 @@ This creates an entry positioned in truth space based on the keywords ["print", 
 
 ### Persistence
 
-Knowledge is persisted as JSON files organized by domain:
+Knowledge is persisted in a **SQLite database** optimized for φ-based vectors:
 
 ```
-knowledge_store/
-├── programming/
-│   ├── a1b2c3d4.json    # print function
-│   ├── e5f6g7h8.json    # requests library
-│   └── ...
-├── history/
-├── science/
-└── backups/             # Versioned backups for updates/deletes
+truthspace_lcm/
+└── knowledge.db          # SQLite database
+
+Database Schema:
+├── entries               # Main knowledge entries
+│   ├── id TEXT PRIMARY KEY
+│   ├── name TEXT
+│   ├── domain TEXT
+│   ├── entry_type TEXT
+│   ├── description TEXT
+│   ├── position BLOB     # 8D vector as binary
+│   ├── position_norm REAL # Pre-computed for fast similarity
+│   ├── metadata TEXT     # JSON
+│   └── version INTEGER
+├── keywords              # Normalized keyword table
+│   ├── id INTEGER PRIMARY KEY
+│   └── keyword TEXT UNIQUE
+└── entry_keywords        # Many-to-many relationship
+    ├── entry_id TEXT
+    └── keyword_id INTEGER
 ```
+
+Benefits over JSON files:
+- **ACID transactions** for safe concurrent access
+- **Indexed queries** for fast keyword filtering
+- **Pre-computed norms** for efficient similarity search
+- **Single file** instead of hundreds of JSON files
 
 ---
 
