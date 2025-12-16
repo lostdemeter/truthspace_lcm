@@ -7,8 +7,9 @@ Components:
 - TruthSpace: Unified knowledge storage and query interface
 - Resolver: Thin NL → Knowledge → Output resolver
 - Ingestor: Knowledge acquisition from various sources
-- PhiEncoder: φ-based semantic encoding
+- PlasticEncoder: ρ-based 12D semantic encoding
 - CodeExecutor: Safe code execution
+- DimensionAwareAutotuner: Dimension-aware knowledge tuning
 """
 
 from truthspace_lcm.core.truthspace import (
@@ -32,15 +33,24 @@ from truthspace_lcm.core.ingestor import (
     IngestionError,
 )
 from truthspace_lcm.core.encoder import (
-    PhiEncoder,
+    PlasticEncoder,
     SemanticDecomposition,
     Primitive,
     PrimitiveType,
+    RHO,
+    ENCODING_DIM,
 )
 from truthspace_lcm.core.executor import (
     CodeExecutor,
     ExecutionResult,
     ExecutionStatus,
+)
+from truthspace_lcm.core.autotuner import (
+    DimensionAwareAutotuner,
+    DimensionAnalysis,
+    CollisionReport,
+    PlacementRecommendation,
+    TestCase,
 )
 
 __all__ = [
@@ -61,12 +71,20 @@ __all__ = [
     "ParsedKnowledge",
     "IngestionError",
     # Encoder
-    "PhiEncoder",
+    "PlasticEncoder",
     "SemanticDecomposition",
     "Primitive",
     "PrimitiveType",
+    "RHO",
+    "ENCODING_DIM",
     # Executor
     "CodeExecutor",
     "ExecutionResult",
     "ExecutionStatus",
+    # Autotuner
+    "DimensionAwareAutotuner",
+    "DimensionAnalysis",
+    "CollisionReport",
+    "PlacementRecommendation",
+    "TestCase",
 ]

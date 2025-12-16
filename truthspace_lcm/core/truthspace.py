@@ -143,10 +143,12 @@ class TruthSpace:
     - store(entry) → persist knowledge
     - query(text) → find matching knowledge or raise KnowledgeGapError
     - resolve(text) → query + extract executable output
+    
+    v2: Now uses 12D plastic-primary encoding for better semantic separation.
     """
     
-    DIM = 8  # Dimension of φ-space
-    SCHEMA_VERSION = 2
+    DIM = 12  # Dimension of ρ-space (upgraded from 8D φ-space)
+    SCHEMA_VERSION = 3  # Bumped for 12D migration
     
     def __init__(self, db_path: str = None):
         if db_path is None:
@@ -158,10 +160,20 @@ class TruthSpace:
         self.db_path = Path(db_path)
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
         
-        # Encoder will be set externally to avoid circular import
+        # Initialize with PlasticEncoder (12D) by default
         self._encoder = None
+        self._init_encoder()
         
         self._init_db()
+    
+    def _init_encoder(self):
+        """Initialize the plastic encoder (12D)."""
+        try:
+            from truthspace_lcm.core.encoder import PlasticEncoder
+            self._encoder = PlasticEncoder()
+        except ImportError:
+            # Fallback to simple encoding if encoder not available
+            self._encoder = None
     
     def set_encoder(self, encoder):
         """Set the φ-encoder (called after encoder is initialized)."""

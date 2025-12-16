@@ -16,6 +16,7 @@ Design principles:
 """
 
 import os
+import re
 import subprocess
 from typing import Dict, List, Tuple, Optional, Any
 from dataclasses import dataclass
@@ -123,6 +124,9 @@ class Resolver:
             output, output_type, entry = self.ts.resolve(request, domain)
             confidence = 0.8  # Default confidence for successful resolution
             
+            # Apply parameter extraction to output
+            output = self._extract_parameters(request, output)
+            
         except KnowledgeGapError as e:
             if not self.auto_learn:
                 raise
@@ -134,6 +138,7 @@ class Resolver:
             
             learned = True
             output = self._extract_output(entry)
+            output = self._extract_parameters(request, output)
             output_type = entry.metadata.get("output_type", "text")
             confidence = 0.6  # Lower confidence for newly learned
         
@@ -255,6 +260,123 @@ class Resolver:
                 return commands[0]
         
         return entry.name
+    
+    # =========================================================================
+    # PARAMETER EXTRACTION
+    # =========================================================================
+    
+    def _extract_parameters(self, request: str, template: str) -> str:
+        """
+        Extract parameters from request and substitute into template.
+        
+        Uses parameter extraction patterns from TruthSpace CONCEPT entries.
+        
+        Args:
+            request: Original natural language request
+            template: Command template with placeholders like {filename}, <url>
+        
+        Returns:
+            Template with parameters substituted
+        """
+        # Find all placeholders in template: {name}, <name>, or <name>
+        placeholders = re.findall(r'\{(\w+)\}|<(\w+)>', template)
+        
+        if not placeholders:
+            return template
+        
+        result = template
+        
+        for match in placeholders:
+            # match is tuple like ('filename', '') or ('', 'url')
+            param_name = match[0] or match[1]
+            param_type = param_name.upper()
+            
+            # Get extraction patterns from knowledge
+            value = self._extract_param_value(request, param_type)
+            
+            if value:
+                # Replace both {name} and <name> formats
+                result = re.sub(r'\{' + param_name + r'\}', value, result)
+                result = re.sub(r'<' + param_name + r'>', value, result)
+        
+        return result
+    
+    def _extract_param_value(self, request: str, param_type: str) -> Optional[str]:
+        """
+        Extract a parameter value from request using knowledge-based patterns.
+        
+        Args:
+            request: Natural language request
+            param_type: Parameter type name (e.g., "FILENAME", "URL")
+        
+        Returns:
+            Extracted value or None
+        """
+        # Query TruthSpace for the parameter concept
+        try:
+            concept = self.ts.get_by_name(param_type, entry_type=EntryType.CONCEPT)
+        except:
+            concept = None
+        
+        if not concept:
+            # Fallback: try common extraction patterns
+            return self._fallback_extract(request, param_type)
+        
+        # Get extraction patterns from concept metadata
+        patterns = concept.metadata.get("extraction_patterns", [])
+        
+        if not patterns:
+            return self._fallback_extract(request, param_type)
+        
+        # Sort by priority (lower = higher priority)
+        if isinstance(patterns[0], dict):
+            patterns = sorted(patterns, key=lambda p: p.get("priority", 99))
+            pattern_strings = [p["pattern"] for p in patterns]
+        else:
+            pattern_strings = patterns
+        
+        # Try each pattern
+        for pattern in pattern_strings:
+            try:
+                match = re.search(pattern, request, re.IGNORECASE)
+                if match:
+                    # Return first captured group
+                    value = match.group(1) if match.groups() else match.group(0)
+                    
+                    # Validate if validation pattern exists
+                    validation = concept.metadata.get("validation")
+                    if validation and not re.match(validation, value):
+                        continue
+                    
+                    return value
+            except re.error:
+                continue
+        
+        # Return default if defined
+        return concept.metadata.get("default")
+    
+    def _fallback_extract(self, request: str, param_type: str) -> Optional[str]:
+        """Fallback extraction when no concept is found."""
+        # Basic patterns for common types
+        fallbacks = {
+            "FILENAME": [r'"([^"]+)"', r"'([^']+)'", r'called\s+(\S+)', r'(\S+\.\w+)'],
+            "DIRECTORY": [r'"([^"]+)"', r"'([^']+)'", r'called\s+(\S+)', r'folder\s+(\S+)'],
+            "URL": [r'(https?://\S+)'],
+            "PATTERN": [r'"([^"]+)"', r"'([^']+)'", r'for\s+(\S+)'],
+            "NUMBER": [r'(\d+)'],
+        }
+        
+        patterns = fallbacks.get(param_type, [r'"([^"]+)"', r"'([^']+)'"])
+        
+        for pattern in patterns:
+            try:
+                match = re.search(pattern, request, re.IGNORECASE)
+                if match:
+                    return match.group(1) if match.groups() else match.group(0)
+            except:
+                continue
+        
+        return None
 
 
 # =============================================================================

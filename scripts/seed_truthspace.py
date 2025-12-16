@@ -24,7 +24,7 @@ from truthspace_lcm.core.truthspace import (
     KnowledgeDomain,
     EntryType,
 )
-from truthspace_lcm.core.encoder import PrimitiveType
+from truthspace_lcm.core.encoder import PrimitiveType, PlasticEncoder
 
 
 def seed_primitives(ts: TruthSpace):
@@ -233,6 +233,123 @@ def seed_primitives(ts: TruthSpace):
                 "level": 3,
             }
         },
+        
+        # Relations (dims 8-11) - NEW in 12D
+        # Dim 8: Temporal
+        {
+            "name": "BEFORE",
+            "description": "Relation: before, prior, previous",
+            "keywords": ["before", "prior", "previous", "earlier", "first", "initially"],
+            "metadata": {
+                "primitive_type": "relation",
+                "dimension": 8,
+                "level": 0,
+                "opposite": "AFTER",
+            }
+        },
+        {
+            "name": "AFTER",
+            "description": "Relation: after, then, next",
+            "keywords": ["after", "then", "next", "later", "finally", "subsequently"],
+            "metadata": {
+                "primitive_type": "relation",
+                "dimension": 8,
+                "level": 1,
+                "opposite": "BEFORE",
+            }
+        },
+        {
+            "name": "DURING",
+            "description": "Relation: during, while, simultaneously",
+            "keywords": ["during", "while", "when", "as", "simultaneously", "concurrent"],
+            "metadata": {
+                "primitive_type": "relation",
+                "dimension": 8,
+                "level": 2,
+            }
+        },
+        
+        # Dim 9: Causal
+        {
+            "name": "CAUSE",
+            "description": "Relation: because, since, cause",
+            "keywords": ["because", "since", "cause", "reason", "due", "therefore"],
+            "metadata": {
+                "primitive_type": "relation",
+                "dimension": 9,
+                "level": 0,
+                "opposite": "EFFECT",
+            }
+        },
+        {
+            "name": "EFFECT",
+            "description": "Relation: result, effect, outcome",
+            "keywords": ["result", "effect", "outcome", "consequence", "leads", "produces"],
+            "metadata": {
+                "primitive_type": "relation",
+                "dimension": 9,
+                "level": 1,
+                "opposite": "CAUSE",
+            }
+        },
+        
+        # Dim 10: Conditional
+        {
+            "name": "IF",
+            "description": "Relation: if, when, provided",
+            "keywords": ["if", "when", "provided", "assuming", "given", "unless", "retry", "try"],
+            "metadata": {
+                "primitive_type": "relation",
+                "dimension": 10,
+                "level": 0,
+                "opposite": "ELSE",
+            }
+        },
+        {
+            "name": "ELSE",
+            "description": "Relation: else, otherwise, fallback",
+            "keywords": ["else", "otherwise", "alternatively", "instead", "fallback", "fail"],
+            "metadata": {
+                "primitive_type": "relation",
+                "dimension": 10,
+                "level": 1,
+                "opposite": "IF",
+            }
+        },
+        
+        # Dim 11: Comparative
+        {
+            "name": "MORE",
+            "description": "Relation: more, greater, increase",
+            "keywords": ["more", "greater", "larger", "higher", "increase", "above", "bigger"],
+            "metadata": {
+                "primitive_type": "relation",
+                "dimension": 11,
+                "level": 0,
+                "opposite": "LESS",
+            }
+        },
+        {
+            "name": "LESS",
+            "description": "Relation: less, fewer, decrease",
+            "keywords": ["less", "fewer", "smaller", "lower", "decrease", "below", "reduce"],
+            "metadata": {
+                "primitive_type": "relation",
+                "dimension": 11,
+                "level": 1,
+                "opposite": "MORE",
+            }
+        },
+        {
+            "name": "EQUAL",
+            "description": "Relation: equal, same, match",
+            "keywords": ["equal", "same", "identical", "match", "equivalent", "compare"],
+            "metadata": {
+                "primitive_type": "relation",
+                "dimension": 11,
+                "level": 2,
+            }
+        },
     ]
     
     count = 0
@@ -256,183 +373,13 @@ def seed_primitives(ts: TruthSpace):
 
 
 def seed_intents(ts: TruthSpace):
-    """Seed core intents (NL → command mappings)."""
-    print("\n2. Seeding Intents...")
+    """Seed minimal core intents - most intents come from JSON files."""
+    print("\n2. Seeding Core Intents...")
     
+    # NOTE: Most intents are loaded from knowledge/*.json files
+    # This only seeds the absolute minimum needed before JSON loading
     intents = [
-        # File operations
-        {
-            "name": "list_files",
-            "description": "List files in directory",
-            "keywords": ["list", "files", "show", "directory", "contents", "ls"],
-            "metadata": {
-                "target_commands": ["ls -la"],
-                "output_type": "bash",
-                "triggers": ["list files", "show files", "what files", "ls"],
-            }
-        },
-        {
-            "name": "create_directory",
-            "description": "Create a new directory",
-            "keywords": ["create", "make", "directory", "folder", "mkdir"],
-            "metadata": {
-                "target_commands": ["mkdir -p"],
-                "output_type": "bash",
-                "triggers": ["create directory", "make folder", "mkdir"],
-            }
-        },
-        {
-            "name": "delete_file",
-            "description": "Delete a file",
-            "keywords": ["delete", "remove", "file", "rm"],
-            "metadata": {
-                "target_commands": ["rm"],
-                "output_type": "bash",
-                "triggers": ["delete file", "remove file", "rm"],
-            }
-        },
-        {
-            "name": "view_file",
-            "description": "View file contents",
-            "keywords": ["view", "show", "display", "contents", "cat", "read"],
-            "metadata": {
-                "target_commands": ["cat"],
-                "output_type": "bash",
-                "triggers": ["view file", "show contents", "cat", "read file"],
-            }
-        },
-        {
-            "name": "copy_file",
-            "description": "Copy a file",
-            "keywords": ["copy", "duplicate", "cp"],
-            "metadata": {
-                "target_commands": ["cp"],
-                "output_type": "bash",
-                "triggers": ["copy file", "duplicate", "cp"],
-            }
-        },
-        {
-            "name": "move_file",
-            "description": "Move or rename a file",
-            "keywords": ["move", "rename", "mv"],
-            "metadata": {
-                "target_commands": ["mv"],
-                "output_type": "bash",
-                "triggers": ["move file", "rename", "mv"],
-            }
-        },
-        
-        # Search operations
-        {
-            "name": "search_text",
-            "description": "Search for text in files",
-            "keywords": ["search", "find", "grep", "text", "pattern"],
-            "metadata": {
-                "target_commands": ["grep -r"],
-                "output_type": "bash",
-                "triggers": ["search for", "find text", "grep"],
-            }
-        },
-        {
-            "name": "find_files",
-            "description": "Find files by name",
-            "keywords": ["find", "locate", "files", "name"],
-            "metadata": {
-                "target_commands": ["find . -name"],
-                "output_type": "bash",
-                "triggers": ["find files", "locate", "find . -name"],
-            }
-        },
-        
-        # Network operations
-        {
-            "name": "show_network",
-            "description": "Show network interfaces",
-            "keywords": ["network", "interface", "ip", "show", "display"],
-            "metadata": {
-                "target_commands": ["ip addr"],
-                "output_type": "bash",
-                "triggers": ["show network", "network interfaces", "ip address"],
-            }
-        },
-        {
-            "name": "download_file",
-            "description": "Download a file from URL",
-            "keywords": ["download", "fetch", "curl", "wget", "url"],
-            "metadata": {
-                "target_commands": ["curl -O"],
-                "output_type": "bash",
-                "triggers": ["download", "fetch url", "curl", "wget"],
-            }
-        },
-        
-        # System operations
-        {
-            "name": "show_processes",
-            "description": "Show running processes",
-            "keywords": ["process", "processes", "running", "ps", "top"],
-            "metadata": {
-                "target_commands": ["ps aux"],
-                "output_type": "bash",
-                "triggers": ["show processes", "running processes", "ps"],
-            }
-        },
-        {
-            "name": "disk_usage",
-            "description": "Show disk usage",
-            "keywords": ["disk", "usage", "space", "df", "du"],
-            "metadata": {
-                "target_commands": ["df -h"],
-                "output_type": "bash",
-                "triggers": ["disk usage", "disk space", "df"],
-            }
-        },
-        {
-            "name": "system_info",
-            "description": "Show system information",
-            "keywords": ["system", "info", "uname", "uptime"],
-            "metadata": {
-                "target_commands": ["uname -a"],
-                "output_type": "bash",
-                "triggers": ["system info", "uname", "system information"],
-            }
-        },
-        
-        # Archive operations
-        {
-            "name": "compress_files",
-            "description": "Compress files into archive",
-            "keywords": ["compress", "archive", "tar", "zip", "gzip"],
-            "metadata": {
-                "target_commands": ["tar -czf"],
-                "output_type": "bash",
-                "triggers": ["compress", "archive", "tar", "zip"],
-            }
-        },
-        {
-            "name": "extract_archive",
-            "description": "Extract files from archive",
-            "keywords": ["extract", "unzip", "untar", "decompress"],
-            "metadata": {
-                "target_commands": ["tar -xzf"],
-                "output_type": "bash",
-                "triggers": ["extract", "unzip", "untar", "decompress"],
-            }
-        },
-        
-        # Permission operations
-        {
-            "name": "make_executable",
-            "description": "Make file executable",
-            "keywords": ["executable", "chmod", "permission", "run"],
-            "metadata": {
-                "target_commands": ["chmod +x"],
-                "output_type": "bash",
-                "triggers": ["make executable", "chmod +x", "permission"],
-            }
-        },
-        
-        # Python operations
+        # Just hello_world as a Python example - bash intents come from JSON
         {
             "name": "hello_world",
             "description": "Print hello world in Python",
@@ -441,6 +388,17 @@ def seed_intents(ts: TruthSpace):
                 "target_commands": ["print(\"Hello, World!\")"],
                 "output_type": "python",
                 "triggers": ["hello world", "print hello", "write hello world"],
+            }
+        },
+        # Basic list files as fallback
+        {
+            "name": "list_files",
+            "description": "List files in directory",
+            "keywords": ["list", "files", "show", "directory", "contents", "ls"],
+            "metadata": {
+                "target_commands": ["ls -la"],
+                "output_type": "bash",
+                "triggers": ["list files", "show files", "what files", "ls"],
             }
         },
     ]
@@ -462,68 +420,20 @@ def seed_intents(ts: TruthSpace):
             print(f"   ✗ {intent['name']}: {e}")
     
     print(f"   Seeded {count} intents")
+    print("   (Additional intents loaded from knowledge/*.json)")
     return count
 
 
 def seed_commands(ts: TruthSpace):
-    """Seed core command knowledge."""
-    print("\n3. Seeding Commands...")
+    """Seed minimal commands - most come from JSON files."""
+    print("\n3. Seeding Core Commands...")
     
-    commands = [
-        {
-            "name": "ls",
-            "description": "List directory contents",
-            "keywords": ["ls", "list", "files", "directory", "bash", "shell"],
-            "metadata": {
-                "command": "ls",
-                "syntax": "ls [options] [path]",
-                "output_type": "bash",
-                "examples": ["ls -la", "ls -lh /tmp"],
-            }
-        },
-        {
-            "name": "cd",
-            "description": "Change directory",
-            "keywords": ["cd", "change", "directory", "navigate", "bash"],
-            "metadata": {
-                "command": "cd",
-                "syntax": "cd [path]",
-                "output_type": "bash",
-            }
-        },
-        {
-            "name": "cat",
-            "description": "Concatenate and display file contents",
-            "keywords": ["cat", "view", "display", "file", "contents", "bash"],
-            "metadata": {
-                "command": "cat",
-                "syntax": "cat [file]",
-                "output_type": "bash",
-            }
-        },
-        {
-            "name": "grep",
-            "description": "Search for patterns in files",
-            "keywords": ["grep", "search", "find", "pattern", "text", "bash"],
-            "metadata": {
-                "command": "grep",
-                "syntax": "grep [options] pattern [file]",
-                "output_type": "bash",
-                "examples": ["grep -r 'pattern' .", "grep -i 'text' file.txt"],
-            }
-        },
-        {
-            "name": "find",
-            "description": "Find files in directory hierarchy",
-            "keywords": ["find", "search", "files", "locate", "bash"],
-            "metadata": {
-                "command": "find",
-                "syntax": "find [path] [expression]",
-                "output_type": "bash",
-                "examples": ["find . -name '*.py'", "find /tmp -type f"],
-            }
-        },
-    ]
+    # NOTE: Most commands are loaded from knowledge/*.json files
+    commands = []  # Empty - all commands come from JSON now
+    
+    if not commands:
+        print("   (All commands loaded from knowledge/*.json)")
+        return 0
     
     count = 0
     for cmd in commands:

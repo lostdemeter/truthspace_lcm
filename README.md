@@ -1,17 +1,17 @@
 # TruthSpace LCM
 
-**Language-Code Model** - A minimal natural language to code system using φ-based geometric knowledge encoding.
+**Language-Code Model** - A minimal natural language to code system using ρ-based (plastic constant) 12D geometric knowledge encoding.
 
 ## Philosophy
 
 > *"Code is just a geometric interpreter. All logic lives in TruthSpace as knowledge."*
 
-This system is designed with a **minimal code footprint** and **maximum knowledge-space usage**. The bootstrap code (~2,400 lines) is irreducible - everything else is knowledge that can be added, modified, or reset without changing code.
+This system is designed with a **minimal code footprint** and **maximum knowledge-space usage**. The bootstrap code (~3,000 lines) is irreducible - everything else is knowledge that can be added, modified, or reset without changing code.
 
 ## Features
 
-- **Minimal Bootstrap** - Only ~2,400 lines of irreducible code
-- **φ-Based Semantic Encoding** - Golden ratio anchored primitives for geometric positioning
+- **Minimal Bootstrap** - Only ~3,000 lines of irreducible code
+- **ρ-Based 12D Semantic Encoding** - Plastic constant (ρ ≈ 1.3247) anchored primitives for geometric positioning
 - **Knowledge-First Architecture** - Primitives, intents, and commands are all knowledge entries
 - **Fail Fast** - No fallbacks; query succeeds or raises `KnowledgeGapError`
 - **Auto-Learning** - System can acquire new knowledge from man pages and pydoc
@@ -36,6 +36,7 @@ pip install -e .
 
 # Seed the knowledge base
 python scripts/seed_truthspace.py
+python scripts/load_knowledge.py
 ```
 
 ## Quick Start
@@ -119,8 +120,8 @@ print(exec_result.stdout)  # /home/user/...
               ┌─────────────┴─────────────┐
               ▼                           ▼
 ┌─────────────────────┐     ┌─────────────────────┐
-│     φ-Encoder       │     │   SQLite Database   │
-│  (semantic math)    │     │   (persistence)     │
+│   PlasticEncoder    │     │   SQLite Database   │
+│  (12D ρ-space)      │     │   (persistence)     │
 └─────────────────────┘     └─────────────────────┘
                             │
                             ▼
@@ -132,25 +133,28 @@ print(exec_result.stdout)  # /home/user/...
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### Core Components (~2,400 lines total)
+### Core Components
 
-| File | Lines | Purpose |
-|------|-------|---------|
-| `truthspace.py` | 647 | Unified knowledge storage + query |
-| `resolver.py` | 321 | NL → Knowledge → Output |
-| `ingestor.py` | 497 | Knowledge acquisition |
-| `encoder.py` | 365 | φ-based semantic encoding |
-| `executor.py` | 513 | Code execution |
+| File | Purpose |
+|------|---------|
+| `truthspace.py` | Unified knowledge storage + query |
+| `resolver.py` | NL → Knowledge → Output |
+| `encoder.py` | ρ-based 12D semantic encoding |
+| `autotuner.py` | Dimension-aware autotuning |
+| `ingestor.py` | Knowledge acquisition |
+| `executor.py` | Safe code execution |
+| `clock.py` | 12D clock phase oracle |
 
 ## Knowledge Base
 
-The system starts with minimal seed knowledge (~40 entries):
+The system starts with ~100 knowledge entries:
 
 | Type | Count | Examples |
 |------|-------|----------|
-| **Primitives** | 19 | CREATE, READ, WRITE, FILE, NETWORK, RECURSIVE |
-| **Intents** | 17 | list_files → `ls -la`, hello_world → `print("Hello, World!")` |
-| **Commands** | 5 | ls, cd, cat, grep, find |
+| **Primitives** | 29 | CREATE, READ, WRITE, FILE, NETWORK, BEFORE, AFTER, CAUSE, IF, MORE |
+| **Intents** | 29+ | list_files → `ls -la`, hello_world → `print("Hello, World!")` |
+| **Commands** | 30 | ls, cd, cat, grep, find, ifconfig, ssh, curl |
+| **Concepts** | 12 | FILENAME, DIRECTORY, INTERFACE, IP_ADDRESS |
 
 Knowledge can be expanded by:
 1. **Seeding** - Run `python scripts/seed_truthspace.py` to reset to minimal
@@ -164,39 +168,50 @@ truthspace-lcm/
 ├── truthspace_lcm/           # Main package
 │   ├── __init__.py
 │   ├── truthspace.db         # SQLite knowledge database
-│   └── core/                 # Core modules (~2,400 lines)
+│   └── core/                 # Core modules
 │       ├── truthspace.py         # Unified knowledge storage + query
 │       ├── resolver.py           # NL → Knowledge → Output
+│       ├── encoder.py            # ρ-based 12D semantic encoding
+│       ├── autotuner.py          # Dimension-aware autotuning
 │       ├── ingestor.py           # Knowledge acquisition
-│       ├── encoder.py            # φ-based semantic encoding
-│       └── executor.py           # Safe code execution
+│       ├── executor.py           # Safe code execution
+│       └── clock.py              # 12D clock phase oracle
 ├── scripts/
-│   └── seed_truthspace.py    # Reset knowledge to minimal state
+│   ├── seed_truthspace.py    # Reset knowledge to minimal state
+│   └── load_knowledge.py     # Load knowledge from JSON files
+├── knowledge/                # Knowledge definitions (JSON)
+│   ├── bash_commands.json
+│   ├── bash_intents.json
+│   └── parameters.json
+├── experiments/              # Validation tests
+├── design_considerations/    # Design documentation
 ├── run.py                    # Interactive runner
-├── tests/
-├── docs/
+├── chat.py                   # Chat interface
+├── ARCHITECTURE.md           # Detailed architecture docs
 ├── requirements.txt
 └── README.md
 ```
 
 ## How It Works
 
-### φ-Based Semantic Encoding
+### ρ-Based 12D Semantic Encoding
 
-Knowledge is encoded using the **φ-encoder**, which maps natural language to geometric positions using semantic primitives:
+Knowledge is encoded using the **PlasticEncoder**, which maps natural language to 12D geometric positions using semantic primitives:
 
 **Primitive Types:**
-- **ACTIONS** (dims 0-3) - CREATE, DESTROY, READ, WRITE, MOVE, CONNECT, EXECUTE, SEARCH
-- **DOMAINS** (dims 4-6) - FILE, PROCESS, NETWORK, SYSTEM, USER, DATA
-- **MODIFIERS** (dim 7) - ALL, RECURSIVE, VERBOSE, FORCE
+- **ACTIONS** (dims 0-3) - CREATE↔DESTROY, READ↔WRITE, MOVE/SEARCH, CONNECT/EXECUTE
+- **DOMAINS** (dims 4-7) - FILE/SYSTEM, PROCESS/DATA, NETWORK/USER, MODIFIERS
+- **RELATIONS** (dims 8-11) - TEMPORAL, CAUSAL, CONDITIONAL, COMPARATIVE *(new in v2)*
 
 **Position Computation:**
 ```
 position = Σ (primitive_position × relevance_weight)
-primitive_position[dim] = φ^level  (where φ = 1.618...)
+primitive_position[dim] = ρ^level  (where ρ = 1.3247... plastic constant)
 ```
 
-This allows semantic similarity search without neural networks.
+The plastic constant (ρ) provides finer discrimination than the golden ratio (φ) due to its slower growth rate and cubic recurrence relation (x³ = x + 1).
+
+This allows semantic similarity search without neural networks, with orthogonal dimensions enabling independent tuning.
 
 ### Resolution Pipeline
 
@@ -205,7 +220,7 @@ This allows semantic similarity search without neural networks.
         │
         ▼
    ┌─────────────┐
-   │  φ-Encoder  │  → position = [0.62, 0.38, 0, 0, 0.85, 0, 0, 0]
+   │ PlasticEnc  │  → position = [0.62, 0.38, 0, 0, 0.85, 0, 0, 0, 0, 0, 0, 0]
    └─────────────┘
         │
         ▼

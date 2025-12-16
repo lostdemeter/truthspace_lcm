@@ -1,0 +1,186 @@
+{
+  "metadata": {
+    "name": "parameters",
+    "version": "1.0.0",
+    "description": "Parameter extraction patterns - defines how to extract values from natural language",
+    "domain": "PROGRAMMING"
+  },
+  "entries": [
+    {
+      "name": "FILENAME",
+      "type": "CONCEPT",
+      "description": "Extract a filename from natural language",
+      "keywords": ["filename", "file", "name", "path"],
+      "extraction_patterns": [
+        {"pattern": "\"([^\"]+)\"", "priority": 1, "description": "Double quoted string"},
+        {"pattern": "'([^']+)'", "priority": 1, "description": "Single quoted string"},
+        {"pattern": "called\\s+([\\w.-]+)", "priority": 2, "description": "called filename"},
+        {"pattern": "named\\s+([\\w.-]+)", "priority": 2, "description": "named filename"},
+        {"pattern": "file\\s+([\\w.-]+)", "priority": 3, "description": "file filename"},
+        {"pattern": "([\\w-]+\\.[a-zA-Z0-9]+)(?:\\s|$)", "priority": 4, "description": "word.ext pattern"}
+      ],
+      "validation": "^[\\w.-]+$",
+      "default": null
+    },
+    {
+      "name": "DIRECTORY",
+      "type": "CONCEPT",
+      "description": "Extract a directory path from natural language",
+      "keywords": ["directory", "folder", "path", "dir"],
+      "extraction_patterns": [
+        {"pattern": "\"([^\"]+)\"", "priority": 1, "description": "Double quoted string"},
+        {"pattern": "'([^']+)'", "priority": 1, "description": "Single quoted string"},
+        {"pattern": "called\\s+([\\w./-]+)", "priority": 2, "description": "called dirname"},
+        {"pattern": "named\\s+([\\w./-]+)", "priority": 2, "description": "named dirname"},
+        {"pattern": "the\\s+([\\w./-]+)\\s+directory", "priority": 2, "description": "the X directory"},
+        {"pattern": "the\\s+([\\w./-]+)\\s+folder", "priority": 2, "description": "the X folder"},
+        {"pattern": "directory\\s+([\\w./-]+)", "priority": 3, "description": "directory dirname"},
+        {"pattern": "folder\\s+([\\w./-]+)", "priority": 3, "description": "folder dirname"},
+        {"pattern": "in\\s+([\\w./-]+)", "priority": 4, "description": "in dirname"},
+        {"pattern": "to\\s+([\\w./-]+)", "priority": 4, "description": "to dirname"}
+      ],
+      "validation": "^[\\w./-]+$",
+      "default": "."
+    },
+    {
+      "name": "URL",
+      "type": "CONCEPT",
+      "description": "Extract a URL from natural language",
+      "keywords": ["url", "link", "http", "https", "web", "address"],
+      "extraction_patterns": [
+        {"pattern": "(https?://[^\\s]+)", "priority": 1, "description": "HTTP/HTTPS URL"},
+        {"pattern": "(www\\.[^\\s]+)", "priority": 2, "description": "www URL"},
+        {"pattern": "from\\s+(\\S+\\.\\S+)", "priority": 3, "description": "from domain"}
+      ],
+      "validation": "^(https?://|www\\.)",
+      "default": null
+    },
+    {
+      "name": "PATTERN",
+      "type": "CONCEPT",
+      "description": "Extract a search pattern from natural language",
+      "keywords": ["pattern", "search", "text", "string", "regex"],
+      "extraction_patterns": [
+        {"pattern": "\"([^\"]+)\"", "priority": 1, "description": "Double quoted string"},
+        {"pattern": "'([^']+)'", "priority": 1, "description": "Single quoted string"},
+        {"pattern": "for\\s+([\\w.-]+)", "priority": 2, "description": "for pattern"},
+        {"pattern": "pattern\\s+([\\w.-]+)", "priority": 3, "description": "pattern word"}
+      ],
+      "validation": null,
+      "default": null
+    },
+    {
+      "name": "NUMBER",
+      "type": "CONCEPT",
+      "description": "Extract a number from natural language",
+      "keywords": ["number", "count", "amount", "lines", "bytes"],
+      "extraction_patterns": [
+        {"pattern": "(\\d+)", "priority": 1, "description": "Digits"},
+        {"pattern": "last\\s+(\\d+)", "priority": 2, "description": "last N"},
+        {"pattern": "first\\s+(\\d+)", "priority": 2, "description": "first N"},
+        {"pattern": "top\\s+(\\d+)", "priority": 2, "description": "top N"}
+      ],
+      "validation": "^\\d+$",
+      "default": "10"
+    },
+    {
+      "name": "PID",
+      "type": "CONCEPT",
+      "description": "Extract a process ID from natural language",
+      "keywords": ["pid", "process", "id", "number"],
+      "extraction_patterns": [
+        {"pattern": "pid\\s+(\\d+)", "priority": 1, "description": "pid N"},
+        {"pattern": "process\\s+(\\d+)", "priority": 1, "description": "process N"},
+        {"pattern": "(\\d{3,})", "priority": 2, "description": "3+ digit number (likely PID)"}
+      ],
+      "validation": "^\\d+$",
+      "default": null
+    },
+    {
+      "name": "USER_HOST",
+      "type": "CONCEPT",
+      "description": "Extract user@host from natural language",
+      "keywords": ["user", "host", "server", "remote", "ssh"],
+      "extraction_patterns": [
+        {"pattern": "([\\w.-]+@[\\w.-]+)", "priority": 1, "description": "user@host"},
+        {"pattern": "to\\s+([\\w.-]+@[\\w.-]+)", "priority": 1, "description": "to user@host"},
+        {"pattern": "into\\s+([\\w.-]+)", "priority": 2, "description": "into host"},
+        {"pattern": "server\\s+([\\w.-]+)", "priority": 2, "description": "server host"}
+      ],
+      "validation": null,
+      "default": null
+    },
+    {
+      "name": "PERMISSION",
+      "type": "CONCEPT",
+      "description": "Extract file permission mode",
+      "keywords": ["permission", "mode", "chmod", "access"],
+      "extraction_patterns": [
+        {"pattern": "(\\d{3,4})", "priority": 1, "description": "Numeric mode like 755"},
+        {"pattern": "([rwx+-]+)", "priority": 2, "description": "Symbolic mode like +x"}
+      ],
+      "validation": null,
+      "default": "+x"
+    },
+    {
+      "name": "INTERFACE",
+      "type": "CONCEPT",
+      "description": "Extract network interface name",
+      "keywords": ["interface", "adapter", "nic", "eth", "wlan", "network"],
+      "extraction_patterns": [
+        {"pattern": "(eth\\d+)", "priority": 1, "description": "Ethernet interface eth0, eth1"},
+        {"pattern": "(wlan\\d+)", "priority": 1, "description": "Wireless interface wlan0, wlan1"},
+        {"pattern": "(enp\\d+s\\d+)", "priority": 1, "description": "Predictable naming enp0s3"},
+        {"pattern": "(wlp\\d+s\\d+)", "priority": 1, "description": "Predictable wireless wlp2s0"},
+        {"pattern": "(lo)", "priority": 1, "description": "Loopback interface"},
+        {"pattern": "(docker\\d+)", "priority": 1, "description": "Docker interface"},
+        {"pattern": "(br-[a-f0-9]+)", "priority": 1, "description": "Bridge interface"},
+        {"pattern": "interface\\s+([\\w-]+)", "priority": 2, "description": "interface name"},
+        {"pattern": "the\\s+([\\w-]+)\\s+interface", "priority": 2, "description": "the X interface"},
+        {"pattern": "on\\s+([\\w-]+)", "priority": 3, "description": "on interface"}
+      ],
+      "validation": "^[a-zA-Z][\\w-]*\\d*$",
+      "default": null
+    },
+    {
+      "name": "IP_ADDRESS",
+      "type": "CONCEPT",
+      "description": "Extract IP address",
+      "keywords": ["ip", "address", "ipv4", "ipv6"],
+      "extraction_patterns": [
+        {"pattern": "(\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})", "priority": 1, "description": "IPv4 address"},
+        {"pattern": "to\\s+(\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})", "priority": 1, "description": "to IP"},
+        {"pattern": "address\\s+(\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})", "priority": 1, "description": "address IP"}
+      ],
+      "validation": "^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$",
+      "default": null
+    },
+    {
+      "name": "NETMASK",
+      "type": "CONCEPT",
+      "description": "Extract network mask",
+      "keywords": ["netmask", "subnet", "mask"],
+      "extraction_patterns": [
+        {"pattern": "(255\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})", "priority": 1, "description": "Netmask like 255.255.255.0"},
+        {"pattern": "/(\\d{1,2})", "priority": 1, "description": "CIDR notation /24"},
+        {"pattern": "netmask\\s+(\\S+)", "priority": 2, "description": "netmask value"}
+      ],
+      "validation": null,
+      "default": "255.255.255.0"
+    },
+    {
+      "name": "SIZE",
+      "type": "CONCEPT",
+      "description": "Extract size value (MTU, bytes, etc)",
+      "keywords": ["size", "mtu", "bytes", "length"],
+      "extraction_patterns": [
+        {"pattern": "to\\s+(\\d+)", "priority": 1, "description": "to N"},
+        {"pattern": "mtu\\s+(\\d+)", "priority": 1, "description": "mtu N"},
+        {"pattern": "size\\s+(\\d+)", "priority": 1, "description": "size N"},
+        {"pattern": "(\\d+)\\s*bytes", "priority": 2, "description": "N bytes"}
+      ],
+      "validation": "^\\d+$",
+      "default": "1500"
+    }
+  ]
+}

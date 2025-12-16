@@ -36,13 +36,32 @@ from truthspace_lcm.core.ingestor import (
     IngestionError,
 )
 from truthspace_lcm.core.encoder import (
-    PhiEncoder,
+    PlasticEncoder,
     SemanticDecomposition,
+    RHO,
+    ENCODING_DIM,
+    BOOTSTRAP_PRIMITIVES_12D,
+    PrimitiveType,
 )
 from truthspace_lcm.core.executor import (
     CodeExecutor,
     ExecutionResult,
     ExecutionStatus,
+)
+from truthspace_lcm.core.clock import (
+    ClockOracle,
+    CLOCK_RATIOS_12D,
+    CLOCK_RATIOS_6D,
+    phase_at,
+    phase_vector,
+    phase_similarity,
+)
+from truthspace_lcm.core.autotuner import (
+    DimensionAwareAutotuner,
+    DimensionAnalysis,
+    CollisionReport,
+    PlacementRecommendation,
+    TestCase,
 )
 
 __all__ = [
@@ -67,4 +86,24 @@ __all__ = [
     "CodeExecutor",
     "ExecutionResult",
     "ExecutionStatus",
+    # Clock
+    "ClockOracle",
+    "CLOCK_RATIOS_12D",
+    "CLOCK_RATIOS_6D",
+    "phase_at",
+    "phase_vector",
+    "phase_similarity",
+    # Encoder (Plastic-primary 12D)
+    "PlasticEncoder",
+    "SemanticDecomposition",
+    "RHO",
+    "ENCODING_DIM",
+    "BOOTSTRAP_PRIMITIVES_12D",
+    "PrimitiveType",
+    # Autotuner (Dimension-aware)
+    "DimensionAwareAutotuner",
+    "DimensionAnalysis",
+    "CollisionReport",
+    "PlacementRecommendation",
+    "TestCase",
 ]

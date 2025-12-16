@@ -1,0 +1,271 @@
+{
+  "metadata": {
+    "name": "bash_intents",
+    "version": "1.0.0",
+    "description": "Natural language to bash command mappings",
+    "domain": "PROGRAMMING"
+  },
+  "entries": [
+    {
+      "name": "create_file",
+      "type": "INTENT",
+      "description": "Create a new empty file",
+      "keywords": ["create", "new", "file", "touch", "make", "empty"],
+      "output_type": "bash",
+      "target_commands": ["touch <filename>"],
+      "triggers": ["create file", "create a file", "new file", "make file", "touch file"]
+    },
+    {
+      "name": "create_directory",
+      "type": "INTENT",
+      "description": "Create a new directory",
+      "keywords": ["create", "new", "directory", "folder", "mkdir", "make"],
+      "output_type": "bash",
+      "target_commands": ["mkdir -p <directory>"],
+      "triggers": ["create directory", "create folder", "new directory", "make directory", "mkdir"]
+    },
+    {
+      "name": "compress_directory",
+      "type": "INTENT",
+      "description": "Compress a directory into an archive",
+      "keywords": ["compress", "archive", "tar", "zip", "gzip", "tarball", "tgz", "logs", "folder"],
+      "output_type": "bash",
+      "target_commands": ["tar -czvf <directory>.tar.gz <directory>"],
+      "triggers": ["compress directory", "compress folder", "archive folder", "tar directory", "create archive", "zip directory", "compress the"]
+    },
+    {
+      "name": "extract_archive",
+      "type": "INTENT",
+      "description": "Extract files from an archive",
+      "keywords": ["extract", "unzip", "untar", "decompress", "archive"],
+      "output_type": "bash",
+      "target_commands": ["tar -xzvf <archive>"],
+      "triggers": ["extract archive", "unzip", "untar", "decompress"]
+    },
+    {
+      "name": "download_file",
+      "type": "INTENT",
+      "description": "Download a file from the web",
+      "keywords": ["download", "curl", "wget", "http", "https", "url", "web", "from", "example"],
+      "output_type": "bash",
+      "target_commands": ["curl -O <url>"],
+      "triggers": ["download file", "fetch url", "get from web", "download from"]
+    },
+    {
+      "name": "count_lines",
+      "type": "INTENT",
+      "description": "Count lines in a file",
+      "keywords": ["count", "lines", "line", "wc", "-l", "number", "how", "many", "total", "newlines"],
+      "output_type": "bash",
+      "target_commands": ["wc -l <filename>"],
+      "triggers": ["count lines", "how many lines", "line count", "number of lines", "count lines in"]
+    },
+    {
+      "name": "count_words",
+      "type": "INTENT",
+      "description": "Count words in a file",
+      "keywords": ["count", "words", "wc", "-w", "word"],
+      "output_type": "bash",
+      "target_commands": ["wc -w <file>"],
+      "triggers": ["count words", "how many words", "word count"]
+    },
+    {
+      "name": "find_files_by_name",
+      "type": "INTENT",
+      "description": "Find files by name pattern",
+      "keywords": ["find", "search", "files", "name", "pattern", "locate"],
+      "output_type": "bash",
+      "target_commands": ["find . -name '<pattern>'"],
+      "triggers": ["find files", "search for files", "locate files", "find all"]
+    },
+    {
+      "name": "find_python_files",
+      "type": "INTENT",
+      "description": "Find all Python files",
+      "keywords": ["find", "python", "files", "py", "search"],
+      "output_type": "bash",
+      "target_commands": ["find . -name '*.py'"],
+      "triggers": ["find python files", "find py files", "all python files", "search python"]
+    },
+    {
+      "name": "disk_space",
+      "type": "INTENT",
+      "description": "Show disk space usage",
+      "keywords": ["disk", "space", "df", "free", "storage", "filesystem", "show", "available"],
+      "output_type": "bash",
+      "target_commands": ["df -h"],
+      "triggers": ["disk space", "disk usage", "free space", "storage space", "how much space", "show disk"]
+    },
+    {
+      "name": "directory_size",
+      "type": "INTENT",
+      "description": "Show directory size",
+      "keywords": ["directory", "size", "folder", "du", "space"],
+      "output_type": "bash",
+      "target_commands": ["du -sh <directory>"],
+      "triggers": ["directory size", "folder size", "how big is", "size of directory"]
+    },
+    {
+      "name": "copy_file",
+      "type": "INTENT",
+      "description": "Copy a file to another location",
+      "keywords": ["copy", "cp", "duplicate", "local"],
+      "output_type": "bash",
+      "target_commands": ["cp <source> <destination>"],
+      "triggers": ["copy file", "copy to", "cp file", "duplicate file", "backup file"]
+    },
+    {
+      "name": "copy_recursive",
+      "type": "INTENT",
+      "description": "Copy directory recursively",
+      "keywords": ["copy", "duplicate", "clone", "cp", "recursive", "directory", "folder"],
+      "output_type": "bash",
+      "target_commands": ["cp -r <source> <destination>"],
+      "triggers": ["copy directory", "copy folder", "copy recursively", "cp -r", "duplicate folder"]
+    },
+    {
+      "name": "move_file",
+      "type": "INTENT",
+      "description": "Move or rename a file",
+      "keywords": ["move", "mv", "rename", "relocate"],
+      "output_type": "bash",
+      "target_commands": ["mv <source> <destination>"],
+      "triggers": ["move file", "move to", "mv file", "rename file", "relocate"]
+    },
+    {
+      "name": "remove_recursive",
+      "type": "INTENT",
+      "description": "Remove directory recursively",
+      "keywords": ["remove", "delete", "recursive", "rm"],
+      "output_type": "bash",
+      "target_commands": ["rm -rf <directory>"],
+      "triggers": ["remove directory", "delete folder", "remove recursively", "delete recursively"]
+    },
+    {
+      "name": "search_in_files",
+      "type": "INTENT",
+      "description": "Search for text in files",
+      "keywords": ["grep", "search", "text", "pattern", "string", "error", "for", "in"],
+      "output_type": "bash",
+      "target_commands": ["grep -r '<pattern>' ."],
+      "triggers": ["search in files", "grep for", "find text", "search text"]
+    },
+    {
+      "name": "view_file_contents",
+      "type": "INTENT",
+      "description": "View contents of a file",
+      "keywords": ["view", "show", "display", "contents", "file", "cat", "read"],
+      "output_type": "bash",
+      "target_commands": ["cat <file>"],
+      "triggers": ["view file", "show file", "display file", "read file", "cat file"]
+    },
+    {
+      "name": "view_first_lines",
+      "type": "INTENT",
+      "description": "View first lines of a file",
+      "keywords": ["head", "first", "top", "beginning", "start", "initial"],
+      "output_type": "bash",
+      "target_commands": ["head -n 10 <file>"],
+      "triggers": ["first lines", "head of file", "top of file", "beginning of file"]
+    },
+    {
+      "name": "view_last_lines",
+      "type": "INTENT",
+      "description": "View last lines of a file",
+      "keywords": ["tail", "last", "end", "bottom", "final", "show", "view"],
+      "output_type": "bash",
+      "target_commands": ["tail -n <number> <filename>"],
+      "triggers": ["last lines", "tail of file", "end of file", "show last", "view last", "last 20"]
+    },
+    {
+      "name": "follow_log",
+      "type": "INTENT",
+      "description": "Follow a log file in real-time",
+      "keywords": ["follow", "tail", "-f", "watch", "monitor", "log", "file", "realtime"],
+      "output_type": "bash",
+      "target_commands": ["tail -f <logfile>"],
+      "triggers": ["follow log", "watch log", "tail follow", "monitor log"]
+    },
+    {
+      "name": "make_executable",
+      "type": "INTENT",
+      "description": "Make a file executable",
+      "keywords": ["executable", "chmod", "+x", "permission", "runnable", "make"],
+      "output_type": "bash",
+      "target_commands": ["chmod +x <file>"],
+      "triggers": ["make executable", "chmod +x", "add execute permission"]
+    },
+    {
+      "name": "list_processes",
+      "type": "INTENT",
+      "description": "List running processes",
+      "keywords": ["process", "running", "ps", "list", "show"],
+      "output_type": "bash",
+      "target_commands": ["ps aux"],
+      "triggers": ["list processes", "show processes", "running processes", "ps aux"]
+    },
+    {
+      "name": "kill_process",
+      "type": "INTENT",
+      "description": "Kill a process by PID",
+      "keywords": ["kill", "terminate", "stop", "process", "pid"],
+      "output_type": "bash",
+      "target_commands": ["kill <pid>"],
+      "triggers": ["kill process", "terminate process", "stop process"]
+    },
+    {
+      "name": "current_directory",
+      "type": "INTENT",
+      "description": "Show current working directory",
+      "keywords": ["current", "directory", "pwd", "where", "path"],
+      "output_type": "bash",
+      "target_commands": ["pwd"],
+      "triggers": ["current directory", "where am i", "pwd", "current path"]
+    },
+    {
+      "name": "sort_file",
+      "type": "INTENT",
+      "description": "Sort lines in a file alphabetically",
+      "keywords": ["sort", "order", "alphabetical", "alphabetically", "arrange", "sorted"],
+      "output_type": "bash",
+      "target_commands": ["sort <filename>"],
+      "triggers": ["sort file", "sort lines", "order lines", "alphabetize"]
+    },
+    {
+      "name": "unique_lines",
+      "type": "INTENT",
+      "description": "Get unique lines from a file",
+      "keywords": ["unique", "uniq", "distinct", "deduplicate", "duplicates", "lines", "get"],
+      "output_type": "bash",
+      "target_commands": ["sort <file> | uniq"],
+      "triggers": ["unique lines", "remove duplicates", "distinct lines", "get unique"]
+    },
+    {
+      "name": "remote_login",
+      "type": "INTENT",
+      "description": "SSH into a remote server",
+      "keywords": ["ssh", "login", "into", "shell", "terminal", "connect"],
+      "output_type": "bash",
+      "target_commands": ["ssh <user_host>"],
+      "triggers": ["ssh into", "remote login", "connect to server", "ssh to"]
+    },
+    {
+      "name": "copy_to_remote",
+      "type": "INTENT",
+      "description": "Copy file to remote server",
+      "keywords": ["scp", "upload", "transfer", "remote", "server", "copy", "to"],
+      "output_type": "bash",
+      "target_commands": ["scp <file> <user>@<host>:<path>"],
+      "triggers": ["copy to remote", "scp to", "upload file", "transfer to server"]
+    },
+    {
+      "name": "copy_from_remote",
+      "type": "INTENT",
+      "description": "Copy file from remote server",
+      "keywords": ["scp", "download", "remote", "fetch", "from", "server"],
+      "output_type": "bash",
+      "target_commands": ["scp <user>@<host>:<file> ."],
+      "triggers": ["copy from remote", "scp from", "download from server"]
+    }
+  ]
+}
