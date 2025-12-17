@@ -1,20 +1,24 @@
 """
 TruthSpace LCM Core Module
 
-Hypergeometric knowledge resolution using φ-MAX encoding.
+Hypergeometric knowledge resolution using φ-MAX encoding and stacked
+geometric embeddings.
 
-This is a showcase of how pure geometry can replace trained LLM/LCM
-functionality with mathematically-derived semantic resolution.
+Primary Components:
+- StackedLCM: 128D hierarchical embedding system (primary driver)
+- TruthSpace: Original 12D geometric knowledge storage
 
-Components:
-- TruthSpace: Geometric knowledge storage and resolution
-- Primitive: Semantic anchors in 12D truth space
-- KnowledgeEntry: Knowledge with geometric position
+Architecture:
+- StackedLCM uses 7 layers to encode text at multiple scales
+- No training required - structure emerges from geometric operations
+- Interpretable - each dimension has semantic meaning
 
-Key concepts:
-- φ-MAX encoding: φ^level with MAX per dimension
-- Sierpinski property: Overlapping activations don't stack
-- φ-weighted distance: Actions > Domains > Relations
+Usage:
+    from truthspace_lcm.core import StackedLCM
+    
+    lcm = StackedLCM()
+    lcm.ingest("chop onions", "cooking food preparation")
+    content, similarity, cluster = lcm.resolve("cut vegetables")
 """
 
 from truthspace_lcm.core.truthspace import (
@@ -28,7 +32,28 @@ from truthspace_lcm.core.truthspace import (
     PHI_BLOCK_WEIGHTS,
 )
 
+from truthspace_lcm.core.stacked_lcm import (
+    StackedLCM,
+    MorphologicalLayer,
+    LexicalLayer,
+    SyntacticLayer,
+    CompositionalLayer,
+    DisambiguationLayer,
+    ContextualLayer,
+    GlobalLayer,
+)
+
 __all__ = [
+    # Primary - Stacked LCM
+    "StackedLCM",
+    "MorphologicalLayer",
+    "LexicalLayer", 
+    "SyntacticLayer",
+    "CompositionalLayer",
+    "DisambiguationLayer",
+    "ContextualLayer",
+    "GlobalLayer",
+    # Legacy - TruthSpace
     "TruthSpace",
     "KnowledgeEntry",
     "KnowledgeGapError",

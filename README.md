@@ -1,6 +1,6 @@
 # TruthSpace LCM
 
-**Hypergeometric Language-Code Model** - A natural language to code system using φ-MAX geometric encoding in 12D truth space.
+**Geometric Language-Code Model** - A natural language to code system using hierarchical geometric embeddings. No training required.
 
 ## Philosophy
 
@@ -8,22 +8,13 @@
 
 This system demonstrates that **pure geometry can replace trained neural networks** for semantic resolution. No training data. No backpropagation. Just mathematics.
 
-## Key Concepts
+## Features
 
-### φ-MAX Encoding
-- **φ^level** for each semantic primitive (golden ratio ≈ 1.618)
-- **MAX per dimension** prevents synonym over-counting
-- **Sierpinski property**: Overlapping activations don't stack
-
-### 12D Truth Space
-- **Dims 0-3**: Actions (CREATE, READ, DELETE, COPY, SEARCH, etc.)
-- **Dims 4-7**: Domains (PROCESS, NETWORK, FILE, STORAGE, etc.)
-- **Dims 8-11**: Relations (INTO, FROM, BEFORE, AFTER, etc.)
-
-### φ-Weighted Distance
-- Actions weighted by φ² (most important)
-- Domains weighted by 1
-- Relations weighted by φ⁻² (least important)
+- **128-dimensional hierarchical embeddings** - 7 stacked geometric layers
+- **Intent detection** - Automatically detects bash commands vs chat
+- **Bash execution** - Execute commands with safety checks
+- **No external dependencies** - No LLM API calls required
+- **Interpretable** - Every dimension has semantic meaning
 
 ## Installation
 
@@ -38,7 +29,7 @@ pip install -e .
 
 ## Quick Start
 
-### Interactive Mode
+### Interactive Chat Mode
 
 ```bash
 python run.py
@@ -46,96 +37,159 @@ python run.py
 
 ```
 ============================================================
-TruthSpace LCM - Hypergeometric Resolution
+  TruthSpace LCM Chat
+  Geometric knowledge resolution with bash execution
 ============================================================
 
-Enter natural language requests (type 'quit' to exit)
+Type 'help' for commands, 'exit' to quit.
 
->>> show disk space
+You: list all files
 
-Query: "show disk space"
-----------------------------------------
-Command: df
-Match: read storage (similarity: 1.00)
+LCM: I'll run: $ ls -la
+     Execute? [y/N]: y
 
-Execute? (y/N): y
+✓ $ ls -la
+total 108
+drwxrwxr-x 12 user user  4096 Dec 17 10:42 .
+...
 
-Output:
-----------------------------------------
-Filesystem     1K-blocks      Used Available Use% Mounted on
-/dev/sda1      102400000  45000000  57400000  44% /
+You: hello
+
+LCM: I'm here to help with bash commands and answer questions.
+
+You: show disk space
+
+LCM: I'll run: $ df -h
+     Execute? [y/N]: y
+
+✓ $ df -h
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda1       1.8T  1.2T  606G  66% /
+```
+
+### Single Query Mode
+
+```bash
+python run.py "list files"
 ```
 
 ### Python API
 
 ```python
-from truthspace_lcm import TruthSpace
+from truthspace_lcm.core import StackedLCM
+from truthspace_lcm.chat import LCMChat
 
-ts = TruthSpace()
+# Direct embedding usage
+lcm = StackedLCM()
+lcm.ingest("ls -la", "list files directory terminal")
+lcm.ingest("df -h", "disk space usage storage")
 
-# Resolve natural language to command
-output, entry, similarity = ts.resolve("list files in directory")
-print(output)  # ls
+content, similarity, cluster = lcm.resolve("show all files")
+print(content)  # ls -la
 
-# Explain resolution
-print(ts.explain("show disk space"))
-
-# Add new knowledge
-ts.store("kubectl apply", "deploy application")
+# Chat interface
+chat = LCMChat(safe_mode=True)
+response = chat.process("list all files")
+print(response)  # Prompts for confirmation, then executes
 ```
 
-### Demo
+### Legacy Mode (12D TruthSpace)
 
 ```bash
-python scripts/demo.py
+python run.py --legacy
 ```
 
 ## Architecture
 
 ```
 truthspace_lcm/
-├── __init__.py          # Package exports
+├── __init__.py              # Package exports
+├── chat.py                  # Chat interface with bash execution
 └── core/
-    ├── __init__.py      # Core exports
-    └── truthspace.py    # The entire system (~400 lines)
-
-That's it. One file. Pure geometry.
+    ├── __init__.py          # Core exports (StackedLCM, TruthSpace)
+    ├── stacked_lcm.py       # PRIMARY: 128D hierarchical embeddings
+    ├── truthspace.py        # Legacy: 12D φ-MAX encoding
+    └── knowledge_generator.py  # LLM-based knowledge generation
 ```
+
+### StackedLCM Layers (128D total)
+
+| Layer | Dimensions | Purpose |
+|-------|------------|---------|
+| Morphological | 16 | Word structure (prefixes, suffixes, n-grams) |
+| Lexical | 32 | Primitive activation (φ-MAX encoding) |
+| Syntactic | 16 | Bigram pattern detection |
+| Compositional | 24 | Domain signature detection |
+| Disambiguation | 16 | Context-dependent meaning |
+| Contextual | 16 | Co-occurrence statistics |
+| Global | 8 | Prototype distances |
 
 ## How It Works
 
-1. **Encode**: Query → 12D position vector using φ-MAX
-2. **Distance**: φ-weighted Euclidean distance to all knowledge
-3. **Match**: Return nearest knowledge entry
+### Hierarchical Encoding
+
+Each layer captures meaning at a different scale:
+
+1. **Morphological**: "cooking" and "baking" share "-ing" suffix
+2. **Lexical**: "chop" activates CUT primitive, "file" activates FILE primitive
+3. **Syntactic**: "the file" vs "the vegetables" detected via bigrams
+4. **Compositional**: Cooking domain = FOOD + HEAT + CUT patterns
+5. **Disambiguation**: "cut the file" → tech, "cut the vegetables" → cooking
+6. **Contextual**: Learns co-occurrence from ingested knowledge
+7. **Global**: Distance to emergent domain prototypes
+
+### Intent Detection
+
+The chat interface detects intent geometrically:
 
 ```python
-# Encoding "show disk space"
-# "show" → READ (dim 1, level 0) → 1.0
-# "disk" → STORAGE (dim 5, level 3) → φ³ ≈ 4.24
-# "space" → STORAGE (dim 5, level 3) → MAX(4.24, 4.24) = 4.24
-
-# Position: [0, 1.0, 0, 0, 0, 4.24, 0, 0, 0, 0, 0, 0]
-# Matches "read storage" (df) with similarity 1.0
+# "list files" → BASH intent (keywords: list, files)
+# "hello" → CHAT intent (greeting patterns)
+# "how do I find a file?" → QUESTION intent
+# "ls -la" → BASH intent (direct command pattern)
 ```
 
-## Why This Works
+### Disambiguation
 
-The golden ratio φ appears naturally in:
-- Fibonacci sequences
-- Optimal packing problems
-- Self-similar fractals (Sierpinski)
-- Dimensional hierarchies
+Same word, different context:
 
-By using φ for level separation and MAX for overlap handling, we achieve the **Sierpinski property**: overlapping semantic activations confirm the same region rather than stacking.
+```
+"cut the file" vs "cut the vegetables"
+  Similarity: 0.42 (correctly low - different domains)
 
-This is what trained LLMs learn implicitly. We encode it explicitly.
+"search for recipes" vs "search for files"  
+  Similarity: 0.41 (correctly low - different domains)
+```
+
+## Key Concepts
+
+### φ-MAX Encoding
+- **φ^level** for each semantic primitive (golden ratio ≈ 1.618)
+- **MAX per dimension** prevents synonym over-counting
+- **Sierpinski property**: Overlapping activations don't stack
+
+### Layer Weighting
+- Morphological: 0.3 (reduced - word length shouldn't dominate)
+- Lexical: 1.2 (semantic primitives)
+- Disambiguation: 2.0 (high - context is critical)
+
+## Testing
+
+```bash
+# Run all tests
+python tests/test_stacked_lcm.py
+
+# Run legacy tests
+python tests/test_truthspace.py
+```
 
 ## Design Documents
 
 See `design_considerations/` for the research journey:
-- `012_geometric_overlap_handling.md` - φ-MAX encoding discovery
-- `010_phi_dimensional_navigation.md` - φ-based weighting
-- `009_projection_weighting.md` - Block weight optimization
+- `017_stacked_geometric_embeddings.md` - Hierarchical architecture
+- `018_stacked_lcm_analysis.md` - What works and what doesn't
+- `016_truly_dynamic_geometric_lcm.md` - Self-organizing domains
+- `015_dynamic_geometric_lcm.md` - Dynamic primitive discovery
 
 ## License
 

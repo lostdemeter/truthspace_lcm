@@ -1,0 +1,2924 @@
+{
+  "dimensions": 40,
+  "primitives": [
+    {
+      "name": "DOMAIN_AI ML_AI-ML",
+      "dimension": 10,
+      "level": 0,
+      "keywords": [
+        "ai ml",
+        "ai-ml"
+      ],
+      "is_seed": false,
+      "domain": "ai-ml"
+    },
+    {
+      "name": "DOMAIN_PHYSICS",
+      "dimension": 10,
+      "level": 1,
+      "keywords": [
+        "physics"
+      ],
+      "is_seed": false,
+      "domain": "physics"
+    },
+    {
+      "name": "DOMAIN_ENGINEERING",
+      "dimension": 10,
+      "level": 2,
+      "keywords": [
+        "engineering"
+      ],
+      "is_seed": false,
+      "domain": "engineering"
+    },
+    {
+      "name": "DOMAIN_PSYCHOLOGY",
+      "dimension": 10,
+      "level": 3,
+      "keywords": [
+        "psychology"
+      ],
+      "is_seed": false,
+      "domain": "psychology"
+    },
+    {
+      "name": "DOMAIN_DESIGN",
+      "dimension": 11,
+      "level": 0,
+      "keywords": [
+        "design"
+      ],
+      "is_seed": false,
+      "domain": "design"
+    },
+    {
+      "name": "DOMAIN_HISTORY",
+      "dimension": 11,
+      "level": 1,
+      "keywords": [
+        "history"
+      ],
+      "is_seed": false,
+      "domain": "history"
+    },
+    {
+      "name": "DOMAIN_BIOLOGY",
+      "dimension": 11,
+      "level": 2,
+      "keywords": [
+        "biology"
+      ],
+      "is_seed": false,
+      "domain": "biology"
+    },
+    {
+      "name": "DOMAIN_LITERATURE",
+      "dimension": 11,
+      "level": 3,
+      "keywords": [
+        "literature"
+      ],
+      "is_seed": false,
+      "domain": "literature"
+    },
+    {
+      "name": "DOMAIN_GEOGRAPHY",
+      "dimension": 12,
+      "level": 0,
+      "keywords": [
+        "geography"
+      ],
+      "is_seed": false,
+      "domain": "geography"
+    },
+    {
+      "name": "DOMAIN_CULINARY",
+      "dimension": 12,
+      "level": 1,
+      "keywords": [
+        "culinary"
+      ],
+      "is_seed": false,
+      "domain": "culinary"
+    },
+    {
+      "name": "AI-ML_MODEL",
+      "dimension": 12,
+      "level": 2,
+      "keywords": [
+        "model"
+      ],
+      "is_seed": false,
+      "domain": "ai-ml"
+    },
+    {
+      "name": "AI-ML_MACHINE",
+      "dimension": 12,
+      "level": 3,
+      "keywords": [
+        "machine"
+      ],
+      "is_seed": false,
+      "domain": "ai-ml"
+    },
+    {
+      "name": "AI-ML_LEARNING",
+      "dimension": 13,
+      "level": 0,
+      "keywords": [
+        "learning"
+      ],
+      "is_seed": false,
+      "domain": "ai-ml"
+    },
+    {
+      "name": "AI-ML_ACCURACY",
+      "dimension": 13,
+      "level": 1,
+      "keywords": [
+        "accuracy"
+      ],
+      "is_seed": false,
+      "domain": "ai-ml"
+    },
+    {
+      "name": "AI-ML_MODELS",
+      "dimension": 13,
+      "level": 2,
+      "keywords": [
+        "models"
+      ],
+      "is_seed": false,
+      "domain": "ai-ml"
+    },
+    {
+      "name": "AI-ML_FEATURE",
+      "dimension": 13,
+      "level": 3,
+      "keywords": [
+        "feature"
+      ],
+      "is_seed": false,
+      "domain": "ai-ml"
+    },
+    {
+      "name": "AI-ML_UNSUPERVISED",
+      "dimension": 14,
+      "level": 0,
+      "keywords": [
+        "unsupervised"
+      ],
+      "is_seed": false,
+      "domain": "ai-ml"
+    },
+    {
+      "name": "PHYSICS_FORCE",
+      "dimension": 14,
+      "level": 1,
+      "keywords": [
+        "force"
+      ],
+      "is_seed": false,
+      "domain": "physics"
+    },
+    {
+      "name": "PHYSICS_NEWTON",
+      "dimension": 14,
+      "level": 2,
+      "keywords": [
+        "newton"
+      ],
+      "is_seed": false,
+      "domain": "physics"
+    },
+    {
+      "name": "PHYSICS_LAW",
+      "dimension": 14,
+      "level": 3,
+      "keywords": [
+        "law"
+      ],
+      "is_seed": false,
+      "domain": "physics"
+    },
+    {
+      "name": "PHYSICS_ENERGY",
+      "dimension": 15,
+      "level": 0,
+      "keywords": [
+        "energy"
+      ],
+      "is_seed": false,
+      "domain": "physics"
+    },
+    {
+      "name": "PHYSICS_EXAMPLES",
+      "dimension": 15,
+      "level": 1,
+      "keywords": [
+        "examples"
+      ],
+      "is_seed": false,
+      "domain": "physics"
+    },
+    {
+      "name": "PHYSICS_OHMS",
+      "dimension": 15,
+      "level": 2,
+      "keywords": [
+        "ohms"
+      ],
+      "is_seed": false,
+      "domain": "physics"
+    },
+    {
+      "name": "PHYSICS_VOLTAGE",
+      "dimension": 15,
+      "level": 3,
+      "keywords": [
+        "voltage"
+      ],
+      "is_seed": false,
+      "domain": "physics"
+    },
+    {
+      "name": "PHYSICS_CURRENT",
+      "dimension": 16,
+      "level": 0,
+      "keywords": [
+        "current"
+      ],
+      "is_seed": false,
+      "domain": "physics"
+    },
+    {
+      "name": "PHYSICS_ELECTRIC",
+      "dimension": 16,
+      "level": 1,
+      "keywords": [
+        "electric"
+      ],
+      "is_seed": false,
+      "domain": "physics"
+    },
+    {
+      "name": "PHYSICS_WAVE",
+      "dimension": 16,
+      "level": 2,
+      "keywords": [
+        "wave"
+      ],
+      "is_seed": false,
+      "domain": "physics"
+    },
+    {
+      "name": "PHYSICS_WAVELENGTH",
+      "dimension": 16,
+      "level": 3,
+      "keywords": [
+        "wavelength"
+      ],
+      "is_seed": false,
+      "domain": "physics"
+    },
+    {
+      "name": "PHYSICS_FREQUENCY",
+      "dimension": 17,
+      "level": 0,
+      "keywords": [
+        "frequency"
+      ],
+      "is_seed": false,
+      "domain": "physics"
+    },
+    {
+      "name": "PHYSICS_AMPLITUDE",
+      "dimension": 17,
+      "level": 1,
+      "keywords": [
+        "amplitude"
+      ],
+      "is_seed": false,
+      "domain": "physics"
+    },
+    {
+      "name": "PHYSICS_WAVES",
+      "dimension": 17,
+      "level": 2,
+      "keywords": [
+        "waves"
+      ],
+      "is_seed": false,
+      "domain": "physics"
+    },
+    {
+      "name": "PHYSICS_FIELD",
+      "dimension": 17,
+      "level": 3,
+      "keywords": [
+        "field"
+      ],
+      "is_seed": false,
+      "domain": "physics"
+    },
+    {
+      "name": "CULINARY_HEAT",
+      "dimension": 18,
+      "level": 0,
+      "keywords": [
+        "heat"
+      ],
+      "is_seed": false,
+      "domain": "culinary"
+    },
+    {
+      "name": "ENGINEERING_MECHANICS",
+      "dimension": 18,
+      "level": 1,
+      "keywords": [
+        "mechanics"
+      ],
+      "is_seed": false,
+      "domain": "engineering"
+    },
+    {
+      "name": "DESIGN_METHODOLOGY",
+      "dimension": 18,
+      "level": 2,
+      "keywords": [
+        "methodology"
+      ],
+      "is_seed": false,
+      "domain": "design"
+    },
+    {
+      "name": "ENGINEERING_EFFICIENCY",
+      "dimension": 18,
+      "level": 3,
+      "keywords": [
+        "efficiency"
+      ],
+      "is_seed": false,
+      "domain": "engineering"
+    },
+    {
+      "name": "ENGINEERING_MANAGEMENT",
+      "dimension": 19,
+      "level": 0,
+      "keywords": [
+        "management"
+      ],
+      "is_seed": false,
+      "domain": "engineering"
+    },
+    {
+      "name": "ENGINEERING_CONTROL",
+      "dimension": 19,
+      "level": 1,
+      "keywords": [
+        "control"
+      ],
+      "is_seed": false,
+      "domain": "engineering"
+    },
+    {
+      "name": "ENGINEERING_PROJECTS",
+      "dimension": 19,
+      "level": 2,
+      "keywords": [
+        "projects"
+      ],
+      "is_seed": false,
+      "domain": "engineering"
+    },
+    {
+      "name": "PSYCHOLOGY_BEHAVIOR",
+      "dimension": 19,
+      "level": 3,
+      "keywords": [
+        "behavior"
+      ],
+      "is_seed": false,
+      "domain": "psychology"
+    },
+    {
+      "name": "PSYCHOLOGY_PSYCHOLOGICAL",
+      "dimension": 20,
+      "level": 0,
+      "keywords": [
+        "psychological"
+      ],
+      "is_seed": false,
+      "domain": "psychology"
+    },
+    {
+      "name": "PSYCHOLOGY_THEORIES",
+      "dimension": 20,
+      "level": 1,
+      "keywords": [
+        "theories"
+      ],
+      "is_seed": false,
+      "domain": "psychology"
+    },
+    {
+      "name": "BIOLOGY_HOW",
+      "dimension": 20,
+      "level": 2,
+      "keywords": [
+        "how"
+      ],
+      "is_seed": false,
+      "domain": "biology"
+    },
+    {
+      "name": "PSYCHOLOGY_MENTAL",
+      "dimension": 20,
+      "level": 3,
+      "keywords": [
+        "mental"
+      ],
+      "is_seed": false,
+      "domain": "psychology"
+    },
+    {
+      "name": "PSYCHOLOGY_HEALTH",
+      "dimension": 21,
+      "level": 0,
+      "keywords": [
+        "health"
+      ],
+      "is_seed": false,
+      "domain": "psychology"
+    },
+    {
+      "name": "PSYCHOLOGY_DIAGNOSIS",
+      "dimension": 21,
+      "level": 1,
+      "keywords": [
+        "diagnosis"
+      ],
+      "is_seed": false,
+      "domain": "psychology"
+    },
+    {
+      "name": "PSYCHOLOGY_THERAPY",
+      "dimension": 21,
+      "level": 2,
+      "keywords": [
+        "therapy"
+      ],
+      "is_seed": false,
+      "domain": "psychology"
+    },
+    {
+      "name": "PSYCHOLOGY_DISORDERS",
+      "dimension": 21,
+      "level": 3,
+      "keywords": [
+        "disorders"
+      ],
+      "is_seed": false,
+      "domain": "psychology"
+    },
+    {
+      "name": "PSYCHOLOGY_EMOTIONS",
+      "dimension": 22,
+      "level": 0,
+      "keywords": [
+        "emotions"
+      ],
+      "is_seed": false,
+      "domain": "psychology"
+    },
+    {
+      "name": "PSYCHOLOGY_CONDITIONING",
+      "dimension": 22,
+      "level": 1,
+      "keywords": [
+        "conditioning"
+      ],
+      "is_seed": false,
+      "domain": "psychology"
+    },
+    {
+      "name": "DESIGN_USER",
+      "dimension": 22,
+      "level": 2,
+      "keywords": [
+        "user"
+      ],
+      "is_seed": false,
+      "domain": "design"
+    },
+    {
+      "name": "DESIGN_COLOR",
+      "dimension": 22,
+      "level": 3,
+      "keywords": [
+        "color"
+      ],
+      "is_seed": false,
+      "domain": "design"
+    },
+    {
+      "name": "DESIGN_APPLICATION",
+      "dimension": 23,
+      "level": 0,
+      "keywords": [
+        "application"
+      ],
+      "is_seed": false,
+      "domain": "design"
+    },
+    {
+      "name": "DESIGN_VISUAL",
+      "dimension": 23,
+      "level": 1,
+      "keywords": [
+        "visual"
+      ],
+      "is_seed": false,
+      "domain": "design"
+    },
+    {
+      "name": "DESIGN_ENHANCEMENT",
+      "dimension": 23,
+      "level": 2,
+      "keywords": [
+        "enhancement"
+      ],
+      "is_seed": false,
+      "domain": "design"
+    },
+    {
+      "name": "DESIGN_LAYOUT",
+      "dimension": 23,
+      "level": 3,
+      "keywords": [
+        "layout"
+      ],
+      "is_seed": false,
+      "domain": "design"
+    },
+    {
+      "name": "HISTORY_EVENTS",
+      "dimension": 24,
+      "level": 0,
+      "keywords": [
+        "events"
+      ],
+      "is_seed": false,
+      "domain": "history"
+    },
+    {
+      "name": "HISTORY_INFLUENCE",
+      "dimension": 24,
+      "level": 1,
+      "keywords": [
+        "influence"
+      ],
+      "is_seed": false,
+      "domain": "history"
+    },
+    {
+      "name": "GEOGRAPHY_LOCATIONS",
+      "dimension": 24,
+      "level": 2,
+      "keywords": [
+        "locations"
+      ],
+      "is_seed": false,
+      "domain": "geography"
+    },
+    {
+      "name": "HISTORY_DIVERSITY",
+      "dimension": 24,
+      "level": 3,
+      "keywords": [
+        "diversity"
+      ],
+      "is_seed": false,
+      "domain": "history"
+    },
+    {
+      "name": "HISTORY_FACTORS",
+      "dimension": 25,
+      "level": 0,
+      "keywords": [
+        "factors"
+      ],
+      "is_seed": false,
+      "domain": "history"
+    },
+    {
+      "name": "BIOLOGY_CELLS",
+      "dimension": 25,
+      "level": 1,
+      "keywords": [
+        "cells"
+      ],
+      "is_seed": false,
+      "domain": "biology"
+    },
+    {
+      "name": "BIOLOGY_DNA",
+      "dimension": 25,
+      "level": 2,
+      "keywords": [
+        "dna"
+      ],
+      "is_seed": false,
+      "domain": "biology"
+    },
+    {
+      "name": "BIOLOGY_GENETIC",
+      "dimension": 25,
+      "level": 3,
+      "keywords": [
+        "genetic"
+      ],
+      "is_seed": false,
+      "domain": "biology"
+    },
+    {
+      "name": "BIOLOGY_TEST",
+      "dimension": 26,
+      "level": 0,
+      "keywords": [
+        "test"
+      ],
+      "is_seed": false,
+      "domain": "biology"
+    },
+    {
+      "name": "BIOLOGY_MECHANISM",
+      "dimension": 26,
+      "level": 1,
+      "keywords": [
+        "mechanism"
+      ],
+      "is_seed": false,
+      "domain": "biology"
+    },
+    {
+      "name": "BIOLOGY_ECOSYSTEM",
+      "dimension": 26,
+      "level": 2,
+      "keywords": [
+        "ecosystem"
+      ],
+      "is_seed": false,
+      "domain": "biology"
+    },
+    {
+      "name": "LITERATURE_CLASSIC",
+      "dimension": 26,
+      "level": 3,
+      "keywords": [
+        "classic"
+      ],
+      "is_seed": false,
+      "domain": "literature"
+    },
+    {
+      "name": "LITERATURE_NOVEL",
+      "dimension": 27,
+      "level": 0,
+      "keywords": [
+        "novel"
+      ],
+      "is_seed": false,
+      "domain": "literature"
+    },
+    {
+      "name": "LITERATURE_SHAKESPEARE",
+      "dimension": 27,
+      "level": 1,
+      "keywords": [
+        "shakespeare"
+      ],
+      "is_seed": false,
+      "domain": "literature"
+    },
+    {
+      "name": "LITERATURE_POETRY",
+      "dimension": 27,
+      "level": 2,
+      "keywords": [
+        "poetry"
+      ],
+      "is_seed": false,
+      "domain": "literature"
+    },
+    {
+      "name": "LITERATURE_SYMBOLISM",
+      "dimension": 27,
+      "level": 3,
+      "keywords": [
+        "symbolism"
+      ],
+      "is_seed": false,
+      "domain": "literature"
+    },
+    {
+      "name": "LITERATURE_MEANING",
+      "dimension": 28,
+      "level": 0,
+      "keywords": [
+        "meaning"
+      ],
+      "is_seed": false,
+      "domain": "literature"
+    },
+    {
+      "name": "LITERATURE_LITERARY",
+      "dimension": 28,
+      "level": 1,
+      "keywords": [
+        "literary"
+      ],
+      "is_seed": false,
+      "domain": "literature"
+    },
+    {
+      "name": "LITERATURE_CHARACTER",
+      "dimension": 28,
+      "level": 2,
+      "keywords": [
+        "character"
+      ],
+      "is_seed": false,
+      "domain": "literature"
+    },
+    {
+      "name": "LITERATURE_PLOT",
+      "dimension": 28,
+      "level": 3,
+      "keywords": [
+        "plot"
+      ],
+      "is_seed": false,
+      "domain": "literature"
+    },
+    {
+      "name": "GEOGRAPHY_AMERICA",
+      "dimension": 29,
+      "level": 0,
+      "keywords": [
+        "america"
+      ],
+      "is_seed": false,
+      "domain": "geography"
+    },
+    {
+      "name": "GEOGRAPHY_RIVER",
+      "dimension": 29,
+      "level": 1,
+      "keywords": [
+        "river"
+      ],
+      "is_seed": false,
+      "domain": "geography"
+    },
+    {
+      "name": "GEOGRAPHY_NAMES",
+      "dimension": 29,
+      "level": 2,
+      "keywords": [
+        "names"
+      ],
+      "is_seed": false,
+      "domain": "geography"
+    },
+    {
+      "name": "GEOGRAPHY_MAP",
+      "dimension": 29,
+      "level": 3,
+      "keywords": [
+        "map"
+      ],
+      "is_seed": false,
+      "domain": "geography"
+    },
+    {
+      "name": "GEOGRAPHY_CLIMATE",
+      "dimension": 30,
+      "level": 0,
+      "keywords": [
+        "climate"
+      ],
+      "is_seed": false,
+      "domain": "geography"
+    },
+    {
+      "name": "GEOGRAPHY_MOUNTAINS",
+      "dimension": 30,
+      "level": 1,
+      "keywords": [
+        "mountains"
+      ],
+      "is_seed": false,
+      "domain": "geography"
+    },
+    {
+      "name": "GEOGRAPHY_MOUNTAIN",
+      "dimension": 30,
+      "level": 2,
+      "keywords": [
+        "mountain"
+      ],
+      "is_seed": false,
+      "domain": "geography"
+    },
+    {
+      "name": "GEOGRAPHY_RANGES",
+      "dimension": 30,
+      "level": 3,
+      "keywords": [
+        "ranges"
+      ],
+      "is_seed": false,
+      "domain": "geography"
+    },
+    {
+      "name": "GEOGRAPHY_COORDINATES",
+      "dimension": 31,
+      "level": 0,
+      "keywords": [
+        "coordinates"
+      ],
+      "is_seed": false,
+      "domain": "geography"
+    },
+    {
+      "name": "GEOGRAPHY_LATITUDE",
+      "dimension": 31,
+      "level": 1,
+      "keywords": [
+        "latitude"
+      ],
+      "is_seed": false,
+      "domain": "geography"
+    },
+    {
+      "name": "GEOGRAPHY_LONGITUDE",
+      "dimension": 31,
+      "level": 2,
+      "keywords": [
+        "longitude"
+      ],
+      "is_seed": false,
+      "domain": "geography"
+    },
+    {
+      "name": "GEOGRAPHY_MOVEMENT",
+      "dimension": 31,
+      "level": 3,
+      "keywords": [
+        "movement"
+      ],
+      "is_seed": false,
+      "domain": "geography"
+    },
+    {
+      "name": "GEOGRAPHY_LARGEST",
+      "dimension": 32,
+      "level": 0,
+      "keywords": [
+        "largest"
+      ],
+      "is_seed": false,
+      "domain": "geography"
+    },
+    {
+      "name": "GEOGRAPHY_ISLAND",
+      "dimension": 32,
+      "level": 1,
+      "keywords": [
+        "island"
+      ],
+      "is_seed": false,
+      "domain": "geography"
+    },
+    {
+      "name": "GEOGRAPHY_LANDSCAPE",
+      "dimension": 32,
+      "level": 2,
+      "keywords": [
+        "landscape"
+      ],
+      "is_seed": false,
+      "domain": "geography"
+    },
+    {
+      "name": "CULINARY_FLAVOR",
+      "dimension": 32,
+      "level": 3,
+      "keywords": [
+        "flavor"
+      ],
+      "is_seed": false,
+      "domain": "culinary"
+    },
+    {
+      "name": "CULINARY_CARAMELIZATION",
+      "dimension": 33,
+      "level": 0,
+      "keywords": [
+        "caramelization"
+      ],
+      "is_seed": false,
+      "domain": "culinary"
+    },
+    {
+      "name": "CULINARY_PUREE",
+      "dimension": 33,
+      "level": 1,
+      "keywords": [
+        "puree"
+      ],
+      "is_seed": false,
+      "domain": "culinary"
+    },
+    {
+      "name": "CULINARY_EQUIPMENT",
+      "dimension": 33,
+      "level": 2,
+      "keywords": [
+        "equipment"
+      ],
+      "is_seed": false,
+      "domain": "culinary"
+    },
+    {
+      "name": "CULINARY_TEXTURE",
+      "dimension": 33,
+      "level": 3,
+      "keywords": [
+        "texture"
+      ],
+      "is_seed": false,
+      "domain": "culinary"
+    },
+    {
+      "name": "CULINARY_PERFECT",
+      "dimension": 34,
+      "level": 0,
+      "keywords": [
+        "perfect"
+      ],
+      "is_seed": false,
+      "domain": "culinary"
+    },
+    {
+      "name": "CULINARY_TIMING",
+      "dimension": 34,
+      "level": 1,
+      "keywords": [
+        "timing"
+      ],
+      "is_seed": false,
+      "domain": "culinary"
+    },
+    {
+      "name": "CULINARY_VEGETABLES",
+      "dimension": 34,
+      "level": 2,
+      "keywords": [
+        "vegetables"
+      ],
+      "is_seed": false,
+      "domain": "culinary"
+    },
+    {
+      "name": "CULINARY_HIGH",
+      "dimension": 34,
+      "level": 3,
+      "keywords": [
+        "high"
+      ],
+      "is_seed": false,
+      "domain": "culinary"
+    },
+    {
+      "name": "CULINARY_MEAT",
+      "dimension": 35,
+      "level": 0,
+      "keywords": [
+        "meat"
+      ],
+      "is_seed": false,
+      "domain": "culinary"
+    },
+    {
+      "name": "CULINARY_COOKING",
+      "dimension": 35,
+      "level": 1,
+      "keywords": [
+        "cooking"
+      ],
+      "is_seed": false,
+      "domain": "culinary"
+    },
+    {
+      "name": "CULINARY_TIME",
+      "dimension": 35,
+      "level": 2,
+      "keywords": [
+        "time"
+      ],
+      "is_seed": false,
+      "domain": "culinary"
+    },
+    {
+      "name": "DATA_DEVELOPMENT_LEARNING",
+      "dimension": 35,
+      "level": 3,
+      "keywords": [
+        "data",
+        "development",
+        "machine",
+        "models",
+        "learning",
+        "technique"
+      ],
+      "is_seed": false,
+      "domain": null
+    },
+    {
+      "name": "HOW_IDENTIFY",
+      "dimension": 36,
+      "level": 0,
+      "keywords": [
+        "how",
+        "identify"
+      ],
+      "is_seed": false,
+      "domain": null
+    },
+    {
+      "name": "BEHAVIOR_EXPLAIN",
+      "dimension": 36,
+      "level": 1,
+      "keywords": [
+        "behavior",
+        "explain"
+      ],
+      "is_seed": false,
+      "domain": null
+    },
+    {
+      "name": "LAW_USE",
+      "dimension": 36,
+      "level": 2,
+      "keywords": [
+        "use",
+        "law"
+      ],
+      "is_seed": false,
+      "domain": null
+    },
+    {
+      "name": "FLAVOR_PROCESS",
+      "dimension": 36,
+      "level": 3,
+      "keywords": [
+        "process",
+        "flavor"
+      ],
+      "is_seed": false,
+      "domain": null
+    },
+    {
+      "name": "APPLY_PRINCIPLES",
+      "dimension": 37,
+      "level": 0,
+      "keywords": [
+        "apply",
+        "principles"
+      ],
+      "is_seed": false,
+      "domain": null
+    },
+    {
+      "name": "ANALYSIS_LITERARY",
+      "dimension": 37,
+      "level": 1,
+      "keywords": [
+        "analysis",
+        "literary"
+      ],
+      "is_seed": false,
+      "domain": null
+    }
+  ],
+  "domains": {
+    "ai-ml": {
+      "description": "Auto-created domain: ai-ml",
+      "parent": null,
+      "children": []
+    },
+    "physics": {
+      "description": "Auto-created domain: physics",
+      "parent": null,
+      "children": []
+    },
+    "engineering": {
+      "description": "Auto-created domain: engineering",
+      "parent": null,
+      "children": []
+    },
+    "psychology": {
+      "description": "Auto-created domain: psychology",
+      "parent": null,
+      "children": []
+    },
+    "design": {
+      "description": "Auto-created domain: design",
+      "parent": null,
+      "children": []
+    },
+    "history": {
+      "description": "Auto-created domain: history",
+      "parent": null,
+      "children": []
+    },
+    "biology": {
+      "description": "Auto-created domain: biology",
+      "parent": null,
+      "children": []
+    },
+    "literature": {
+      "description": "Auto-created domain: literature",
+      "parent": null,
+      "children": []
+    },
+    "geography": {
+      "description": "Auto-created domain: geography",
+      "parent": null,
+      "children": []
+    },
+    "culinary": {
+      "description": "Auto-created domain: culinary",
+      "parent": null,
+      "children": []
+    }
+  },
+  "entries": [
+    {
+      "id": "48d02f2218d1",
+      "content": "Train an AI model with labeled data to recognize patterns",
+      "description": "ai-ml train model labeled data pattern recognition machine learning",
+      "domain": "ai-ml",
+      "metadata": {}
+    },
+    {
+      "id": "6485f163b25b",
+      "content": "Use cross-validation techniques when evaluating the performance of a machine learning algorithm",
+      "description": "ai-ml cross-validation evaluate performance machine learning algorithms accuracy technique",
+      "domain": "ai-ml",
+      "metadata": {}
+    },
+    {
+      "id": "8be56b1d862e",
+      "content": "Implement regularization methods to prevent overfitting in your AI model",
+      "description": "ai-ml regularization overfitting machine learning prevent models",
+      "domain": "ai-ml",
+      "metadata": {}
+    },
+    {
+      "id": "2dac3f229a29",
+      "content": "Understand and apply the concept of feature engineering for better model performance",
+      "description": "ai-ml feature engineering improve machine learning data transformation technique",
+      "domain": "ai-ml",
+      "metadata": {}
+    },
+    {
+      "id": "07ff5d680473",
+      "content": "Utilize ensemble methods such as Random Forests or Gradient Boosting to enhance predictive power",
+      "description": "ai-ml ensemble methods random forests gradient boosting predict increase accuracy algorithms",
+      "domain": "ai-ml",
+      "metadata": {}
+    },
+    {
+      "id": "141307b705cd",
+      "content": "Use hyperparameter tuning techniques like Grid Search or Randomized Search for optimization",
+      "description": "ai-ml hyperparameter tuning grid search randomized machine learning optimize parameters",
+      "domain": "ai-ml",
+      "metadata": {}
+    },
+    {
+      "id": "cd1ee3992781",
+      "content": "Understand the importance of bias and variance in your AI model and aim to achieve a balance between them",
+      "description": "ai-ml bias variance machine learning model balance understand error types",
+      "domain": "ai-ml",
+      "metadata": {}
+    },
+    {
+      "id": "05bfac5929d9",
+      "content": "Use unsupervised learning techniques for clustering or anomaly detection when dealing with unlabeled data",
+      "description": "ai-ml unsupervised learning clustering anomaly detection machine learning models unlabeled data",
+      "domain": "ai-ml",
+      "metadata": {}
+    },
+    {
+      "id": "5d9016faa08b",
+      "content": "Implement deep learning architectures like CNNs or RNNs on your AI projects to handle complex datasets",
+      "description": "ai-ml deep learning architectures CNNs RNNs machine learning complex datasets improve accuracy",
+      "domain": "ai-ml",
+      "metadata": {}
+    },
+    {
+      "id": "3e91ebeef266",
+      "content": "Understand the trade-offs between supervised and unsupervised learning methods when designing your model",
+      "description": "ai-ml supervised learning unsupervised learning trade-offs design choose method models",
+      "domain": "ai-ml",
+      "metadata": {}
+    },
+    {
+      "id": "8c2ffe977535",
+      "content": "Learn about reinforcement learning principles to train AI systems in dynamic environments",
+      "description": "ai-ml reinforcement learning dynamic environment machine learning autonomous decision making",
+      "domain": "ai-ml",
+      "metadata": {}
+    },
+    {
+      "id": "d226878d4441",
+      "content": "Implement feature selection methods like Recursive Feature Elimination or Lasso Regression for optimizing your model's performance",
+      "description": "ai-ml feature selection recursive feature elimination lasso regression optimize machine learning models",
+      "domain": "ai-ml",
+      "metadata": {}
+    },
+    {
+      "id": "cd6e7d1916be",
+      "content": "Understand the importance of normalization and scaling techniques in preparing input data for AI models",
+      "description": "ai-ml normalization scaling techniques prepare input data preprocessing machine learning",
+      "domain": "ai-ml",
+      "metadata": {}
+    },
+    {
+      "id": "42712022f32b",
+      "content": "Learn about the concept of transfer learning to leverage pre-trained models on new tasks",
+      "description": "ai-ml transfer learning pre-trained models leverage existing knowledge new tasks",
+      "domain": "ai-ml",
+      "metadata": {}
+    },
+    {
+      "id": "852e70f4ebc4",
+      "content": "Use interpretability tools and methods like LIME or SHAP to understand how your AI model makes decisions",
+      "description": "ai-ml interpretability tools LIME SHAP machine learning explain predictions decision-making transparency",
+      "domain": "ai-ml",
+      "metadata": {}
+    },
+    {
+      "id": "62c1749eb4e4",
+      "content": "Calculate gravitational force between two masses",
+      "description": "physics calculate gravitational force mass distance Newton's law",
+      "domain": "physics",
+      "metadata": {}
+    },
+    {
+      "id": "55ff979c6718",
+      "content": "Apply the principle of conservation of energy",
+      "description": "physics apply conservation of energy work potential kinetic energy examples problems",
+      "domain": "physics",
+      "metadata": {}
+    },
+    {
+      "id": "d8dcc5db8939",
+      "content": "Use Ohm's Law to determine current in a circuit",
+      "description": "physics use ohms law voltage resistance current electric circuits calculations",
+      "domain": "physics",
+      "metadata": {}
+    },
+    {
+      "id": "66385c4a549d",
+      "content": "Identify the type of wave based on its properties",
+      "description": "physics identify wave type wavelength frequency amplitude electromagnetic mechanical waves",
+      "domain": "physics",
+      "metadata": {}
+    },
+    {
+      "id": "1bd5b15d13ea",
+      "content": "Apply the laws of motion to predict an object's movement",
+      "description": "physics apply laws of motion force acceleration velocity Newton's second law",
+      "domain": "physics",
+      "metadata": {}
+    },
+    {
+      "id": "e3b57646dd24",
+      "content": "Determine the speed of light in a given medium",
+      "description": "physics determine speed of light medium refractive index formula calculations",
+      "domain": "physics",
+      "metadata": {}
+    },
+    {
+      "id": "10b84fd950e8",
+      "content": "Calculate the period and frequency of a wave",
+      "description": "physics calculate wave period frequency wavelength amplitude waves oscillations",
+      "domain": "physics",
+      "metadata": {}
+    },
+    {
+      "id": "53c4465b2ccc",
+      "content": "Use the principle of superposition to analyze wave interactions",
+      "description": "physics use principle of superposition waves interference constructive destructive examples",
+      "domain": "physics",
+      "metadata": {}
+    },
+    {
+      "id": "af5ad78332c3",
+      "content": "Apply Coulomb's law to calculate electric force between charges",
+      "description": "physics apply coulombs law charge distance electric field electric force",
+      "domain": "physics",
+      "metadata": {}
+    },
+    {
+      "id": "fe11f6a17208",
+      "content": "Use the ideal gas law to predict pressure, volume or temperature changes",
+      "description": "physics use ideal gas law PV relationship gases Boyle's law Charles' law",
+      "domain": "physics",
+      "metadata": {}
+    },
+    {
+      "id": "ffb9ff9c576a",
+      "content": "Determine the specific heat capacity of a substance through calorimetry",
+      "description": "physics determine specific heat capacity calorimeter substances energy transfer",
+      "domain": "physics",
+      "metadata": {}
+    },
+    {
+      "id": "73fe917c7984",
+      "content": "Calculate the intensity and direction of magnetic field using Amp\u00e8re's circuital law",
+      "description": "physics calculate magnetic field intensity ampere's circuital law loops current",
+      "domain": "physics",
+      "metadata": {}
+    },
+    {
+      "id": "646b284004bb",
+      "content": "Use Ohm's law to determine voltage drop across a resistor",
+      "description": "physics use ohms law resistors voltage drops electrical circuits",
+      "domain": "physics",
+      "metadata": {}
+    },
+    {
+      "id": "2697e1066090",
+      "content": "Explain the process of nuclear fission and fusion",
+      "description": "physics explain nuclear fission fusion atoms energy release radioactive materials",
+      "domain": "physics",
+      "metadata": {}
+    },
+    {
+      "id": "f2d445ce3637",
+      "content": "Calculate the wavelength of light emitted by a blackbody at a specific temperature",
+      "description": "physics calculate blackbody radiation wavelength temperature Planck's law Stefan-Boltzmann law",
+      "domain": "physics",
+      "metadata": {}
+    },
+    {
+      "id": "ce98de88dc4b",
+      "content": "Apply engineering principles to solve complex problems",
+      "description": "engineering apply principles problem solving technical design",
+      "domain": "engineering",
+      "metadata": {}
+    },
+    {
+      "id": "ae91a073a062",
+      "content": "Use CAD software to create detailed designs",
+      "description": "engineering computer-aided-design software create designs 3d modeling",
+      "domain": "engineering",
+      "metadata": {}
+    },
+    {
+      "id": "d904babde421",
+      "content": "Calculate stress concentrations in materials for structural integrity",
+      "description": "engineering material strength stress concentration calculations mechanics integrity",
+      "domain": "engineering",
+      "metadata": {}
+    },
+    {
+      "id": "30e243baa124",
+      "content": "Conduct experiments to test mechanical systems",
+      "description": "engineering testing experimental mechanics physics prototypes",
+      "domain": "engineering",
+      "metadata": {}
+    },
+    {
+      "id": "6ad28968271c",
+      "content": "Optimize manufacturing processes using Lean Six Sigma methodologies",
+      "description": "engineering process optimization Lean Six Sigma methodology quality improvement efficiency",
+      "domain": "engineering",
+      "metadata": {}
+    },
+    {
+      "id": "dac316dcea38",
+      "content": "Design electrical circuits for electronic devices",
+      "description": "engineering electrical circuits electronics design components",
+      "domain": "engineering",
+      "metadata": {}
+    },
+    {
+      "id": "5bb3b12815d3",
+      "content": "Incorporate renewable energy sources into infrastructure plans",
+      "description": "engineering sustainable infrastructure renewable energy solar wind",
+      "domain": "engineering",
+      "metadata": {}
+    },
+    {
+      "id": "c1219369de38",
+      "content": "Analyze environmental impact of engineering projects",
+      "description": "engineering project management sustainability analysis environment impact",
+      "domain": "engineering",
+      "metadata": {}
+    },
+    {
+      "id": "9e18e7b02904",
+      "content": "Utilize Finite Element Analysis (FEA) for structural simulation",
+      "description": "engineering FEA simulation mechanics stress strain design",
+      "domain": "engineering",
+      "metadata": {}
+    },
+    {
+      "id": "3b9c3df28ce6",
+      "content": "Integrate smart technology in building automation systems",
+      "description": "engineering smart technology automation buildings control systems",
+      "domain": "engineering",
+      "metadata": {}
+    },
+    {
+      "id": "731b83fae3de",
+      "content": "Ensure compliance with safety regulations during project implementation",
+      "description": "engineering safety regulations compliance construction projects",
+      "domain": "engineering",
+      "metadata": {}
+    },
+    {
+      "id": "15775b5ccb00",
+      "content": "Develop algorithms for artificial intelligence applications",
+      "description": "engineering AI machine learning algorithms development programming",
+      "domain": "engineering",
+      "metadata": {}
+    },
+    {
+      "id": "e4120d1beb84",
+      "content": "Estimate cost and time for engineering projects",
+      "description": "engineering budget estimation management projects timeline",
+      "domain": "engineering",
+      "metadata": {}
+    },
+    {
+      "id": "042b3a7ea631",
+      "content": "Design user interfaces for software applications",
+      "description": "engineering UI design human-computer interaction software development",
+      "domain": "engineering",
+      "metadata": {}
+    },
+    {
+      "id": "897c9080b9c6",
+      "content": "Implement quality control measures in the manufacturing process",
+      "description": "engineering QC manufacturing inspection processes efficiency improvement",
+      "domain": "engineering",
+      "metadata": {}
+    },
+    {
+      "id": "8e1e92bc69a2",
+      "content": "Optimize supply chain logistics for engineering materials",
+      "description": "engineering logistics supply chain material management inventory control",
+      "domain": "engineering",
+      "metadata": {}
+    },
+    {
+      "id": "462bba2daeb1",
+      "content": "Analyze behavior patterns using psychological theories",
+      "description": "psychology analyze behavior patterns psychological theories how understand mind",
+      "domain": "psychology",
+      "metadata": {}
+    },
+    {
+      "id": "8dd809c4ea4c",
+      "content": "Assess mental health status with professional tools",
+      "description": "psychology assess mental health status professional tools diagnosis evaluate",
+      "domain": "psychology",
+      "metadata": {}
+    },
+    {
+      "id": "89cf2fdb4463",
+      "content": "Use cognitive-behavioral therapy techniques effectively",
+      "description": "psychology use cognitive-behavioral therapy techniques effectively CBT treatment anxiety depression",
+      "domain": "psychology",
+      "metadata": {}
+    },
+    {
+      "id": "89a34516c911",
+      "content": "Identify signs of psychological disorders during assessment",
+      "description": "psychology identify psychological disorders assessment symptoms diagnose mental health",
+      "domain": "psychology",
+      "metadata": {}
+    },
+    {
+      "id": "8cbb3095ec5f",
+      "content": "Explore the impact of stress on human behavior",
+      "description": "psychology explore stress impact human behavior studies research coping mechanisms",
+      "domain": "psychology",
+      "metadata": {}
+    },
+    {
+      "id": "41c61dd3598d",
+      "content": "Explain the role of neurotransmitters in mood regulation",
+      "description": "psychology explain neurotransmitters mood regulation brain chemistry emotions",
+      "domain": "psychology",
+      "metadata": {}
+    },
+    {
+      "id": "a6296332c75f",
+      "content": "Understand the principles behind cognitive development",
+      "description": "psychology understand principles cognitive development stages children learning growth",
+      "domain": "psychology",
+      "metadata": {}
+    },
+    {
+      "id": "294456883660",
+      "content": "Apply psychological research methods to gather data",
+      "description": "psychology apply research methods gather data experiments observations statistics",
+      "domain": "psychology",
+      "metadata": {}
+    },
+    {
+      "id": "5b36ef90e50d",
+      "content": "Use therapeutic interventions for personality disorders",
+      "description": "psychology use interventions personality disorders therapy diagnosis improvement",
+      "domain": "psychology",
+      "metadata": {}
+    },
+    {
+      "id": "6bc477f08206",
+      "content": "Explain the concept of classical conditioning in behavior",
+      "description": "psychology explain classical conditioning behavior learning response stimuli",
+      "domain": "psychology",
+      "metadata": {}
+    },
+    {
+      "id": "cce912057cbd",
+      "content": "Study the effects of social media on adolescent psychology",
+      "description": "psychology study social media effects adolescents psychological health behavior",
+      "domain": "psychology",
+      "metadata": {}
+    },
+    {
+      "id": "7209f1695bcc",
+      "content": "Understand the role of genetics in psychological traits",
+      "description": "psychology understand genetics psychological traits heredity mental health",
+      "domain": "psychology",
+      "metadata": {}
+    },
+    {
+      "id": "8e7e75bf1618",
+      "content": "Use empirical evidence to support psychoanalytic theories",
+      "description": "psychology use empirical evidence psychoanalytic theories Sigmund Freud psychology history",
+      "domain": "psychology",
+      "metadata": {}
+    },
+    {
+      "id": "a4d5a5b3a2fa",
+      "content": "Explore the relationship between emotions and physiological responses",
+      "description": "psychology explore emotions physiological responses body language stress levels",
+      "domain": "psychology",
+      "metadata": {}
+    },
+    {
+      "id": "80ffa8142c1f",
+      "content": "Apply positive psychology principles for personal growth",
+      "description": "psychology apply positive psychology principles personal growth happiness well-being",
+      "domain": "psychology",
+      "metadata": {}
+    },
+    {
+      "id": "2c03a584b3c8",
+      "content": "Explain the concept of operant conditioning in behavior modification",
+      "description": "psychology explain operant conditioning behavior modification rewards punishments learning",
+      "domain": "psychology",
+      "metadata": {}
+    },
+    {
+      "id": "e4decfdd4f14",
+      "content": "Create a design prototype using software tools",
+      "description": "design create prototype software tools instructions process",
+      "domain": "design",
+      "metadata": {}
+    },
+    {
+      "id": "11da99c57031",
+      "content": "Refine your design with iterative improvements",
+      "description": "design refine improve iterative process methodology adjustments",
+      "domain": "design",
+      "metadata": {}
+    },
+    {
+      "id": "a589d6bbcf03",
+      "content": "Conduct user research to inform your design decisions",
+      "description": "design user research decisions inform methodology insights",
+      "domain": "design",
+      "metadata": {}
+    },
+    {
+      "id": "150cfc750dc9",
+      "content": "Utilize color theory effectively in graphic designs",
+      "description": "design utilize color theory graphic design application principles",
+      "domain": "design",
+      "metadata": {}
+    },
+    {
+      "id": "69f9a5d9f60b",
+      "content": "Select the right materials for product design based on functionality and aesthetics",
+      "description": "design select materials function aesthetics criteria choice",
+      "domain": "design",
+      "metadata": {}
+    },
+    {
+      "id": "01cef84fedf8",
+      "content": "Incorporate sustainability considerations into your design process",
+      "description": "design incorporate sustainability considerations process eco-friendly practices",
+      "domain": "design",
+      "metadata": {}
+    },
+    {
+      "id": "e0ed206de051",
+      "content": "Use typography effectively to enhance visual communication in design projects",
+      "description": "design use typography visual communication enhancement principles application",
+      "domain": "design",
+      "metadata": {}
+    },
+    {
+      "id": "9802eab58e40",
+      "content": "Create a responsive web design that adapts to different devices",
+      "description": "design create responsive web adaptation devices mobile optimization",
+      "domain": "design",
+      "metadata": {}
+    },
+    {
+      "id": "7eaa6d908674",
+      "content": "Balance negative space for optimal design clarity",
+      "description": "design balance negative space clarity optimal layout spacing",
+      "domain": "design",
+      "metadata": {}
+    },
+    {
+      "id": "02c3cd9c7d9d",
+      "content": "Employ storytelling techniques in your design projects for better user engagement",
+      "description": "design employ storytelling techniques user engagement improve narrative process",
+      "domain": "design",
+      "metadata": {}
+    },
+    {
+      "id": "fefc5f257810",
+      "content": "Integrate human-centered design principles to solve user problems",
+      "description": "design integrate human-centered design problem solving methodology empathize",
+      "domain": "design",
+      "metadata": {}
+    },
+    {
+      "id": "efcb5c971eb1",
+      "content": "Use white balance adjustment tools to enhance color in designs",
+      "description": "design use white balance adjustment tools color enhancement photography software",
+      "domain": "design",
+      "metadata": {}
+    },
+    {
+      "id": "6d7af6f20d5e",
+      "content": "Choose appropriate design patterns that align with your brand identity",
+      "description": "design choose design patterns brand identity consistency",
+      "domain": "design",
+      "metadata": {}
+    },
+    {
+      "id": "bfb315e86101",
+      "content": "Optimize user interface for ease of navigation and accessibility",
+      "description": "design optimize user interface navigation accessibility usability methodology",
+      "domain": "design",
+      "metadata": {}
+    },
+    {
+      "id": "4b5e5e99d09f",
+      "content": "Apply the principles of visual hierarchy to guide viewer attention in designs",
+      "description": "design apply visual hierarchy guide attention layout organization principles",
+      "domain": "design",
+      "metadata": {}
+    },
+    {
+      "id": "090752a4feac",
+      "content": "Understand and implement design ethics in creative projects",
+      "description": "design understand implement design ethics creativity professional responsibility",
+      "domain": "design",
+      "metadata": {}
+    },
+    {
+      "id": "e8fc8b9611a9",
+      "content": "Identify key events in history by their dates",
+      "description": "history identify events date timeline chronology when",
+      "domain": "history",
+      "metadata": {}
+    },
+    {
+      "id": "c7fd66bbbd42",
+      "content": "Compare historical periods through significant figures",
+      "description": "compare history periods figures leaders impact change",
+      "domain": "history",
+      "metadata": {}
+    },
+    {
+      "id": "58ebfa136374",
+      "content": "Analyze causes and effects of major historical wars",
+      "description": "analyze history wars cause effect consequences battles",
+      "domain": "history",
+      "metadata": {}
+    },
+    {
+      "id": "529099ad7ed5",
+      "content": "Determine the role of geography in shaping historical events",
+      "description": "history determine geography shape events influence locations",
+      "domain": "history",
+      "metadata": {}
+    },
+    {
+      "id": "f0e1c4650480",
+      "content": "Explain how different cultures contributed to world history",
+      "description": "history explain cultures contribute impact global diversity",
+      "domain": "history",
+      "metadata": {}
+    },
+    {
+      "id": "b1026021b5b8",
+      "content": "Recognize milestones during significant historical movements",
+      "description": "milestone history significant movements change impact",
+      "domain": "history",
+      "metadata": {}
+    },
+    {
+      "id": "b6e0929426f2",
+      "content": "Compare and contrast various historical interpretations of events",
+      "description": "compare history interpretations events perspective understand",
+      "domain": "history",
+      "metadata": {}
+    },
+    {
+      "id": "9c50347a3e17",
+      "content": "Research the influence of technology on historical progress",
+      "description": "history research technology influence progress impacts innovation",
+      "domain": "history",
+      "metadata": {}
+    },
+    {
+      "id": "f07c087264d7",
+      "content": "Identify political, economic, social factors in historical analysis",
+      "description": "history identify factors influence analysis decision making",
+      "domain": "history",
+      "metadata": {}
+    },
+    {
+      "id": "dd9738c02de5",
+      "content": "Describe the impact of global events on local history",
+      "description": "describe history global local impact change interaction",
+      "domain": "history",
+      "metadata": {}
+    },
+    {
+      "id": "dca1f3a2ec00",
+      "content": "Explain the process of archaeological discovery and its importance",
+      "description": "explain archaeology discovery importance history unearthing",
+      "domain": "history",
+      "metadata": {}
+    },
+    {
+      "id": "04f6067cc8ca",
+      "content": "Recognize the influence of historical literature on society",
+      "description": "history recognize literature influence society themes impact",
+      "domain": "history",
+      "metadata": {}
+    },
+    {
+      "id": "799baf5806df",
+      "content": "Compare historical artifacts to understand different cultures",
+      "description": "compare artifacts culture history understanding diversity",
+      "domain": "history",
+      "metadata": {}
+    },
+    {
+      "id": "5d21509d9219",
+      "content": "Discuss how history can be used as a guide for future actions",
+      "description": "discuss history guide future actions lessons learn",
+      "domain": "history",
+      "metadata": {}
+    },
+    {
+      "id": "91af4eecd468",
+      "content": "Identify the key factors in historical change and development",
+      "description": "history identify factors change development impact growth",
+      "domain": "history",
+      "metadata": {}
+    },
+    {
+      "id": "e7ae5b576d47",
+      "content": "Identify cells under a microscope",
+      "description": "biology identify microscopic cells how observe specimen microscope",
+      "domain": "biology",
+      "metadata": {}
+    },
+    {
+      "id": "a42747c95306",
+      "content": "Calculate DNA's nucleotide sequence",
+      "description": "biology calculate DNA sequence nucleotides how determine genetic material",
+      "domain": "biology",
+      "metadata": {}
+    },
+    {
+      "id": "73f70f31f969",
+      "content": "Determine blood type using antigens",
+      "description": "biology determine blood test antigens types how identify donor recipient compatibility",
+      "domain": "biology",
+      "metadata": {}
+    },
+    {
+      "id": "d726ca56aa3e",
+      "content": "Predict genetic traits for offspring",
+      "description": "biology predict genetics offspring parents how inheritance occurs traits",
+      "domain": "biology",
+      "metadata": {}
+    },
+    {
+      "id": "fa2845c8b900",
+      "content": "Create a basic cell culture",
+      "description": "biology create cell culture basic media temperature technique growing cells",
+      "domain": "biology",
+      "metadata": {}
+    },
+    {
+      "id": "f92b620cb90c",
+      "content": "Test for bacterial resistance to antibiotics",
+      "description": "biology test bacteria antibiotic resistance mechanism why use culture medium",
+      "domain": "biology",
+      "metadata": {}
+    },
+    {
+      "id": "fe6510898254",
+      "content": "Identify plant species through morphology",
+      "description": "biology identify plant species morphology how examine structure",
+      "domain": "biology",
+      "metadata": {}
+    },
+    {
+      "id": "03143f9eb782",
+      "content": "Cultivate fungi under optimal conditions",
+      "description": "biology cultivate fungi optimal temperature humidity light requirements growth",
+      "domain": "biology",
+      "metadata": {}
+    },
+    {
+      "id": "367ccf3e2342",
+      "content": "Study the behavior of animal populations",
+      "description": "biology study population animal behavior ecology how collect data environment",
+      "domain": "biology",
+      "metadata": {}
+    },
+    {
+      "id": "19a9e1f322e9",
+      "content": "Analyze soil samples for biodiversity",
+      "description": "biology analyze soil biodiversity sample technique determine ecosystem health",
+      "domain": "biology",
+      "metadata": {}
+    },
+    {
+      "id": "a878e74cc21c",
+      "content": "Isolate and identify viruses in cultures",
+      "description": "biology isolate identify virus cultures technique pathogen detection biology",
+      "domain": "biology",
+      "metadata": {}
+    },
+    {
+      "id": "194d1998a8e3",
+      "content": "Explain natural selection processes",
+      "description": "biology explain natural selection evolution how organisms adapt environment",
+      "domain": "biology",
+      "metadata": {}
+    },
+    {
+      "id": "bb25f04bc234",
+      "content": "Measure pH levels for aquatic ecosystems",
+      "description": "biology measure pH aquatic ecosystem technique determine water quality",
+      "domain": "biology",
+      "metadata": {}
+    },
+    {
+      "id": "e5189858813c",
+      "content": "Determine enzyme activity through kinetics",
+      "description": "biology determine enzyme kinetics activity mechanism rate of reactions",
+      "domain": "biology",
+      "metadata": {}
+    },
+    {
+      "id": "2a7239b0e6a9",
+      "content": "Perform PCR amplification on DNA",
+      "description": "biology perform PCR amplify DNA technique genetic material replication biology",
+      "domain": "biology",
+      "metadata": {}
+    },
+    {
+      "id": "a834cf95ff05",
+      "content": "Choose a classic novel to read",
+      "description": "literature choose classic novel read book classic literature",
+      "domain": "literature",
+      "metadata": {}
+    },
+    {
+      "id": "8043715e9f2d",
+      "content": "Identify the themes in Shakespeare's works",
+      "description": "literature identify themes shakespeare plays sonnets poetry",
+      "domain": "literature",
+      "metadata": {}
+    },
+    {
+      "id": "d5aff6f7b9d1",
+      "content": "Analyze the symbolism in a given text",
+      "description": "literature analyze symbolism text interpretation meaning literary analysis",
+      "domain": "literature",
+      "metadata": {}
+    },
+    {
+      "id": "5089b12d24ab",
+      "content": "Compare two authors' writing styles",
+      "description": "literature compare authors writing style compare literature styles",
+      "domain": "literature",
+      "metadata": {}
+    },
+    {
+      "id": "13a4c75b2ffc",
+      "content": "Explore the impact of setting on character development",
+      "description": "literature explore setting impact character development theme",
+      "domain": "literature",
+      "metadata": {}
+    },
+    {
+      "id": "f315c0157d0f",
+      "content": "Discuss the significance of a particular poem's metaphor",
+      "description": "literature discuss poem metaphor significance poetry analysis",
+      "domain": "literature",
+      "metadata": {}
+    },
+    {
+      "id": "53025a747aef",
+      "content": "Explain the use of foreshadowing in a story",
+      "description": "literature explain foreshadowing technique plot development prediction",
+      "domain": "literature",
+      "metadata": {}
+    },
+    {
+      "id": "5739f6d5fab9",
+      "content": "Write an essay on literary criticism",
+      "description": "literature write essay literary criticism analyze evaluate",
+      "domain": "literature",
+      "metadata": {}
+    },
+    {
+      "id": "5133f34247fd",
+      "content": "Identify different genres within literature",
+      "description": "literature identify genres novel poetry drama literature types",
+      "domain": "literature",
+      "metadata": {}
+    },
+    {
+      "id": "4ae37fca70ff",
+      "content": "Discuss the role of dialogue in character development",
+      "description": "literature discuss dialogue character development literary analysis technique",
+      "domain": "literature",
+      "metadata": {}
+    },
+    {
+      "id": "6ed63de37884",
+      "content": "Analyze the structure of a Shakespearean play",
+      "description": "literature analyze structure shakespeare play plot form",
+      "domain": "literature",
+      "metadata": {}
+    },
+    {
+      "id": "d7dae4fd6728",
+      "content": "Examine the influence of personal experiences on literature",
+      "description": "literature examine personal experiences influence literature biography inspiration",
+      "domain": "literature",
+      "metadata": {}
+    },
+    {
+      "id": "0aacdddf359b",
+      "content": "Explore the use of allegory in literature",
+      "description": "literature explore allegory meaning symbolism literary technique",
+      "domain": "literature",
+      "metadata": {}
+    },
+    {
+      "id": "8a28cd1834d5",
+      "content": "Identify and describe different types of literary devices",
+      "description": "literature identify describe literary devices metaphors similes personification",
+      "domain": "literature",
+      "metadata": {}
+    },
+    {
+      "id": "07064e00aeb0",
+      "content": "Discuss how literature reflects society's values",
+      "description": "literature discuss reflect society values themes cultural impact",
+      "domain": "literature",
+      "metadata": {}
+    },
+    {
+      "id": "fbe24c7128fa",
+      "content": "Locate the capital city of France on a world map.",
+      "description": "geography locate find capital Paris Europe",
+      "domain": "geography",
+      "metadata": {}
+    },
+    {
+      "id": "518ae130c1d5",
+      "content": "Identify major river systems in North America.",
+      "description": "geography identify rivers North America geography river names map",
+      "domain": "geography",
+      "metadata": {}
+    },
+    {
+      "id": "96dbae0f815c",
+      "content": "Determine the climate zones of Australia.",
+      "description": "geography determine climate zones Australia geography climate types regions",
+      "domain": "geography",
+      "metadata": {}
+    },
+    {
+      "id": "e8f4eb1843e3",
+      "content": "List three main mountain ranges in Asia.",
+      "description": "geography list mountains Asia geography mountain ranges names locations",
+      "domain": "geography",
+      "metadata": {}
+    },
+    {
+      "id": "9a9ba7e31943",
+      "content": "Calculate the distance between two cities using geographical coordinates.",
+      "description": "geography calculate distance coordinates latitude longitude cities map",
+      "domain": "geography",
+      "metadata": {}
+    },
+    {
+      "id": "6e4dfc17086d",
+      "content": "Explain how plate tectonics cause earthquakes and volcanic eruptions.",
+      "description": "geography explain plate tectonics earthquake volcanoes movement Earth",
+      "domain": "geography",
+      "metadata": {}
+    },
+    {
+      "id": "501c3bec5423",
+      "content": "Identify the largest island in the world.",
+      "description": "geography identify largest island geography largest island names locations",
+      "domain": "geography",
+      "metadata": {}
+    },
+    {
+      "id": "8de5ac40383d",
+      "content": "Describe the process of glacial movement and its impact on landscape.",
+      "description": "geography describe glacial movement impact landscape erosion glaciers geography",
+      "domain": "geography",
+      "metadata": {}
+    },
+    {
+      "id": "2cf21531a51e",
+      "content": "Explain the significance of latitude and longitude for navigation.",
+      "description": "geography explain latitude longitude navigation coordinates geography map",
+      "domain": "geography",
+      "metadata": {}
+    },
+    {
+      "id": "a587d7b8ce5e",
+      "content": "Recognize the characteristics of a desert climate.",
+      "description": "geography recognize desert climate characteristics temperature precipitation geography",
+      "domain": "geography",
+      "metadata": {}
+    },
+    {
+      "id": "64bb2a01c029",
+      "content": "Discuss the importance of waterways for global trade routes.",
+      "description": "geography discuss waterways global trade routes geography river ports",
+      "domain": "geography",
+      "metadata": {}
+    },
+    {
+      "id": "49177469b39f",
+      "content": "Name and describe the main types of natural disasters.",
+      "description": "geography name natural disasters types hurricanes floods earthquakes geography",
+      "domain": "geography",
+      "metadata": {}
+    },
+    {
+      "id": "63e7ba0f410e",
+      "content": "Identify the major mountain ranges in South America.",
+      "description": "geography identify mountain ranges South America geography mountains locations",
+      "domain": "geography",
+      "metadata": {}
+    },
+    {
+      "id": "65a1515ca311",
+      "content": "Explain how climate change affects geographical landscapes.",
+      "description": "geography explain climate change landscape effects sea level rise geography",
+      "domain": "geography",
+      "metadata": {}
+    },
+    {
+      "id": "625c73f899c9",
+      "content": "Locate the equator and discuss its significance in geography.",
+      "description": "geography locate equator significance global geography dividing line",
+      "domain": "geography",
+      "metadata": {}
+    },
+    {
+      "id": "3ab201163632",
+      "content": "Chop garlic finely to release flavor",
+      "description": "culinary chop garlic finely flavor extract prepare",
+      "domain": "culinary",
+      "metadata": {}
+    },
+    {
+      "id": "78627328a49f",
+      "content": "Saut\u00e9 onions until translucent",
+      "description": "culinary saut\u00e9 onions until soften caramelization heat technique",
+      "domain": "culinary",
+      "metadata": {}
+    },
+    {
+      "id": "72deb93cd152",
+      "content": "Blend ingredients in food processor",
+      "description": "culinary blend ingredients food processor puree mix equipment",
+      "domain": "culinary",
+      "metadata": {}
+    },
+    {
+      "id": "41f94d94e863",
+      "content": "Season seafood with salt and pepper",
+      "description": "culinary season seafood salt pepper flavor seasoning process",
+      "domain": "culinary",
+      "metadata": {}
+    },
+    {
+      "id": "4e66d0721f72",
+      "content": "Cook pasta al dente for best texture",
+      "description": "culinary cook pasta al dente texture perfect timing preparation",
+      "domain": "culinary",
+      "metadata": {}
+    },
+    {
+      "id": "7ae77a10773a",
+      "content": "Roast vegetables at high heat to caramelize",
+      "description": "culinary roast vegetables high heat caramelization technique flavor",
+      "domain": "culinary",
+      "metadata": {}
+    },
+    {
+      "id": "33c38e77e900",
+      "content": "Marinate meat overnight before grilling",
+      "description": "culinary marinate meat overnight marinade flavor development cooking process",
+      "domain": "culinary",
+      "metadata": {}
+    },
+    {
+      "id": "5bcfb7b088bd",
+      "content": "Fry chicken in hot oil until golden brown",
+      "description": "culinary fry chicken hot oil golden brown texture cooking technique",
+      "domain": "culinary",
+      "metadata": {}
+    },
+    {
+      "id": "f4e969287c29",
+      "content": "Bake dessert at lower temperature for longer time",
+      "description": "culinary bake dessert low temperature long time perfect texture timing",
+      "domain": "culinary",
+      "metadata": {}
+    },
+    {
+      "id": "1a283882a60e",
+      "content": "Sear meat quickly on high heat to create crust",
+      "description": "culinary sear meat high heat crust flavor technique prepare",
+      "domain": "culinary",
+      "metadata": {}
+    },
+    {
+      "id": "5143ab2c2711",
+      "content": "Puree soup in blender until smooth",
+      "description": "culinary puree soup blender smooth consistency equipment technique",
+      "domain": "culinary",
+      "metadata": {}
+    },
+    {
+      "id": "a56850460f38",
+      "content": "Stir ingredients gently to avoid overmixing",
+      "description": "culinary stir gently avoid overmixing texture mixing process",
+      "domain": "culinary",
+      "metadata": {}
+    },
+    {
+      "id": "02de8b0c9ccc",
+      "content": "Steam vegetables lightly for crisp-tender results",
+      "description": "culinary steam vegetables light time crisp tender texture technique",
+      "domain": "culinary",
+      "metadata": {}
+    },
+    {
+      "id": "374bd9c80f4f",
+      "content": "Proof yeast in warm water before baking",
+      "description": "culinary proof yeast warm water activate fermentation process bread",
+      "domain": "culinary",
+      "metadata": {}
+    },
+    {
+      "id": "2dcd2a8d0850",
+      "content": "Grill fish until skin is crispy and flesh is cooked through",
+      "description": "culinary grill fish crispy skin texture timing technique",
+      "domain": "culinary",
+      "metadata": {}
+    }
+  ],
+  "word_frequency": {
+    "ai-ml": 15,
+    "train": 1,
+    "model": 2,
+    "labeled": 1,
+    "data": 6,
+    "pattern": 1,
+    "recognition": 1,
+    "machine": 13,
+    "learning": 22,
+    "cross-validation": 1,
+    "evaluate": 3,
+    "performance": 1,
+    "algorithms": 3,
+    "accuracy": 3,
+    "technique": 17,
+    "regularization": 1,
+    "overfitting": 1,
+    "prevent": 1,
+    "models": 5,
+    "feature": 3,
+    "engineering": 17,
+    "improve": 4,
+    "transformation": 1,
+    "ensemble": 1,
+    "methods": 2,
+    "random": 1,
+    "forests": 1,
+    "gradient": 1,
+    "boosting": 1,
+    "predict": 2,
+    "increase": 1,
+    "hyperparameter": 1,
+    "tuning": 1,
+    "grid": 1,
+    "search": 1,
+    "randomized": 1,
+    "optimize": 3,
+    "parameters": 1,
+    "bias": 1,
+    "variance": 1,
+    "balance": 3,
+    "understand": 6,
+    "error": 1,
+    "types": 5,
+    "unsupervised": 2,
+    "clustering": 1,
+    "anomaly": 1,
+    "detection": 2,
+    "unlabeled": 1,
+    "deep": 1,
+    "architectures": 1,
+    "cnns": 1,
+    "rnns": 1,
+    "complex": 1,
+    "datasets": 1,
+    "supervised": 1,
+    "trade-offs": 1,
+    "design": 25,
+    "choose": 3,
+    "method": 1,
+    "reinforcement": 1,
+    "dynamic": 1,
+    "environment": 4,
+    "autonomous": 1,
+    "decision": 2,
+    "making": 2,
+    "selection": 2,
+    "recursive": 1,
+    "elimination": 1,
+    "lasso": 1,
+    "regression": 1,
+    "normalization": 1,
+    "scaling": 1,
+    "techniques": 3,
+    "prepare": 3,
+    "input": 1,
+    "preprocessing": 1,
+    "transfer": 2,
+    "pre-trained": 1,
+    "leverage": 1,
+    "existing": 1,
+    "knowledge": 1,
+    "new": 1,
+    "tasks": 1,
+    "interpretability": 1,
+    "tools": 4,
+    "lime": 1,
+    "shap": 1,
+    "explain": 12,
+    "predictions": 1,
+    "decision-making": 1,
+    "transparency": 1,
+    "physics": 16,
+    "calculate": 6,
+    "gravitational": 1,
+    "force": 3,
+    "mass": 1,
+    "distance": 3,
+    "newton": 2,
+    "s": 5,
+    "law": 11,
+    "apply": 7,
+    "conservation": 1,
+    "of": 5,
+    "energy": 5,
+    "work": 1,
+    "potential": 1,
+    "kinetic": 1,
+    "examples": 2,
+    "problems": 1,
+    "use": 10,
+    "ohms": 2,
+    "voltage": 2,
+    "resistance": 2,
+    "current": 2,
+    "electric": 3,
+    "circuits": 3,
+    "calculations": 3,
+    "identify": 15,
+    "wave": 2,
+    "type": 1,
+    "wavelength": 3,
+    "frequency": 2,
+    "amplitude": 2,
+    "electromagnetic": 1,
+    "mechanical": 1,
+    "waves": 3,
+    "laws": 1,
+    "motion": 1,
+    "acceleration": 1,
+    "velocity": 1,
+    "second": 1,
+    "determine": 9,
+    "speed": 1,
+    "light": 3,
+    "medium": 2,
+    "refractive": 1,
+    "index": 1,
+    "formula": 1,
+    "period": 1,
+    "oscillations": 1,
+    "principle": 1,
+    "superposition": 1,
+    "interference": 1,
+    "constructive": 1,
+    "destructive": 1,
+    "coulombs": 1,
+    "charge": 1,
+    "field": 2,
+    "ideal": 1,
+    "gas": 1,
+    "pv": 1,
+    "relationship": 1,
+    "gases": 1,
+    "boyle": 1,
+    "charles": 1,
+    "specific": 1,
+    "heat": 4,
+    "capacity": 1,
+    "calorimeter": 1,
+    "substances": 1,
+    "magnetic": 1,
+    "intensity": 1,
+    "ampere": 1,
+    "circuital": 1,
+    "loops": 1,
+    "resistors": 1,
+    "drops": 1,
+    "electrical": 2,
+    "nuclear": 1,
+    "fission": 1,
+    "fusion": 1,
+    "atoms": 1,
+    "release": 1,
+    "radioactive": 1,
+    "materials": 2,
+    "blackbody": 1,
+    "radiation": 1,
+    "temperature": 5,
+    "planck": 1,
+    "stefan-boltzmann": 1,
+    "principles": 6,
+    "problem": 2,
+    "solving": 2,
+    "technical": 1,
+    "computer-aided-design": 1,
+    "software": 4,
+    "create": 4,
+    "designs": 1,
+    "3d": 1,
+    "modeling": 1,
+    "material": 4,
+    "strength": 1,
+    "stress": 4,
+    "concentration": 1,
+    "mechanics": 3,
+    "integrity": 1,
+    "testing": 1,
+    "experimental": 1,
+    "prototypes": 1,
+    "process": 9,
+    "optimization": 2,
+    "lean": 1,
+    "six": 1,
+    "sigma": 1,
+    "methodology": 5,
+    "quality": 2,
+    "improvement": 3,
+    "efficiency": 2,
+    "electronics": 1,
+    "components": 1,
+    "sustainable": 1,
+    "infrastructure": 1,
+    "renewable": 1,
+    "solar": 1,
+    "wind": 1,
+    "project": 1,
+    "management": 3,
+    "sustainability": 2,
+    "analysis": 5,
+    "impact": 11,
+    "fea": 1,
+    "simulation": 1,
+    "strain": 1,
+    "smart": 1,
+    "technology": 2,
+    "automation": 1,
+    "buildings": 1,
+    "control": 2,
+    "systems": 1,
+    "safety": 1,
+    "regulations": 1,
+    "compliance": 1,
+    "construction": 1,
+    "projects": 2,
+    "ai": 1,
+    "development": 8,
+    "programming": 1,
+    "budget": 1,
+    "estimation": 1,
+    "timeline": 2,
+    "ui": 1,
+    "human-computer": 1,
+    "interaction": 2,
+    "qc": 1,
+    "manufacturing": 1,
+    "inspection": 1,
+    "processes": 1,
+    "logistics": 1,
+    "supply": 1,
+    "chain": 1,
+    "inventory": 1,
+    "psychology": 18,
+    "analyze": 6,
+    "behavior": 6,
+    "patterns": 2,
+    "psychological": 4,
+    "theories": 2,
+    "how": 8,
+    "mind": 1,
+    "assess": 1,
+    "mental": 3,
+    "health": 5,
+    "status": 1,
+    "professional": 2,
+    "diagnosis": 2,
+    "cognitive-behavioral": 1,
+    "therapy": 2,
+    "effectively": 1,
+    "cbt": 1,
+    "treatment": 1,
+    "anxiety": 1,
+    "depression": 1,
+    "disorders": 2,
+    "assessment": 1,
+    "symptoms": 1,
+    "diagnose": 1,
+    "explore": 4,
+    "human": 1,
+    "studies": 1,
+    "research": 4,
+    "coping": 1,
+    "mechanisms": 1,
+    "neurotransmitters": 1,
+    "mood": 1,
+    "regulation": 1,
+    "brain": 1,
+    "chemistry": 1,
+    "emotions": 2,
+    "cognitive": 1,
+    "stages": 1,
+    "children": 1,
+    "growth": 4,
+    "gather": 1,
+    "experiments": 1,
+    "observations": 1,
+    "statistics": 1,
+    "interventions": 1,
+    "personality": 1,
+    "classical": 1,
+    "conditioning": 2,
+    "response": 1,
+    "stimuli": 1,
+    "study": 2,
+    "social": 1,
+    "media": 2,
+    "effects": 2,
+    "adolescents": 1,
+    "genetics": 2,
+    "traits": 2,
+    "heredity": 1,
+    "empirical": 1,
+    "evidence": 1,
+    "psychoanalytic": 1,
+    "sigmund": 1,
+    "freud": 1,
+    "history": 16,
+    "physiological": 1,
+    "responses": 1,
+    "body": 1,
+    "language": 1,
+    "levels": 1,
+    "positive": 1,
+    "personal": 2,
+    "happiness": 1,
+    "well-being": 1,
+    "operant": 1,
+    "modification": 1,
+    "rewards": 1,
+    "punishments": 1,
+    "prototype": 1,
+    "instructions": 1,
+    "refine": 1,
+    "iterative": 1,
+    "adjustments": 1,
+    "user": 3,
+    "decisions": 1,
+    "inform": 1,
+    "insights": 1,
+    "utilize": 1,
+    "color": 2,
+    "theory": 1,
+    "graphic": 1,
+    "application": 2,
+    "select": 1,
+    "function": 1,
+    "aesthetics": 1,
+    "criteria": 1,
+    "choice": 1,
+    "incorporate": 1,
+    "considerations": 1,
+    "eco-friendly": 1,
+    "practices": 1,
+    "typography": 1,
+    "visual": 2,
+    "communication": 1,
+    "enhancement": 2,
+    "responsive": 1,
+    "web": 1,
+    "adaptation": 1,
+    "devices": 2,
+    "mobile": 1,
+    "negative": 1,
+    "space": 1,
+    "clarity": 1,
+    "optimal": 2,
+    "layout": 2,
+    "spacing": 1,
+    "employ": 1,
+    "storytelling": 1,
+    "engagement": 1,
+    "narrative": 1,
+    "integrate": 1,
+    "human-centered": 1,
+    "empathize": 1,
+    "white": 1,
+    "adjustment": 1,
+    "photography": 1,
+    "brand": 1,
+    "identity": 1,
+    "consistency": 2,
+    "interface": 1,
+    "navigation": 2,
+    "accessibility": 1,
+    "usability": 1,
+    "hierarchy": 1,
+    "guide": 2,
+    "attention": 1,
+    "organization": 1,
+    "implement": 1,
+    "ethics": 1,
+    "creativity": 1,
+    "responsibility": 1,
+    "events": 3,
+    "date": 1,
+    "chronology": 1,
+    "when": 1,
+    "compare": 5,
+    "periods": 1,
+    "figures": 1,
+    "leaders": 1,
+    "change": 5,
+    "wars": 1,
+    "cause": 1,
+    "effect": 1,
+    "consequences": 1,
+    "battles": 1,
+    "geography": 28,
+    "shape": 1,
+    "influence": 5,
+    "locations": 4,
+    "cultures": 2,
+    "contribute": 1,
+    "global": 4,
+    "diversity": 2,
+    "milestone": 1,
+    "significant": 1,
+    "movements": 1,
+    "interpretations": 1,
+    "perspective": 1,
+    "progress": 1,
+    "impacts": 1,
+    "innovation": 1,
+    "factors": 2,
+    "describe": 3,
+    "local": 1,
+    "archaeology": 1,
+    "discovery": 1,
+    "importance": 1,
+    "unearthing": 1,
+    "recognize": 2,
+    "literature": 20,
+    "society": 2,
+    "themes": 3,
+    "artifacts": 1,
+    "culture": 3,
+    "understanding": 1,
+    "discuss": 5,
+    "future": 1,
+    "actions": 1,
+    "lessons": 1,
+    "learn": 1,
+    "biology": 17,
+    "microscopic": 1,
+    "cells": 2,
+    "observe": 1,
+    "specimen": 1,
+    "microscope": 1,
+    "dna": 2,
+    "sequence": 1,
+    "nucleotides": 1,
+    "genetic": 2,
+    "blood": 1,
+    "test": 2,
+    "antigens": 1,
+    "donor": 1,
+    "recipient": 1,
+    "compatibility": 1,
+    "offspring": 1,
+    "parents": 1,
+    "inheritance": 1,
+    "occurs": 1,
+    "cell": 1,
+    "basic": 1,
+    "growing": 1,
+    "bacteria": 1,
+    "antibiotic": 1,
+    "mechanism": 2,
+    "why": 1,
+    "plant": 1,
+    "species": 1,
+    "morphology": 1,
+    "examine": 2,
+    "structure": 2,
+    "cultivate": 1,
+    "fungi": 1,
+    "humidity": 1,
+    "requirements": 1,
+    "population": 1,
+    "animal": 1,
+    "ecology": 1,
+    "collect": 1,
+    "soil": 1,
+    "biodiversity": 1,
+    "sample": 1,
+    "ecosystem": 2,
+    "isolate": 1,
+    "virus": 1,
+    "pathogen": 1,
+    "natural": 2,
+    "evolution": 1,
+    "organisms": 1,
+    "adapt": 1,
+    "measure": 1,
+    "ph": 1,
+    "aquatic": 1,
+    "water": 2,
+    "enzyme": 1,
+    "kinetics": 1,
+    "activity": 1,
+    "rate": 1,
+    "reactions": 1,
+    "perform": 1,
+    "pcr": 1,
+    "amplify": 1,
+    "replication": 1,
+    "classic": 2,
+    "novel": 2,
+    "read": 1,
+    "book": 1,
+    "shakespeare": 2,
+    "plays": 1,
+    "sonnets": 1,
+    "poetry": 3,
+    "symbolism": 2,
+    "text": 1,
+    "interpretation": 1,
+    "meaning": 2,
+    "literary": 5,
+    "authors": 1,
+    "writing": 1,
+    "style": 1,
+    "styles": 1,
+    "setting": 1,
+    "character": 2,
+    "theme": 1,
+    "poem": 1,
+    "metaphor": 1,
+    "significance": 2,
+    "foreshadowing": 1,
+    "plot": 2,
+    "prediction": 1,
+    "write": 1,
+    "essay": 1,
+    "criticism": 1,
+    "genres": 1,
+    "drama": 1,
+    "dialogue": 1,
+    "play": 1,
+    "form": 1,
+    "experiences": 1,
+    "biography": 1,
+    "inspiration": 1,
+    "allegory": 1,
+    "metaphors": 1,
+    "similes": 1,
+    "personification": 1,
+    "reflect": 1,
+    "values": 1,
+    "cultural": 1,
+    "locate": 2,
+    "find": 1,
+    "capital": 1,
+    "paris": 1,
+    "europe": 1,
+    "rivers": 1,
+    "north": 1,
+    "america": 2,
+    "river": 2,
+    "names": 3,
+    "map": 3,
+    "climate": 4,
+    "zones": 1,
+    "australia": 1,
+    "regions": 1,
+    "list": 1,
+    "mountains": 2,
+    "asia": 1,
+    "mountain": 2,
+    "ranges": 2,
+    "coordinates": 2,
+    "latitude": 2,
+    "longitude": 2,
+    "cities": 1,
+    "plate": 1,
+    "tectonics": 1,
+    "earthquake": 1,
+    "volcanoes": 1,
+    "movement": 2,
+    "earth": 1,
+    "largest": 2,
+    "island": 2,
+    "glacial": 1,
+    "landscape": 2,
+    "erosion": 1,
+    "glaciers": 1,
+    "desert": 1,
+    "characteristics": 1,
+    "precipitation": 1,
+    "waterways": 1,
+    "trade": 1,
+    "routes": 1,
+    "ports": 1,
+    "name": 1,
+    "disasters": 1,
+    "hurricanes": 1,
+    "floods": 1,
+    "earthquakes": 1,
+    "south": 1,
+    "sea": 1,
+    "level": 1,
+    "rise": 1,
+    "equator": 1,
+    "dividing": 1,
+    "line": 1,
+    "culinary": 15,
+    "chop": 1,
+    "garlic": 1,
+    "finely": 1,
+    "flavor": 5,
+    "extract": 1,
+    "saut\u00e9": 1,
+    "onions": 1,
+    "until": 1,
+    "soften": 1,
+    "caramelization": 2,
+    "blend": 1,
+    "ingredients": 1,
+    "food": 1,
+    "processor": 1,
+    "puree": 2,
+    "mix": 1,
+    "equipment": 2,
+    "season": 1,
+    "seafood": 1,
+    "salt": 1,
+    "pepper": 1,
+    "seasoning": 1,
+    "cook": 1,
+    "pasta": 1,
+    "al": 1,
+    "dente": 1,
+    "texture": 6,
+    "perfect": 2,
+    "timing": 3,
+    "preparation": 1,
+    "roast": 1,
+    "vegetables": 2,
+    "high": 2,
+    "marinate": 1,
+    "meat": 2,
+    "overnight": 1,
+    "marinade": 1,
+    "cooking": 2,
+    "fry": 1,
+    "chicken": 1,
+    "hot": 1,
+    "oil": 1,
+    "golden": 1,
+    "brown": 1,
+    "bake": 1,
+    "dessert": 1,
+    "low": 1,
+    "long": 1,
+    "time": 2,
+    "sear": 1,
+    "crust": 1,
+    "soup": 1,
+    "blender": 1,
+    "smooth": 1,
+    "stir": 1,
+    "gently": 1,
+    "avoid": 1,
+    "overmixing": 1,
+    "mixing": 1,
+    "steam": 1,
+    "crisp": 1,
+    "tender": 1,
+    "proof": 1,
+    "yeast": 1,
+    "warm": 1,
+    "activate": 1,
+    "fermentation": 1,
+    "bread": 1,
+    "grill": 1,
+    "fish": 1,
+    "crispy": 1,
+    "skin": 1
+  },
+  "next_emergent_dim": 37,
+  "next_emergent_level": 2
+}

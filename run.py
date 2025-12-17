@@ -1,29 +1,59 @@
 #!/usr/bin/env python3
 """
-TruthSpace LCM - Hypergeometric Resolution
+TruthSpace LCM - Geometric Language-Code Model
 
-Translates natural language to bash commands using pure geometry.
-No training. No keywords. Just φ-MAX encoding and distance.
+A natural language interface powered by the StackedLCM (128D hierarchical
+geometric embeddings). Translates natural language to bash commands and
+provides conversational responses.
 
 Usage:
-    python run.py                    # Interactive mode
+    python run.py                    # Interactive chat mode (default)
+    python run.py --legacy           # Legacy TruthSpace mode (12D)
     python run.py "list files"       # Single query mode
-    python run.py --reset            # Reset learned knowledge
-    python run.py --learned          # Show learned knowledge
-    python run.py --learn <cmd>      # Learn a command from man page
+
+The default mode uses the new StackedLCM with:
+- 7 hierarchical layers (128 dimensions)
+- Intent detection (bash vs chat)
+- Bash command execution with safety checks
+- No external LLM dependencies
 """
 
 import sys
-import subprocess
-from truthspace_lcm.core import TruthSpace, KnowledgeGapError
 
 
 def main():
+    # Check for legacy mode
+    if len(sys.argv) > 1 and sys.argv[1] == "--legacy":
+        run_legacy_mode(sys.argv[2:] if len(sys.argv) > 2 else [])
+        return
+    
+    # Default: Run the new chat interface
+    from truthspace_lcm.chat import LCMChat
+    
+    # Single query mode
+    if len(sys.argv) > 1:
+        chat = LCMChat(safe_mode=False)
+        query = " ".join(sys.argv[1:])
+        response = chat.process(query)
+        if response and response != "EXIT":
+            print(response)
+        return
+    
+    # Interactive chat mode
+    chat = LCMChat(safe_mode=True)
+    chat.run()
+
+
+def run_legacy_mode(args: list):
+    """Run the legacy TruthSpace (12D) mode."""
+    import subprocess
+    from truthspace_lcm.core import TruthSpace
+    
     ts = TruthSpace()
     
     # Handle special arguments
-    if len(sys.argv) > 1:
-        arg = sys.argv[1]
+    if args:
+        arg = args[0]
         
         if arg == "--reset":
             ts.reset()
@@ -41,8 +71,8 @@ def main():
                 print("No learned knowledge yet.")
             return
         
-        if arg == "--learn" and len(sys.argv) > 2:
-            cmd = sys.argv[2]
+        if arg == "--learn" and len(args) > 1:
+            cmd = args[1]
             entry = ts.learn_from_man(cmd)
             if entry:
                 print(f"✓ Learned: {entry.name} = \"{entry.description}\"")
@@ -51,14 +81,14 @@ def main():
             return
     
     print("=" * 60)
-    print("TruthSpace LCM - Hypergeometric Resolution")
+    print("TruthSpace LCM - Legacy Mode (12D)")
     print("=" * 60)
     print()
     
     # Single query mode
-    if len(sys.argv) > 1:
-        query = " ".join(sys.argv[1:])
-        process_query(ts, query)
+    if args:
+        query = " ".join(args)
+        process_legacy_query(ts, query)
         return
     
     # Interactive mode
@@ -88,117 +118,40 @@ def main():
             print()
             continue
         
-        process_query(ts, query)
+        process_legacy_query(ts, query)
         print()
 
 
-def get_social_response(social_type: str) -> str:
-    """Get an appropriate response prefix based on social context."""
-    responses = {
-        'GREETING': "Hello! ",
-        'ACKNOWLEDGMENT': "Sounds good. ",
-        'POLITENESS': "Of course! ",
-        'QUERY_INTENT': "Sure, ",
-        'FILLER': "",  # Fillers don't need acknowledgment
-    }
-    return responses.get(social_type, "")
-
-
-def process_query(ts: TruthSpace, query: str):
-    """Process a single query using compound resolution."""
+def process_legacy_query(ts, query: str):
+    """Process a single query using legacy TruthSpace."""
+    import subprocess
+    
     print(f"\nQuery: \"{query}\"")
     print("-" * 40)
     
-    # Use compound resolution to extract multiple concepts
-    result = ts.resolve_with_params(query)
-    
-    # Handle new structured return format
-    if isinstance(result, dict):
-        concepts = result.get('concepts', [])
-        social = result.get('social', {})
-    else:
-        # Fallback for old format
-        concepts = result
-        social = {}
-    
-    # Get social response prefix
-    social_prefix = ""
-    if social.get('has_social'):
-        social_prefix = get_social_response(social['social_type'])
-    
-    if not concepts:
-        # Check if this is a pure social query (greeting only, no command)
-        if social.get('has_social') and not social.get('command_content', '').strip():
-            # Pure social interaction - respond appropriately
-            if social['social_type'] == 'GREETING':
-                print("Hello! How can I help you today?")
-            elif social['social_type'] == 'ACKNOWLEDGMENT':
-                print("Ready when you are.")
-            elif social['social_type'] == 'POLITENESS':
-                print("You're welcome! What would you like to do?")
-            else:
-                print("I'm listening. What would you like to do?")
-            return
-        
-        print("No concepts found in query.")
+    try:
+        output, entry, sim = ts.resolve(query)
+        print(f"Command: {output}")
+        print(f"Match: {entry.description} (similarity: {sim:.2f})")
         print()
         
-        # Try to learn from man pages
-        print("Attempting to learn from man pages...")
-        entry = ts.try_learn(query)
-        
-        if entry:
-            print(f"✓ Learned: {entry.name} = \"{entry.description}\"")
-            # Retry
-            result = ts.resolve_with_params(query)
-            if isinstance(result, dict):
-                concepts = result.get('concepts', [])
-        
-        if not concepts:
-            print("Could not resolve query.")
-            return
-    
-    # Build full commands with parameters
-    commands = []
-    print(f"{social_prefix}Here's what I found:")
-    for c in concepts:
-        cmd = c['command']
-        if c['params']:
-            cmd += ' ' + ' '.join(c['params'])
-        commands.append(cmd)
-        print(f"  • \"{c['window']}\" → {cmd} ({c['similarity']:.2f})")
-    
-    full_command = ' && '.join(commands)
-    print()
-    print(f"Command: {full_command}")
-    print()
-    
-    # Ask to execute
-    response = input("Execute? (y/N): ").strip().lower()
-    
-    if response == 'y':
-        print()
-        print("Output:")
-        print("-" * 40)
-        
-        try:
-            result = subprocess.run(
-                full_command,
-                shell=True,
-                capture_output=True,
-                text=True,
-                timeout=30,
-            )
-            if result.stdout:
-                print(result.stdout)
-            if result.stderr:
-                print(f"[stderr] {result.stderr}")
-            if result.returncode != 0:
-                print(f"[Exit code: {result.returncode}]")
-        except subprocess.TimeoutExpired:
-            print("[Timed out after 30s]")
-        except Exception as e:
-            print(f"[Error: {e}]")
+        response = input("Execute? (y/N): ").strip().lower()
+        if response == 'y':
+            print()
+            print("Output:")
+            print("-" * 40)
+            try:
+                result = subprocess.run(output, shell=True, capture_output=True, text=True, timeout=30)
+                if result.stdout:
+                    print(result.stdout)
+                if result.stderr:
+                    print(f"[stderr] {result.stderr}")
+            except subprocess.TimeoutExpired:
+                print("[Timed out after 30s]")
+            except Exception as e:
+                print(f"[Error: {e}]")
+    except Exception as e:
+        print(f"Could not resolve: {e}")
 
 
 if __name__ == "__main__":
