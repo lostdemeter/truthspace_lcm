@@ -92,15 +92,54 @@ def main():
         print()
 
 
+def get_social_response(social_type: str) -> str:
+    """Get an appropriate response prefix based on social context."""
+    responses = {
+        'GREETING': "Hello! ",
+        'ACKNOWLEDGMENT': "Sounds good. ",
+        'POLITENESS': "Of course! ",
+        'QUERY_INTENT': "Sure, ",
+        'FILLER': "",  # Fillers don't need acknowledgment
+    }
+    return responses.get(social_type, "")
+
+
 def process_query(ts: TruthSpace, query: str):
     """Process a single query using compound resolution."""
     print(f"\nQuery: \"{query}\"")
     print("-" * 40)
     
     # Use compound resolution to extract multiple concepts
-    concepts = ts.resolve_with_params(query)
+    result = ts.resolve_with_params(query)
+    
+    # Handle new structured return format
+    if isinstance(result, dict):
+        concepts = result.get('concepts', [])
+        social = result.get('social', {})
+    else:
+        # Fallback for old format
+        concepts = result
+        social = {}
+    
+    # Get social response prefix
+    social_prefix = ""
+    if social.get('has_social'):
+        social_prefix = get_social_response(social['social_type'])
     
     if not concepts:
+        # Check if this is a pure social query (greeting only, no command)
+        if social.get('has_social') and not social.get('command_content', '').strip():
+            # Pure social interaction - respond appropriately
+            if social['social_type'] == 'GREETING':
+                print("Hello! How can I help you today?")
+            elif social['social_type'] == 'ACKNOWLEDGMENT':
+                print("Ready when you are.")
+            elif social['social_type'] == 'POLITENESS':
+                print("You're welcome! What would you like to do?")
+            else:
+                print("I'm listening. What would you like to do?")
+            return
+        
         print("No concepts found in query.")
         print()
         
@@ -111,7 +150,9 @@ def process_query(ts: TruthSpace, query: str):
         if entry:
             print(f"✓ Learned: {entry.name} = \"{entry.description}\"")
             # Retry
-            concepts = ts.resolve_with_params(query)
+            result = ts.resolve_with_params(query)
+            if isinstance(result, dict):
+                concepts = result.get('concepts', [])
         
         if not concepts:
             print("Could not resolve query.")
@@ -119,7 +160,7 @@ def process_query(ts: TruthSpace, query: str):
     
     # Build full commands with parameters
     commands = []
-    print("Concepts extracted:")
+    print(f"{social_prefix}Here's what I found:")
     for c in concepts:
         cmd = c['command']
         if c['params']:

@@ -196,8 +196,88 @@ COMPOUND_TESTS = [
 
 
 # =============================================================================
+# SOCIAL CONTEXT TESTS
+# =============================================================================
+
+# Format: (query, expected_social_type, expected_has_command)
+SOCIAL_TESTS = [
+    # Pure greetings (no command)
+    ("hey", "GREETING", False),
+    ("hello", "GREETING", False),
+    ("hi there", "GREETING", False),
+    
+    # Pure acknowledgments (no command)
+    ("ok", "ACKNOWLEDGMENT", False),
+    ("alright", "ACKNOWLEDGMENT", False),
+    ("sure", "ACKNOWLEDGMENT", False),
+    
+    # Pure politeness (no command)
+    ("thanks", "POLITENESS", False),
+    ("thank you", "POLITENESS", False),
+    
+    # Social + command
+    ("please list files", "POLITENESS", True),
+    ("hey, show disk space", "GREETING", True),
+    ("ok, create directory test", "ACKNOWLEDGMENT", True),
+    ("could you list files", "QUERY_INTENT", True),
+    ("so, show memory", "FILLER", True),
+    
+    # Complex social + command
+    ("hey, could you please create a directory called myproject", "QUERY_INTENT", True),
+    ("alright, show disk space and list files", "ACKNOWLEDGMENT", True),
+]
+
+
+# =============================================================================
 # TEST RUNNER
 # =============================================================================
+
+def run_social_tests():
+    """Run social context tests."""
+    ts = TruthSpace()
+    
+    print("=" * 70)
+    print("SOCIAL CONTEXT TEST SUITE")
+    print("=" * 70)
+    print()
+    
+    passed = 0
+    failed = 0
+    
+    for query, expected_social, expected_has_cmd in SOCIAL_TESTS:
+        result = ts.resolve_with_params(query)
+        
+        if isinstance(result, dict):
+            social = result.get('social', {})
+            concepts = result.get('concepts', [])
+        else:
+            social = {}
+            concepts = result
+        
+        actual_social = social.get('social_type')
+        actual_has_cmd = len(concepts) > 0
+        
+        social_match = actual_social == expected_social
+        cmd_match = actual_has_cmd == expected_has_cmd
+        
+        if social_match and cmd_match:
+            passed += 1
+            print(f"✓ \"{query}\"")
+        else:
+            failed += 1
+            print(f"✗ \"{query}\"")
+            if not social_match:
+                print(f"    Expected social: {expected_social}, got: {actual_social}")
+            if not cmd_match:
+                print(f"    Expected has_cmd: {expected_has_cmd}, got: {actual_has_cmd}")
+        print()
+    
+    print("=" * 70)
+    print(f"SOCIAL RESULTS: {passed}/{passed + failed} passed ({100*passed/(passed+failed):.0f}%)")
+    print("=" * 70)
+    
+    return passed, failed
+
 
 def run_tests():
     """Run all compound query tests."""
@@ -213,7 +293,13 @@ def run_tests():
     results = []
     
     for query, expected_cmds, expected_params in COMPOUND_TESTS:
-        concepts = ts.resolve_with_params(query)
+        result = ts.resolve_with_params(query)
+        
+        # Handle new structured return format
+        if isinstance(result, dict):
+            concepts = result.get('concepts', [])
+        else:
+            concepts = result
         
         # Extract actual commands and params
         actual_cmds = [c['command'] for c in concepts]
@@ -329,9 +415,14 @@ def run_single_test(query: str):
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
-        # Single query mode
-        query = " ".join(sys.argv[1:])
-        run_single_test(query)
+        if sys.argv[1] == "--social":
+            run_social_tests()
+        else:
+            # Single query mode
+            query = " ".join(sys.argv[1:])
+            run_single_test(query)
     else:
         # Run all tests
         run_tests()
+        print()
+        run_social_tests()

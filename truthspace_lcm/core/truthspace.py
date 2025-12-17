@@ -100,11 +100,21 @@ PRIMITIVES = [
     
     # Structural primitives - for geometric parameter detection
     Primitive("NAMING", 11, 1, ["called", "named", "as"]),
-    Primitive("SEQUENCE", 11, 2, ["and", "then", "also", "next", "after"]),
+    Primitive("SEQUENCE", 11, 2, ["and", "then", "also", "next"]),
+    
+    # Social primitives - for conversational context (dim 8-9, higher levels)
+    Primitive("GREETING", 8, 3, ["hey", "hello", "hi", "greetings", "howdy", "yo"]),
+    Primitive("ACKNOWLEDGMENT", 8, 4, ["ok", "okay", "alright", "sure", "yes", "yep", "yeah", "got", "understood"]),
+    Primitive("POLITENESS", 9, 3, ["please", "thanks", "thank", "appreciate", "kindly"]),
+    Primitive("QUERY_INTENT", 9, 4, ["could", "would", "can", "will", "might", "should"]),
+    Primitive("FILLER", 10, 3, ["so", "well", "um", "uh", "like", "just", "actually"]),
 ]
 
 # Dimensions that indicate domain context (parameters often follow these)
 DOMAIN_DIMS = {4, 5, 6, 7}  # PROCESS, NETWORK, USER, FILE, DIRECTORY, etc.
+
+# Dimensions that indicate social context
+SOCIAL_DIMS = {8, 9, 10}  # At levels 3+ these are social primitives
 
 
 # =============================================================================
@@ -391,6 +401,66 @@ class TruthSpace:
         
         return selected
     
+    def detect_social_context(self, text: str) -> Dict[str, Any]:
+        """
+        Detect social context in a query using geometric analysis.
+        
+        Social primitives occupy higher levels (3+) in dimensions 8-10.
+        We detect if the query has significant social activation.
+        
+        Returns:
+            Dict with:
+                - has_social: bool - whether social context detected
+                - social_type: str - primary social primitive activated
+                - social_weight: float - strength of social activation
+                - command_content: str - the non-social part of the query
+        """
+        words = self._tokenize(text)
+        
+        # Check for social keywords directly (more reliable than dimension analysis)
+        social_primitives = {
+            'GREETING': ['hey', 'hello', 'hi', 'greetings', 'howdy', 'yo'],
+            'ACKNOWLEDGMENT': ['ok', 'okay', 'alright', 'sure', 'yes', 'yep', 'yeah', 'got', 'understood'],
+            'POLITENESS': ['please', 'thanks', 'thank', 'appreciate', 'kindly'],
+            'QUERY_INTENT': ['could', 'would', 'can', 'will', 'might', 'should'],
+            'FILLER': ['so', 'well', 'um', 'uh', 'like', 'just', 'actually'],
+        }
+        
+        social_activations = {}
+        matched_keywords = set()
+        
+        for word in words:
+            for prim_name, keywords in social_primitives.items():
+                if word in keywords:
+                    # Use level-based weight (higher level = higher weight)
+                    weight = PHI ** (3 if prim_name in ('GREETING', 'POLITENESS', 'FILLER') else 4)
+                    if prim_name not in social_activations or weight > social_activations[prim_name]:
+                        social_activations[prim_name] = weight
+                    matched_keywords.add(word)
+        
+        if not social_activations:
+            return {
+                'has_social': False,
+                'social_type': None,
+                'social_weight': 0.0,
+                'command_content': text
+            }
+        
+        # Find primary social type (highest activation)
+        primary_social = max(social_activations, key=social_activations.get)
+        social_weight = social_activations[primary_social]
+        
+        # Extract command content by removing matched social keywords
+        command_words = [w for w in words if w not in matched_keywords]
+        command_content = ' '.join(command_words)
+        
+        return {
+            'has_social': True,
+            'social_type': primary_social,
+            'social_weight': social_weight,
+            'command_content': command_content
+        }
+    
     def detect_parameters_geometric(self, text: str) -> List[Tuple[int, str, str]]:
         """
         Detect parameters using geometric analysis.
@@ -483,27 +553,35 @@ class TruthSpace:
         
         return params
     
-    def resolve_with_params(self, text: str, use_geometric_params: bool = True) -> List[Dict[str, Any]]:
+    def resolve_with_params(self, text: str, use_geometric_params: bool = True) -> Dict[str, Any]:
         """
         Resolve compound query and attach extracted parameters.
         
         This combines geometric concept extraction with parameter extraction
-        to produce actionable commands.
+        to produce actionable commands. Also detects social context.
         
         Args:
             text: Natural language query
             use_geometric_params: If True, use geometric parameter detection
         
         Returns:
-            List of concept dicts, each with an additional 'params' key
+            Dict with:
+                - concepts: List of concept dicts with 'params' key
+                - social: Social context dict (has_social, social_type, etc.)
         """
         import re
         
+        # Detect social context first
+        social = self.detect_social_context(text)
+        
+        # Use command content (social words stripped) for concept extraction
+        query_text = social['command_content'] if social['has_social'] else text
+        
         # Phase 1: Geometric concept extraction
-        concepts = self.resolve_compound(text)
+        concepts = self.resolve_compound(query_text)
         
         if not concepts:
-            return []
+            return {'concepts': [], 'social': social}
         
         # Phase 2: Parameter extraction
         words = self._tokenize(text)
@@ -546,7 +624,7 @@ class TruthSpace:
                     concept['params'].append(value)
                     param_positions.remove((pos, value))
         
-        return concepts
+        return {'concepts': concepts, 'social': social}
     
     def explain(self, text: str) -> str:
         """Explain how a query would be resolved."""
