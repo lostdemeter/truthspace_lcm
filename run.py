@@ -93,46 +93,15 @@ def main():
 
 
 def process_query(ts: TruthSpace, query: str):
-    """Process a single query."""
+    """Process a single query using compound resolution."""
     print(f"\nQuery: \"{query}\"")
     print("-" * 40)
     
-    try:
-        output, entry, similarity = ts.resolve(query)
-        
-        print(f"Command: {output}")
-        print(f"Match: {entry.description} (similarity: {similarity:.2f})")
-        print()
-        
-        # Ask to execute
-        response = input("Execute? (y/N): ").strip().lower()
-        
-        if response == 'y':
-            print()
-            print("Output:")
-            print("-" * 40)
-            
-            try:
-                result = subprocess.run(
-                    output,
-                    shell=True,
-                    capture_output=True,
-                    text=True,
-                    timeout=30,
-                )
-                if result.stdout:
-                    print(result.stdout)
-                if result.stderr:
-                    print(f"[stderr] {result.stderr}")
-                if result.returncode != 0:
-                    print(f"[Exit code: {result.returncode}]")
-            except subprocess.TimeoutExpired:
-                print("[Timed out after 30s]")
-            except Exception as e:
-                print(f"[Error: {e}]")
-                
-    except KnowledgeGapError as e:
-        print(f"No match found (best similarity: {e.best_similarity:.2f})")
+    # Use compound resolution to extract multiple concepts
+    concepts = ts.resolve_with_params(query)
+    
+    if not concepts:
+        print("No concepts found in query.")
         print()
         
         # Try to learn from man pages
@@ -141,17 +110,54 @@ def process_query(ts: TruthSpace, query: str):
         
         if entry:
             print(f"✓ Learned: {entry.name} = \"{entry.description}\"")
-            print()
-            # Retry resolution
-            try:
-                output, entry, similarity = ts.resolve(query)
-                print(f"Command: {output}")
-                print(f"Match: {entry.description} (similarity: {similarity:.2f})")
-            except KnowledgeGapError:
-                print("Still no match after learning.")
-        else:
-            print("Could not learn from man pages.")
-            print("Add knowledge manually with: ts.store(name, description, persist=True)")
+            # Retry
+            concepts = ts.resolve_with_params(query)
+        
+        if not concepts:
+            print("Could not resolve query.")
+            return
+    
+    # Build full commands with parameters
+    commands = []
+    print("Concepts extracted:")
+    for c in concepts:
+        cmd = c['command']
+        if c['params']:
+            cmd += ' ' + ' '.join(c['params'])
+        commands.append(cmd)
+        print(f"  • \"{c['window']}\" → {cmd} ({c['similarity']:.2f})")
+    
+    full_command = ' && '.join(commands)
+    print()
+    print(f"Command: {full_command}")
+    print()
+    
+    # Ask to execute
+    response = input("Execute? (y/N): ").strip().lower()
+    
+    if response == 'y':
+        print()
+        print("Output:")
+        print("-" * 40)
+        
+        try:
+            result = subprocess.run(
+                full_command,
+                shell=True,
+                capture_output=True,
+                text=True,
+                timeout=30,
+            )
+            if result.stdout:
+                print(result.stdout)
+            if result.stderr:
+                print(f"[stderr] {result.stderr}")
+            if result.returncode != 0:
+                print(f"[Exit code: {result.returncode}]")
+        except subprocess.TimeoutExpired:
+            print("[Timed out after 30s]")
+        except Exception as e:
+            print(f"[Error: {e}]")
 
 
 if __name__ == "__main__":

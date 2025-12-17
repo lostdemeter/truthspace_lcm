@@ -58,7 +58,7 @@ class Primitive:
 # Bootstrap primitives - the semantic anchors
 PRIMITIVES = [
     # Actions (dims 0-3)
-    Primitive("CREATE", 0, 0, ["create", "make", "new", "generate", "add", "init"]),
+    Primitive("CREATE", 0, 0, ["create", "make", "new", "generate", "add", "init", "put", "place"]),
     Primitive("READ", 1, 0, ["read", "get", "show", "display", "view", "print", "cat", "report", "dump"]),
     Primitive("LIST", 1, 1, ["list", "ls", "dir"]),
     Primitive("WRITE", 1, 1, ["write", "set", "update", "modify", "change", "edit"]),
@@ -91,13 +91,20 @@ PRIMITIVES = [
     Primitive("RECURSIVE", 7, 0, ["recursive", "tree", "all", "deep"]),
     
     # Relations (dims 8-11)
-    Primitive("INTO", 8, 0, ["into", "to", "toward"]),
+    Primitive("INTO", 8, 0, ["into", "in", "to", "toward"]),
     Primitive("FROM", 8, 1, ["from", "source", "origin"]),
     Primitive("BEFORE", 9, 0, ["before", "first", "head", "top", "start"]),
     Primitive("AFTER", 9, 1, ["after", "last", "tail", "end", "bottom"]),
     Primitive("DURING", 10, 0, ["during", "while", "follow", "watch", "live"]),
     Primitive("TEST", 11, 0, ["test", "check", "verify", "ping"]),
+    
+    # Structural primitives - for geometric parameter detection
+    Primitive("NAMING", 11, 1, ["called", "named", "as"]),
+    Primitive("SEQUENCE", 11, 2, ["and", "then", "also", "next", "after"]),
 ]
+
+# Dimensions that indicate domain context (parameters often follow these)
+DOMAIN_DIMS = {4, 5, 6, 7}  # PROCESS, NETWORK, USER, FILE, DIRECTORY, etc.
 
 
 # =============================================================================
@@ -205,9 +212,11 @@ class TruthSpace:
         return position
     
     def _tokenize(self, text: str) -> List[str]:
-        """Simple tokenization."""
+        """Tokenization that preserves filenames, paths, and hyphenated words."""
         import re
-        return re.findall(r'\b\w+\b', text.lower())
+        # Match: filenames (word.ext), paths (/foo/bar), hyphenated words, or regular words
+        tokens = re.findall(r'[\w./]+\.[\w]+|/[\w./]+|\b[\w]+-[\w-]+\b|\b\w+\b', text.lower())
+        return tokens
     
     def _distance(self, a: np.ndarray, b: np.ndarray) -> float:
         """φ-weighted Euclidean distance."""
@@ -296,6 +305,248 @@ class TruthSpace:
         """
         entry, similarity = self.query(text)
         return entry.output, entry, similarity
+    
+    def resolve_compound(self, text: str, window_sizes: List[int] = None,
+                         threshold: float = 0.65) -> List[Dict[str, Any]]:
+        """
+        Extract multiple concepts from a compound query using sliding window encoding.
+        
+        This is the geometric approach to multi-concept extraction:
+        - Slide windows of various sizes across the query
+        - Encode each window and find matches above threshold
+        - Use greedy non-overlapping selection to get distinct concepts
+        
+        Args:
+            text: Natural language query (potentially compound)
+            window_sizes: Window sizes to try (default: [2, 3, 4])
+            threshold: Minimum similarity for a match
+        
+        Returns:
+            List of concept dicts with keys:
+                - start: word index start
+                - end: word index end  
+                - window: the matched text
+                - command: resolved command
+                - description: matched entry description
+                - similarity: match similarity
+        """
+        if window_sizes is None:
+            window_sizes = [2, 3, 4]
+        
+        words = self._tokenize(text)
+        
+        # Collect all candidate matches
+        candidates = []
+        
+        for window_size in window_sizes:
+            for i in range(len(words) - window_size + 1):
+                window = ' '.join(words[i:i+window_size])
+                pos = self._encode(window)
+                
+                # Find best match for this window
+                best_entry = None
+                best_sim = 0.0
+                
+                for entry in self.entries:
+                    sim = self._similarity(pos, entry.position)
+                    if sim > best_sim:
+                        best_sim = sim
+                        best_entry = entry
+                
+                if best_sim >= threshold and best_entry:
+                    candidates.append({
+                        'start': i,
+                        'end': i + window_size,
+                        'window': window,
+                        'command': best_entry.output,
+                        'description': best_entry.description,
+                        'similarity': best_sim
+                    })
+        
+        # Score candidates: prefer windows with action primitives
+        action_dims = {0, 1, 2, 3}  # CREATE, READ/LIST/WRITE/DELETE, COPY/RELOCATE/SEARCH, EXECUTE/etc
+        
+        for c in candidates:
+            # Check if window activates action dimensions
+            window_pos = self._encode(c['window'])
+            has_action = any(window_pos[d] > 0.5 for d in action_dims)
+            # Boost score for action-containing windows
+            c['score'] = c['similarity'] * (1.5 if has_action else 1.0)
+        
+        # Sort by score (highest first)
+        candidates.sort(key=lambda x: x['score'], reverse=True)
+        
+        # Greedy non-overlapping selection
+        selected = []
+        covered = set()
+        
+        for c in candidates:
+            window_positions = set(range(c['start'], c['end']))
+            if not window_positions & covered:
+                selected.append(c)
+                covered.update(window_positions)
+        
+        # Sort by position in original query
+        selected.sort(key=lambda x: x['start'])
+        
+        return selected
+    
+    def detect_parameters_geometric(self, text: str) -> List[Tuple[int, str, str]]:
+        """
+        Detect parameters using geometric analysis.
+        
+        A parameter is identified as a word that:
+        1. Does NOT activate any primitives (semantic void)
+        2. Appears after a word that DOES activate primitives (context)
+        
+        Special cases:
+        - After NAMING word (called, named) → next word is definitely a parameter
+        - After DOMAIN primitive (file, directory) → next void word is likely a parameter
+        
+        Returns:
+            List of (word_index, value, reason) tuples
+        """
+        words = self._tokenize(text)
+        parameters = []
+        seen_indices = set()  # Avoid duplicates
+        
+        # NAMING keywords (check by keyword, not by encoding, to avoid dimension conflicts)
+        naming_keywords = {'called', 'named', 'as'}
+        
+        for i, word in enumerate(words):
+            # Check if this is a NAMING keyword
+            if word in naming_keywords and i + 1 < len(words):
+                next_idx = i + 1
+                if next_idx not in seen_indices:
+                    next_word = words[next_idx]
+                    parameters.append((next_idx, next_word, "after_naming"))
+                    seen_indices.add(next_idx)
+                continue
+            
+            # Check if this word is a semantic void after a domain word
+            word_pos = self._encode(word)
+            word_activates = np.any(word_pos > 0.01)
+            
+            if i > 0 and not word_activates and i not in seen_indices:
+                prev_word = words[i - 1]
+                prev_pos = self._encode(prev_word)
+                
+                # Check if previous word activated any domain dimension
+                prev_activates_domain = any(prev_pos[d] > 0.01 for d in DOMAIN_DIMS)
+                
+                if prev_activates_domain:
+                    parameters.append((i, word, "after_domain"))
+                    seen_indices.add(i)
+        
+        return parameters
+    
+    def extract_parameters(self, text: str) -> Dict[str, List[str]]:
+        """
+        Extract parameters from natural language text (post-geometric phase).
+        
+        This is NOT geometric - it's simple pattern matching to extract
+        the actual values that will fill in command templates.
+        
+        Returns:
+            Dict with parameter types as keys and lists of values
+        """
+        import re
+        
+        params = {
+            'names': [],      # Things that are "called X" or "named X"
+            'quoted': [],     # Quoted strings
+            'paths': [],      # Path-like strings
+        }
+        
+        # Extract "called X" or "named X" patterns
+        called_pattern = r"called\s+['\"]?([^'\",\s]+)['\"]?"
+        named_pattern = r"named\s+['\"]?([^'\",\s]+)['\"]?"
+        
+        for match in re.finditer(called_pattern, text, re.IGNORECASE):
+            params['names'].append(match.group(1))
+        for match in re.finditer(named_pattern, text, re.IGNORECASE):
+            params['names'].append(match.group(1))
+        
+        # Extract quoted strings
+        quoted_pattern = r"['\"]([^'\"]+)['\"]"
+        for match in re.finditer(quoted_pattern, text):
+            value = match.group(1)
+            if value not in params['names']:
+                params['quoted'].append(value)
+        
+        # Extract path-like strings (contain / or end with common extensions)
+        path_pattern = r"\b([\w./]+(?:\.[\w]+)?)\b"
+        for match in re.finditer(path_pattern, text):
+            value = match.group(1)
+            if ('/' in value or '.' in value) and value not in params['names'] + params['quoted']:
+                params['paths'].append(value)
+        
+        return params
+    
+    def resolve_with_params(self, text: str, use_geometric_params: bool = True) -> List[Dict[str, Any]]:
+        """
+        Resolve compound query and attach extracted parameters.
+        
+        This combines geometric concept extraction with parameter extraction
+        to produce actionable commands.
+        
+        Args:
+            text: Natural language query
+            use_geometric_params: If True, use geometric parameter detection
+        
+        Returns:
+            List of concept dicts, each with an additional 'params' key
+        """
+        import re
+        
+        # Phase 1: Geometric concept extraction
+        concepts = self.resolve_compound(text)
+        
+        if not concepts:
+            return []
+        
+        # Phase 2: Parameter extraction
+        words = self._tokenize(text)
+        
+        if use_geometric_params:
+            # GEOMETRIC APPROACH: Parameters are semantic voids in context
+            geometric_params = self.detect_parameters_geometric(text)
+            param_positions = [(idx, value) for idx, value, reason in geometric_params]
+        else:
+            # REGEX APPROACH: Pattern matching (fallback)
+            param_positions = []
+            for i, word in enumerate(words):
+                if word in ('called', 'named') and i + 1 < len(words):
+                    param_positions.append((i + 1, words[i + 1]))
+        
+        # Also extract quoted strings (hybrid - quotes are explicit markers)
+        for match in re.finditer(r"['\"]([^'\"]+)['\"]", text):
+            value = match.group(1)
+            word_pos = len(text[:match.start()].split())
+            if not any(p[1] == value for p in param_positions):
+                param_positions.append((word_pos, value))
+        
+        # Sort by position
+        param_positions.sort(key=lambda x: x[0])
+        
+        # Assign parameters to concepts based on proximity
+        for concept in concepts:
+            concept['params'] = []
+            concept_end = concept['end']
+            
+            # Find parameters that come after this concept but before the next
+            next_concept_start = float('inf')
+            concept_idx = concepts.index(concept)
+            if concept_idx + 1 < len(concepts):
+                next_concept_start = concepts[concept_idx + 1]['start']
+            
+            # Collect params between this concept and the next
+            for pos, value in param_positions[:]:
+                if concept_end <= pos < next_concept_start:
+                    concept['params'].append(value)
+                    param_positions.remove((pos, value))
+        
+        return concepts
     
     def explain(self, text: str) -> str:
         """Explain how a query would be resolved."""
