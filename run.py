@@ -8,6 +8,9 @@ No training. No keywords. Just φ-MAX encoding and distance.
 Usage:
     python run.py                    # Interactive mode
     python run.py "list files"       # Single query mode
+    python run.py --reset            # Reset learned knowledge
+    python run.py --learned          # Show learned knowledge
+    python run.py --learn <cmd>      # Learn a command from man page
 """
 
 import sys
@@ -17,6 +20,35 @@ from truthspace_lcm.core import TruthSpace, KnowledgeGapError
 
 def main():
     ts = TruthSpace()
+    
+    # Handle special arguments
+    if len(sys.argv) > 1:
+        arg = sys.argv[1]
+        
+        if arg == "--reset":
+            ts.reset()
+            print("✓ Database reset. All learned knowledge removed.")
+            print(f"  Bootstrap entries: {len(ts.entries)}")
+            return
+        
+        if arg == "--learned":
+            learned = ts.list_learned()
+            if learned:
+                print(f"Learned knowledge ({len(learned)} entries):")
+                for cmd, desc in learned:
+                    print(f"  {cmd}: \"{desc}\"")
+            else:
+                print("No learned knowledge yet.")
+            return
+        
+        if arg == "--learn" and len(sys.argv) > 2:
+            cmd = sys.argv[2]
+            entry = ts.learn_from_man(cmd)
+            if entry:
+                print(f"✓ Learned: {entry.name} = \"{entry.description}\"")
+            else:
+                print(f"✗ Could not learn '{cmd}' from man page")
+            return
     
     print("=" * 60)
     print("TruthSpace LCM - Hypergeometric Resolution")
@@ -101,8 +133,25 @@ def process_query(ts: TruthSpace, query: str):
                 
     except KnowledgeGapError as e:
         print(f"No match found (best similarity: {e.best_similarity:.2f})")
-        print("\nThe system doesn't know how to do this.")
-        print("Add knowledge with: ts.store(name, description)")
+        print()
+        
+        # Try to learn from man pages
+        print("Attempting to learn from man pages...")
+        entry = ts.try_learn(query)
+        
+        if entry:
+            print(f"✓ Learned: {entry.name} = \"{entry.description}\"")
+            print()
+            # Retry resolution
+            try:
+                output, entry, similarity = ts.resolve(query)
+                print(f"Command: {output}")
+                print(f"Match: {entry.description} (similarity: {similarity:.2f})")
+            except KnowledgeGapError:
+                print("Still no match after learning.")
+        else:
+            print("Could not learn from man pages.")
+            print("Add knowledge manually with: ts.store(name, description, persist=True)")
 
 
 if __name__ == "__main__":

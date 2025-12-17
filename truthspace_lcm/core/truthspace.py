@@ -18,9 +18,13 @@ functionality with mathematically-derived resolution.
 
 import numpy as np
 import json
+import sqlite3
+import subprocess
+import re
 from typing import List, Tuple, Optional, Dict, Any
 from dataclasses import dataclass, field
 from pathlib import Path
+from contextlib import contextmanager
 
 
 # =============================================================================
@@ -55,7 +59,7 @@ class Primitive:
 PRIMITIVES = [
     # Actions (dims 0-3)
     Primitive("CREATE", 0, 0, ["create", "make", "new", "generate", "add", "init"]),
-    Primitive("READ", 1, 0, ["read", "get", "show", "display", "view", "print", "cat"]),
+    Primitive("READ", 1, 0, ["read", "get", "show", "display", "view", "print", "cat", "report", "dump"]),
     Primitive("LIST", 1, 1, ["list", "ls", "dir"]),
     Primitive("WRITE", 1, 1, ["write", "set", "update", "modify", "change", "edit"]),
     Primitive("DELETE", 1, 2, ["delete", "remove", "destroy", "kill", "rm", "erase", "clear"]),
@@ -79,7 +83,7 @@ PRIMITIVES = [
     Primitive("DIRECTORY", 5, 2, ["directory", "folder", "dir", "path", "pwd"]),
     Primitive("SYSTEM", 5, 1, ["system", "os", "uname", "kernel"]),
     Primitive("STORAGE", 5, 3, ["storage", "disk", "space", "volume", "df", "size"]),
-    Primitive("MEMORY", 5, 4, ["memory", "ram", "free", "usage"]),
+    Primitive("MEMORY", 5, 4, ["memory", "ram", "free", "usage", "virtual", "swap", "vmstat"]),
     Primitive("TIME", 5, 5, ["time", "date", "clock", "timestamp"]),
     Primitive("HOST", 5, 6, ["host", "hostname", "machine", "computer"]),
     Primitive("UPTIME", 5, 7, ["uptime", "since", "boot"]),
@@ -150,10 +154,14 @@ class TruthSpace:
     Geometric knowledge storage and resolution.
     
     Uses φ-MAX encoding for positions and φ-weighted Euclidean
-    distance for queries. No keywords, no database - pure geometry.
+    distance for queries.
+    
+    Knowledge sources:
+    - Bootstrap: Loaded from JSON file (immutable core knowledge)
+    - Learned: Stored in SQLite database (persists across runs)
     """
     
-    def __init__(self, knowledge_file: str = None):
+    def __init__(self, db_path: str = None, bootstrap_path: str = None):
         self.dim = DIM
         self.entries: List[KnowledgeEntry] = []
         
@@ -163,11 +171,17 @@ class TruthSpace:
             for kw in prim.keywords:
                 self.keyword_to_primitive[kw.lower()] = prim
         
-        # Load or initialize knowledge
-        if knowledge_file and Path(knowledge_file).exists():
-            self.load(knowledge_file)
-        else:
-            self._load_default_knowledge()
+        # Set up paths
+        pkg_dir = Path(__file__).parent.parent
+        self.db_path = db_path or str(pkg_dir / "truthspace.db")
+        self.bootstrap_path = bootstrap_path or str(pkg_dir / "bootstrap_knowledge.json")
+        
+        # Initialize database
+        self._init_db()
+        
+        # Load knowledge
+        self._load_bootstrap()
+        self._load_learned()
     
     def _encode(self, text: str) -> np.ndarray:
         """
@@ -205,7 +219,8 @@ class TruthSpace:
         dist = self._distance(a, b)
         return 1.0 / (1.0 + dist)
     
-    def store(self, name: str, description: str, output: str = None, metadata: Dict = None):
+    def store(self, name: str, description: str, output: str = None, 
+              metadata: Dict = None, persist: bool = False) -> KnowledgeEntry:
         """
         Store knowledge with geometric encoding.
         
@@ -214,6 +229,10 @@ class TruthSpace:
             description: Natural language description (encoded to position)
             output: Executable output (defaults to name)
             metadata: Additional data
+            persist: If True, save to database for persistence
+        
+        Returns:
+            The created KnowledgeEntry
         """
         position = self._encode(description)
         entry = KnowledgeEntry(
@@ -224,6 +243,16 @@ class TruthSpace:
             metadata=metadata or {},
         )
         self.entries.append(entry)
+        
+        # Persist to database if requested
+        if persist:
+            with self._connection() as conn:
+                conn.execute(
+                    "INSERT INTO knowledge (command, description) VALUES (?, ?)",
+                    (name, description)
+                )
+        
+        return entry
     
     def query(self, text: str, threshold: float = 0.3) -> Tuple[KnowledgeEntry, float]:
         """
@@ -300,86 +329,200 @@ class TruthSpace:
         
         return "\n".join(lines)
     
-    def save(self, filepath: str):
-        """Save knowledge to JSON."""
-        data = [e.to_dict() for e in self.entries]
-        with open(filepath, 'w') as f:
-            json.dump(data, f, indent=2)
+    # =========================================================================
+    # DATABASE
+    # =========================================================================
     
-    def load(self, filepath: str):
-        """Load knowledge from JSON."""
-        with open(filepath, 'r') as f:
-            data = json.load(f)
-        self.entries = [KnowledgeEntry.from_dict(d) for d in data]
+    @contextmanager
+    def _connection(self):
+        """Context manager for database connections."""
+        conn = sqlite3.connect(self.db_path)
+        conn.row_factory = sqlite3.Row
+        try:
+            yield conn
+            conn.commit()
+        finally:
+            conn.close()
     
-    def _load_default_knowledge(self):
-        """Load default bash command knowledge."""
-        defaults = [
-            # Directory
-            ("pwd", "directory"),
-            ("ls", "list directory"),
-            ("ls", "list file"),
-            ("mkdir -p", "create directory"),
-            
-            # File
-            ("touch", "create file"),
-            ("cat", "read file"),
-            ("head", "read file first"),
-            ("tail", "read file last"),
-            ("rm", "delete file"),
-            ("rm -r", "delete directory"),
-            
-            # Copy/Move
-            ("cp", "copy file"),
-            ("cp -r", "copy directory"),
-            ("mv", "move file"),
-            
-            # Search
-            ("find", "find file"),
-            ("grep", "search data"),
-            
-            # System
-            ("df", "read storage"),
-            ("du", "read directory storage"),
-            ("uname", "read system"),
-            ("hostname", "read host"),
-            ("date", "read time"),
-            ("uptime", "read uptime"),
-            ("free", "read memory"),
-            
-            # Process
-            ("ps", "list process"),
-            ("top", "read process"),
-            ("kill", "delete process"),
-            ("lsof", "list file process"),
-            ("pstree", "read process recursive"),
-            ("strace", "trace system"),
-            
-            # Network
-            ("ifconfig", "read network"),
-            ("curl", "download network"),
-            ("wget", "download network file"),
-            ("ssh", "connect network user"),
-            ("scp", "copy file network"),
-            ("ping", "test network"),
-            
-            # User
-            ("whoami", "read user"),
-            ("chmod", "write file user"),
-            
-            # Data
-            ("wc", "count file"),
-            ("sort", "sort data"),
-            ("uniq", "filter unique"),
-            ("tar", "compress file"),
-            
-            # Environment
-            ("env", "read data"),
-            ("echo", "write output"),
-        ]
+    def _init_db(self):
+        """Initialize the database schema."""
+        with self._connection() as conn:
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS knowledge (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    command TEXT NOT NULL,
+                    description TEXT NOT NULL,
+                    source TEXT DEFAULT 'learned',
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
+    
+    def _load_bootstrap(self):
+        """Load bootstrap knowledge from JSON."""
+        if not Path(self.bootstrap_path).exists():
+            return
         
-        for cmd, desc in defaults:
-            self.store(cmd, desc)
+        with open(self.bootstrap_path, 'r') as f:
+            data = json.load(f)
+        
+        for entry in data.get("entries", []):
+            self.store(
+                entry["command"],
+                entry["description"],
+                persist=False  # Don't save bootstrap to DB
+            )
+    
+    def _load_learned(self):
+        """Load learned knowledge from database."""
+        with self._connection() as conn:
+            cursor = conn.execute("SELECT command, description FROM knowledge")
+            for row in cursor:
+                self.store(row["command"], row["description"], persist=False)
+    
+    # =========================================================================
+    # MAN PAGE INGESTION
+    # =========================================================================
+    
+    def parse_man_page(self, command: str) -> Optional[str]:
+        """
+        Parse a man page to extract a description.
+        
+        Returns the NAME section description, or None if not found.
+        """
+        try:
+            result = subprocess.run(
+                ["man", command],
+                capture_output=True,
+                text=True,
+                timeout=5,
+                env={"MANWIDTH": "1000", "LANG": "C"}
+            )
+            
+            if result.returncode != 0:
+                return None
+            
+            text = result.stdout
+            
+            # Extract NAME section
+            name_match = re.search(
+                r'NAME\s*\n\s*(\S+)\s*[-–—]\s*(.+?)(?=\n\n|\nSYNOPSIS|\nDESCRIPTION)',
+                text,
+                re.DOTALL
+            )
+            
+            if name_match:
+                description = name_match.group(2).strip()
+                # Clean up whitespace
+                description = re.sub(r'\s+', ' ', description)
+                return description[:200]  # Limit length
+            
+            return None
+            
+        except (subprocess.TimeoutExpired, FileNotFoundError):
+            return None
+    
+    def infer_description(self, man_description: str, command: str = None) -> str:
+        """
+        Convert a man page description to primitive-friendly description.
+        
+        Extracts key action and domain words that map to primitives.
+        Prioritizes unique combinations to avoid collisions.
+        """
+        words = self._tokenize(man_description)
+        
+        # Find words that map to primitives, tracking dimensions
+        primitive_words = []
+        seen_dims = set()
+        
+        for word in words:
+            if word in self.keyword_to_primitive:
+                prim = self.keyword_to_primitive[word]
+                # Prefer one word per dimension for uniqueness
+                if prim.dimension not in seen_dims:
+                    primitive_words.append(word)
+                    seen_dims.add(prim.dimension)
+        
+        # If we found primitives, use them
+        if primitive_words:
+            desc = " ".join(primitive_words[:4])
+        else:
+            # Fallback: use first few words
+            desc = " ".join(words[:3])
+        
+        # Add command name if it maps to a primitive (for uniqueness)
+        if command and command in self.keyword_to_primitive:
+            if command not in desc:
+                desc = command + " " + desc
+        
+        return desc
+    
+    def learn_from_man(self, command: str) -> Optional[KnowledgeEntry]:
+        """
+        Learn a command from its man page.
+        
+        Returns the new KnowledgeEntry, or None if learning failed.
+        """
+        man_desc = self.parse_man_page(command)
+        if not man_desc:
+            return None
+        
+        description = self.infer_description(man_desc, command)
+        if not description:
+            return None
+        
+        # Store with persistence
+        entry = self.store(command, description, persist=True)
+        return entry
+    
+    def list_learned(self) -> List[Tuple[str, str]]:
+        """List all learned knowledge from the database."""
+        with self._connection() as conn:
+            cursor = conn.execute("SELECT command, description FROM knowledge ORDER BY created_at")
+            return [(row["command"], row["description"]) for row in cursor]
+    
+    def forget(self, command: str) -> bool:
+        """Remove learned knowledge for a command."""
+        with self._connection() as conn:
+            cursor = conn.execute("DELETE FROM knowledge WHERE command = ?", (command,))
+            if cursor.rowcount > 0:
+                # Also remove from entries
+                self.entries = [e for e in self.entries if e.name != command]
+                return True
+            return False
+    
+    def reset(self):
+        """Reset the database, removing all learned knowledge."""
+        with self._connection() as conn:
+            conn.execute("DELETE FROM knowledge")
+        
+        # Reload from bootstrap only
+        self.entries = []
+        self._load_bootstrap()
+    
+    def try_learn(self, query: str) -> Optional[KnowledgeEntry]:
+        """
+        Try to learn from a failed query by checking man pages.
+        
+        Extracts potential command names from the query and tries
+        to learn them from man pages.
+        """
+        words = self._tokenize(query)
+        
+        # Try each word as a potential command
+        for word in words:
+            if len(word) < 2:
+                continue
+            
+            # Check if we already know this command
+            known = any(e.name == word or e.output == word for e in self.entries)
+            if known:
+                continue
+            
+            entry = self.learn_from_man(word)
+            if entry:
+                return entry
+        
+        return None
 
 
 # =============================================================================
