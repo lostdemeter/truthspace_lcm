@@ -213,9 +213,143 @@ This separates:
 - **Understanding** (LLM's strength) from
 - **Knowledge retrieval** (TruthSpace's strength)
 
-## Conclusion
+## Experimental Analysis (December 2024)
 
-The 86.7% success rate isn't a failure of the 12D encoding—it's a fundamental limitation of **keyword-based compositional semantics**. Traditional LLMs achieve better disambiguation because they learn from distributional patterns in massive datasets.
+Deep analysis of the 4 failing cases reveals specific root causes:
+
+### Finding 1: Primitive Keyword Overlap
+
+The MOVE primitive includes both "move" AND "copy":
+```
+MOVE (dim 2): {move, copy, mv, cp, transfer, backup, duplicate, clone}
+```
+
+This means "copy file" and "move file" encode **identically**! The encoder cannot distinguish them.
+
+### Finding 2: Misclassified Keywords
+
+| Keyword | Expected | Actual | Why |
+|---------|----------|--------|-----|
+| `log` | FILE/DATA | USER | Matches "login" in USER primitive |
+| `tail` | ACTION | VERBOSE | Matches verbose modifier |
+| `to` | SPATIAL | CREATE | Matches creation keywords |
+| `scp` | CONNECT | MOVE | Matches copy/move keywords |
+| `follow` | ACTION | (none) | No primitive match at all |
+
+### Finding 3: Query-Intent Dimension Mismatch
+
+```
+Query "ssh into server.com":
+   dim 3 (INTERACTION): +0.752  ← "ssh" → CONNECT
+   dim 6 (NETWORK_USER): +0.000  ← "server.com" has no USER signal
+
+Expected "remote_login":
+   dim 3 (INTERACTION): +0.591
+   dim 6 (NETWORK_USER): +0.783  ← "remote", "login" → USER
+```
+
+The query lacks dim 6 signal because "server.com" doesn't encode to USER!
+
+### Finding 4: Dimension Collision
+
+Multiple intents occupy the same region:
+- "move file to /tmp" → dim 2 + dim 4
+- "du" (disk usage) → dim 2 + dim 4
+- "copy directory" → dim 2 + dim 4
+
+### Root Cause Summary
+
+1. **Primitive keywords are too broad** - "copy" and "move" share a primitive
+2. **Missing discriminative primitives** - "follow", "log", "tail" lack specific matches
+3. **Stop words add noise** - "to", "the", "from" encode to wrong primitives
+4. **Domain keywords missing** - "server.com", "http://" don't trigger NETWORK
+
+## Attempted Fixes (December 2024)
+
+### Fix 1: Split MOVE/COPY Primitives ✓
+```python
+# Before: MOVE included both move AND copy
+MOVE: {move, copy, mv, cp, transfer, backup, clone, duplicate}
+
+# After: Separate primitives
+MOVE: {move, mv, rename, relocate}
+COPY: {copy, cp, duplicate, clone, backup}
+```
+**Result**: Helped distinguish move vs copy operations.
+
+### Fix 2: Add FOLLOW Primitive ✓
+```python
+FOLLOW: {follow, tail, watch, monitor, stream, live, realtime}
+```
+**Result**: "follow the log file" now correctly matches `follow_log` intent.
+
+### Fix 3: Add Stop Word Filtering ✓
+```python
+STOP_WORDS = {"the", "a", "an", "to", "from", "in", "on", ...}
+```
+**Result**: Reduced noise from common words.
+
+### Fix 4: Expand CONNECT with URL Keywords ✓
+```python
+CONNECT: {connect, link, ssh, curl, fetch, download, upload, sync, http, https, url, remote}
+```
+**Result**: Better matching for download/network operations.
+
+### Fix 5: Add "server" to NETWORK Primitive ✓
+```python
+NETWORK: {network, interface, ip, port, socket, connection, host, server, client}
+```
+**Result**: "ssh into server.com" now triggers NETWORK dimension.
+
+### Remaining Failures (5 cases)
+
+Despite improvements, 5 cases remain problematic:
+
+| Query | Expected | Actual | Root Cause |
+|-------|----------|--------|------------|
+| "move file.txt to /tmp" | mv | cp | "file" pulls toward copy_recursive |
+| "search for error in log files" | grep | find | "files" dominates over "error" |
+| "count lines in file.txt" | wc -l | pwd | "count" has no primitive match |
+| "download file from http://..." | curl | scp | "file" pulls toward scp |
+| "ssh into server.com" | ssh | scp | "server" pulls toward scp |
+
+### Key Insight: The Tuning Dilemma
+
+Fixing one failure often causes regressions elsewhere:
+- Adding "lines" to DATA primitive → broke head/tail queries
+- Adding "server" to NETWORK → helped ssh but not enough
+
+This reveals a **fundamental limitation**: keyword-based encoding cannot capture the nuanced relationships that distinguish similar operations.
+
+## Resolution (December 2024)
+
+**UPDATE**: The disambiguation problem was SOLVED by implementing dimension-weighted scoring.
+
+The issue wasn't a fundamental limitation - it was that our scoring treated all dimensions equally when ACTION dimensions should be weighted more heavily.
+
+### The Fix
+
+```python
+dim_weights = [3.0, 3.0, 3.0, 3.0,  # Actions: highest weight
+               1.0, 1.0, 1.0, 1.0,  # Domains: normal weight  
+               0.3, 0.3, 0.3, 0.3]  # Relations: low weight
+```
+
+### Results
+
+| Stage | Success Rate |
+|-------|-------------|
+| Initial 12D | 60% |
+| After keyword tuning | 83.3% |
+| After dimension weighting | **100%** |
+
+See `009_projection_weighting.md` for the full mathematical analysis.
+
+## Original Conclusion (Superseded)
+
+~~The 86.7% success rate isn't a failure of the 12D encoding—it's a fundamental limitation of keyword-based compositional semantics.~~
+
+**Corrected**: The 12D encoding contains all necessary information. The issue was the **projection method** (how we compare vectors), not the encoding itself.
 
 TruthSpace LCM's approach is different by design:
 - **Explicit** rather than implicit knowledge

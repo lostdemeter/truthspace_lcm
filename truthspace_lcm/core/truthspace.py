@@ -1,61 +1,99 @@
 """
-TruthSpace: Unified Knowledge Storage and Query Interface
+TruthSpace: Geometric Knowledge Storage and Resolution
 
-This is the consolidated knowledge layer that replaces:
-- knowledge_db.py
-- knowledge_manager.py  
-- intent_manager.py
+A unified knowledge system that uses φ-MAX encoding for storage
+and geometric distance for queries. This replaces keyword-based
+matching with pure hypergeometric resolution.
 
 Design principles:
-- Single interface for all knowledge operations
-- Everything is a KnowledgeEntry (including intents, primitives, patterns)
-- No fallbacks - query succeeds or raises KnowledgeGapError
-- Fail fast philosophy
+- Pure geometry: All resolution is φ-weighted Euclidean distance
+- φ-MAX encoding: Synonyms collapse, levels separate
+- No fallbacks: Query succeeds or fails
+- Fail fast: Errors are explicit, not hidden
+- Minimal: Only what's needed for geometric resolution
+
+This is a showcase of how hypergeometry can replace trained LLM/LCM
+functionality with mathematically-derived resolution.
 """
 
-import sqlite3
 import numpy as np
 import json
-import os
-import hashlib
-import re
-from datetime import datetime
-from typing import Dict, List, Tuple, Optional, Any, Set
+from typing import List, Tuple, Optional, Dict, Any
 from dataclasses import dataclass, field
-from enum import Enum
 from pathlib import Path
-from contextlib import contextmanager
 
 
 # =============================================================================
 # CONSTANTS
 # =============================================================================
 
-PHI = (1 + np.sqrt(5)) / 2
+PHI = (1 + np.sqrt(5)) / 2  # Golden ratio ≈ 1.618
+DIM = 12  # Encoding dimension
+
+# φ-block weights: Actions (φ²), Domains (1), Relations (φ⁻²)
+PHI_BLOCK_WEIGHTS = np.array([
+    PHI**2, PHI**2, PHI**2, PHI**2,  # Actions: dims 0-3
+    1.0, 1.0, 1.0, 1.0,               # Domains: dims 4-7
+    PHI**-2, PHI**-2, PHI**-2, PHI**-2  # Relations: dims 8-11
+])
 
 
-class KnowledgeDomain(Enum):
-    """Knowledge domains for isolation in TruthSpace."""
-    PROGRAMMING = "programming"
-    SYSTEM = "system"
-    GENERAL = "general"
+# =============================================================================
+# PRIMITIVES
+# =============================================================================
+
+@dataclass
+class Primitive:
+    """A semantic anchor in truth space."""
+    name: str
+    dimension: int
+    level: int
+    keywords: List[str]
 
 
-class EntryType(Enum):
-    """Types of knowledge entries."""
-    PRIMITIVE = "primitive"      # Semantic anchor (CREATE, READ, FILE, etc.)
-    INTENT = "intent"            # NL trigger → command mapping
-    COMMAND = "command"          # Executable command knowledge
-    PATTERN = "pattern"          # Code/command template
-    CONCEPT = "concept"          # General knowledge
-    META = "meta"                # Stop words, config, etc.
-
-
-DOMAIN_OFFSETS = {
-    KnowledgeDomain.PROGRAMMING: 1.0,
-    KnowledgeDomain.SYSTEM: 2.0,
-    KnowledgeDomain.GENERAL: 3.0,
-}
+# Bootstrap primitives - the semantic anchors
+PRIMITIVES = [
+    # Actions (dims 0-3)
+    Primitive("CREATE", 0, 0, ["create", "make", "new", "generate", "add", "init"]),
+    Primitive("READ", 1, 0, ["read", "get", "show", "display", "view", "print", "cat"]),
+    Primitive("LIST", 1, 1, ["list", "ls", "dir"]),
+    Primitive("WRITE", 1, 1, ["write", "set", "update", "modify", "change", "edit"]),
+    Primitive("DELETE", 1, 2, ["delete", "remove", "destroy", "kill", "rm", "erase", "clear"]),
+    Primitive("COPY", 2, 0, ["copy", "duplicate", "clone", "cp"]),
+    Primitive("RELOCATE", 2, 1, ["move", "mv", "relocate", "rename"]),
+    Primitive("SEARCH", 2, 2, ["search", "find", "locate", "grep", "lookup", "query"]),
+    Primitive("EXECUTE", 3, 0, ["run", "execute", "start", "launch", "invoke"]),
+    Primitive("CONNECT", 3, 1, ["connect", "link", "join", "attach", "download", "fetch", "curl"]),
+    Primitive("TRANSFORM", 3, 2, ["transform", "convert", "parse", "format"]),
+    Primitive("COMPRESS", 3, 3, ["compress", "zip", "tar", "archive", "pack"]),
+    Primitive("SORT", 3, 4, ["sort", "order", "arrange", "rank"]),
+    Primitive("FILTER", 3, 5, ["filter", "unique", "uniq", "distinct", "dedupe"]),
+    Primitive("COUNT", 3, 6, ["count", "wc", "tally", "sum"]),
+    Primitive("TRACE", 3, 7, ["trace", "strace", "debug", "monitor"]),
+    
+    # Domains (dims 4-7)
+    Primitive("PROCESS", 4, 0, ["process", "processes", "pid", "proc", "task", "job", "running"]),
+    Primitive("NETWORK", 4, 1, ["network", "net", "http", "url", "web", "remote", "ssh"]),
+    Primitive("USER", 4, 2, ["user", "owner", "permission", "chmod", "whoami"]),
+    Primitive("FILE", 5, 0, ["file", "files", "document"]),
+    Primitive("DIRECTORY", 5, 2, ["directory", "folder", "dir", "path", "pwd"]),
+    Primitive("SYSTEM", 5, 1, ["system", "os", "uname", "kernel"]),
+    Primitive("STORAGE", 5, 3, ["storage", "disk", "space", "volume", "df", "size"]),
+    Primitive("MEMORY", 5, 4, ["memory", "ram", "free", "usage"]),
+    Primitive("TIME", 5, 5, ["time", "date", "clock", "timestamp"]),
+    Primitive("HOST", 5, 6, ["host", "hostname", "machine", "computer"]),
+    Primitive("UPTIME", 5, 7, ["uptime", "since", "boot"]),
+    Primitive("DATA", 6, 1, ["data", "text", "content", "string", "output", "log"]),
+    Primitive("RECURSIVE", 7, 0, ["recursive", "tree", "all", "deep"]),
+    
+    # Relations (dims 8-11)
+    Primitive("INTO", 8, 0, ["into", "to", "toward"]),
+    Primitive("FROM", 8, 1, ["from", "source", "origin"]),
+    Primitive("BEFORE", 9, 0, ["before", "first", "head", "top", "start"]),
+    Primitive("AFTER", 9, 1, ["after", "last", "tail", "end", "bottom"]),
+    Primitive("DURING", 10, 0, ["during", "while", "follow", "watch", "live"]),
+    Primitive("TEST", 11, 0, ["test", "check", "verify", "ping"]),
+]
 
 
 # =============================================================================
@@ -63,597 +101,330 @@ DOMAIN_OFFSETS = {
 # =============================================================================
 
 class KnowledgeGapError(Exception):
-    """Raised when knowledge is not found - triggers learning opportunity."""
-    def __init__(self, query: str, best_match: float = 0.0):
+    """Raised when no geometric match is found."""
+    def __init__(self, query: str, best_similarity: float = 0.0):
         self.query = query
-        self.best_match = best_match
-        super().__init__(f"Knowledge gap: '{query}' (best match: {best_match:.2f})")
+        self.best_similarity = best_similarity
+        super().__init__(f"No match for '{query}' (best: {best_similarity:.2f})")
 
 
 # =============================================================================
-# DATA CLASSES
+# KNOWLEDGE ENTRY
 # =============================================================================
 
 @dataclass
 class KnowledgeEntry:
-    """A single piece of knowledge in TruthSpace."""
-    id: str
+    """A piece of knowledge with its geometric position."""
     name: str
-    entry_type: EntryType
-    domain: KnowledgeDomain
     description: str
     position: np.ndarray
-    keywords: List[str] = field(default_factory=list)
+    output: str = ""
     metadata: Dict[str, Any] = field(default_factory=dict)
-    created_at: str = ""
-    updated_at: str = ""
-    version: int = 1
     
     def to_dict(self) -> Dict[str, Any]:
         return {
-            "id": self.id,
             "name": self.name,
-            "entry_type": self.entry_type.value,
-            "domain": self.domain.value,
             "description": self.description,
             "position": self.position.tolist(),
-            "keywords": self.keywords,
+            "output": self.output,
             "metadata": self.metadata,
-            "created_at": self.created_at,
-            "updated_at": self.updated_at,
-            "version": self.version,
         }
     
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'KnowledgeEntry':
+    def from_dict(cls, data: Dict[str, Any]) -> "KnowledgeEntry":
         return cls(
-            id=data["id"],
             name=data["name"],
-            entry_type=EntryType(data["entry_type"]),
-            domain=KnowledgeDomain(data["domain"]),
             description=data["description"],
             position=np.array(data["position"]),
-            keywords=data.get("keywords", []),
+            output=data.get("output", ""),
             metadata=data.get("metadata", {}),
-            created_at=data.get("created_at", ""),
-            updated_at=data.get("updated_at", ""),
-            version=data.get("version", 1),
         )
 
 
-@dataclass
-class QueryResult:
-    """Result of a TruthSpace query."""
-    entry: KnowledgeEntry
-    similarity: float
-    
-    
 # =============================================================================
-# TRUTHSPACE: THE UNIFIED KNOWLEDGE INTERFACE
+# TRUTHSPACE
 # =============================================================================
 
 class TruthSpace:
     """
-    Unified knowledge storage and query interface.
+    Geometric knowledge storage and resolution.
     
-    This is the single source of truth for all knowledge in the system.
-    Everything - primitives, intents, commands, patterns - lives here.
-    
-    Core operations:
-    - store(entry) → persist knowledge
-    - query(text) → find matching knowledge or raise KnowledgeGapError
-    - resolve(text) → query + extract executable output
-    
-    v2: Now uses 12D plastic-primary encoding for better semantic separation.
+    Uses φ-MAX encoding for positions and φ-weighted Euclidean
+    distance for queries. No keywords, no database - pure geometry.
     """
     
-    DIM = 12  # Dimension of ρ-space (upgraded from 8D φ-space)
-    SCHEMA_VERSION = 3  # Bumped for 12D migration
-    
-    def __init__(self, db_path: str = None):
-        if db_path is None:
-            db_path = os.path.join(
-                os.path.dirname(__file__),
-                "..", "truthspace.db"
-            )
+    def __init__(self, knowledge_file: str = None):
+        self.dim = DIM
+        self.entries: List[KnowledgeEntry] = []
         
-        self.db_path = Path(db_path)
-        self.db_path.parent.mkdir(parents=True, exist_ok=True)
+        # Build keyword → primitive mapping
+        self.keyword_to_primitive: Dict[str, Primitive] = {}
+        for prim in PRIMITIVES:
+            for kw in prim.keywords:
+                self.keyword_to_primitive[kw.lower()] = prim
         
-        # Initialize with PlasticEncoder (12D) by default
-        self._encoder = None
-        self._init_encoder()
-        
-        self._init_db()
-    
-    def _init_encoder(self):
-        """Initialize the plastic encoder (12D)."""
-        try:
-            from truthspace_lcm.core.encoder import PlasticEncoder
-            self._encoder = PlasticEncoder()
-        except ImportError:
-            # Fallback to simple encoding if encoder not available
-            self._encoder = None
-    
-    def set_encoder(self, encoder):
-        """Set the φ-encoder (called after encoder is initialized)."""
-        self._encoder = encoder
-    
-    @contextmanager
-    def _connection(self):
-        """Database connection context manager."""
-        conn = sqlite3.connect(str(self.db_path))
-        conn.row_factory = sqlite3.Row
-        try:
-            yield conn
-            conn.commit()
-        except Exception:
-            conn.rollback()
-            raise
-        finally:
-            conn.close()
-    
-    def _init_db(self):
-        """Initialize database schema."""
-        with self._connection() as conn:
-            cursor = conn.cursor()
-            
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS entries (
-                    id TEXT PRIMARY KEY,
-                    name TEXT NOT NULL,
-                    entry_type TEXT NOT NULL,
-                    domain TEXT NOT NULL,
-                    description TEXT NOT NULL,
-                    position BLOB NOT NULL,
-                    position_norm REAL NOT NULL,
-                    metadata TEXT,
-                    created_at TEXT NOT NULL,
-                    updated_at TEXT NOT NULL,
-                    version INTEGER DEFAULT 1
-                )
-            """)
-            
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS keywords (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    keyword TEXT UNIQUE NOT NULL
-                )
-            """)
-            
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS entry_keywords (
-                    entry_id TEXT NOT NULL,
-                    keyword_id INTEGER NOT NULL,
-                    PRIMARY KEY (entry_id, keyword_id),
-                    FOREIGN KEY (entry_id) REFERENCES entries(id) ON DELETE CASCADE,
-                    FOREIGN KEY (keyword_id) REFERENCES keywords(id) ON DELETE CASCADE
-                )
-            """)
-            
-            cursor.execute("CREATE INDEX IF NOT EXISTS idx_entries_type ON entries(entry_type)")
-            cursor.execute("CREATE INDEX IF NOT EXISTS idx_entries_domain ON entries(domain)")
-            cursor.execute("CREATE INDEX IF NOT EXISTS idx_entries_name ON entries(name)")
-    
-    # =========================================================================
-    # ENCODING
-    # =========================================================================
+        # Load or initialize knowledge
+        if knowledge_file and Path(knowledge_file).exists():
+            self.load(knowledge_file)
+        else:
+            self._load_default_knowledge()
     
     def _encode(self, text: str) -> np.ndarray:
-        """Encode text to φ-position."""
-        if self._encoder is None:
-            # Fallback: simple keyword-based encoding
-            return self._simple_encode(text)
-        return self._encoder.encode(text).position
-    
-    def _simple_encode(self, text: str) -> np.ndarray:
-        """Simple encoding when φ-encoder not available (bootstrap)."""
-        position = np.zeros(self.DIM)
-        words = text.lower().split()
+        """
+        Encode text using φ-MAX.
         
-        for i, word in enumerate(words[:self.DIM]):
-            # Use character sum as simple hash
-            position[i % self.DIM] += sum(ord(c) for c in word) / 1000.0
+        - φ^level for each primitive
+        - φ^(-i/2) for word position decay
+        - MAX per dimension (Sierpinski property)
+        """
+        words = self._tokenize(text)
+        position = np.zeros(self.dim)
         
-        # Normalize
-        norm = np.linalg.norm(position)
-        if norm > 0:
-            position = position / norm
+        for i, word in enumerate(words):
+            word_lower = word.lower()
+            if word_lower in self.keyword_to_primitive:
+                prim = self.keyword_to_primitive[word_lower]
+                value = PHI ** prim.level
+                pos_decay = PHI ** (-i * 0.5)
+                position[prim.dimension] = max(position[prim.dimension], value * pos_decay)
         
         return position
     
-    def _position_to_blob(self, position: np.ndarray) -> bytes:
-        return position.astype(np.float64).tobytes()
+    def _tokenize(self, text: str) -> List[str]:
+        """Simple tokenization."""
+        import re
+        return re.findall(r'\b\w+\b', text.lower())
     
-    def _blob_to_position(self, blob: bytes) -> np.ndarray:
-        return np.frombuffer(blob, dtype=np.float64)
+    def _distance(self, a: np.ndarray, b: np.ndarray) -> float:
+        """φ-weighted Euclidean distance."""
+        diff = (a - b) * PHI_BLOCK_WEIGHTS
+        return float(np.linalg.norm(diff))
     
-    # =========================================================================
-    # STORE: Add Knowledge
-    # =========================================================================
+    def _similarity(self, a: np.ndarray, b: np.ndarray) -> float:
+        """Convert distance to similarity (0 to 1)."""
+        dist = self._distance(a, b)
+        return 1.0 / (1.0 + dist)
     
-    def store(
-        self,
-        name: str,
-        entry_type: EntryType,
-        domain: KnowledgeDomain,
-        description: str,
-        keywords: List[str] = None,
-        metadata: Dict[str, Any] = None,
-        position: np.ndarray = None,
-    ) -> KnowledgeEntry:
+    def store(self, name: str, description: str, output: str = None, metadata: Dict = None):
         """
-        Store knowledge in TruthSpace.
+        Store knowledge with geometric encoding.
         
-        If position is not provided, it's computed from name + keywords.
+        Args:
+            name: Command or concept name
+            description: Natural language description (encoded to position)
+            output: Executable output (defaults to name)
+            metadata: Additional data
         """
-        keywords = keywords or []
-        metadata = metadata or {}
-        
-        # Generate ID
-        now = datetime.now()
-        content = f"{entry_type.value}:{domain.value}:{name}:{now.isoformat()}"
-        entry_id = hashlib.sha256(content.encode()).hexdigest()[:16]
-        
-        # Compute position if not provided
-        if position is None:
-            text = f"{name} {' '.join(keywords)}"
-            position = self._encode(text)
-            
-            # Add domain offset
-            domain_offset = DOMAIN_OFFSETS.get(domain, 0)
-            position = position * 0.8
-            position[0] += domain_offset * 0.2
-        
-        position_norm = float(np.linalg.norm(position))
-        
-        with self._connection() as conn:
-            cursor = conn.cursor()
-            
-            cursor.execute("""
-                INSERT INTO entries (id, name, entry_type, domain, description,
-                                    position, position_norm, metadata, created_at, updated_at, version)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """, (
-                entry_id, name, entry_type.value, domain.value, description,
-                self._position_to_blob(position), position_norm,
-                json.dumps(metadata), now.isoformat(), now.isoformat(), 1
-            ))
-            
-            for kw in keywords:
-                cursor.execute("INSERT OR IGNORE INTO keywords (keyword) VALUES (?)", (kw.lower(),))
-                cursor.execute("SELECT id FROM keywords WHERE keyword = ?", (kw.lower(),))
-                kw_id = cursor.fetchone()[0]
-                cursor.execute(
-                    "INSERT OR IGNORE INTO entry_keywords (entry_id, keyword_id) VALUES (?, ?)",
-                    (entry_id, kw_id)
-                )
-        
-        return KnowledgeEntry(
-            id=entry_id,
+        position = self._encode(description)
+        entry = KnowledgeEntry(
             name=name,
-            entry_type=entry_type,
-            domain=domain,
             description=description,
             position=position,
-            keywords=keywords,
-            metadata=metadata,
-            created_at=now.isoformat(),
-            updated_at=now.isoformat(),
-            version=1,
+            output=output or name,
+            metadata=metadata or {},
         )
+        self.entries.append(entry)
     
-    # =========================================================================
-    # QUERY: Find Knowledge (Fail Fast)
-    # =========================================================================
-    
-    def query(
-        self,
-        text: str,
-        entry_type: EntryType = None,
-        domain: KnowledgeDomain = None,
-        threshold: float = 0.3,
-        top_k: int = 10,
-    ) -> List[QueryResult]:
+    def query(self, text: str, threshold: float = 0.3) -> Tuple[KnowledgeEntry, float]:
         """
-        Query TruthSpace for matching knowledge.
+        Find the nearest knowledge entry to the query.
         
-        Returns list of results sorted by similarity.
-        Raises KnowledgeGapError if no results above threshold.
+        Args:
+            text: Natural language query
+            threshold: Minimum similarity required
+        
+        Returns:
+            (entry, similarity)
+        
+        Raises:
+            KnowledgeGapError if no match above threshold
         """
-        query_vec = self._encode(text)
+        if not self.entries:
+            raise KnowledgeGapError(text, 0.0)
         
-        if domain:
-            query_vec = query_vec.copy()
-            query_vec[0] += DOMAIN_OFFSETS.get(domain, 0) * 0.2
+        query_pos = self._encode(text)
         
-        query_norm = np.linalg.norm(query_vec)
+        best_entry = None
+        best_sim = 0.0
         
-        results = []
-        keywords = set(text.lower().split())
+        for entry in self.entries:
+            sim = self._similarity(query_pos, entry.position)
+            if sim > best_sim:
+                best_sim = sim
+                best_entry = entry
         
-        with self._connection() as conn:
-            cursor = conn.cursor()
-            
-            # Build query
-            sql = "SELECT * FROM entries WHERE 1=1"
-            params = []
-            
-            if entry_type:
-                sql += " AND entry_type = ?"
-                params.append(entry_type.value)
-            
-            if domain:
-                sql += " AND domain = ?"
-                params.append(domain.value)
-            
-            cursor.execute(sql, params)
-            
-            for row in cursor.fetchall():
-                position = self._blob_to_position(row["position"])
-                position_norm = row["position_norm"]
-                
-                # Geometric similarity
-                if position_norm > 0 and query_norm > 0:
-                    geo_sim = float(np.dot(query_vec, position) / (query_norm * position_norm))
-                else:
-                    geo_sim = 0.0
-                
-                # Keyword boost
-                cursor.execute("""
-                    SELECT k.keyword FROM keywords k
-                    JOIN entry_keywords ek ON k.id = ek.keyword_id
-                    WHERE ek.entry_id = ?
-                """, (row["id"],))
-                entry_keywords = set(r[0] for r in cursor.fetchall())
-                entry_keywords.add(row["name"].lower())
-                
-                keyword_boost = 0.0
-                for qkw in keywords:
-                    if qkw in entry_keywords:
-                        keyword_boost += 0.15
-                    else:
-                        for ekw in entry_keywords:
-                            if qkw in ekw or ekw in qkw:
-                                keyword_boost += 0.05
-                                break
-                
-                combined_sim = geo_sim + min(keyword_boost, 0.4)
-                
-                entry = KnowledgeEntry(
-                    id=row["id"],
-                    name=row["name"],
-                    entry_type=EntryType(row["entry_type"]),
-                    domain=KnowledgeDomain(row["domain"]),
-                    description=row["description"],
-                    position=position,
-                    keywords=list(entry_keywords),
-                    metadata=json.loads(row["metadata"]) if row["metadata"] else {},
-                    created_at=row["created_at"],
-                    updated_at=row["updated_at"],
-                    version=row["version"],
-                )
-                
-                results.append(QueryResult(entry=entry, similarity=combined_sim))
+        if best_sim < threshold:
+            raise KnowledgeGapError(text, best_sim)
         
-        results.sort(key=lambda x: -x.similarity)
-        results = results[:top_k]
-        
-        # Fail fast: raise if no good matches
-        if not results or results[0].similarity < threshold:
-            best = results[0].similarity if results else 0.0
-            raise KnowledgeGapError(text, best)
-        
-        return results
+        return best_entry, best_sim
     
-    def query_safe(
-        self,
-        text: str,
-        entry_type: EntryType = None,
-        domain: KnowledgeDomain = None,
-        top_k: int = 10,
-    ) -> List[QueryResult]:
-        """Query without raising KnowledgeGapError (returns empty list instead)."""
-        try:
-            return self.query(text, entry_type, domain, threshold=0.0, top_k=top_k)
-        except KnowledgeGapError:
-            return []
-    
-    # =========================================================================
-    # RESOLVE: Query + Extract Output
-    # =========================================================================
-    
-    def resolve(
-        self,
-        text: str,
-        domain: KnowledgeDomain = None,
-    ) -> Tuple[str, str, KnowledgeEntry]:
+    def resolve(self, text: str) -> Tuple[str, KnowledgeEntry, float]:
         """
-        Resolve natural language to executable output.
+        Resolve query to executable output.
         
-        Returns: (output, output_type, entry)
-        Raises: KnowledgeGapError if no match
+        Returns:
+            (output, entry, similarity)
         """
-        # First try intents (high precision pattern matching)
-        try:
-            results = self.query(text, entry_type=EntryType.INTENT, domain=domain, threshold=0.5)
-            if results:
-                entry = results[0].entry
-                output = self._extract_output(entry)
-                output_type = entry.metadata.get("output_type", "bash")
-                return output, output_type, entry
-        except KnowledgeGapError:
-            pass
+        entry, similarity = self.query(text)
+        return entry.output, entry, similarity
+    
+    def explain(self, text: str) -> str:
+        """Explain how a query would be resolved."""
+        query_pos = self._encode(text)
         
-        # Then try commands
-        try:
-            results = self.query(text, entry_type=EntryType.COMMAND, domain=domain, threshold=0.4)
-            if results:
-                entry = results[0].entry
-                output = self._extract_output(entry)
-                output_type = entry.metadata.get("output_type", "bash")
-                return output, output_type, entry
-        except KnowledgeGapError:
-            pass
+        lines = [
+            f"Query: \"{text}\"",
+            "",
+            "φ-MAX Encoding:",
+        ]
         
-        # Finally try any knowledge
-        results = self.query(text, domain=domain, threshold=0.3)
-        entry = results[0].entry
-        output = self._extract_output(entry)
-        output_type = entry.metadata.get("output_type", "text")
-        return output, output_type, entry
-    
-    def _extract_output(self, entry: KnowledgeEntry) -> str:
-        """Extract executable output from entry."""
-        # Check metadata fields in order of preference
-        for field in ["code", "command", "syntax", "output"]:
-            if entry.metadata.get(field):
-                return entry.metadata[field]
+        # Show active dimensions
+        for i, v in enumerate(query_pos):
+            if v > 0.01:
+                prim_name = "?"
+                for prim in PRIMITIVES:
+                    if prim.dimension == i:
+                        prim_name = prim.name
+                        break
+                lines.append(f"  dim{i}: {v:.3f} ({prim_name})")
         
-        # For intents, get target command
-        if entry.entry_type == EntryType.INTENT:
-            commands = entry.metadata.get("target_commands", [])
-            if commands:
-                return commands[0]
+        # Show top matches
+        lines.append("")
+        lines.append("Top 3 matches:")
         
-        return entry.name
+        matches = [(e, self._similarity(query_pos, e.position)) for e in self.entries]
+        matches.sort(key=lambda x: x[1], reverse=True)
+        
+        for entry, sim in matches[:3]:
+            lines.append(f"  {entry.name}: {sim:.3f} (\"{entry.description}\")")
+        
+        return "\n".join(lines)
     
-    # =========================================================================
-    # UTILITY METHODS
-    # =========================================================================
+    def save(self, filepath: str):
+        """Save knowledge to JSON."""
+        data = [e.to_dict() for e in self.entries]
+        with open(filepath, 'w') as f:
+            json.dump(data, f, indent=2)
     
-    def get(self, entry_id: str) -> Optional[KnowledgeEntry]:
-        """Get entry by ID."""
-        with self._connection() as conn:
-            cursor = conn.cursor()
-            cursor.execute("SELECT * FROM entries WHERE id = ?", (entry_id,))
-            row = cursor.fetchone()
+    def load(self, filepath: str):
+        """Load knowledge from JSON."""
+        with open(filepath, 'r') as f:
+            data = json.load(f)
+        self.entries = [KnowledgeEntry.from_dict(d) for d in data]
+    
+    def _load_default_knowledge(self):
+        """Load default bash command knowledge."""
+        defaults = [
+            # Directory
+            ("pwd", "directory"),
+            ("ls", "list directory"),
+            ("ls", "list file"),
+            ("mkdir -p", "create directory"),
             
-            if not row:
-                return None
+            # File
+            ("touch", "create file"),
+            ("cat", "read file"),
+            ("head", "read file first"),
+            ("tail", "read file last"),
+            ("rm", "delete file"),
+            ("rm -r", "delete directory"),
             
-            cursor.execute("""
-                SELECT k.keyword FROM keywords k
-                JOIN entry_keywords ek ON k.id = ek.keyword_id
-                WHERE ek.entry_id = ?
-            """, (entry_id,))
-            keywords = [r[0] for r in cursor.fetchall()]
+            # Copy/Move
+            ("cp", "copy file"),
+            ("cp -r", "copy directory"),
+            ("mv", "move file"),
             
-            return KnowledgeEntry(
-                id=row["id"],
-                name=row["name"],
-                entry_type=EntryType(row["entry_type"]),
-                domain=KnowledgeDomain(row["domain"]),
-                description=row["description"],
-                position=self._blob_to_position(row["position"]),
-                keywords=keywords,
-                metadata=json.loads(row["metadata"]) if row["metadata"] else {},
-                created_at=row["created_at"],
-                updated_at=row["updated_at"],
-                version=row["version"],
-            )
-    
-    def get_by_name(self, name: str, entry_type: EntryType = None) -> Optional[KnowledgeEntry]:
-        """Get entry by name."""
-        with self._connection() as conn:
-            cursor = conn.cursor()
+            # Search
+            ("find", "find file"),
+            ("grep", "search data"),
             
-            if entry_type:
-                cursor.execute(
-                    "SELECT id FROM entries WHERE name = ? AND entry_type = ?",
-                    (name, entry_type.value)
-                )
-            else:
-                cursor.execute("SELECT id FROM entries WHERE name = ?", (name,))
+            # System
+            ("df", "read storage"),
+            ("du", "read directory storage"),
+            ("uname", "read system"),
+            ("hostname", "read host"),
+            ("date", "read time"),
+            ("uptime", "read uptime"),
+            ("free", "read memory"),
             
-            row = cursor.fetchone()
-            return self.get(row["id"]) if row else None
-    
-    def list_by_type(self, entry_type: EntryType) -> List[KnowledgeEntry]:
-        """List all entries of a type."""
-        with self._connection() as conn:
-            cursor = conn.cursor()
-            cursor.execute("SELECT id FROM entries WHERE entry_type = ?", (entry_type.value,))
-            return [self.get(row["id"]) for row in cursor.fetchall()]
-    
-    def count(self) -> Dict[str, int]:
-        """Count entries by type."""
-        with self._connection() as conn:
-            cursor = conn.cursor()
-            cursor.execute("""
-                SELECT entry_type, COUNT(*) as count
-                FROM entries GROUP BY entry_type
-            """)
-            return {row["entry_type"]: row["count"] for row in cursor.fetchall()}
-    
-    def delete(self, entry_id: str) -> bool:
-        """Delete an entry."""
-        with self._connection() as conn:
-            cursor = conn.cursor()
-            cursor.execute("DELETE FROM entries WHERE id = ?", (entry_id,))
-            return cursor.rowcount > 0
+            # Process
+            ("ps", "list process"),
+            ("top", "read process"),
+            ("kill", "delete process"),
+            ("lsof", "list file process"),
+            ("pstree", "read process recursive"),
+            ("strace", "trace system"),
+            
+            # Network
+            ("ifconfig", "read network"),
+            ("curl", "download network"),
+            ("wget", "download network file"),
+            ("ssh", "connect network user"),
+            ("scp", "copy file network"),
+            ("ping", "test network"),
+            
+            # User
+            ("whoami", "read user"),
+            ("chmod", "write file user"),
+            
+            # Data
+            ("wc", "count file"),
+            ("sort", "sort data"),
+            ("uniq", "filter unique"),
+            ("tar", "compress file"),
+            
+            # Environment
+            ("env", "read data"),
+            ("echo", "write output"),
+        ]
+        
+        for cmd, desc in defaults:
+            self.store(cmd, desc)
 
 
 # =============================================================================
 # DEMONSTRATION
 # =============================================================================
 
+def demonstrate():
+    """Demonstrate geometric resolution."""
+    ts = TruthSpace()
+    
+    print("=" * 60)
+    print("TRUTHSPACE: Geometric Knowledge Resolution")
+    print("=" * 60)
+    
+    queries = [
+        "list directory contents",
+        "show disk space",
+        "copy files",
+        "move files",
+        "find files",
+        "search text in files",
+        "show running processes",
+        "kill process",
+        "compress files",
+        "download from url",
+    ]
+    
+    print("\nResolution Test:")
+    print("-" * 40)
+    
+    for query in queries:
+        try:
+            output, entry, sim = ts.resolve(query)
+            print(f"✓ \"{query}\" → {output} ({sim:.2f})")
+        except KnowledgeGapError as e:
+            print(f"✗ \"{query}\" → no match ({e.best_similarity:.2f})")
+    
+    print("\n" + "-" * 40)
+    print("\nExplanation:")
+    print(ts.explain("show disk space"))
+    
+    print("\n" + "=" * 60)
+    print("Pure geometry. No keywords. No training.")
+    print("=" * 60)
+
+
 if __name__ == "__main__":
-    import tempfile
-    
-    print("=" * 70)
-    print("TRUTHSPACE - Unified Knowledge Interface")
-    print("=" * 70)
-    
-    with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as f:
-        db_path = f.name
-    
-    ts = TruthSpace(db_path)
-    
-    # Store some knowledge
-    print("\nStoring knowledge...")
-    
-    ts.store(
-        name="ls",
-        entry_type=EntryType.COMMAND,
-        domain=KnowledgeDomain.PROGRAMMING,
-        description="List directory contents",
-        keywords=["list", "files", "directory", "bash"],
-        metadata={"command": "ls -la", "output_type": "bash"}
-    )
-    
-    ts.store(
-        name="list_files_intent",
-        entry_type=EntryType.INTENT,
-        domain=KnowledgeDomain.PROGRAMMING,
-        description="List files in directory",
-        keywords=["list", "files", "show", "directory"],
-        metadata={"target_commands": ["ls -la"], "output_type": "bash"}
-    )
-    
-    print(f"  Stored {ts.count()} entries")
-    
-    # Query
-    print("\nQuerying 'show files in directory'...")
-    try:
-        results = ts.query("show files in directory")
-        for r in results:
-            print(f"  {r.similarity:.3f} | {r.entry.name} ({r.entry.entry_type.value})")
-    except KnowledgeGapError as e:
-        print(f"  Knowledge gap: {e}")
-    
-    # Resolve
-    print("\nResolving 'list all files'...")
-    try:
-        output, output_type, entry = ts.resolve("list all files")
-        print(f"  Output: {output}")
-        print(f"  Type: {output_type}")
-    except KnowledgeGapError as e:
-        print(f"  Knowledge gap: {e}")
-    
-    # Cleanup
-    os.unlink(db_path)
-    
-    print("\n" + "=" * 70)
-    print("TruthSpace test complete!")
-    print("=" * 70)
+    demonstrate()

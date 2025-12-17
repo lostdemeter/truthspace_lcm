@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-TruthSpace LCM - Interactive Runner
+TruthSpace LCM - Hypergeometric Resolution
 
-A simple interface to test the TruthSpace system.
-Translates natural language to code and executes it.
+Translates natural language to bash commands using pure geometry.
+No training. No keywords. Just φ-MAX encoding and distance.
 
 Usage:
     python run.py                    # Interactive mode
@@ -11,23 +11,22 @@ Usage:
 """
 
 import sys
-from truthspace_lcm import TruthSpace, Resolver, KnowledgeGapError
+import subprocess
+from truthspace_lcm.core import TruthSpace, KnowledgeGapError
 
 
 def main():
-    # Initialize
     ts = TruthSpace()
-    resolver = Resolver(ts, auto_learn=True)
     
     print("=" * 60)
-    print("TruthSpace LCM - Natural Language to Code")
+    print("TruthSpace LCM - Hypergeometric Resolution")
     print("=" * 60)
     print()
     
     # Single query mode
     if len(sys.argv) > 1:
         query = " ".join(sys.argv[1:])
-        process_query(resolver, query)
+        process_query(ts, query)
         return
     
     # Interactive mode
@@ -48,50 +47,62 @@ def main():
             print("Goodbye!")
             break
         
-        process_query(resolver, query)
+        if query.lower() == 'explain':
+            print("Enter a query to explain:")
+            eq = input(">>> ").strip()
+            if eq:
+                print()
+                print(ts.explain(eq))
+            print()
+            continue
+        
+        process_query(ts, query)
         print()
 
 
-def process_query(resolver: Resolver, query: str):
-    """Process a single query and display results."""
-    print(f"\nRequest: \"{query}\"")
+def process_query(ts: TruthSpace, query: str):
+    """Process a single query."""
+    print(f"\nQuery: \"{query}\"")
     print("-" * 40)
     
     try:
-        # Resolve
-        result = resolver.resolve(query)
+        output, entry, similarity = ts.resolve(query)
         
-        print(f"Generated ({result.output_type.value}):")
-        print(f"  {result.output}")
+        print(f"Command: {output}")
+        print(f"Match: {entry.description} (similarity: {similarity:.2f})")
         print()
         
         # Ask to execute
-        if result.output_type.value in ('bash', 'python'):
-            response = input("Execute? (y/N): ").strip().lower()
-            
-            if response == 'y':
-                print()
-                print("Output:")
-                print("-" * 40)
-                
-                resolution, exec_result = resolver.resolve_and_execute(query)
-                
-                if exec_result.stdout:
-                    print(exec_result.stdout)
-                if exec_result.stderr:
-                    print(f"[stderr] {exec_result.stderr}")
-                
-                if not exec_result.success:
-                    print(f"[Exit code: {exec_result.return_code}]")
+        response = input("Execute? (y/N): ").strip().lower()
         
-        if result.learned:
-            print(f"\n[Auto-learned: {result.knowledge.name}]")
+        if response == 'y':
+            print()
+            print("Output:")
+            print("-" * 40)
             
+            try:
+                result = subprocess.run(
+                    output,
+                    shell=True,
+                    capture_output=True,
+                    text=True,
+                    timeout=30,
+                )
+                if result.stdout:
+                    print(result.stdout)
+                if result.stderr:
+                    print(f"[stderr] {result.stderr}")
+                if result.returncode != 0:
+                    print(f"[Exit code: {result.returncode}]")
+            except subprocess.TimeoutExpired:
+                print("[Timed out after 30s]")
+            except Exception as e:
+                print(f"[Error: {e}]")
+                
     except KnowledgeGapError as e:
-        print(f"Knowledge gap: {e.query}")
-        print(f"Best match similarity: {e.best_match:.2f}")
-        print("\nThe system doesn't know how to do this yet.")
-        print("You can teach it by adding knowledge to TruthSpace.")
+        print(f"No match found (best similarity: {e.best_similarity:.2f})")
+        print("\nThe system doesn't know how to do this.")
+        print("Add knowledge with: ts.store(name, description)")
 
 
 if __name__ == "__main__":

@@ -1,90 +1,40 @@
 """
 TruthSpace LCM Core Module
 
-Minimal architecture with maximum knowledge-space usage.
+Hypergeometric knowledge resolution using φ-MAX encoding.
+
+This is a showcase of how pure geometry can replace trained LLM/LCM
+functionality with mathematically-derived semantic resolution.
 
 Components:
-- TruthSpace: Unified knowledge storage and query interface
-- Resolver: Thin NL → Knowledge → Output resolver
-- Ingestor: Knowledge acquisition from various sources
-- PlasticEncoder: ρ-based 12D semantic encoding
-- CodeExecutor: Safe code execution
-- DimensionAwareAutotuner: Dimension-aware knowledge tuning
+- TruthSpace: Geometric knowledge storage and resolution
+- Primitive: Semantic anchors in 12D truth space
+- KnowledgeEntry: Knowledge with geometric position
+
+Key concepts:
+- φ-MAX encoding: φ^level with MAX per dimension
+- Sierpinski property: Overlapping activations don't stack
+- φ-weighted distance: Actions > Domains > Relations
 """
 
 from truthspace_lcm.core.truthspace import (
     TruthSpace,
     KnowledgeEntry,
-    KnowledgeDomain,
-    EntryType,
     KnowledgeGapError,
-    QueryResult,
-)
-from truthspace_lcm.core.resolver import (
-    Resolver,
-    Resolution,
-    ExecutionResult as ResolverExecutionResult,
-    OutputType,
-)
-from truthspace_lcm.core.ingestor import (
-    Ingestor,
-    SourceType,
-    ParsedKnowledge,
-    IngestionError,
-)
-from truthspace_lcm.core.encoder import (
-    PlasticEncoder,
-    SemanticDecomposition,
     Primitive,
-    PrimitiveType,
-    RHO,
-    ENCODING_DIM,
-)
-from truthspace_lcm.core.executor import (
-    CodeExecutor,
-    ExecutionResult,
-    ExecutionStatus,
-)
-from truthspace_lcm.core.autotuner import (
-    DimensionAwareAutotuner,
-    DimensionAnalysis,
-    CollisionReport,
-    PlacementRecommendation,
-    TestCase,
+    PRIMITIVES,
+    PHI,
+    DIM,
+    PHI_BLOCK_WEIGHTS,
 )
 
 __all__ = [
-    # TruthSpace
     "TruthSpace",
     "KnowledgeEntry",
-    "KnowledgeDomain",
-    "EntryType",
     "KnowledgeGapError",
-    "QueryResult",
-    # Resolver
-    "Resolver",
-    "Resolution",
-    "OutputType",
-    # Ingestor
-    "Ingestor",
-    "SourceType",
-    "ParsedKnowledge",
-    "IngestionError",
-    # Encoder
-    "PlasticEncoder",
-    "SemanticDecomposition",
     "Primitive",
-    "PrimitiveType",
-    "RHO",
-    "ENCODING_DIM",
-    # Executor
-    "CodeExecutor",
-    "ExecutionResult",
-    "ExecutionStatus",
-    # Autotuner
-    "DimensionAwareAutotuner",
-    "DimensionAnalysis",
-    "CollisionReport",
-    "PlacementRecommendation",
-    "TestCase",
+    "PRIMITIVES",
+    "PHI",
+    "DIM",
+    "PHI_BLOCK_WEIGHTS",
 ]
