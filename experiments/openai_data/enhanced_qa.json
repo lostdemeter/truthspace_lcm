@@ -1,0 +1,468 @@
+{
+  "qa_pairs": [
+    [
+      "How do I list files in a specific directory?",
+      "Use `ls /path/to/directory`."
+    ],
+    [
+      "Show me all files in the current working directory?",
+      "Use `ls .`."
+    ],
+    [
+      "Can you show files hidden by default?",
+      "Use `ls -a` to include hidden files."
+    ],
+    [
+      "List only directories?",
+      "Use `ls -d /path/to/directory`."
+    ],
+    [
+      "Display file sizes and timestamps?",
+      "Use `ls -l`."
+    ],
+    [
+      "Show file permissions and ownership?",
+      "Use `ls -lR`."
+    ],
+    [
+      "List files sorted by size?",
+      "Use `ls -Sl`."
+    ],
+    [
+      "Display only executable files?",
+      "Use `ls /path/to/directory/*.{c,h,py}`."
+    ],
+    [
+      "How to list files recursively in a directory tree?",
+      "Use `ls -R /path/to/directory`."
+    ],
+    [
+      "Show only executable files in hidden directories?",
+      "Use `find . -type f -name '*.*' -exec ls {} \\; | grep '/bin/'`."
+    ],
+    [
+      "List files excluding symbolic links?",
+      "Use `ls -L /path/to/directory | grep '^d'`."
+    ],
+    [
+      "Display the size and extension of files?",
+      "Use `ls -lS /path/to/directory`."
+    ],
+    [
+      "How to list files in human-readable format by size?",
+      "Use `ls -lh /path/to/directory`."
+    ],
+    [
+      "List all files and directories matching a specific pattern?",
+      "Use `ls *pattern*`."
+    ],
+    [
+      "Display files sorted by modification time, reverse order?",
+      "Use `ls -lt /path/to/directory`."
+    ],
+    [
+      "How do I check free space on a specific mount point?",
+      "Use 'df [mount_point]' to view free space."
+    ],
+    [
+      "Show disk usage at /home directory?",
+      "Execute 'df /home'."
+    ],
+    [
+      "What's the free space for my root partition?",
+      "Use 'df -h /' for root partition info."
+    ],
+    [
+      "How to display total disk size of a drive?",
+      "Run 'df -I /dev/[device]' where [device] is your drive."
+    ],
+    [
+      "To inspect free space on /tmp folder, what command should I use?",
+      "Use 'df /tmp'."
+    ],
+    [
+      "Display disk usage for a mounted NFS share.",
+      "Execute 'df [NFS_share_name]' to see details."
+    ],
+    [
+      "How can I check free space on my SSD?",
+      "Use 'df -h /dev/sd[a-z]' where sd[a-z] is your SSD device."
+    ],
+    [
+      "What command checks available disk space for a partition?",
+      "Use 'df [partition_name]' to view status."
+    ],
+    [
+      "To list all mounted filesystems with sizes, use which command?",
+      "Run 'df -h'."
+    ],
+    [
+      "How do I check free space on /data directory?",
+      "Execute 'df /data'."
+    ],
+    [
+      "Displaying disk usage of a USB drive.",
+      "Use 'df -h [USB_drive]' where [USB_drive] is the device name."
+    ],
+    [
+      "What command should be used to see how much space /var is using?",
+      "Execute 'df /var'."
+    ],
+    [
+      "How can I inspect free storage on my external hard drive?",
+      "Use 'df /dev/[external_hdd_device]' where [external_hdd_device] is your device ID."
+    ],
+    [
+      "To check disk usage of a specific partition, which command should be used?",
+      "Run 'df [partition_path]' to get details."
+    ],
+    [
+      "For a detailed overview of all mounted disks and their sizes, use this command:",
+      "Execute 'df -hT'."
+    ],
+    [
+      "How do I list all running processes?",
+      "Use 'ps aux'."
+    ],
+    [
+      "Show me every process currently running.",
+      "Use 'ps aux'."
+    ],
+    [
+      "What's the best way to find out what a specific process is doing?",
+      "Use 'ps -ef' with the process ID."
+    ],
+    [
+      "How can I view only the top 10 most consuming processes?",
+      "Use 'ps aux --sort=-%cpu | head -n 11'."
+    ],
+    [
+      "How do you check which user owns a specific process?",
+      "Use 'ps auxf' and search for the process ID."
+    ],
+    [
+      "Find out who started a particular process.",
+      "Use 'ps -ef | grep PID' (replace \"PID\" with the process ID)."
+    ],
+    [
+      "Can I display only the running processes in memory?",
+      "Use 'ps -m'."
+    ],
+    [
+      "How to list all background processes?",
+      "Use 'ps -aux --all'."
+    ],
+    [
+      "Show me all processes sorted by their start time.",
+      "Use 'ps aux --sort=tty,etimes'."
+    ],
+    [
+      "List processes ordered by CPU usage.",
+      "Use 'ps aux --sort=-%cpu'."
+    ],
+    [
+      "How to display processes with a specific parent process?",
+      "Use 'ps -ef | grep PID' (replace \"PID\" with the parent process ID)."
+    ],
+    [
+      "What's an efficient way to view all child processes of another running process?",
+      "Use 'ps -o pid,ppid --sort=ppid <pid>' (replace \"<pid>\" with the target process ID)."
+    ],
+    [
+      "Display only processes from a specific user.",
+      "Use 'ps au | grep username'."
+    ],
+    [
+      "How can I show processes sorted by memory usage?",
+      "Use 'ps aux --sort=-rss'."
+    ],
+    [
+      "Is there a way to list all processes on a system without their timestamps?",
+      "Use 'ps -ef | cut -c 1-9' (this won't sort, only lists)."
+    ],
+    [
+      "How do I check open ports?",
+      "Use 'netstat -ant'."
+    ],
+    [
+      "Show all active TCP connections?",
+      "Use 'netstat -ant'."
+    ],
+    [
+      "Find listening services?",
+      "Use 'netstat -aln'."
+    ],
+    [
+      "Display UDP connections?",
+      "Use 'netstat -avn'."
+    ],
+    [
+      "View established TCP sessions?",
+      "Use 'netstat -e'."
+    ],
+    [
+      "Check routing tables?",
+      "Use 'netstat -r'."
+    ],
+    [
+      "Show network interfaces status?",
+      "Use 'netstat -i'."
+    ],
+    [
+      "Display packet statistics?",
+      "Use 'netstat -s'."
+    ],
+    [
+      "How to show listening sockets by user?",
+      "Use 'netstat -an | awk \"/:80/ {print $5, $6}\"\"'."
+    ],
+    [
+      "Find connections with errors?",
+      "Use 'netstat -e'."
+    ],
+    [
+      "Show network statistics for interfaces?",
+      "Use 'netstat -B'."
+    ],
+    [
+      "Get TCP and UDP sockets?",
+      "Use 'netstat -tuln'."
+    ],
+    [
+      "Display listening connections of a specific port?",
+      "Use 'netstat -tan | grep 80'."
+    ],
+    [
+      "Check IP forwarding status?",
+      "Use 'netstat -rn'."
+    ],
+    [
+      "Find network devices information?",
+      "Use 'netstat -e -p'."
+    ],
+    [
+      "How do I see who is using a specific resource?",
+      "Use 'who -b'."
+    ],
+    [
+      "Who are the users with idle sessions?",
+      "Use 'who -q'."
+    ],
+    [
+      "View who's currently logged in and their login times?",
+      "Use 'who -a'."
+    ],
+    [
+      "How do I check available disk space?",
+      "Use 'df -h'."
+    ],
+    [
+      "To view disk usage status, what command should be used?",
+      "Use 'df -h'."
+    ],
+    [
+      "What shows the total disk size?",
+      "Use 'df -H'."
+    ],
+    [
+      "Which command displays disk partition sizes?",
+      "Use 'df'."
+    ],
+    [
+      "How can I monitor disk space in real time?",
+      "Use 'df -ht'."
+    ],
+    [
+      "What's a quick way to see disk usage?",
+      "Use 'df -h'."
+    ],
+    [
+      "For detailed disk usage info, use which tool?",
+      "Use 'df -v'."
+    ],
+    [
+      "To inspect mounted disks on Linux, what command is effective?",
+      "Use 'df'."
+    ],
+    [
+      "How do I list all disk partitions?",
+      "Use 'df -l'."
+    ],
+    [
+      "Which command gives the disk space of specific partition?",
+      "Use 'df /path/to/partition'."
+    ],
+    [
+      "What's an easy method to view root disk usage?",
+      "Use 'df /root'."
+    ],
+    [
+      "To check disk usage including subdirectories, use:",
+      "Use 'df --total'."
+    ],
+    [
+      "How do I show disk usage sorted by size?",
+      "Use 'df -hT'."
+    ],
+    [
+      "For disk space in a single directory, use:",
+      "Use 'df -hP'."
+    ],
+    [
+      "Which command helps monitor disk space efficiently on Linux?",
+      "Use 'df'."
+    ],
+    [
+      "To list all mounted filesystems with their sizes and usage, execute:",
+      "Use 'df -h'."
+    ],
+    [
+      "How do I identify the disk where a file resides?",
+      "Use 'df -i'."
+    ],
+    [
+      "For quick insights on disk space, which command is appropriate?",
+      "Use 'df'."
+    ],
+    [
+      "List all active connections?",
+      "Use 'netstat -tuln'."
+    ],
+    [
+      "Show listening network ports?",
+      "netstat -an | grep ':80'."
+    ],
+    [
+      "See network interfaces?",
+      "netstat -rn for routing."
+    ],
+    [
+      "Display TCP statistics?",
+      "netstat -s to see TCP."
+    ],
+    [
+      "Find network protocol status?",
+      "Use 'netstat -p'."
+    ],
+    [
+      "List IPv6 connections?",
+      "netstat -vlp | grep '::'."
+    ],
+    [
+      "Monitor active sockets?",
+      "netstat -ap."
+    ],
+    [
+      "Check network interface status?",
+      "netstat -i for interface stats."
+    ],
+    [
+      "Display IP routing table?",
+      "netstat -r for routing details."
+    ],
+    [
+      "Track packet loss over network?",
+      "Use 'ping -c 10 server | netstat -ln'."
+    ],
+    [
+      "Show established connections list?",
+      "netstat -e to see all networks."
+    ],
+    [
+      "List running network services?",
+      "netstat -nauwn."
+    ],
+    [
+      "View BGP sessions status?",
+      "netstat -b for BGP sessions."
+    ],
+    [
+      "Inspect DNS server responses?",
+      "netstat -l | grep '6' (for IPv6)."
+    ],
+    [
+      "Check SSH connections?",
+      "Use 'netstat -tuln | grep ssh'."
+    ],
+    [
+      "Show TCP/UDP connections by IP?",
+      "netstat -nap | grep '[IP]'."
+    ],
+    [
+      "Display ARP cache entries?",
+      "netstat -anp | grep 'ether'."
+    ],
+    [
+      "Monitor network interface errors?",
+      "netstat -w for watch mode."
+    ],
+    [
+      "Track internet traffic?",
+      "Use 'netstat -n --all'."
+    ],
+    [
+      "List user logs?",
+      "Use 'who -u' for logs."
+    ],
+    [
+      "Show user permissions?",
+      "Use 'whoami' for identity."
+    ],
+    [
+      "Find online users?",
+      "Use 'who | grep tty'."
+    ],
+    [
+      "See running processes?",
+      "Use 'who -b' for tasks."
+    ],
+    [
+      "List active connections?",
+      "Use 'who -a' for connections."
+    ],
+    [
+      "View password expiration?",
+      "Use 'who -e' for passwords."
+    ],
+    [
+      "List recent logins?",
+      "Use 'who -r' for activity."
+    ],
+    [
+      "How do I list all currently active users?",
+      "Use 'who' to show logged in users."
+    ],
+    [
+      "What command displays who is online?",
+      "The 'who' command lists users logged in."
+    ],
+    [
+      "Which tool checks for online sessions?",
+      "Use 'who' to identify users online."
+    ],
+    [
+      "Is there a method to see all connected user IDs?",
+      "Type 'who' to list active users."
+    ],
+    [
+      "How can I find out who is currently signed in?",
+      "Run 'who' for logged-in users."
+    ],
+    [
+      "Which command reveals current logins?",
+      "Use 'who' to view users online."
+    ],
+    [
+      "Can you spot who's active with a command?",
+      "Run 'who' for users online."
+    ],
+    [
+      "Which command offers insight into concurrent logins?",
+      "Use 'who' to see active users."
+    ],
+    [
+      "What displays users signed in at any given moment?",
+      "'who' lists current users."
+    ]
+  ]
+}

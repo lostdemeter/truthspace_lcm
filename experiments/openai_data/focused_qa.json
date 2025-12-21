@@ -1,0 +1,204 @@
+{
+  "qa_pairs": [
+    [
+      "Can you list all the files and directories on my current directory?",
+      "Use 'ls'. It displays a list of all files and directories present in your current working directory."
+    ],
+    [
+      "How can I see both hidden files along with others?",
+      "Use 'ls -a'. This includes hidden files which start with '.', showing everything in your directory."
+    ],
+    [
+      "Is there a way to display the sizes of all files in my directory?",
+      "Use 'ls -lS'. It lists files according to size, starting from largest to smallest, giving you an overview of what takes up most space."
+    ],
+    [
+      "How do I view the files sorted by their modification times?",
+      "Use 'ls -lt'. The output is sorted based on file modification time, showing recently modified files first."
+    ],
+    [
+      "Can I list only executable programs in my directory?",
+      "Use 'ls *.exe' (replace '.exe' with your specific extension). This command lists all files with the specified extension and checks if they are executable."
+    ],
+    [
+      "How can I check which directories contain files larger than a certain size?",
+      "Use 'find . -type f -size +<size>'. Replace '<size>' with the desired file size. It finds all files larger than your specified size in your current directory."
+    ],
+    [
+      "What command should I use to find all hidden files that are executable and have specific permissions?",
+      "Use 'ls -l /path/to/directory | grep ' (replace ' with the permission code). This command searches for files matching certain permissions, including hidden ones."
+    ],
+    [
+      "How do I display only directories in my current directory?",
+      "Use 'ls -d'. It lists each directory as a single line without any file contents or other details."
+    ],
+    [
+      "Can you show me all .txt files that are executable in my directory hierarchy?",
+      "Use 'find /path/to/directory -type f \\( -name '*.txt' ! -perm /000 \\)'. This command finds text files and checks for executability across your specified directory path."
+    ],
+    [
+      "What if I want to see only files with a specific name pattern in my current directory?",
+      "Use 'ls *.pattern'. Replace 'pattern' with the desired name sequence. It lists all files containing that pattern in their names."
+    ],
+    [
+      "How much disk space is left on my /home directory?",
+      "You can use the `df -h` command to get an overview of file system sizes and usage, focusing specifically on `/home`. It will display how many gigabytes (`GB`) or megabytes (`MB`) are free for storage."
+    ],
+    [
+      "Can you tell me which directories have the most available space?",
+      "To find out which directories offer the most disk space using `df`, first identify your file system paths like `/root` or `/data`. Then, use a combination of commands such as `du -a | sort -n | tail -1` to get directory sizes and `df` for their usage."
+    ],
+    [
+      "How can I check how much disk space each partition is using?",
+      "Use the command `df -h <partition>` (e.g., replace `<partition>` with `/dev/sda1`) to specifically inspect a partition. This will show free space in human-readable units, like GB or MB."
+    ],
+    [
+      "Is there any way to see how much disk usage each user has on my system?",
+      "While `df` shows overall usage, you can use `du -a / | sort -n | tail` to get file sizes and then manually check by partition with `df`. For a more direct solution involving multiple users, consider using an external tool or script."
+    ],
+    [
+      "What command would help me monitor disk space utilization in real-time?",
+      "Use the `watch df` command repeatedly (e.g., `watch df /path/to/monitor`) to constantly update you on the current disk usage status over time."
+    ],
+    [
+      "I need to know which files are taking up a lot of disk space. How can I find that out?",
+      "Combine commands like `du -h * | sort -hr | head -n 10` with `df` for context by running it in sequence, e.g., `du -h * | sort -hr | head -n 10; df /`. This shows file sizes and disk usage."
+    ],
+    [
+      "How do I find the largest files to free up space?",
+      "With `du -h --max-depth=1` followed by `sort -hr`, see file sizes across directories. Then, use `df` on critical partitions to understand how these large files affect your system\u2019s overall storage capacity."
+    ],
+    [
+      "Could you tell me which directories are using the most space without sorting manually?",
+      "Use `du -h --max-depth=1 | sort -r | head -n 5` and then `df /` to see disk usage by file system. This gives a list of largest directories sorted in descending order with space usage."
+    ],
+    [
+      "How can I see if there\u2019s any disk fragmentation that might affect my system?",
+      "Use the `lsof` command followed by `lsblk -f` to get an idea about disk fragmentation across multiple file systems, and then use `df` for quick overviews of each partition's health."
+    ],
+    [
+      "What are some commands I can use to check disk space usage across all mounted partitions?",
+      "With the `df -hT` command, you can see detailed information about filesystems on your system including their total size, used space, and available space. Use this command often since it provides a comprehensive view of disk space usage across multiple partitions."
+    ],
+    [
+      "How can I see what processes are currently running on my Linux system?",
+      "Use 'ps' command with 'ps aux', this will display all running processes including their PID, user, CPU usage, memory usage and more."
+    ],
+    [
+      "Is there a way to check the process IDs of tasks I'm currently running in Linux?",
+      "By executing 'ps' followed by 'aux', you can see all active processes alongside their PIDs."
+    ],
+    [
+      "Can I get information about system processes that are currently consuming most of my CPU resources?",
+      "Running 'ps' with 'top' or 'ps auxw' will help you identify which processes are using the most CPU, along with detailed stats like memory usage."
+    ],
+    [
+      "How can I track down which process is causing an error in my Linux environment?",
+      "Use 'ps' alongside 'grep' command to filter out specific processes by searching for keywords within their command line or status output."
+    ],
+    [
+      "Is there a method to display the list of background jobs that are being run on my Linux system?",
+      "Execute 'ps' with 'bg', this will show you all the processes running in the background."
+    ],
+    [
+      "How do I check which applications or services are using high memory usage?",
+      "Use 'ps aux' followed by 'grep MEM' to filter out processes based on their memory consumption."
+    ],
+    [
+      "Can you tell me how to see which process is currently holding a lockfile that prevents system operation?",
+      "By running 'ps' with 'grep LOCK', this will help identify the processes involved in specific file locking issues."
+    ],
+    [
+      "How can I determine if any of my scripts are running in the background and consuming resources?",
+      "Use 'ps auxw' to display all processes, their status including whether they're in the foreground or background."
+    ],
+    [
+      "Is there a command that allows me to monitor disk usage by different applications?",
+      "While 'ps' doesn't directly show disk usage, you can combine it with 'iostat -p', but for process specific disk usage, use 'cat /proc/[pid]/io'."
+    ],
+    [
+      "How do I find out which processes are using the most bandwidth on my Linux system?",
+      "Use 'netstat -tnlp' to see all network connections and then filter them based on their process ID using 'ps'. Alternatively you can use tools like 'nethogs', 'iftop', 'ss' or 'iptraf'."
+    ],
+    [
+      "How can I view all currently established connections on my Linux network?",
+      "Use 'netstat -a', this command will show every connection that your system has established or is accepting."
+    ],
+    [
+      "Can you tell me how to see listening ports for running services on Linux?",
+      "Use 'netstat -tuln', it will display a list of TCP and UDP sockets which shows the listening ports where your system accepts connections."
+    ],
+    [
+      "What's the command if I need to check detailed information about network interfaces in Linux?",
+      "Use 'netstat -i' which shows statistics related to network interfaces including their state, receive packets count, send packets count etc."
+    ],
+    [
+      "How can someone check network activity in terms of bytes transmitted and received by Linux system?",
+      "Use 'netstat -s', this command will give you a detailed report about the total number of packets transmitted and received over different network interfaces."
+    ],
+    [
+      "Is there a way to see all active connections between hosts on my local network using netstat?",
+      "Yes, use 'netstat -an' which provides the same information as 'netstat -a', but in ASCII format for easier readability."
+    ],
+    [
+      "Can you show me how to monitor TCP connections on Linux with 'netstat' command?",
+      "Use 'netstat -t' to display detailed statistics about TCP (Transmission Control Protocol) connections."
+    ],
+    [
+      "How do I list all the IP addresses associated with each network interface in Linux?",
+      "Use 'netstat -rn', this will provide routing information which includes details like source address and gateway of each route."
+    ],
+    [
+      "Do you know how to check for UDP sessions using netstat command on Linux?",
+      "Yes, use 'netstat -u' which lists up the current state of all UDP (User Datagram Protocol) sockets that are currently established."
+    ],
+    [
+      "If I want detailed information about network interfaces including their addresses and status in Linux, what should I use?",
+      "Use 'netstat -rn', this command will show routing table details which can also include interface information like address and broadcast address."
+    ],
+    [
+      "How would someone list listening TCP servers using netstat on Linux?",
+      "Use 'netstat -anp | grep ':server_port' (replace server_port with the actual port number) to filter out processes that are currently accepting connections on a specific TCP port."
+    ],
+    [
+      "Can you list all currently logged in users on this Linux system?",
+      "You can use the 'who' command to display a list of all users currently logged into your Linux system."
+    ],
+    [
+      "Which command would show me who is actively using resources on my Linux machine?",
+      "The 'who' command would be used here, as it provides information about which users are currently logged in and their active sessions."
+    ],
+    [
+      "How can I see who's online on the current Linux server without logging into any accounts manually?",
+      "Running 'who' will help you identify all those who are currently connected to your Linux server, offering insights into which user accounts are active."
+    ],
+    [
+      "Is there a way to find out who has recently logged in and is still connected via SSH or another method on my Linux system?",
+      "Using the 'who' command should give you an overview of users who have been online since the last reboot until now."
+    ],
+    [
+      "How can I determine which user accounts are being used actively across all systems within a network using Linux?",
+      "The 'who' command isn't designed for inter-system queries, but monitoring each system individually with 'who' can provide insights into active sessions."
+    ],
+    [
+      "Which Linux command provides information about the users who were logged in earlier today and have now disconnected?",
+      "While 'who' doesn't show past logins directly, it lists currently online users. To find out recently offline users, you might need to combine other commands or scripts."
+    ],
+    [
+      "How can I use 'who' command to identify which Linux user accounts are currently utilizing system resources?",
+      "By running the 'who' command, you'll see who's currently active and thus using system resources like CPU, memory, disk space."
+    ],
+    [
+      "What's an alternative way to view who has been logged into a Linux system in the last few minutes, aside from 'last' or 'whoami' commands?",
+      "The 'who' command is another option for seeing users online recently. It provides real-time data unlike static logs like 'last'."
+    ],
+    [
+      "How might one use 'who' to identify which user accounts are being accessed remotely through SSH on a Linux server?",
+      "When someone connects via SSH, their session will show up in the 'who' output as they're actively using system resources."
+    ],
+    [
+      "Can you suggest how I would use 'who' command to get an overview of all users logged into my Linux system during different times of the day?",
+      "While not designed for time-based analysis, the 'who' command can give insights by running it multiple times throughout a day to identify active user accounts."
+    ]
+  ]
+}

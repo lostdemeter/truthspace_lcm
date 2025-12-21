@@ -1,0 +1,660 @@
+{
+  "is": {
+    "word": "is",
+    "level": 14,
+    "phase": 0,
+    "frequency": 1001,
+    "domain": "GROUND"
+  },
+  "the": {
+    "word": "the",
+    "level": 14,
+    "phase": 0.8440451352582893,
+    "frequency": 1002,
+    "domain": "GROUND"
+  },
+  "a": {
+    "word": "a",
+    "level": 14,
+    "phase": 1.5400138433020216,
+    "frequency": 1008,
+    "domain": "GROUND"
+  },
+  "be": {
+    "word": "be",
+    "level": 14,
+    "phase": 2.356194490192345,
+    "frequency": 1000,
+    "domain": "GROUND"
+  },
+  "have": {
+    "word": "have",
+    "level": 14,
+    "phase": 3.141592653589793,
+    "frequency": 1000,
+    "domain": "GROUND"
+  },
+  "it": {
+    "word": "it",
+    "level": 14,
+    "phase": 3.9269908169872414,
+    "frequency": 1000,
+    "domain": "GROUND"
+  },
+  "time": {
+    "word": "time",
+    "level": 13,
+    "phase": 0,
+    "frequency": 1000,
+    "domain": "CONTEXT"
+  },
+  "when": {
+    "word": "when",
+    "level": 13,
+    "phase": 1.0471975511965976,
+    "frequency": 1000,
+    "domain": "CONTEXT"
+  },
+  "where": {
+    "word": "where",
+    "level": 13,
+    "phase": 2.0943951023931953,
+    "frequency": 1000,
+    "domain": "CONTEXT"
+  },
+  "now": {
+    "word": "now",
+    "level": 13,
+    "phase": 3.141592653589793,
+    "frequency": 1000,
+    "domain": "CONTEXT"
+  },
+  "here": {
+    "word": "here",
+    "level": 13,
+    "phase": 4.1887902047863905,
+    "frequency": 1000,
+    "domain": "CONTEXT"
+  },
+  "there": {
+    "word": "there",
+    "level": 13,
+    "phase": 5.235987755982989,
+    "frequency": 1000,
+    "domain": "CONTEXT"
+  },
+  "good": {
+    "word": "good",
+    "level": 12,
+    "phase": 0,
+    "frequency": 1000,
+    "domain": "ATTRIBUTE"
+  },
+  "bad": {
+    "word": "bad",
+    "level": 12,
+    "phase": 3.141592653589793,
+    "frequency": 1000,
+    "domain": "ATTRIBUTE"
+  },
+  "big": {
+    "word": "big",
+    "level": 12,
+    "phase": 0.7853981633974483,
+    "frequency": 1000,
+    "domain": "ATTRIBUTE"
+  },
+  "small": {
+    "word": "small",
+    "level": 12,
+    "phase": 3.9269908169872414,
+    "frequency": 1000,
+    "domain": "ATTRIBUTE"
+  },
+  "new": {
+    "word": "new",
+    "level": 12,
+    "phase": 1.5707963267948966,
+    "frequency": 1001,
+    "domain": "ATTRIBUTE"
+  },
+  "old": {
+    "word": "old",
+    "level": 12,
+    "phase": 4.71238898038469,
+    "frequency": 1000,
+    "domain": "ATTRIBUTE"
+  },
+  "with": {
+    "word": "with",
+    "level": 11,
+    "phase": 0,
+    "frequency": 1000,
+    "domain": "RELATION"
+  },
+  "for": {
+    "word": "for",
+    "level": 11,
+    "phase": 1.0471975511965976,
+    "frequency": 1000,
+    "domain": "RELATION"
+  },
+  "about": {
+    "word": "about",
+    "level": 11,
+    "phase": 2.0943951023931953,
+    "frequency": 1000,
+    "domain": "RELATION"
+  },
+  "like": {
+    "word": "like",
+    "level": 11,
+    "phase": 3.141592653589793,
+    "frequency": 1000,
+    "domain": "RELATION"
+  },
+  "between": {
+    "word": "between",
+    "level": 11,
+    "phase": 4.1887902047863905,
+    "frequency": 1000,
+    "domain": "RELATION"
+  },
+  "file": {
+    "word": "file",
+    "level": 10,
+    "phase": 0,
+    "frequency": 1008,
+    "domain": "ENTITY"
+  },
+  "user": {
+    "word": "user",
+    "level": 10,
+    "phase": 0.7853981633974483,
+    "frequency": 1000,
+    "domain": "ENTITY"
+  },
+  "system": {
+    "word": "system",
+    "level": 10,
+    "phase": 1.5707963267948966,
+    "frequency": 1002,
+    "domain": "ENTITY"
+  },
+  "data": {
+    "word": "data",
+    "level": 10,
+    "phase": 2.356194490192345,
+    "frequency": 1000,
+    "domain": "ENTITY"
+  },
+  "program": {
+    "word": "program",
+    "level": 10,
+    "phase": 3.141592653589793,
+    "frequency": 1000,
+    "domain": "ENTITY"
+  },
+  "network": {
+    "word": "network",
+    "level": 10,
+    "phase": 3.9269908169872414,
+    "frequency": 1002,
+    "domain": "ENTITY"
+  },
+  "show": {
+    "word": "show",
+    "level": 9,
+    "phase": 0.0540885537021858,
+    "frequency": 1002,
+    "domain": "ACTION"
+  },
+  "list": {
+    "word": "list",
+    "level": 9,
+    "phase": 0.552138655968362,
+    "frequency": 1002,
+    "domain": "ACTION"
+  },
+  "get": {
+    "word": "get",
+    "level": 9,
+    "phase": 0.9771975511965976,
+    "frequency": 1000,
+    "domain": "ACTION"
+  },
+  "create": {
+    "word": "create",
+    "level": 9,
+    "phase": 1.5482388605007145,
+    "frequency": 1002,
+    "domain": "ACTION"
+  },
+  "delete": {
+    "word": "delete",
+    "level": 9,
+    "phase": 2.046288962766891,
+    "frequency": 1002,
+    "domain": "ACTION"
+  },
+  "update": {
+    "word": "update",
+    "level": 9,
+    "phase": 2.6179938779914944,
+    "frequency": 1000,
+    "domain": "ACTION"
+  },
+  "run": {
+    "word": "run",
+    "level": 9,
+    "phase": 3.141592653589793,
+    "frequency": 1000,
+    "domain": "ACTION"
+  },
+  "stop": {
+    "word": "stop",
+    "level": 9,
+    "phase": 3.665191429188092,
+    "frequency": 1000,
+    "domain": "ACTION"
+  },
+  "send": {
+    "word": "send",
+    "level": 9,
+    "phase": 4.1887902047863905,
+    "frequency": 1000,
+    "domain": "ACTION"
+  },
+  "know": {
+    "word": "know",
+    "level": 8,
+    "phase": 0,
+    "frequency": 1000,
+    "domain": "KNOWLEDGE"
+  },
+  "think": {
+    "word": "think",
+    "level": 8,
+    "phase": 1.0271975511965976,
+    "frequency": 1000,
+    "domain": "KNOWLEDGE"
+  },
+  "understand": {
+    "word": "understand",
+    "level": 8,
+    "phase": 2.0743951023931957,
+    "frequency": 1000,
+    "domain": "KNOWLEDGE"
+  },
+  "explain": {
+    "word": "explain",
+    "level": 8,
+    "phase": 3.141592653589793,
+    "frequency": 1000,
+    "domain": "KNOWLEDGE"
+  },
+  "learn": {
+    "word": "learn",
+    "level": 8,
+    "phase": 4.1887902047863905,
+    "frequency": 1000,
+    "domain": "KNOWLEDGE"
+  },
+  "remember": {
+    "word": "remember",
+    "level": 8,
+    "phase": 5.235987755982989,
+    "frequency": 1000,
+    "domain": "KNOWLEDGE"
+  },
+  "meaning": {
+    "word": "meaning",
+    "level": 7,
+    "phase": 0,
+    "frequency": 1000,
+    "domain": "ABSTRACT"
+  },
+  "truth": {
+    "word": "truth",
+    "level": 7,
+    "phase": 1.5707963267948966,
+    "frequency": 1000,
+    "domain": "ABSTRACT"
+  },
+  "idea": {
+    "word": "idea",
+    "level": 7,
+    "phase": 3.141592653589793,
+    "frequency": 1000,
+    "domain": "ABSTRACT"
+  },
+  "concept": {
+    "word": "concept",
+    "level": 7,
+    "phase": 4.71238898038469,
+    "frequency": 1000,
+    "domain": "ABSTRACT"
+  },
+  "how": {
+    "word": "how",
+    "level": 8,
+    "phase": 0.9257147127944336,
+    "frequency": 11,
+    "domain": "KNOWLEDGE"
+  },
+  "do": {
+    "word": "do",
+    "level": 9,
+    "phase": 1.1090854532444614,
+    "frequency": 10,
+    "domain": "ACTION"
+  },
+  "i": {
+    "word": "i",
+    "level": 8,
+    "phase": 1.2165508604725426,
+    "frequency": 10,
+    "domain": "KNOWLEDGE"
+  },
+  "files": {
+    "word": "files",
+    "level": 8,
+    "phase": 1.1051720853516707,
+    "frequency": 2,
+    "domain": "KNOWLEDGE"
+  },
+  "use": {
+    "word": "use",
+    "level": 8,
+    "phase": 0.9159315006963652,
+    "frequency": 10,
+    "domain": "KNOWLEDGE"
+  },
+  "ls": {
+    "word": "ls",
+    "level": 8,
+    "phase": 1.55723050834635,
+    "frequency": 1,
+    "domain": "KNOWLEDGE"
+  },
+  "command": {
+    "word": "command",
+    "level": 8,
+    "phase": 1.5599576468070004,
+    "frequency": 1,
+    "domain": "KNOWLEDGE"
+  },
+  "to": {
+    "word": "to",
+    "level": 14,
+    "phase": 1.4113998997397301,
+    "frequency": 10,
+    "domain": "GROUND"
+  },
+  "in": {
+    "word": "in",
+    "level": 14,
+    "phase": 1.4628777138258777,
+    "frequency": 3,
+    "domain": "GROUND"
+  },
+  "directory": {
+    "word": "directory",
+    "level": 8,
+    "phase": 1.8881892962273428,
+    "frequency": 1,
+    "domain": "KNOWLEDGE"
+  },
+  "disk": {
+    "word": "disk",
+    "level": 8,
+    "phase": 1.4301055297682561,
+    "frequency": 2,
+    "domain": "KNOWLEDGE"
+  },
+  "space": {
+    "word": "space",
+    "level": 8,
+    "phase": 1.464286316300307,
+    "frequency": 2,
+    "domain": "KNOWLEDGE"
+  },
+  "df": {
+    "word": "df",
+    "level": 8,
+    "phase": 1.551934641896924,
+    "frequency": 1,
+    "domain": "KNOWLEDGE"
+  },
+  "h": {
+    "word": "h",
+    "level": 8,
+    "phase": 1.2025414408982522,
+    "frequency": 1,
+    "domain": "KNOWLEDGE"
+  },
+  "usage": {
+    "word": "usage",
+    "level": 8,
+    "phase": 1.6523652736723373,
+    "frequency": 1,
+    "domain": "KNOWLEDGE"
+  },
+  "find": {
+    "word": "find",
+    "level": 8,
+    "phase": 1.6871373393030575,
+    "frequency": 1,
+    "domain": "KNOWLEDGE"
+  },
+  "running": {
+    "word": "running",
+    "level": 9,
+    "phase": 1.890233264056823,
+    "frequency": 3,
+    "domain": "ACTION"
+  },
+  "processes": {
+    "word": "processes",
+    "level": 8,
+    "phase": 1.4463114107343906,
+    "frequency": 2,
+    "domain": "KNOWLEDGE"
+  },
+  "ps": {
+    "word": "ps",
+    "level": 8,
+    "phase": 1.4090147925819454,
+    "frequency": 1,
+    "domain": "KNOWLEDGE"
+  },
+  "aux": {
+    "word": "aux",
+    "level": 8,
+    "phase": 1.791298678506379,
+    "frequency": 1,
+    "domain": "KNOWLEDGE"
+  },
+  "or": {
+    "word": "or",
+    "level": 14,
+    "phase": 1.7272952458680813,
+    "frequency": 3,
+    "domain": "GROUND"
+  },
+  "top": {
+    "word": "top",
+    "level": 8,
+    "phase": 1.9885673627508214,
+    "frequency": 1,
+    "domain": "KNOWLEDGE"
+  },
+  "see": {
+    "word": "see",
+    "level": 8,
+    "phase": 1.9568067446313566,
+    "frequency": 3,
+    "domain": "KNOWLEDGE"
+  },
+  "check": {
+    "word": "check",
+    "level": 8,
+    "phase": 2.198090029761944,
+    "frequency": 4,
+    "domain": "KNOWLEDGE"
+  },
+  "connections": {
+    "word": "connections",
+    "level": 8,
+    "phase": 2.5344305515537,
+    "frequency": 2,
+    "domain": "KNOWLEDGE"
+  },
+  "netstat": {
+    "word": "netstat",
+    "level": 8,
+    "phase": 2.2973135238483504,
+    "frequency": 1,
+    "domain": "KNOWLEDGE"
+  },
+  "ss": {
+    "word": "ss",
+    "level": 8,
+    "phase": 2.6878156793135903,
+    "frequency": 1,
+    "domain": "KNOWLEDGE"
+  },
+  "touch": {
+    "word": "touch",
+    "level": 8,
+    "phase": 1.3432057244762547,
+    "frequency": 1,
+    "domain": "KNOWLEDGE"
+  },
+  "filename": {
+    "word": "filename",
+    "level": 8,
+    "phase": 1.252037161342812,
+    "frequency": 2,
+    "domain": "KNOWLEDGE"
+  },
+  "an": {
+    "word": "an",
+    "level": 14,
+    "phase": 1.6134972138420773,
+    "frequency": 1,
+    "domain": "GROUND"
+  },
+  "empty": {
+    "word": "empty",
+    "level": 8,
+    "phase": 1.2968633773390623,
+    "frequency": 1,
+    "domain": "KNOWLEDGE"
+  },
+  "rm": {
+    "word": "rm",
+    "level": 8,
+    "phase": 1.5812196053982537,
+    "frequency": 1,
+    "domain": "KNOWLEDGE"
+  },
+  "copy": {
+    "word": "copy",
+    "level": 8,
+    "phase": 1.4820922730682398,
+    "frequency": 2,
+    "domain": "KNOWLEDGE"
+  },
+  "cp": {
+    "word": "cp",
+    "level": 8,
+    "phase": 1.571759273669414,
+    "frequency": 1,
+    "domain": "KNOWLEDGE"
+  },
+  "source": {
+    "word": "source",
+    "level": 8,
+    "phase": 1.260126862291139,
+    "frequency": 2,
+    "domain": "KNOWLEDGE"
+  },
+  "destination": {
+    "word": "destination",
+    "level": 8,
+    "phase": 1.7920563975246468,
+    "frequency": 2,
+    "domain": "KNOWLEDGE"
+  },
+  "move": {
+    "word": "move",
+    "level": 9,
+    "phase": 1.0884291021345778,
+    "frequency": 2,
+    "domain": "ACTION"
+  },
+  "mv": {
+    "word": "mv",
+    "level": 8,
+    "phase": 1.8054908074531906,
+    "frequency": 1,
+    "domain": "KNOWLEDGE"
+  },
+  "who": {
+    "word": "who",
+    "level": 8,
+    "phase": 1.5066348851540272,
+    "frequency": 2,
+    "domain": "KNOWLEDGE"
+  },
+  "logged": {
+    "word": "logged",
+    "level": 9,
+    "phase": 1.5178317303349602,
+    "frequency": 2,
+    "domain": "ACTION"
+  },
+  "w": {
+    "word": "w",
+    "level": 8,
+    "phase": 1.8161850066054719,
+    "frequency": 1,
+    "domain": "KNOWLEDGE"
+  },
+  "users": {
+    "word": "users",
+    "level": 8,
+    "phase": 1.9781372582873498,
+    "frequency": 1,
+    "domain": "KNOWLEDGE"
+  },
+  "uptime": {
+    "word": "uptime",
+    "level": 8,
+    "phase": 2.190665176381512,
+    "frequency": 2,
+    "domain": "KNOWLEDGE"
+  },
+  "long": {
+    "word": "long",
+    "level": 12,
+    "phase": 2.260839419944811,
+    "frequency": 1,
+    "domain": "ATTRIBUTE"
+  },
+  "has": {
+    "word": "has",
+    "level": 8,
+    "phase": 2.396714381619261,
+    "frequency": 1,
+    "domain": "KNOWLEDGE"
+  },
+  "been": {
+    "word": "been",
+    "level": 8,
+    "phase": 2.1831699752944287,
+    "frequency": 1,
+    "domain": "KNOWLEDGE"
+  }
+}
