@@ -1,40 +1,46 @@
 """
-TruthSpace LCM - Hypergeometric Language-Code Model
+TruthSpace LCM - Geometric Language Concept Model
 
-A natural language to code system that uses φ-MAX geometric encoding
-to translate human requests into executable bash commands.
+A conversational AI system using pure geometric operations.
+All semantic operations are geometric operations in vector space.
 
-No training. No keywords. Pure hypergeometry.
+No training. No neural networks. Pure geometry.
 
 Example:
-    from truthspace_lcm import TruthSpace
+    from truthspace_lcm.core import Vocabulary, KnowledgeBase, StyleEngine
     
-    ts = TruthSpace()
-    output, entry, similarity = ts.resolve("list files in directory")
-    print(output)  # ls
+    vocab = Vocabulary(dim=64)
+    kb = KnowledgeBase(vocab)
+    kb.add_qa_pair("What is TruthSpace?", "A geometric approach to language.")
+    
+    results = kb.search_qa("Tell me about TruthSpace")
 """
 
-__version__ = "0.3.0"
+__version__ = "0.4.0"
 __author__ = "TruthSpace Team"
 
-from truthspace_lcm.core.truthspace import (
-    TruthSpace,
-    KnowledgeEntry,
-    KnowledgeGapError,
-    Primitive,
-    PRIMITIVES,
-    PHI,
-    DIM,
-    PHI_BLOCK_WEIGHTS,
+from truthspace_lcm.core import (
+    Vocabulary,
+    KnowledgeBase,
+    StyleEngine,
+    Style,
+    Fact,
+    Triple,
+    QAPair,
+    cosine_similarity,
+    tokenize,
+    detect_question_type,
 )
 
 __all__ = [
-    "TruthSpace",
-    "KnowledgeEntry",
-    "KnowledgeGapError",
-    "Primitive",
-    "PRIMITIVES",
-    "PHI",
-    "DIM",
-    "PHI_BLOCK_WEIGHTS",
+    "Vocabulary",
+    "KnowledgeBase",
+    "StyleEngine",
+    "Style",
+    "Fact",
+    "Triple",
+    "QAPair",
+    "cosine_similarity",
+    "tokenize",
+    "detect_question_type",
 ]

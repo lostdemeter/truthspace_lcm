@@ -1,65 +1,84 @@
 """
 TruthSpace LCM Core Module
 
-Hypergeometric knowledge resolution using φ-MAX encoding and stacked
-geometric embeddings.
+Geometric Chat System (GCS) implementation based on the SDS specification.
+
+Core Principle: All semantic operations are geometric operations in vector space.
 
 Primary Components:
-- StackedLCM: 128D hierarchical embedding system (primary driver)
-- TruthSpace: Original 12D geometric knowledge storage
+- Vocabulary: Hash-based word positions with IDF weighting
+- KnowledgeBase: Facts, triples, Q&A pairs with semantic search
+- StyleEngine: Style extraction, classification, and transfer
 
-Architecture:
-- StackedLCM uses 7 layers to encode text at multiple scales
-- No training required - structure emerges from geometric operations
-- Interpretable - each dimension has semantic meaning
+Core Formulas:
+- Word Position: pos(w) = hash(w) → ℝ^dim (deterministic)
+- Text Encoding: enc(t) = Σᵢ wᵢ·pos(wordᵢ) / Σᵢ wᵢ (IDF-weighted)
+- Style Centroid: c = (1/n) Σᵢ enc(exemplarᵢ)
+- Style Transfer: styled = (1-α)·content + α·centroid
+- Similarity: cos(θ) = (a·b) / (‖a‖·‖b‖)
 
 Usage:
-    from truthspace_lcm.core import StackedLCM
+    from truthspace_lcm.core import Vocabulary, KnowledgeBase, StyleEngine
     
-    lcm = StackedLCM()
-    lcm.ingest("chop onions", "cooking food preparation")
-    content, similarity, cluster = lcm.resolve("cut vegetables")
+    # Create vocabulary and knowledge base
+    vocab = Vocabulary(dim=64)
+    kb = KnowledgeBase(vocab)
+    
+    # Ingest knowledge
+    kb.ingest_text("Captain Ahab is the captain of the Pequod.")
+    
+    # Query
+    results = kb.search_qa("Who is Captain Ahab?")
+    
+    # Style operations
+    style_engine = StyleEngine(vocab)
+    style = style_engine.extract_from_text(hemingway_text, "Hemingway")
+    classification = style_engine.classify("The man sat alone.")
 """
 
-from truthspace_lcm.core.truthspace import (
-    TruthSpace,
-    KnowledgeEntry,
-    KnowledgeGapError,
-    Primitive,
-    PRIMITIVES,
-    PHI,
-    DIM,
-    PHI_BLOCK_WEIGHTS,
+from .vocabulary import (
+    Vocabulary,
+    tokenize,
+    word_position,
+    cosine_similarity,
+    euclidean_distance,
+    DEFAULT_DIM,
 )
 
-from truthspace_lcm.core.stacked_lcm import (
-    StackedLCM,
-    MorphologicalLayer,
-    LexicalLayer,
-    SyntacticLayer,
-    CompositionalLayer,
-    DisambiguationLayer,
-    ContextualLayer,
-    GlobalLayer,
+from .knowledge import (
+    KnowledgeBase,
+    Fact,
+    Triple,
+    QAPair,
+    detect_question_type,
+    extract_triples,
+    generate_qa_from_triple,
+    QUESTION_PATTERNS,
+)
+
+from .style import (
+    StyleEngine,
+    Style,
 )
 
 __all__ = [
-    # Primary - Stacked LCM
-    "StackedLCM",
-    "MorphologicalLayer",
-    "LexicalLayer", 
-    "SyntacticLayer",
-    "CompositionalLayer",
-    "DisambiguationLayer",
-    "ContextualLayer",
-    "GlobalLayer",
-    # Legacy - TruthSpace
-    "TruthSpace",
-    "KnowledgeEntry",
-    "KnowledgeGapError",
-    "Primitive",
-    "PRIMITIVES",
-    "PHI",
-    "DIM",
-    "PHI_BLOCK_WEIGHTS",
+    # Vocabulary
+    "Vocabulary",
+    "tokenize",
+    "word_position",
+    "cosine_similarity",
+    "euclidean_distance",
+    "DEFAULT_DIM",
+    # Knowledge Base
+    "KnowledgeBase",
+    "Fact",
+    "Triple",
+    "QAPair",
+    "detect_question_type",
+    "extract_triples",
+    "generate_qa_from_triple",
+    "QUESTION_PATTERNS",
+    # Style Engine
+    "StyleEngine",
+    "Style",
 ]

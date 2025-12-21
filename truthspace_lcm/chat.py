@@ -1,457 +1,253 @@
 #!/usr/bin/env python3
 """
-TruthSpace LCM Chat Interface
+TruthSpace Geometric Chat System
 
-A geometric chat system that:
-1. Detects user intent (chat, bash command, question)
-2. Resolves queries against knowledge base
-3. Executes bash commands when appropriate
-4. Provides conversational responses
+An interactive chat demonstration of the Geometric LCM approach.
+
+Features:
+- Semantic Q&A using geometric similarity
+- Style extraction and classification
+- Knowledge ingestion from text
+- Interactive CLI with commands
 
 Usage:
     python -m truthspace_lcm.chat
     
 Or:
-    from truthspace_lcm.chat import LCMChat
-    chat = LCMChat()
+    from truthspace_lcm.chat import GeometricChat
+    chat = GeometricChat()
     chat.run()
 """
 
-import subprocess
-import sys
 import re
 from typing import Tuple, Optional, List, Dict
-from truthspace_lcm.core import StackedLCM
+
+from truthspace_lcm.core import (
+    Vocabulary,
+    KnowledgeBase,
+    StyleEngine,
+    Style,
+    cosine_similarity,
+    detect_question_type,
+)
 
 
-# =============================================================================
-# INTENT TYPES
-# =============================================================================
-
-class Intent:
-    BASH = "bash"           # User wants to execute a command
-    QUESTION = "question"   # User is asking a question
-    CHAT = "chat"           # General conversation
-    HELP = "help"           # User needs help
-    EXIT = "exit"           # User wants to quit
-
-
-# =============================================================================
-# KNOWLEDGE BASE - Bootstrap with essential knowledge
-# =============================================================================
-
-BOOTSTRAP_KNOWLEDGE = [
-    # Bash commands
-    {"content": "ls -la", "description": "list show files directory all hidden terminal bash command"},
-    {"content": "ls", "description": "list files directory terminal bash command"},
-    {"content": "pwd", "description": "print working directory current path terminal bash command"},
-    {"content": "cd", "description": "change directory navigate folder terminal bash command"},
-    {"content": "mkdir", "description": "make create directory folder new terminal bash command"},
-    {"content": "rm", "description": "remove delete file terminal bash command"},
-    {"content": "rm -rf", "description": "remove delete directory folder force recursive terminal bash command"},
-    {"content": "cp", "description": "copy file duplicate terminal bash command"},
-    {"content": "mv", "description": "move rename file directory terminal bash command"},
-    {"content": "cat", "description": "show display read file contents terminal bash command"},
-    {"content": "grep", "description": "search find pattern text file terminal bash command"},
-    {"content": "find", "description": "search locate file directory name terminal bash command"},
-    {"content": "ps aux", "description": "list show process running system terminal bash command"},
-    {"content": "top", "description": "show system process cpu memory monitor terminal bash command"},
-    {"content": "df -h", "description": "disk space usage filesystem terminal bash command"},
-    {"content": "du -sh", "description": "directory size disk usage terminal bash command"},
-    {"content": "chmod", "description": "change permissions file directory terminal bash command"},
-    {"content": "chown", "description": "change owner file directory terminal bash command"},
-    {"content": "echo", "description": "print display text output terminal bash command"},
-    {"content": "head", "description": "show first lines file beginning terminal bash command"},
-    {"content": "tail", "description": "show last lines file end terminal bash command"},
-    {"content": "wc -l", "description": "count lines words file terminal bash command"},
-    {"content": "sort", "description": "sort lines file alphabetical terminal bash command"},
-    {"content": "uniq", "description": "unique lines remove duplicates file terminal bash command"},
-    {"content": "tar -xzf", "description": "extract archive tar gzip file terminal bash command"},
-    {"content": "tar -czf", "description": "create archive tar gzip compress terminal bash command"},
-    {"content": "wget", "description": "download file url web terminal bash command"},
-    {"content": "curl", "description": "transfer data url http request terminal bash command"},
-    {"content": "ssh", "description": "secure shell remote connect server terminal bash command"},
-    {"content": "scp", "description": "secure copy file remote server terminal bash command"},
-    {"content": "git status", "description": "git show status changes repository terminal bash command"},
-    {"content": "git log", "description": "git show history commits repository terminal bash command"},
-    {"content": "git diff", "description": "git show changes differences repository terminal bash command"},
-    {"content": "git pull", "description": "git fetch merge remote changes repository terminal bash command"},
-    {"content": "git push", "description": "git upload commits remote repository terminal bash command"},
-    
-    # Chat/Social responses
-    {"content": "Hello! How can I help you today?", "description": "hello hi greeting welcome how are you"},
-    {"content": "You're welcome! Let me know if you need anything else.", "description": "you're welcome no problem glad to help thanks thank you"},
-    {"content": "Goodbye! Have a great day!", "description": "goodbye bye see you later exit quit"},
-    {"content": "I'm here to help with bash commands and answer questions.", "description": "help what can you do capabilities features"},
-    {"content": "I understand. How can I assist you further?", "description": "understand okay got it i see"},
-    {"content": "That's a great question! Let me help you with that.", "description": "question ask how what why when where"},
-    
-    # Help/Meta
-    {"content": "Type 'exit' or 'quit' to leave the chat.", "description": "exit quit leave stop end session"},
-    {"content": "I can help you with bash commands. Just describe what you want to do!", "description": "help bash command terminal what can you do"},
+BOOTSTRAP_QA = [
+    ("What is TruthSpace?", "TruthSpace is a geometric approach to language understanding where meaning is position in semantic space."),
+    ("How does geometric encoding work?", "Text is encoded as IDF-weighted average of word positions, where each word has a deterministic position from its hash."),
+    ("What is a style centroid?", "A style centroid is the average position of all exemplars of that style in semantic space."),
+    ("How does style transfer work?", "Style transfer interpolates content toward the target style centroid: styled = (1-a)*content + a*centroid."),
+    ("What is cosine similarity?", "Cosine similarity measures the angle between two vectors, ranging from -1 to 1."),
+    ("What is gap-filling?", "Gap-filling is the Q&A principle where questions define gaps in semantic space and answers fill those gaps."),
+    ("What are the question types?", "Question types are WHO, WHAT, WHERE, WHEN, WHY, and HOW - each projects onto a different semantic axis."),
+    ("What is IDF weighting?", "IDF weighting gives rare words higher weight so meaningful words contribute more than common ones."),
+    ("How is this different from LLMs?", "Unlike neural LLMs, this uses pure geometry - no training, no learned weights, deterministic and interpretable."),
+    ("What is the dimensionality?", "The default semantic space is 64-dimensional, though this is configurable."),
 ]
 
+BOOTSTRAP_STYLES = {
+    'formal': [
+        "The implementation demonstrates significant improvements in accuracy.",
+        "One must consider the theoretical implications of this approach.",
+        "The methodology employed herein follows established protocols.",
+    ],
+    'casual': [
+        "Hey, this thing actually works pretty well!",
+        "So basically, it just averages the word positions.",
+        "Cool, right? No neural networks needed.",
+    ],
+    'technical': [
+        "The centroid is computed as mean of encoded exemplars.",
+        "Cosine similarity returns values in the range negative one to one.",
+        "Hash-based positioning ensures deterministic word vectors.",
+    ],
+}
 
-# =============================================================================
-# LCM CHAT
-# =============================================================================
 
-class LCMChat:
-    """
-    Interactive chat interface powered by StackedLCM.
+class GeometricChat:
+    """Interactive chat interface demonstrating the Geometric LCM."""
     
-    Features:
-    - Intent detection (bash vs chat vs question)
-    - Bash command execution with confirmation
-    - Knowledge-based response generation
-    - Context tracking
-    """
-    
-    def __init__(self, safe_mode: bool = True):
-        """
-        Initialize the chat.
-        
-        Args:
-            safe_mode: If True, ask for confirmation before executing commands
-        """
-        self.lcm = StackedLCM()
-        self.safe_mode = safe_mode
-        self.context: List[str] = []  # Recent queries for context
-        self.max_context = 5
-        
-        # Bootstrap with essential knowledge
+    def __init__(self):
+        self.vocab = Vocabulary(dim=64)
+        self.kb = KnowledgeBase(self.vocab)
+        self.style_engine = StyleEngine(self.vocab)
+        self.current_style = None
+        self.debug_mode = False
         self._bootstrap()
     
     def _bootstrap(self):
-        """Load bootstrap knowledge into the LCM."""
-        print("Initializing knowledge base...")
-        self.lcm.ingest_batch(BOOTSTRAP_KNOWLEDGE)
-        print(f"Loaded {len(BOOTSTRAP_KNOWLEDGE)} knowledge entries.")
+        print("Initializing Geometric Chat System...")
+        for q, a in BOOTSTRAP_QA:
+            self.kb.add_qa_pair(q, a, source="bootstrap")
+        print(f"  Loaded {len(BOOTSTRAP_QA)} Q&A pairs")
+        
+        for name, exemplars in BOOTSTRAP_STYLES.items():
+            self.style_engine.extract_style(exemplars, name)
+        print(f"  Extracted {len(BOOTSTRAP_STYLES)} styles: {list(BOOTSTRAP_STYLES.keys())}")
+        print("Ready!\n")
     
-    def detect_intent(self, query: str) -> Tuple[str, float]:
-        """
-        Detect the user's intent from their query.
+    def query(self, question: str) -> Tuple[str, float, Dict]:
+        debug_info = {}
+        qtype = detect_question_type(question)
+        debug_info['question_type'] = qtype
         
-        Returns:
-            (intent_type, confidence)
-        """
-        query_lower = query.lower().strip()
+        qa_results = self.kb.search_qa(question, k=3)
         
-        # Direct exit commands
-        if query_lower in ['exit', 'quit', 'bye', 'goodbye', 'q']:
-            return Intent.EXIT, 1.0
-        
-        # Direct help commands
-        if query_lower in ['help', '?', 'help me']:
-            return Intent.HELP, 1.0
-        
-        # Check for bash-like patterns
-        bash_patterns = [
-            r'^ls\b', r'^cd\b', r'^pwd\b', r'^mkdir\b', r'^rm\b', r'^cp\b', r'^mv\b',
-            r'^cat\b', r'^grep\b', r'^find\b', r'^ps\b', r'^top\b', r'^df\b', r'^du\b',
-            r'^chmod\b', r'^chown\b', r'^echo\b', r'^head\b', r'^tail\b', r'^wc\b',
-            r'^sort\b', r'^uniq\b', r'^tar\b', r'^wget\b', r'^curl\b', r'^ssh\b',
-            r'^scp\b', r'^git\b', r'^python\b', r'^pip\b', r'^npm\b', r'^docker\b',
-            r'^sudo\b', r'^apt\b', r'^yum\b', r'^brew\b',
-        ]
-        
-        for pattern in bash_patterns:
-            if re.match(pattern, query_lower):
-                return Intent.BASH, 0.95
-        
-        # Use LCM to detect intent based on similarity to known patterns
-        query_emb = self.lcm.encode(query, update_stats=False)
-        
-        # Check similarity to bash knowledge
-        bash_sims = []
-        chat_sims = []
-        
-        for pid, (content, emb) in self.lcm.points.items():
-            sim = self.lcm.cosine_similarity(query_emb, emb)
+        if qa_results:
+            best_qa, best_sim = qa_results[0]
+            debug_info['best_match'] = best_qa.question
+            debug_info['similarity'] = best_sim
             
-            # Classify based on content
-            if any(kw in content.lower() for kw in ['terminal', 'bash', 'command', 'ls', 'cd', 'rm', 'git']):
-                bash_sims.append(sim)
+            if best_sim > 0.5:
+                answer = best_qa.answer
+                confidence = best_sim
+            elif best_sim > 0.3:
+                answer = f"I think: {best_qa.answer}"
+                confidence = best_sim
             else:
-                chat_sims.append(sim)
-        
-        avg_bash = sum(bash_sims) / len(bash_sims) if bash_sims else 0
-        avg_chat = sum(chat_sims) / len(chat_sims) if chat_sims else 0
-        
-        # Detect bash intent from natural language
-        bash_keywords = ['list', 'show', 'files', 'directory', 'folder', 'delete', 'remove',
-                        'create', 'make', 'copy', 'move', 'rename', 'search', 'find',
-                        'process', 'processes', 'running', 'disk', 'space', 'permission', 
-                        'download', 'git', 'status', 'size']
-        
-        query_words = set(query_lower.split())
-        bash_keyword_count = len(query_words & set(bash_keywords))
-        
-        # Question patterns
-        question_words = ['how', 'what', 'where', 'when', 'why', 'which', 'can', 'could', 'would']
-        is_question = any(query_lower.startswith(w) for w in question_words) or query.endswith('?')
-        
-        # Decision logic
-        if bash_keyword_count >= 2 or (bash_keyword_count >= 1 and avg_bash > avg_chat):
-            return Intent.BASH, min(0.7 + bash_keyword_count * 0.1, 0.95)
-        elif is_question:
-            return Intent.QUESTION, 0.8
+                answer = "I don't have enough information to answer that question."
+                confidence = 0.0
         else:
-            return Intent.CHAT, 0.7
+            answer = "I don't have any knowledge to search."
+            confidence = 0.0
+        
+        if self.current_style and confidence > 0.3:
+            styled_vec, style_words = self.style_engine.transfer(answer, self.current_style, strength=0.3)
+            debug_info['style_applied'] = self.current_style
+            debug_info['style_words'] = style_words[:5]
+        
+        return answer, confidence, debug_info
     
-    def resolve_bash_command(self, query: str) -> Tuple[str, float]:
-        """
-        Resolve a natural language query to a bash command.
-        
-        Returns:
-            (command, confidence)
-        """
-        query_lower = query.lower().strip()
-        
-        # Direct command - return as-is
-        direct_commands = ['ls', 'cd', 'pwd', 'mkdir', 'rm', 'cp', 'mv', 'cat', 
-                          'grep', 'find', 'ps', 'git', 'echo', 'head', 'tail',
-                          'df', 'du', 'chmod', 'chown', 'tar', 'wget', 'curl',
-                          'ssh', 'scp', 'top', 'sort', 'uniq', 'wc', 'sudo']
-        
-        if any(query_lower.startswith(cmd) for cmd in direct_commands):
-            return query, 0.95
-        
-        # Natural language to command mapping
-        nl_to_cmd = {
-            # File listing
-            ('list', 'files'): 'ls -la',
-            ('show', 'files'): 'ls -la',
-            ('list', 'directory'): 'ls -la',
-            ('show', 'directory'): 'ls -la',
-            ('what', 'files'): 'ls -la',
-            ('list', 'all'): 'ls -la',
-            
-            # Current directory
-            ('current', 'directory'): 'pwd',
-            ('where', 'am'): 'pwd',
-            ('print', 'directory'): 'pwd',
-            
-            # Process listing
-            ('running', 'processes'): 'ps aux',
-            ('show', 'processes'): 'ps aux',
-            ('list', 'processes'): 'ps aux',
-            ('what', 'running'): 'ps aux',
-            ('processes', 'running'): 'ps aux',
-            ('what', 'processes'): 'ps aux',
-            
-            # Disk space
-            ('disk', 'space'): 'df -h',
-            ('disk', 'usage'): 'df -h',
-            ('free', 'space'): 'df -h',
-            ('storage', 'space'): 'df -h',
-            ('show', 'space'): 'df -h',
-            
-            # Directory size
-            ('directory', 'size'): 'du -sh .',
-            ('folder', 'size'): 'du -sh .',
-            
-            # Git
-            ('git', 'status'): 'git status',
-            ('git', 'changes'): 'git status',
-            ('git', 'history'): 'git log --oneline -10',
-            ('git', 'log'): 'git log --oneline -10',
-            ('git', 'diff'): 'git diff',
-        }
-        
-        # Check for keyword matches
-        query_words = set(query_lower.split())
-        for keywords, command in nl_to_cmd.items():
-            if all(kw in query_words for kw in keywords):
-                return command, 0.9
-        
-        # Partial matches (single keyword triggers)
-        partial_matches = {
-            'files': 'ls -la',
-            'directory': 'ls -la',
-            'processes': 'ps aux',
-            'running': 'ps aux',
-            'space': 'df -h',
-        }
-        
-        for keyword, command in partial_matches.items():
-            if keyword in query_words:
-                return command, 0.7
-        
-        # Fall back to LCM resolution
-        content, sim, cluster = self.lcm.resolve(query)
-        
-        # Check if the resolved content looks like a command
-        if content and any(content.startswith(cmd) for cmd in direct_commands):
-            return content, sim
-        
-        return None, 0.0
+    def analyze_style(self, text: str) -> List[Tuple[str, float]]:
+        return self.style_engine.classify(text)
     
-    def execute_command(self, command: str) -> Tuple[bool, str]:
-        """
-        Execute a bash command and return the result.
-        
-        Returns:
-            (success, output)
-        """
-        # Safety check - block dangerous commands
-        dangerous_patterns = [
-            r'rm\s+-rf\s+/', r'rm\s+-rf\s+~', r'rm\s+-rf\s+\*',
-            r'dd\s+', r'mkfs', r':\(\)\{', r'>\s*/dev/sd',
-            r'chmod\s+-R\s+777\s+/', r'chown\s+-R.*/',
-        ]
-        
-        for pattern in dangerous_patterns:
-            if re.search(pattern, command):
-                return False, f"⚠️  Blocked potentially dangerous command: {command}"
-        
-        try:
-            result = subprocess.run(
-                command,
-                shell=True,
-                capture_output=True,
-                text=True,
-                timeout=30,
-                cwd=None  # Use current directory
-            )
-            
-            output = result.stdout if result.stdout else result.stderr
-            success = result.returncode == 0
-            
-            if not output:
-                output = "(no output)" if success else f"Error (code {result.returncode})"
-            
-            return success, output.strip()
-            
-        except subprocess.TimeoutExpired:
-            return False, "⚠️  Command timed out (30s limit)"
-        except Exception as e:
-            return False, f"⚠️  Error: {str(e)}"
+    def process_command(self, cmd: str, args: str) -> str:
+        if cmd == '/help':
+            return """
+Commands:
+  /help          Show this help
+  /style <name>  Set style (formal, casual, technical)
+  /style list    List styles
+  /style off     Turn off style
+  /analyze <txt> Analyze text style
+  /debug on|off  Toggle debug mode
+  /stats         Show statistics
+  /quit          Exit
+
+Just type questions to query the knowledge base!
+"""
+        elif cmd == '/style':
+            if args == 'list':
+                return f"Available styles: {', '.join(self.style_engine.styles.keys())}"
+            elif args == 'off':
+                self.current_style = None
+                return "Style turned off."
+            elif args in self.style_engine.styles:
+                self.current_style = args
+                return f"Style set to: {args}"
+            else:
+                return f"Unknown style: {args}"
+        elif cmd == '/analyze':
+            if not args:
+                return "Usage: /analyze <text>"
+            results = self.analyze_style(args)
+            lines = ["Style analysis:"]
+            for name, score in results[:3]:
+                lines.append(f"  {name}: {score:.3f}")
+            return "\n".join(lines)
+        elif cmd == '/debug':
+            if args == 'on':
+                self.debug_mode = True
+                return "Debug mode enabled."
+            elif args == 'off':
+                self.debug_mode = False
+                return "Debug mode disabled."
+            return f"Debug is {'on' if self.debug_mode else 'off'}"
+        elif cmd == '/stats':
+            return f"Vocab: {len(self.vocab.word_positions)} words, Q&A: {len(self.kb.qa_pairs)}, Styles: {len(self.style_engine.styles)}"
+        elif cmd == '/quit':
+            return "QUIT"
+        return f"Unknown command: {cmd}"
     
-    def generate_response(self, query: str, intent: str) -> str:
-        """Generate a response based on query and intent."""
-        content, sim, cluster = self.lcm.resolve(query)
-        
-        if sim > 0.7:
-            return content
-        elif sim > 0.5:
-            return f"I think you might be looking for: {content}"
-        else:
-            return "I'm not sure I understand. Could you rephrase that?"
-    
-    def process(self, query: str) -> str:
-        """
-        Process a user query and return a response.
-        
-        This is the main entry point for processing queries.
-        """
-        query = query.strip()
-        if not query:
+    def process(self, user_input: str) -> str:
+        user_input = user_input.strip()
+        if not user_input:
             return ""
         
-        # Update context
-        self.context.append(query)
-        if len(self.context) > self.max_context:
-            self.context.pop(0)
+        if user_input.startswith('/'):
+            parts = user_input.split(maxsplit=1)
+            cmd = parts[0].lower()
+            args = parts[1] if len(parts) > 1 else ""
+            return self.process_command(cmd, args)
         
-        # Detect intent
-        intent, confidence = self.detect_intent(query)
+        answer, confidence, debug_info = self.query(user_input)
+        response = answer
         
-        # Handle different intents
-        if intent == Intent.EXIT:
-            return "EXIT"
+        if self.debug_mode:
+            response += f"\n[DEBUG: type={debug_info.get('question_type')}, sim={debug_info.get('similarity', 0):.3f}]"
         
-        elif intent == Intent.HELP:
-            return """
-🔧 TruthSpace LCM Chat
-
-I can help you with:
-• Bash commands - describe what you want to do, or type commands directly
-• Questions - ask me anything about files, directories, processes
-• General chat - just say hello!
-
-Examples:
-• "list all files in this directory"
-• "show me running processes"
-• "how do I find a file?"
-• "ls -la"
-• "git status"
-
-Type 'exit' or 'quit' to leave.
-"""
-        
-        elif intent == Intent.BASH:
-            # Try to resolve to a bash command
-            command, cmd_confidence = self.resolve_bash_command(query)
-            
-            if command and cmd_confidence > 0.5:
-                if self.safe_mode:
-                    return f"CONFIRM_BASH:{command}"
-                else:
-                    success, output = self.execute_command(command)
-                    prefix = "✓" if success else "✗"
-                    return f"{prefix} $ {command}\n{output}"
-            else:
-                return f"I understood you want to run a command, but I'm not sure which one.\nCould you be more specific or type the command directly?"
-        
-        elif intent == Intent.QUESTION:
-            response = self.generate_response(query, intent)
-            return response
-        
-        else:  # CHAT
-            response = self.generate_response(query, intent)
-            return response
+        return response
     
     def run(self):
-        """Run the interactive chat loop."""
-        print("\n" + "=" * 60)
-        print("  TruthSpace LCM Chat")
-        print("  Geometric knowledge resolution with bash execution")
         print("=" * 60)
-        print("\nType 'help' for commands, 'exit' to quit.\n")
+        print("  TRUTHSPACE GEOMETRIC CHAT SYSTEM")
+        print("  All semantic operations are geometric operations")
+        print("=" * 60)
+        print("\nType /help for commands, /quit to exit.\n")
         
         while True:
             try:
-                query = input("You: ").strip()
-                
-                if not query:
+                user_input = input("You: ").strip()
+                if not user_input:
                     continue
-                
-                response = self.process(query)
-                
-                if response == "EXIT":
-                    print("\nLCM: Goodbye! 👋\n")
+                response = self.process(user_input)
+                if response == "QUIT":
+                    print("\nGoodbye!\n")
                     break
-                
-                elif response.startswith("CONFIRM_BASH:"):
-                    command = response[13:]
-                    print(f"\nLCM: I'll run: $ {command}")
-                    confirm = input("     Execute? [y/N]: ").strip().lower()
-                    
-                    if confirm in ['y', 'yes']:
-                        success, output = self.execute_command(command)
-                        prefix = "✓" if success else "✗"
-                        print(f"\n{prefix} $ {command}")
-                        print(output)
-                    else:
-                        print("     (cancelled)")
-                    print()
-                
-                else:
-                    print(f"\nLCM: {response}\n")
-                    
-            except KeyboardInterrupt:
-                print("\n\nLCM: Goodbye! 👋\n")
-                break
-            except EOFError:
-                print("\n\nLCM: Goodbye! 👋\n")
+                print(f"\nGCS: {response}\n")
+            except (KeyboardInterrupt, EOFError):
+                print("\n\nGoodbye!\n")
                 break
 
 
-# =============================================================================
-# MAIN
-# =============================================================================
+def demo():
+    print("=" * 60)
+    print("  GEOMETRIC CHAT SYSTEM - Demo")
+    print("=" * 60)
+    
+    chat = GeometricChat()
+    
+    print("\n--- Q&A Demo ---\n")
+    questions = [
+        "What is TruthSpace?",
+        "How does style transfer work?",
+        "What is cosine similarity?",
+    ]
+    for q in questions:
+        answer, conf, _ = chat.query(q)
+        print(f"Q: {q}")
+        print(f"A: {answer}")
+        print(f"   (confidence: {conf:.2f})\n")
+    
+    print("\n--- Style Analysis Demo ---\n")
+    texts = [
+        "The methodology demonstrates significant improvements.",
+        "Hey, this is pretty cool stuff!",
+        "Centroid equals mean of encoded exemplars.",
+    ]
+    for text in texts:
+        results = chat.analyze_style(text)
+        best_style, best_score = results[0]
+        print(f"Text: \"{text[:40]}...\"")
+        print(f"Style: {best_style} ({best_score:.3f})\n")
+    
+    print("--- Demo Complete ---\n")
+
 
 if __name__ == "__main__":
-    chat = LCMChat(safe_mode=True)
-    chat.run()
+    import sys
+    if len(sys.argv) > 1 and sys.argv[1] == 'demo':
+        demo()
+    else:
+        chat = GeometricChat()
+        chat.run()
