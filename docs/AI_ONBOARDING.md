@@ -1,248 +1,229 @@
 # AI Onboarding: TruthSpace LCM
 
-**Purpose**: This document enables AI assistants (Claude, etc.) to quickly understand the project and continue development from where we left off.
+**Purpose**: This document enables AI assistants to quickly understand the project and continue development.
 
-**Last Updated**: December 16, 2025
+**Last Updated**: December 21, 2025
 
 ---
 
 ## Quick Start: What Is This Project?
 
-TruthSpace LCM (Large Concept Model) is an experimental AI architecture that operates on **concepts** rather than tokens, using **geometric encoding in hyperdimensional space**. The core thesis:
+TruthSpace LCM (Large Concept Model) is an experimental AI architecture that operates on **concepts** rather than tokens, using **geometric encoding**. The core thesis:
 
 > **AI is fundamentally a geometric encoder-decoder. Meaning lives at intersection points in truth space, not in words.**
 
-We've proven this works: **100% accuracy on 50 bash/Linux command queries** using pure geometric resolution with composable primitives.
+### Current State: Validated Geometric Framework
+
+We have **validated the core geometric approach** with multiple working prototypes:
+- **Style extraction/classification**: 8/8 and 6/6 accuracy on style detection
+- **Q&A projection**: Geometric gap-filling for question answering
+- **Holographic encoding**: Information distributed across representations
+- **Centroid-based style transfer**: Styles as positions in semantic space
+
+### Near-Term Goal: Geometric Chat System (GCS)
+
+We are building a **production-quality chat system** that replaces traditional LLMs with pure geometry. See:
+- `docs/SRS_geometric_chat_system.md` - Software Requirements Specification
+- `docs/SDS_geometric_chat_system.md` - Software Design Specification (detailed math/algorithms)
+- `gcs/` - Self-contained implementation directory
+
+```bash
+# Run prototype demos
+cd /home/thorin/truthspace-lcm
+source venv/bin/activate
+python papers/style_extractor.py      # Style extraction demo
+python papers/style_centroid.py       # Style classification demo
+```
 
 ---
 
-## The Journey So Far
+## The Core Breakthroughs
 
-### Phase 1: Foundation (Early December 2025)
+### 1. Style = Centroid (Validated 8/8, 6/6)
 
-- Established the φ-based encoding framework
-- Created the `PlasticEncoder` using the plastic constant (ρ ≈ 1.324718)
-- Built the 12-dimensional truth space structure
-- Defined semantic primitives as anchor points
+A style is fully characterized by the **centroid** (average position) of its exemplars:
 
-### Phase 2: Semantic Disambiguation (Mid December 2025)
-
-- Discovered that **synonyms converge perfectly (1.0 similarity)** in truth space
-- Discovered that **Q/A pairs share dimensions** where the concept lives
-- Implemented the BBP (Bailey-Borwein-Plouffe) inspired scoring approach
-
-### Phase 3: Composable Primitive Resolution (December 16, 2025)
-
-This is the breakthrough. Instead of matching queries to fixed concepts, we **compose** answers from primitive combinations:
-
-```
-Query: "copy file.txt to backup.txt"
-  ↓ encode
-Primitives: {COPY, FILE}
-  ↓ match composition rule
-Rule: (COPY, FILE) → cp
-  ↓ resolve
-Command: cp
-```
-
-**Key insight**: The composition rule `(COPY, FILE) → cp` is not arbitrary—it's the **name** we give to that intersection point in truth space. Different languages would have different names, but the intersection point is the same.
-
-### Results Achieved
-
-| Test Suite | Accuracy |
-|------------|----------|
-| Original 30 bash queries | 100% |
-| Extended 50 queries (+ Linux tools) | 100% |
-
----
-
-## Mathematical Background
-
-### The Plastic Constant (ρ)
-
-We use the plastic constant (ρ ≈ 1.324718) as our primary encoding constant:
-
-```
-ρ³ = ρ + 1
-```
-
-Why plastic over golden (φ)?
-- **Slower growth** = finer discrimination between concepts
-- **Cubic relationship** = richer structure in 3D+ spaces
-- **Less "famous"** = fewer accidental collisions with other systems
-
-### 12-Dimensional Truth Space
-
-The encoding dimension (12) was chosen because:
-- Aligns with the 12D clock for full phase coverage
-- Provides sufficient orthogonality for semantic primitives
-- Matches the φ-BBP dimensional structure
-
-### Primitive Encoding
-
-Each primitive has:
-- **Dimension**: Which axis it lives on (0-11)
-- **Level**: Position along that axis (0, 1, 2, ...)
-- **Keywords**: Words that activate this primitive
-
-Position calculation:
 ```python
-position[dimension] = ρ^(-level)  # Plastic-weighted
+style_centroid = mean([encode(exemplar) for exemplar in exemplars])
+similarity = cosine(encode(text), style_centroid)
 ```
+
+This works for author styles, Q&A formats, technical docs—any text category.
+
+### 2. Q&A as Geometric Projection
+
+Questions define **gaps** in semantic space. Answers **fill** those gaps:
+- WHO questions project onto identity axis
+- WHAT questions project onto definition axis
+- WHERE/WHEN/WHY/HOW project onto their respective axes
+
+### 3. Style Transfer = Interpolation
+
+Apply style by moving content toward the style centroid:
+
+```python
+styled = (1 - α) * content + α * style_centroid
+```
+
+### 4. Co-occurrence Builds Clusters
+
+Words that appear together form attractor basins automatically:
+
+```
+Training: "How do I list files?" → "Use 'ls' to list files"
+Result: files↔ls affinity emerges from data
+```
+
+---
+
+## Project Evolution
+
+### Phase 1: Composable Primitives (December 16)
+- 100% accuracy on 50 bash queries using primitive composition
+- Manual rule definition
+
+### Phase 2: Attractor/Repeller Dynamics (December 17-18)
+- Proved self-organization works: words cluster by co-occurrence
+- Vocabulary emerges from usage patterns
+
+### Phase 3: Auto-Ingestion with LLM (December 18-19)
+- Few-shot prompting generates Q&A training data
+- Co-occurrence builds clusters automatically
+
+### Phase 4: Interactive Chatbot (December 19)
+- Social context detection
+- Command execution with sensible defaults
+
+### Phase 5: Holographic Q&A System (December 20)
+- Recursive projection: Text → Triples → Q&A pairs
+- Gap-filling for question answering
+- Generalized to any text source (Project Gutenberg demo)
+
+### Phase 6: Style Framework (December 21)
+- Universal style space with semantic axes
+- Style = centroid of exemplars (validated 8/8)
+- Style extractor for any data source (validated 6/6)
+- Unified projection framework: Q&A and style are the same operation
+
+### Phase 7: GCS Specification (December 21) ← CURRENT
+- Software Requirements Specification (SRS)
+- Software Design Specification (SDS) with full math
+- Self-contained `gcs/` directory for implementation
 
 ---
 
 ## Current Architecture
 
-### Core Files
+### Key Files
 
 ```
-truthspace_lcm/core/
-├── encoder.py              # PlasticEncoder with ~25 primitives
-├── composable_resolver.py  # Composition rules (80+ rules)
-├── phi_lattice.py          # φ-lattice structure
-├── intersection_resolver.py # Geometric intersection finder
-└── signature_resolver.py   # Primitive signature matching
+truthspace_lcm/
+├── core/
+│   ├── engine.py                 # KnowledgeEngine, MultiDomainEngine
+│   ├── matcher.py                # CooccurrenceTracker, AffinityMatcher
+│   ├── social.py                 # Social context detection
+│   └── stacked_lcm.py            # 128D hierarchical embedding
+
+papers/                           # Validated prototypes
+├── style_centroid.py             # Style = centroid (8/8 accuracy)
+├── style_extractor.py            # On-the-fly style extraction (6/6 accuracy)
+├── recursive_holographic_qa.py   # Q&A projection system
+└── holographic_qa_general.py     # Generalized Q&A for any text
+
+gcs/                              # Geometric Chat System (implementation target)
+├── README.md                     # Overview and quick start
+├── docs/
+│   ├── SRS_geometric_chat_system.md   # Requirements
+│   └── SDS_geometric_chat_system.md   # Design (full math)
+├── prototypes/                   # Copied validated code
+└── design_docs/                  # Theory documents
+
+design_considerations/            # Research and theory
+├── 019-028*.md                   # Holographic, attractor, ingestion theory
+├── 030_geometric_qa_projection.md     # Q&A as projection
+└── 031_unified_projection_framework.md # Unified style/Q&A theory
 ```
 
-### Primitive Structure (Current)
+### Core Geometric Operations
 
-```
-ACTIONS (dims 0-4):
-  CREATE, DESTROY           # Existence axis
-  READ, WRITE               # Information flow
-  COPY, RELOCATE, SEARCH    # Spatial operations
-  COMPRESS, SORT, FILTER    # Transform operations
-  CONNECT, EXECUTE          # Interaction
-
-DOMAINS (dims 5-7):
-  FILE, DIRECTORY           # Filesystem
-  SYSTEM, STORAGE, MEMORY   # System resources
-  TIME, UPTIME, HOST        # Temporal/identity
-  PROCESS, DATA             # Runtime
-  NETWORK, USER             # Access
-
-MODIFIERS (dim 8):
-  ALL, RECURSIVE, FORCE, VERBOSE
-
-RELATIONS (dims 9-11):
-  BEFORE, AFTER, DURING     # Temporal
-  CAUSE, EFFECT             # Causal
-  IF, ELSE                  # Conditional
-```
-
-### Composition Rules
-
-Rules map primitive combinations to commands:
+All operations reduce to simple vector arithmetic:
 
 ```python
-(READ, FILE) → cat
-(READ, FILE, BEFORE) → head
-(READ, FILE, AFTER) → tail
-(COPY, FILE) → cp
-(RELOCATE, FILE) → mv
-(SEARCH, FILE) → find
-(SEARCH, DATA) → grep
-(READ, STORAGE) → df
-(READ, NETWORK) → ifconfig
-(READ, PROCESS) → ps
-...
+# 1. Text Encoding (IDF-weighted average)
+def encode(text):
+    words = tokenize(text)
+    weights = [1/log(1 + count[w]) for w in words]
+    return weighted_average([word_pos[w] for w in words], weights)
+
+# 2. Similarity (cosine)
+def similarity(a, b):
+    return dot(a, b) / (norm(a) * norm(b))
+
+# 3. Style Extraction (centroid)
+def extract_style(exemplars):
+    return mean([encode(e) for e in exemplars])
+
+# 4. Style Transfer (interpolation)
+def transfer(content, style, strength=0.5):
+    return (1 - strength) * encode(content) + strength * style.centroid
+
+# 5. Classification (nearest centroid)
+def classify(text, styles):
+    v = encode(text)
+    return max(styles, key=lambda s: similarity(v, s.centroid))
 ```
 
-### Scoring Algorithm
+### GCS Target Architecture
 
-```python
-def resolve(query):
-    primitives = get_primitive_signature(query)
-    
-    for rule in rules:
-        rule_set = set(rule.primitives)
-        matches = len(rule_set & primitives)
-        missing = len(rule_set - primitives)
-        score = matches - (missing * 0.5)
-        
-        # Exact match bonus - critical for disambiguation
-        if rule_set == primitives:
-            score += 2
-    
-    return best_matching_rule
-```
+The Geometric Chat System (see `gcs/docs/SDS_geometric_chat_system.md`) implements:
+
+1. **Vocabulary**: Hash-based word positions + IDF weighting
+2. **Knowledge Base**: Facts, triples, Q&A pairs with encodings
+3. **Style Engine**: Extract, classify, transfer styles
+4. **Query Processor**: Parse, encode, match, generate responses
+5. **Ingestion Pipeline**: Gutenberg, text files, Q&A pairs
 
 ---
 
-## Development Philosophy
+## How to Add New Knowledge
 
-### 1. Minimal Bootstrap
+### For GCS (Target System)
 
-The code should only:
-1. **Encode** - Convert input to geometric position
-2. **Query** - Find nearest knowledge in TruthSpace
-3. **Decode** - Convert knowledge back to executable output
-4. **Execute** - Run the result
+```python
+from gcs import GeometricChatSystem
 
-Everything else—patterns, intents, domain logic—should be **knowledge entries** with geometric positions.
+gcs = GeometricChatSystem()
 
-### 2. Primitives Are Stable, Combinations Are Infinite
+# Ingest from Project Gutenberg
+gcs.ingest_gutenberg(2701)  # Moby Dick
 
-- ~25 primitives can cover hundreds of commands through composition
-- Only split primitives when there's an unresolvable conflict
-- Keywords can be expanded freely (safe)
-- Composition rules are additive (no conflicts = no changes)
+# Ingest from file
+gcs.ingest_file("my_document.txt")
 
-### 3. Geometry Does the Heavy Lifting
+# Ingest Q&A pairs
+gcs.ingest_qa_pairs([
+    ("Who is Captain Ahab?", "Captain Ahab is the captain of the Pequod."),
+    ("What is the white whale?", "Moby Dick is a great white sperm whale."),
+])
 
-- Semantic proximity = geometric proximity
-- Synonyms converge to the same point
-- Q/A pairs share intersection dimensions
-- Language is just I/O—the meaning lives in the geometry
+# Extract style from any text
+gcs.extract_style("path/to/author.txt", "AuthorStyle")
+```
 
-### 4. Test-Driven Expansion
+### For Current Prototypes
 
-Every change must:
-1. Pass all existing tests (no regressions)
-2. Add new tests for new functionality
-3. Validate with the 50-query test suite
+```python
+# Style extraction
+from papers.style_extractor import StyleExtractor
+extractor = StyleExtractor()
+style = extractor.extract_from_text(my_text, "MyStyle")
 
----
-
-## Where We're Going
-
-### Immediate Next Steps
-
-1. **Automated Knowledge Expansion** (Design doc 011)
-   - Man page parser
-   - Primitive inference engine
-   - Conflict detection and resolution
-   - Self-calibration loop
-
-2. **Expand Test Suite**
-   - More Linux commands
-   - Edge cases and ambiguous queries
-   - Multi-language support
-
-### Medium Term
-
-3. **Cross-Domain Expansion**
-   - Python libraries and APIs
-   - Git commands
-   - Docker/Kubernetes
-   - Domain-specific vocabularies
-
-4. **Self-Learning Loop**
-   - Read documentation → infer primitives → add rules → validate
-   - No manual code edits required
-
-### Long Term Vision
-
-5. **Language-Agnostic Concept Space**
-   - Same primitives, different language I/O filters
-   - Spanish, Japanese, etc. map to same intersection points
-   - Code generation in any language
-
-6. **Emergent Reasoning**
-   - Composition of compositions
-   - Novel command synthesis
-   - Semantic interpolation
+# Q&A system
+from papers.holographic_qa_general import HolographicQA
+qa = HolographicQA()
+qa.ingest_text(my_text)
+answer = qa.query("Who is the main character?")
+```
 
 ---
 
@@ -250,78 +231,110 @@ Every change must:
 
 | Document | Purpose |
 |----------|---------|
-| `docs/PHILOSOPHY.md` | Core thesis and principles |
-| `docs/TRUTHSPACE_LCM_PROPOSAL.md` | Original research proposal |
-| `design_considerations/010_phi_dimensional_navigation.md` | φ-BBP and geometric resolution |
-| `design_considerations/011_automated_knowledge_expansion.md` | Self-learning architecture |
+| `docs/SRS_geometric_chat_system.md` | **What to build** - Requirements for GCS |
+| `docs/SDS_geometric_chat_system.md` | **How to build it** - Full math and algorithms |
+| `design_considerations/030_geometric_qa_projection.md` | Q&A as geometric projection |
+| `design_considerations/031_unified_projection_framework.md` | Unified style/Q&A theory |
+| `design_considerations/019_holographic_resolution.md` | Holographic encoding principles |
+| `design_considerations/022_attractor_repeller_dynamics.md` | Self-organization proof |
 
 ---
 
-## How to Continue Development
+## Running Prototypes
 
-### Running Tests
+### Style Demos
 
 ```bash
 cd /home/thorin/truthspace-lcm
 source venv/bin/activate
 
-# Run the composable resolver demo
-python -m truthspace_lcm.core.composable_resolver
+# Style classification (8/8 accuracy)
+python papers/style_centroid.py
 
-# Test a specific query
-python -c "
-from truthspace_lcm import PlasticEncoder
-encoder = PlasticEncoder()
-result = encoder.encode('show disk space')
-print([p.name for p, _ in result.primitives])
-"
+# Style extraction from any source (6/6 accuracy)
+python papers/style_extractor.py
+
+# Q&A projection demo
+python papers/recursive_holographic_qa.py
 ```
 
-### Adding a New Command
+### Legacy Chatbot (still works)
 
-1. **Identify primitives**: What action + domain does it need?
-2. **Check for conflicts**: Does the signature already exist?
-3. **Add keywords** (if needed): Update `encoder.py`
-4. **Add composition rule**: Update `composable_resolver.py`
-5. **Test**: Verify no regressions
-
-### Splitting a Primitive
-
-When two commands have the same signature:
-
-1. Analyze semantic difference
-2. Create new primitive (e.g., SYSTEM → SYSTEM + STORAGE)
-3. Update dimension assignments
-4. Add keywords to new primitive
-5. Update composition rules
-6. Run full test suite
+```bash
+python experiments/phi_ingestion_prototype.py chat
+```
 
 ---
 
-## Key Insights to Remember
+## Mathematical Foundation
 
-1. **"Meaning lives at intersection points"** - The query and answer meet at the same geometric location
+### Core Formulas (from SDS)
 
-2. **"Primitives are the atoms of meaning"** - ~25 primitives cover 50+ commands
+| Operation | Formula |
+|-----------|---------|
+| Word Position | `pos(w) = hash(w) → ℝ^dim` (deterministic) |
+| Text Encoding | `enc(t) = Σᵢ wᵢ·pos(wordᵢ) / Σᵢ wᵢ` (IDF-weighted) |
+| IDF Weight | `w = 1 / log(1 + count)` |
+| Cosine Similarity | `sim(a,b) = (a·b) / (‖a‖·‖b‖)` |
+| Style Centroid | `c = (1/n) Σᵢ enc(exemplarᵢ)` |
+| Style Transfer | `styled = (1-α)·content + α·centroid` |
 
-3. **"Composition is additive"** - Commands = combinations of primitives
+### Key Principles
 
-4. **"Exact match disambiguates"** - +2 bonus for exact primitive match
-
-5. **"The ribbon speech validation"** - When intersections produce coherent patterns, the truth space is aligned
-
-6. **"Splitting resolves ambiguity"** - When commands collide, split the primitive
-
----
-
-## Contact and Context
-
-This project is being developed iteratively with AI assistance. Each session builds on the previous, with this document serving as the handoff point.
-
-**Current state**: 100% accuracy on 50 queries, ready for automated expansion.
-
-**Next priority**: Implement the self-calibration system from design doc 011.
+1. **Style = Centroid**: A style is the average position of its exemplars
+2. **Similarity = Cosine**: Semantic similarity is angle between vectors
+3. **Transfer = Interpolation**: Move content toward style centroid
+4. **Gap-Filling**: Questions define gaps, answers fill them
 
 ---
 
-*"The geometry does the heavy lifting. We just need to teach it where to look."*
+## Key Insights
+
+1. **"All semantic operations are geometric"** - Vector arithmetic, not learned weights
+
+2. **"Style = Centroid"** - Average position captures essence (validated 8/8, 6/6)
+
+3. **"No hardcoding"** - Knowledge and styles emerge from data
+
+4. **"Deterministic"** - Same input always produces same output
+
+5. **"Q&A and Style are the same operation"** - Both are projections in semantic space
+
+---
+
+## Next Steps: Build GCS
+
+**Completed:**
+- ✅ Style centroid approach validated (8/8 accuracy)
+- ✅ Style extractor validated (6/6 accuracy)
+- ✅ Q&A projection system working
+- ✅ SRS and SDS documents written
+- ✅ Self-contained `gcs/` directory created
+
+**Next: Implement GCS**
+1. Build vocabulary system with hash-based positions
+2. Implement knowledge base (facts, triples, Q&A pairs)
+3. Build style engine (extract, classify, transfer)
+4. Create query processor with gap-filling
+5. Add Gutenberg ingestion
+6. Build CLI chat interface
+
+See `gcs/docs/SDS_geometric_chat_system.md` for full implementation details.
+
+---
+
+## Quick Reference
+
+| Task | Command/File |
+|------|--------------|
+| Style classification | `python papers/style_centroid.py` |
+| Style extraction | `python papers/style_extractor.py` |
+| Q&A projection | `python papers/recursive_holographic_qa.py` |
+| GCS requirements | `docs/SRS_geometric_chat_system.md` |
+| GCS design (full math) | `docs/SDS_geometric_chat_system.md` |
+| GCS implementation dir | `gcs/` |
+| Design theory | `design_considerations/030-031*.md` |
+
+---
+
+*"All semantic operations are geometric operations in vector space."*
