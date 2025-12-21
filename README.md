@@ -1,35 +1,34 @@
 # TruthSpace LCM
 
-**Geometric Language-Code Model** - A natural language to code system using hierarchical geometric embeddings. No training required.
+**Geometric Chat System** - A conversational AI using pure geometric operations in semantic space. No training, no neural networks - just geometry.
 
 ## Philosophy
 
-> *"AI is fundamentally a geometric encoder-decoder. Meaning lives at intersection points in truth space, not in words."*
+> *"All semantic operations are geometric operations in vector space."*
 
-This system demonstrates that **pure geometry can replace trained neural networks** for semantic resolution. No training data. No backpropagation. Just mathematics.
+This system demonstrates that **pure geometry can replace trained neural networks** for semantic understanding. Meaning is position. Similarity is angle. Style is centroid.
 
 ## Features
 
-- **128-dimensional hierarchical embeddings** - 7 stacked geometric layers
-- **Intent detection** - Automatically detects bash commands vs chat
-- **Bash execution** - Execute commands with safety checks
-- **No external dependencies** - No LLM API calls required
-- **Interpretable** - Every dimension has semantic meaning
+- **64-dimensional semantic space** - Hash-based word positions with IDF weighting
+- **Q&A via similarity** - Questions find answers through cosine distance
+- **Style extraction** - Learn any style from exemplars (centroid approach)
+- **Style transfer** - Move content toward target style
+- **No training** - Deterministic, interpretable, reproducible
 
 ## Installation
 
 ```bash
-git clone https://github.com/yourusername/truthspace-lcm.git
+git clone https://github.com/lostdemeter/truthspace_lcm.git
 cd truthspace-lcm
 python -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-pip install -e .
 ```
 
 ## Quick Start
 
-### Interactive Chat Mode
+### Interactive Chat
 
 ```bash
 python run.py
@@ -37,159 +36,117 @@ python run.py
 
 ```
 ============================================================
-  TruthSpace LCM Chat
-  Geometric knowledge resolution with bash execution
+  TRUTHSPACE GEOMETRIC CHAT SYSTEM
+  All semantic operations are geometric operations
 ============================================================
 
-Type 'help' for commands, 'exit' to quit.
+Type /help for commands, /quit to exit.
 
-You: list all files
+You: What is TruthSpace?
 
-LCM: I'll run: $ ls -la
-     Execute? [y/N]: y
+GCS: TruthSpace is a geometric approach to language understanding 
+     where meaning is position in semantic space.
 
-✓ $ ls -la
-total 108
-drwxrwxr-x 12 user user  4096 Dec 17 10:42 .
-...
+You: /style formal
 
-You: hello
+GCS: Style set to: formal
 
-LCM: I'm here to help with bash commands and answer questions.
+You: /analyze The methodology demonstrates significant improvements.
 
-You: show disk space
-
-LCM: I'll run: $ df -h
-     Execute? [y/N]: y
-
-✓ $ df -h
-Filesystem      Size  Used Avail Use% Mounted on
-/dev/sda1       1.8T  1.2T  606G  66% /
+GCS: Style analysis:
+       formal: 0.572
+       technical: 0.431
+       casual: 0.335
 ```
 
-### Single Query Mode
+### Demo Mode
 
 ```bash
-python run.py "list files"
+python run.py demo
 ```
 
 ### Python API
 
 ```python
-from truthspace_lcm.core import StackedLCM
-from truthspace_lcm.chat import LCMChat
+from truthspace_lcm.core import Vocabulary, KnowledgeBase, StyleEngine
 
-# Direct embedding usage
-lcm = StackedLCM()
-lcm.ingest("ls -la", "list files directory terminal")
-lcm.ingest("df -h", "disk space usage storage")
+# Create vocabulary and knowledge base
+vocab = Vocabulary(dim=64)
+kb = KnowledgeBase(vocab)
 
-content, similarity, cluster = lcm.resolve("show all files")
-print(content)  # ls -la
+# Add Q&A pairs
+kb.add_qa_pair("What is Python?", "Python is a programming language.")
+kb.add_qa_pair("Who is Einstein?", "Einstein was a physicist.")
 
-# Chat interface
-chat = LCMChat(safe_mode=True)
-response = chat.process("list all files")
-print(response)  # Prompts for confirmation, then executes
-```
+# Query
+results = kb.search_qa("Tell me about Python")
+best_qa, similarity = results[0]
+print(f"{best_qa.answer} (sim: {similarity:.2f})")
 
-### Legacy Mode (12D TruthSpace)
+# Style operations
+style_engine = StyleEngine(vocab)
+style = style_engine.extract_style([
+    "The methodology demonstrates improvements.",
+    "Results indicate significant findings.",
+], "formal")
 
-```bash
-python run.py --legacy
+classification = style_engine.classify("Hey, that's cool!")
+print(classification)  # [('casual', 0.38), ('formal', 0.32), ...]
 ```
 
 ## Architecture
 
 ```
 truthspace_lcm/
-├── __init__.py              # Package exports
-├── chat.py                  # Chat interface with bash execution
+├── __init__.py          # Package exports
+├── chat.py              # Interactive GeometricChat demo
 └── core/
-    ├── __init__.py          # Core exports (StackedLCM, TruthSpace)
-    ├── stacked_lcm.py       # PRIMARY: 128D hierarchical embeddings
-    ├── truthspace.py        # Legacy: 12D φ-MAX encoding
-    └── knowledge_generator.py  # LLM-based knowledge generation
+    ├── __init__.py      # Core exports
+    ├── vocabulary.py    # Hash-based word positions, IDF weighting
+    ├── knowledge.py     # Facts, triples, Q&A pairs, semantic search
+    └── style.py         # Style extraction, classification, transfer
 ```
 
-### StackedLCM Layers (128D total)
+## Core Formulas
 
-| Layer | Dimensions | Purpose |
-|-------|------------|---------|
-| Morphological | 16 | Word structure (prefixes, suffixes, n-grams) |
-| Lexical | 32 | Primitive activation (φ-MAX encoding) |
-| Syntactic | 16 | Bigram pattern detection |
-| Compositional | 24 | Domain signature detection |
-| Disambiguation | 16 | Context-dependent meaning |
-| Contextual | 16 | Co-occurrence statistics |
-| Global | 8 | Prototype distances |
-
-## How It Works
-
-### Hierarchical Encoding
-
-Each layer captures meaning at a different scale:
-
-1. **Morphological**: "cooking" and "baking" share "-ing" suffix
-2. **Lexical**: "chop" activates CUT primitive, "file" activates FILE primitive
-3. **Syntactic**: "the file" vs "the vegetables" detected via bigrams
-4. **Compositional**: Cooking domain = FOOD + HEAT + CUT patterns
-5. **Disambiguation**: "cut the file" → tech, "cut the vegetables" → cooking
-6. **Contextual**: Learns co-occurrence from ingested knowledge
-7. **Global**: Distance to emergent domain prototypes
-
-### Intent Detection
-
-The chat interface detects intent geometrically:
-
-```python
-# "list files" → BASH intent (keywords: list, files)
-# "hello" → CHAT intent (greeting patterns)
-# "how do I find a file?" → QUESTION intent
-# "ls -la" → BASH intent (direct command pattern)
-```
-
-### Disambiguation
-
-Same word, different context:
-
-```
-"cut the file" vs "cut the vegetables"
-  Similarity: 0.42 (correctly low - different domains)
-
-"search for recipes" vs "search for files"  
-  Similarity: 0.41 (correctly low - different domains)
-```
+| Operation | Formula |
+|-----------|---------|
+| Word Position | `pos(w) = hash(w) → ℝ^dim` (deterministic) |
+| Text Encoding | `enc(t) = Σᵢ wᵢ·pos(wordᵢ) / Σᵢ wᵢ` (IDF-weighted) |
+| IDF Weight | `w = 1 / log(1 + count)` |
+| Cosine Similarity | `sim(a,b) = (a·b) / (‖a‖·‖b‖)` |
+| Style Centroid | `c = (1/n) Σᵢ enc(exemplarᵢ)` |
+| Style Transfer | `styled = (1-α)·content + α·centroid` |
 
 ## Key Concepts
 
-### φ-MAX Encoding
-- **φ^level** for each semantic primitive (golden ratio ≈ 1.618)
-- **MAX per dimension** prevents synonym over-counting
-- **Sierpinski property**: Overlapping activations don't stack
+### Style = Centroid
+A style is the average position of its exemplars in semantic space. This simple insight achieves 8/8 accuracy on style classification.
 
-### Layer Weighting
-- Morphological: 0.3 (reduced - word length shouldn't dominate)
-- Lexical: 1.2 (semantic primitives)
-- Disambiguation: 2.0 (high - context is critical)
+### Similarity = Cosine
+Semantic similarity is the angle between vectors. Identical meaning = angle 0 (cosine 1). Unrelated = orthogonal (cosine 0).
+
+### Gap-Filling Q&A
+Questions define gaps in semantic space. Answers fill those gaps. Finding the right answer means finding the question with the most similar gap.
 
 ## Testing
 
 ```bash
-# Run all tests
-python tests/test_stacked_lcm.py
-
-# Run legacy tests
-python tests/test_truthspace.py
+# Run all tests (43 total)
+python tests/test_core.py   # 28 tests
+python tests/test_chat.py   # 15 tests
 ```
 
 ## Design Documents
 
 See `design_considerations/` for the research journey:
-- `017_stacked_geometric_embeddings.md` - Hierarchical architecture
-- `018_stacked_lcm_analysis.md` - What works and what doesn't
-- `016_truly_dynamic_geometric_lcm.md` - Self-organizing domains
-- `015_dynamic_geometric_lcm.md` - Dynamic primitive discovery
+- `030_geometric_qa_projection.md` - Q&A as geometric projection
+- `031_unified_projection_framework.md` - Unified style/Q&A theory
+- `019_holographic_resolution.md` - Holographic encoding principles
+
+See `gcs/` for implementation specifications:
+- `docs/SRS_geometric_chat_system.md` - Requirements specification
+- `docs/SDS_geometric_chat_system.md` - Design specification with full math
 
 ## License
 
