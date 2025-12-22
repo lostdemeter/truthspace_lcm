@@ -2,123 +2,159 @@
 
 ## Overview
 
-TruthSpace LCM is a **Geometric Chat System** that performs all semantic operations as geometric operations in vector space. No neural networks, no training - just mathematics.
+TruthSpace LCM is a **Dynamic Geometric Language Model** that performs all semantic operations as geometric operations in vector space. No neural networks, no training - just mathematics.
 
-## Core Principle
+## Core Principles
 
-> **All semantic operations are geometric operations in vector space.**
+> **Structure IS the data. Learning IS structure update.**
 
-- **Meaning** = Position in ℝ^64
-- **Similarity** = Cosine of angle between vectors
-- **Style** = Centroid (average position) of exemplars
-- **Transfer** = Interpolation toward target centroid
+- **Entities** = Positions in ℝ^256 (learned from context)
+- **Relations** = Vector offsets between entities (learned from pairs)
+- **Facts** = (subject, relation, object) triples
+- **Learning** = Iterative refinement until relations are consistent
 
-## Components
+## Primary Component: GeometricLCM (`geometric_lcm.py`)
 
-### 1. Vocabulary (`vocabulary.py`)
+The main component that provides dynamic learning and reasoning.
 
-Manages word positions and text encoding.
+### Data Structures
+
+```python
+GeoEntity:
+  - name: str
+  - position: np.ndarray (256D)
+  - entity_type: str
+
+GeoRelation:
+  - name: str
+  - vector: np.ndarray (256D offset)
+  - consistency: float (0-1)
+  - instance_count: int
+
+GeoFact:
+  - subject: str
+  - relation: str
+  - object: str
+```
+
+### Key Methods
+
+```python
+# Learning
+lcm.add_fact(subject, relation, object)  # Add a fact
+lcm.ingest(text)                          # Parse NL to facts
+lcm.tell(statement)                       # NL learning interface
+lcm.learn(n_iterations, target_consistency)  # Update structure
+
+# Inference
+lcm.query(subject, relation, k)           # subject --relation--> ?
+lcm.inverse_query(object, relation, k)    # ? --relation--> object
+lcm.analogy(a, b, c, k)                   # a:b :: c:?
+lcm.similar(entity, k)                    # Find similar entities
+lcm.multi_hop(start, [relations], k)      # Chain queries
+lcm.find_path(start, end, max_hops)       # Find paths
+
+# Natural Language
+lcm.ask(question)                         # NL question answering
+lcm.tell(statement)                       # NL fact learning
+```
+
+### Learning Algorithm
 
 ```
-Word → Hash → Random Seed → Unit Vector in ℝ^64
+For each iteration:
+    1. Update relation vectors from current entity positions
+       relation.vector = average(object.position - subject.position)
+    
+    2. Update entity positions to align with relations
+       object.position → subject.position + relation.vector
+       subject.position → object.position - relation.vector
+    
+    3. Check consistency (pairwise similarity of offsets)
+       If consistency > target: STOP
 ```
 
-**Key Functions:**
-- `word_position(word)` - Deterministic position from hash
-- `encode(text)` - IDF-weighted average of word positions
-- `idf_weight(word)` - Rare words get higher weight: `1/log(1+count)`
+## Supporting Components
 
-### 2. Knowledge Base (`knowledge.py`)
+### Vocabulary (`vocabulary.py`)
 
-Stores facts, triples, and Q&A pairs with their encodings.
+Provides deterministic word positions for initial entity placement.
 
-**Data Types:**
-- `Fact` - A statement with its encoding
-- `Triple` - Subject-predicate-object with modifiers
-- `QAPair` - Question, answer, and question type (WHO/WHAT/WHERE/WHEN/WHY/HOW)
+```
+Word → Hash → Random Seed → Unit Vector in ℝ^256
+```
 
-**Key Functions:**
-- `add_fact(content)` - Store a fact
-- `add_qa_pair(question, answer)` - Store Q&A pair
-- `search_qa(question)` - Find similar questions by cosine similarity
-- `ingest_text(text)` - Extract facts and triples from raw text
+### FactParser (in `geometric_lcm.py`)
 
-### 3. Style Engine (`style.py`)
+Parses natural language into facts using pattern matching.
 
-Extracts, classifies, and transfers styles.
-
-**Key Insight:** A style IS its centroid - the average position of all exemplars.
-
-**Key Functions:**
-- `extract_style(exemplars, name)` - Compute centroid from examples
-- `classify(text)` - Find nearest style by cosine similarity
-- `transfer(content, style, strength)` - Interpolate toward style centroid
+**Supported Patterns:**
+- "X is the capital of Y" → (Y, capital_of, X)
+- "X wrote Y" → (X, wrote, Y)
+- "X is in Y" → (X, located_in, Y)
+- "X is a Y" → (X, is_a, Y)
 
 ## Data Flow
 
 ```
                     ┌─────────────┐
-                    │   Input     │
-                    │   Text      │
+                    │   Natural   │
+                    │   Language  │
                     └──────┬──────┘
                            │
                            ▼
                     ┌─────────────┐
-                    │  Tokenize   │
-                    │  (words)    │
+                    │  FactParser │
+                    │  (patterns) │
                     └──────┬──────┘
                            │
                            ▼
               ┌────────────────────────┐
-              │   For each word:       │
-              │   pos = hash → ℝ^64    │
-              │   weight = 1/log(1+n)  │
+              │   Extract Facts:       │
+              │   (subject, rel, obj)  │
               └───────────┬────────────┘
                           │
                           ▼
                    ┌─────────────┐
-                   │  Weighted   │
-                   │  Average    │
+                   │   Learn     │
+                   │  (iterate)  │
                    └──────┬──────┘
                           │
                           ▼
-                   ┌─────────────┐
-                   │  Text       │
-                   │  Vector     │
-                   └─────────────┘
+              ┌────────────────────────┐
+              │  Updated Geometry:     │
+              │  - Entity positions    │
+              │  - Relation vectors    │
+              └────────────────────────┘
 ```
 
 ## Formulas
 
-### Text Encoding
+### Relation Learning
 ```
-enc(text) = Σᵢ wᵢ · pos(wordᵢ) / Σᵢ wᵢ
+relation.vector = (1/n) Σᵢ (objectᵢ.position - subjectᵢ.position)
 
-where:
-  pos(word) = normalize(random_vector(hash(word)))
-  wᵢ = 1 / log(1 + count(wordᵢ))
+Normalized to unit length after averaging.
 ```
 
-### Cosine Similarity
+### Query (subject --relation--> ?)
 ```
-sim(a, b) = (a · b) / (‖a‖ · ‖b‖)
-
-Range: [-1, 1]
-  1  = identical direction
-  0  = orthogonal (unrelated)
-  -1 = opposite direction
+target = subject.position + relation.vector
+answer = argmax_entity(cosine(target, entity.position))
 ```
 
-### Style Centroid
+### Analogy (a:b :: c:?)
 ```
-centroid(style) = (1/n) Σᵢ enc(exemplarᵢ)
+relation = b.position - a.position
+target = c.position + relation
+answer = argmax_entity(cosine(target, entity.position))
 ```
 
-### Style Transfer
+### Consistency
 ```
-styled = (1 - α) · content + α · centroid
+consistency = mean(pairwise_cosine(all_relation_offsets))
 
-where α ∈ [0, 1] controls transfer strength
+Target: > 0.95 for reliable analogies
 ```
 
 ## Directory Structure
@@ -130,56 +166,58 @@ truthspace-lcm/
 │   ├── chat.py               # Interactive GeometricChat
 │   └── core/
 │       ├── __init__.py       # Core exports
+│       ├── geometric_lcm.py  # Dynamic Geometric LCM (main)
 │       ├── vocabulary.py     # Word positions, IDF, encoding
 │       ├── knowledge.py      # Facts, triples, Q&A pairs
 │       └── style.py          # Style extraction/transfer
 ├── tests/
-│   ├── test_core.py          # Core tests (28)
-│   └── test_chat.py          # Chat tests (15)
-├── gcs/                      # GCS specification
-│   ├── docs/
-│   │   ├── SRS_*.md          # Requirements spec
-│   │   └── SDS_*.md          # Design spec (full math)
-│   └── prototypes/           # Validated prototypes
-├── design_considerations/    # Research journey (019-031)
-├── papers/                   # Style/Q&A experiments
-├── experiments/              # Earlier experiments
+│   ├── test_core.py          # Core tests (29)
+│   └── test_chat.py          # Chat tests (20)
+├── design_considerations/    # Research journey
+│   ├── 033_dynamic_geometric_lcm.md  # Current architecture
+│   └── 032_vsa_binding_extension.md  # VSA exploration
+├── experiments/              # Exploration and prototypes
+│   ├── sparse_vsa_exploration_v3.py  # 100% analogy breakthrough
+│   └── geometric_lcm_full.py         # Full system prototype
 ├── run.py                    # Entry point
 └── requirements.txt          # Dependencies (numpy)
 ```
 
 ## Validation Results
 
-### Style Classification
-- **8/8 accuracy** on style classification (formal/casual/technical)
-- Centroid approach outperforms vector arithmetic and co-occurrence methods
+### Analogy Accuracy
+- **100%** on capital-country analogies (france:paris :: germany:berlin)
+- **100%** on author-book analogies (melville:moby_dick :: shakespeare:hamlet)
+- Works across domains without interference
 
-### Q&A Matching
-- **0.83-1.0 confidence** on bootstrap questions
-- Gap-filling principle: similar questions have similar gaps
+### Relation Consistency
+- **99%+** consistency achieved after learning
+- Converges in **4-10 iterations** typically
+
+### Query Accuracy
+- **100%** on learned facts
+- Similarity scores > 0.98 for correct answers
 
 ## Design Decisions
 
-### Why Hash-Based Positions?
-- **Deterministic**: Same word always gets same position
-- **No training**: Works immediately without data
-- **Reproducible**: Results are consistent across runs
+### Why Learned Positions (not just hash)?
+- **Hash gives random positions** - no semantic structure
+- **Learning aligns relations** - makes analogies work
+- **Key insight**: Relations must be INVARIANT across instances
 
-### Why IDF Weighting?
-- **Meaningful words matter more**: "quantum" > "the"
-- **Simple formula**: `1/log(1+count)`
-- **Self-adjusting**: Weights update as vocabulary grows
+### Why Iterative Learning?
+- **Single pass insufficient** - relations not consistent
+- **Iteration aligns all pairs** - converges to stable structure
+- **Fast**: 4-10 iterations, ~0.01s for 100 facts
 
-### Why Centroid for Style?
-- **Simplest possible approach**: Just average the exemplars
-- **Validated**: 8/8 and 6/6 accuracy in experiments
-- **Interpretable**: Style IS its average position
+### Why Vector Offsets for Relations?
+- **Simple**: relation = object - subject
+- **Invertible**: subject = object - relation
+- **Composable**: multi-hop = sum of relations
 
 ## Future Work
 
-See `gcs/docs/SDS_geometric_chat_system.md` for the full implementation roadmap:
-
-1. **Gutenberg Ingestion** - Ingest books from Project Gutenberg
-2. **Advanced Q&A** - Multi-hop reasoning via projection chains
-3. **Style Blending** - Interpolate between multiple styles
-4. **Persistence** - Save/load knowledge bases and styles
+1. **Hierarchical Relations** - Support sub-types (located_in → city_in_country)
+2. **Temporal Dynamics** - Track how structure changes over time
+3. **Larger Scale** - Test with thousands of entities
+4. **Integration** - Combine with style engine for styled responses

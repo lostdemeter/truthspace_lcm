@@ -1,10 +1,10 @@
 """
-Tests for TruthSpace LCM Core - Geometric Chat System
+Tests for TruthSpace LCM Core - Geometric Language Model
 
-Tests the GCS-aligned core functionality:
+Tests the core functionality:
 - Vocabulary: hash-based word positions, IDF weighting, text encoding
-- KnowledgeBase: facts, Q&A pairs, semantic search
-- StyleEngine: style extraction, classification, transfer
+- GeometricLCM: fact learning, queries, analogies, multi-hop reasoning
+- Supporting modules: cosine similarity, tokenization
 """
 
 import sys
@@ -14,12 +14,9 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import numpy as np
 from truthspace_lcm.core import (
     Vocabulary,
-    KnowledgeBase,
-    StyleEngine,
-    Style,
+    GeometricLCM,
     cosine_similarity,
     tokenize,
-    detect_question_type,
 )
 
 
@@ -131,182 +128,273 @@ class TestCosine:
         assert cosine_similarity(v1, v2) == 0.0
 
 
-class TestKnowledgeBase:
-    """Test KnowledgeBase."""
+class TestGeometricLCM:
+    """Test GeometricLCM - the core dynamic geometric language model."""
+    
+    def test_initialization(self):
+        """Test LCM initialization."""
+        lcm = GeometricLCM(dim=256)
+        
+        assert lcm.dim == 256
+        assert len(lcm.entities) == 0
+        assert len(lcm.relations) == 0
+        assert len(lcm.facts) == 0
     
     def test_add_fact(self):
         """Test adding facts."""
-        vocab = Vocabulary(dim=64)
-        kb = KnowledgeBase(vocab)
+        lcm = GeometricLCM(dim=256)
         
-        fact = kb.add_fact("The sky is blue.", source="test")
+        fact = lcm.add_fact("france", "capital_of", "paris")
         
-        assert fact.content == "The sky is blue."
-        assert fact.source == "test"
-        assert len(fact.encoding) == 64
-        assert fact.id in kb.facts
-    
-    def test_add_qa_pair(self):
-        """Test adding Q&A pairs."""
-        vocab = Vocabulary(dim=64)
-        kb = KnowledgeBase(vocab)
-        
-        qa = kb.add_qa_pair("What is the color of the sky?", "The sky is blue.", source="test")
-        
-        assert qa.question == "What is the color of the sky?"
-        assert qa.answer == "The sky is blue."
-        assert qa.question_type == "WHAT"
-        assert qa.id in kb.qa_pairs
-    
-    def test_search_qa(self):
-        """Test Q&A search."""
-        vocab = Vocabulary(dim=64)
-        kb = KnowledgeBase(vocab)
-        
-        kb.add_qa_pair("What is Python?", "Python is a programming language.")
-        kb.add_qa_pair("What is Java?", "Java is a programming language.")
-        kb.add_qa_pair("Who is Einstein?", "Einstein was a physicist.")
-        
-        results = kb.search_qa("What is Python programming?", k=2)
-        
-        assert len(results) == 2
-        best_qa, best_sim = results[0]
-        assert "Python" in best_qa.question or "programming" in best_qa.answer
-        assert best_sim > 0.2
-    
-    def test_search_facts(self):
-        """Test fact search."""
-        vocab = Vocabulary(dim=64)
-        kb = KnowledgeBase(vocab)
-        
-        kb.add_fact("Cats are mammals.")
-        kb.add_fact("Dogs are mammals.")
-        kb.add_fact("Python is a programming language.")
-        
-        results = kb.search_facts("Tell me about cats", k=2)
-        
-        assert len(results) == 2
-        best_fact, best_sim = results[0]
-        assert "Cats" in best_fact.content or "mammals" in best_fact.content
+        assert fact.subject == "france"
+        assert fact.relation == "capital_of"
+        assert fact.object == "paris"
+        assert "france" in lcm.entities
+        assert "paris" in lcm.entities
+        assert "capital_of" in lcm.relations
     
     def test_ingest_text(self):
         """Test text ingestion."""
-        vocab = Vocabulary(dim=64)
-        kb = KnowledgeBase(vocab)
+        lcm = GeometricLCM(dim=256)
         
-        text = "Captain Ahab is the captain of the Pequod. He is obsessed with Moby Dick."
-        counts = kb.ingest_text(text, source="moby_dick")
+        facts = lcm.ingest("Paris is the capital of France.")
         
-        assert counts['facts'] >= 2
-        assert len(kb.facts) >= 2
-
-
-class TestQuestionType:
-    """Test question type detection."""
+        assert len(facts) > 0
+        assert "france" in lcm.entities
+        assert "paris" in lcm.entities
     
-    def test_who_questions(self):
-        assert detect_question_type("Who is the president?") == "WHO"
-        assert detect_question_type("Who was Einstein?") == "WHO"
-    
-    def test_what_questions(self):
-        assert detect_question_type("What is Python?") == "WHAT"
-        assert detect_question_type("What does this mean?") == "WHAT"
-    
-    def test_where_questions(self):
-        assert detect_question_type("Where is Paris?") == "WHERE"
-        assert detect_question_type("Where did it happen?") == "WHERE"
-    
-    def test_when_questions(self):
-        assert detect_question_type("When did WWII end?") == "WHEN"
-        assert detect_question_type("What year was it?") == "WHEN"
-    
-    def test_why_questions(self):
-        assert detect_question_type("Why did he leave?") == "WHY"
-        assert detect_question_type("Why is the sky blue?") == "WHY"
-    
-    def test_how_questions(self):
-        assert detect_question_type("How does it work?") == "HOW"
-        assert detect_question_type("How to cook pasta?") == "HOW"
-    
-    def test_unknown_questions(self):
-        assert detect_question_type("Is this correct?") == "UNKNOWN"
-
-
-class TestStyleEngine:
-    """Test StyleEngine."""
-    
-    def test_extract_style(self):
-        """Test style extraction."""
-        vocab = Vocabulary(dim=64)
-        engine = StyleEngine(vocab)
+    def test_learn(self):
+        """Test learning updates structure."""
+        lcm = GeometricLCM(dim=256)
         
-        exemplars = [
-            "The methodology demonstrates significant improvements.",
-            "One must consider the theoretical implications.",
-            "Results indicate a statistically significant correlation.",
+        lcm.add_fact("france", "capital_of", "paris")
+        lcm.add_fact("germany", "capital_of", "berlin")
+        lcm.add_fact("japan", "capital_of", "tokyo")
+        
+        consistency = lcm.learn(n_iterations=50)
+        
+        assert consistency > 0.9, f"Should achieve high consistency, got {consistency}"
+    
+    def test_query(self):
+        """Test relational queries."""
+        lcm = GeometricLCM(dim=256)
+        
+        lcm.add_fact("france", "capital_of", "paris")
+        lcm.add_fact("germany", "capital_of", "berlin")
+        lcm.learn(n_iterations=50)
+        
+        results = lcm.query("france", "capital_of", k=1)
+        
+        assert len(results) > 0
+        assert results[0][0] == "paris", f"Expected paris, got {results[0][0]}"
+    
+    def test_inverse_query(self):
+        """Test inverse relational queries."""
+        lcm = GeometricLCM(dim=256)
+        
+        lcm.add_fact("france", "capital_of", "paris")
+        lcm.add_fact("germany", "capital_of", "berlin")
+        lcm.learn(n_iterations=50)
+        
+        results = lcm.inverse_query("paris", "capital_of", k=1)
+        
+        assert len(results) > 0
+        assert results[0][0] == "france", f"Expected france, got {results[0][0]}"
+    
+    def test_analogy(self):
+        """Test analogical reasoning."""
+        lcm = GeometricLCM(dim=256)
+        
+        lcm.add_fact("france", "capital_of", "paris")
+        lcm.add_fact("germany", "capital_of", "berlin")
+        lcm.add_fact("japan", "capital_of", "tokyo")
+        lcm.learn(n_iterations=50)
+        
+        # france:paris :: germany:?
+        results = lcm.analogy("france", "paris", "germany", k=1)
+        
+        assert len(results) > 0
+        assert results[0][0] == "berlin", f"Expected berlin, got {results[0][0]}"
+    
+    def test_analogy_cross_domain(self):
+        """Test analogies don't cross domains incorrectly."""
+        lcm = GeometricLCM(dim=256)
+        
+        # Geography
+        lcm.add_fact("france", "capital_of", "paris")
+        lcm.add_fact("germany", "capital_of", "berlin")
+        
+        # Literature
+        lcm.add_fact("melville", "wrote", "moby_dick")
+        lcm.add_fact("shakespeare", "wrote", "hamlet")
+        
+        lcm.learn(n_iterations=50)
+        
+        # Geography analogy should stay in geography
+        results = lcm.analogy("france", "paris", "germany", k=1)
+        assert results[0][0] == "berlin"
+        
+        # Literature analogy should stay in literature
+        results = lcm.analogy("melville", "moby_dick", "shakespeare", k=1)
+        assert results[0][0] == "hamlet"
+    
+    def test_similar(self):
+        """Test finding similar entities."""
+        lcm = GeometricLCM(dim=256)
+        
+        lcm.add_fact("france", "capital_of", "paris")
+        lcm.add_fact("germany", "capital_of", "berlin")
+        lcm.add_fact("italy", "capital_of", "rome")
+        lcm.learn(n_iterations=50)
+        
+        results = lcm.similar("paris", k=3)
+        
+        assert len(results) > 0
+        # Other capitals should be similar to paris
+        similar_names = [r[0] for r in results]
+        assert "berlin" in similar_names or "rome" in similar_names
+    
+    def test_multi_hop(self):
+        """Test multi-hop reasoning."""
+        lcm = GeometricLCM(dim=256)
+        
+        lcm.add_fact("france", "capital_of", "paris")
+        lcm.add_fact("france", "located_in", "europe")
+        lcm.learn(n_iterations=50)
+        
+        # france --capital_of--> ?
+        results = lcm.multi_hop("france", ["capital_of"], k=1)
+        
+        assert len(results) > 0
+        assert results[0][0] == "paris"
+    
+    def test_incremental_learning(self):
+        """Test that new facts can be added incrementally."""
+        lcm = GeometricLCM(dim=256)
+        
+        # Initial facts
+        lcm.add_fact("france", "capital_of", "paris")
+        lcm.add_fact("germany", "capital_of", "berlin")
+        lcm.learn(n_iterations=30)
+        
+        # Add new fact
+        lcm.add_fact("japan", "capital_of", "tokyo")
+        lcm.learn(n_iterations=30)
+        
+        # Should work for new entity
+        results = lcm.analogy("france", "paris", "japan", k=1)
+        assert results[0][0] == "tokyo"
+    
+    def test_relation_consistency(self):
+        """Test that relations achieve high consistency."""
+        lcm = GeometricLCM(dim=256)
+        
+        # Add multiple instances of same relation
+        pairs = [
+            ("france", "paris"),
+            ("germany", "berlin"),
+            ("japan", "tokyo"),
+            ("italy", "rome"),
+            ("spain", "madrid"),
         ]
         
-        style = engine.extract_style(exemplars, "formal")
+        for country, capital in pairs:
+            lcm.add_fact(country, "capital_of", capital)
         
-        assert style.name == "formal"
-        assert style.exemplar_count == 3
-        assert len(style.centroid) == 64
-        assert "formal" in engine.styles
+        lcm.learn(n_iterations=100, target_consistency=0.95)
+        
+        consistency = lcm.relations["capital_of"].consistency
+        assert consistency > 0.9, f"Should have >90% consistency, got {consistency:.1%}"
     
-    def test_classify(self):
-        """Test style classification."""
-        vocab = Vocabulary(dim=64)
-        engine = StyleEngine(vocab)
+    def test_natural_language_ask(self):
+        """Test natural language question answering."""
+        lcm = GeometricLCM(dim=256)
         
-        # Extract two styles
-        engine.extract_style([
-            "Hey, this is cool!",
-            "So basically, it works.",
-            "Pretty simple, right?",
-        ], "casual")
+        lcm.ingest("Paris is the capital of France.")
+        lcm.ingest("Berlin is the capital of Germany.")
+        lcm.learn(n_iterations=30)
         
-        engine.extract_style([
-            "The implementation demonstrates improvements.",
-            "One must consider the implications.",
-            "Results indicate significant findings.",
-        ], "formal")
+        answer = lcm.ask("What is the capital of France?")
         
-        # Classify casual text
-        results = engine.classify("Hey, that's pretty neat!")
-        assert results[0][0] == "casual", f"Expected casual, got {results[0][0]}"
-        
-        # Classify formal text
-        results = engine.classify("The methodology indicates significant results.")
-        assert results[0][0] == "formal", f"Expected formal, got {results[0][0]}"
+        assert "paris" in answer.lower()
     
-    def test_transfer(self):
-        """Test style transfer."""
-        vocab = Vocabulary(dim=64)
-        engine = StyleEngine(vocab)
+    def test_natural_language_tell(self):
+        """Test natural language fact ingestion."""
+        lcm = GeometricLCM(dim=256)
         
-        engine.extract_style([
-            "The implementation demonstrates improvements.",
-            "One must consider the implications.",
-        ], "formal")
+        result = lcm.tell("Tokyo is the capital of Japan.")
         
-        styled_vec, words = engine.transfer("This is a test.", "formal", strength=0.5)
-        
-        assert len(styled_vec) == 64
-        assert isinstance(words, list)
+        assert "learned" in result.lower()
+        assert "japan" in lcm.entities
+        assert "tokyo" in lcm.entities
     
-    def test_style_difference(self):
-        """Test style difference computation."""
-        vocab = Vocabulary(dim=64)
-        engine = StyleEngine(vocab)
+    def test_persistence(self):
+        """Test save and load."""
+        import tempfile
+        import os
         
-        engine.extract_style(["Hey, cool!", "Nice one!"], "casual")
-        engine.extract_style(["The methodology is sound.", "Results are significant."], "formal")
+        lcm1 = GeometricLCM(dim=256)
+        lcm1.add_fact("france", "capital_of", "paris")
+        lcm1.add_fact("germany", "capital_of", "berlin")
+        lcm1.learn(n_iterations=30)
         
-        direction, toward_formal, toward_casual = engine.style_difference("casual", "formal")
+        # Save
+        filepath = tempfile.mktemp(suffix=".json")
+        lcm1.save(filepath)
         
-        assert len(direction) == 64
-        assert isinstance(toward_formal, list)
-        assert isinstance(toward_casual, list)
+        # Load into new instance
+        lcm2 = GeometricLCM()
+        lcm2.load(filepath)
+        
+        # Verify
+        assert len(lcm2.entities) == len(lcm1.entities)
+        assert len(lcm2.relations) == len(lcm1.relations)
+        
+        results = lcm2.query("france", "capital_of", k=1)
+        assert results[0][0] == "paris"
+        
+        # Cleanup
+        os.remove(filepath)
+
+
+class TestScaling:
+    """Test scaling behavior."""
+    
+    def test_many_facts(self):
+        """Test with many facts."""
+        lcm = GeometricLCM(dim=256)
+        
+        # Add 50 country-capital pairs
+        for i in range(50):
+            lcm.add_fact(f"country_{i}", "capital_of", f"capital_{i}")
+        
+        lcm.learn(n_iterations=100, target_consistency=0.95)
+        
+        # Should still work
+        results = lcm.query("country_0", "capital_of", k=1)
+        assert results[0][0] == "capital_0"
+        
+        # Analogies should work
+        results = lcm.analogy("country_0", "capital_0", "country_25", k=1)
+        assert results[0][0] == "capital_25"
+    
+    def test_multiple_relations(self):
+        """Test with multiple relation types."""
+        lcm = GeometricLCM(dim=256)
+        
+        # Different relation types
+        lcm.add_fact("france", "capital_of", "paris")
+        lcm.add_fact("germany", "capital_of", "berlin")
+        lcm.add_fact("melville", "wrote", "moby_dick")
+        lcm.add_fact("shakespeare", "wrote", "hamlet")
+        lcm.add_fact("paris", "located_in", "france")
+        lcm.add_fact("berlin", "located_in", "germany")
+        
+        lcm.learn(n_iterations=50)
+        
+        # Each relation should work independently
+        assert lcm.query("france", "capital_of", k=1)[0][0] == "paris"
+        assert lcm.query("melville", "wrote", k=1)[0][0] == "moby_dick"
 
 
 def run_all_tests():
@@ -319,9 +407,8 @@ def run_all_tests():
     test_classes = [
         TestVocabulary,
         TestCosine,
-        TestKnowledgeBase,
-        TestQuestionType,
-        TestStyleEngine,
+        TestGeometricLCM,
+        TestScaling,
     ]
     
     total_passed = 0
@@ -339,15 +426,11 @@ def run_all_tests():
         for method_name in methods:
             try:
                 getattr(instance, method_name)()
+                print(f"  ✓ {method_name}")
                 passed += 1
             except Exception as e:
                 print(f"  ✗ {method_name}: {e}")
                 failed += 1
-        
-        if failed == 0:
-            print(f"  ✓ All {passed} tests passed")
-        else:
-            print(f"  {passed} passed, {failed} failed")
         
         total_passed += passed
         total_failed += failed

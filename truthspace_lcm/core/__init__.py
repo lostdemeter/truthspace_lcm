@@ -61,6 +61,27 @@ from .style import (
     Style,
 )
 
+from .binding import (
+    bind,
+    unbind,
+    bundle,
+    permute,
+    inverse_permute,
+    similarity,
+    BindingMethod,
+    CleanupMemory,
+    RelationalStore,
+    SequenceEncoder,
+)
+
+from .geometric_lcm import (
+    GeometricLCM,
+    GeoEntity,
+    GeoRelation,
+    GeoFact,
+    FactParser,
+)
+
 __all__ = [
     # Vocabulary
     "Vocabulary",
@@ -81,4 +102,21 @@ __all__ = [
     # Style Engine
     "StyleEngine",
     "Style",
+    # Binding (VSA)
+    "bind",
+    "unbind",
+    "bundle",
+    "permute",
+    "inverse_permute",
+    "similarity",
+    "BindingMethod",
+    "CleanupMemory",
+    "RelationalStore",
+    "SequenceEncoder",
+    # Geometric LCM
+    "GeometricLCM",
+    "GeoEntity",
+    "GeoRelation",
+    "GeoFact",
+    "FactParser",
 ]
