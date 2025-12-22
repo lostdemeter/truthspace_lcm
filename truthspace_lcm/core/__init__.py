@@ -82,6 +82,21 @@ from .geometric_lcm import (
     FactParser,
 )
 
+from .bootstrap import (
+    BootstrapKnowledge,
+    ExtractedFact,
+    ParsedQuestion,
+    CoreferenceTracker,
+    get_bootstrap_knowledge,
+)
+
+from .pattern_learner import (
+    PatternLearner,
+    PatternCandidate,
+    ExtractionFailure,
+    analyze_book_for_patterns,
+)
+
 __all__ = [
     # Vocabulary
     "Vocabulary",
@@ -119,4 +134,15 @@ __all__ = [
     "GeoRelation",
     "GeoFact",
     "FactParser",
+    # Bootstrap Knowledge
+    "BootstrapKnowledge",
+    "ExtractedFact",
+    "ParsedQuestion",
+    "CoreferenceTracker",
+    "get_bootstrap_knowledge",
+    # Pattern Learning
+    "PatternLearner",
+    "PatternCandidate",
+    "ExtractionFailure",
+    "analyze_book_for_patterns",
 ]

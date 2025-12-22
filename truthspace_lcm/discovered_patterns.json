@@ -1,0 +1,1299 @@
+{
+  "version": "1.0",
+  "description": "Patterns discovered through error-driven learning",
+  "patterns": [
+    {
+      "name": "thinks",
+      "regex": "([A-Z][a-z]+)\\s+thoughts\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "thinks",
+        "entity2"
+      ],
+      "description": "[ENTITY] thoughts [ENTITY2] -> (entity1, thinks, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "Collins through his paces; but the general sense of\nthe world has probably been right in preferring to the first rank his\nconsolation to the former when she maunders over the entail, \u201cMy dear,\ndo not give way to such gloomy thoughts."
+      ]
+    },
+    {
+      "name": "saw",
+      "regex": "([A-Z][a-z]+)\\s+seemed\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "saw",
+        "entity2"
+      ],
+      "description": "[ENTITY] seemed [ENTITY2] -> (entity1, saw, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "But the\nhero and the heroine are not tints to be dismissed._\n\n_Darcy has always seemed to me by far the best and most interesting of\nMiss Austen\u2019s heroes; the only possible competitor being Henry Tilney,\nwhose part is so slight and simple that it hardly enters into\ncomparison."
+      ]
+    },
+    {
+      "name": "marris",
+      "regex": "([A-Z][a-z]+)\\s+married\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "marris",
+        "entity2"
+      ],
+      "description": "[ENTITY] married [ENTITY2] -> (entity1, marris, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "But I, at least, have not the slightest doubt that she would have\nmarried Darcy just as willingly without Pemberley as with it, and\nanybody who can read between lines will not find the lovers\u2019\nconversations in the final chapters so frigid as they might have looked\nto the Della Cruscans of their own day, and perhaps do look to the Della\nCruscans of this._\n\n_And, after all, what is the good of seeking for the reason of\ncharm?--it is there."
+      ]
+    },
+    {
+      "name": "entered",
+      "regex": "([A-Z][a-z]+)\\s+entered\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "entered",
+        "entity2"
+      ],
+      "description": "[ENTITY] entered [ENTITY2] -> (entity1, entered, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "Bingley will like it\u201d                                      6\n\n\u201cI\u2019m the tallest\u201d                                                      9\n\n\u201cHe rode a black horse\u201d                                               10\n\n\u201cWhen the party entered\u201d                                              12\n\n\u201cShe is tolerable\u201d                                                    15\n\nHeading to Chapter IV."
+      ]
+    },
+    {
+      "name": "entered",
+      "regex": "([A-Z][a-z]+)\\s+entered\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "entered",
+        "entity2"
+      ],
+      "description": "[ENTITY] entered [ENTITY2] -> (entity1, entered, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "139\n\n\u201cThey entered the breakfast-room\u201d                                    143\n\nHeading to Chapter XXI."
+      ]
+    },
+    {
+      "name": "marris",
+      "regex": "([A-Z][a-z]+)\\s+married\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "marris",
+        "entity2"
+      ],
+      "description": "[ENTITY] married [ENTITY2] -> (entity1, marris, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "Morris immediately; that he is\nto take possession before Michaelmas, and some of his servants are to be\nin the house by the end of next week.\u201d\n\n\u201cWhat is his name?\u201d\n\n\u201cBingley.\u201d\n\n\u201cIs he married or single?\u201d\n\n\u201cOh, single, my dear, to be sure!"
+      ]
+    },
+    {
+      "name": "replis",
+      "regex": "([A-Z][a-z]+)\\s+replied\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "replis",
+        "entity2"
+      ],
+      "description": "[ENTITY] replied [ENTITY2] -> (entity1, replis, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "But you are always giving _her_ the preference.\u201d\n\n\u201cThey have none of them much to recommend them,\u201d replied he: \u201cthey are\nall silly and ignorant like other girls; but Lizzy has something more of\nquickness than her sisters.\u201d\n\n\u201cMr."
+      ]
+    },
+    {
+      "name": "replis",
+      "regex": "([A-Z][a-z]+)\\s+replied\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "replis",
+        "entity2"
+      ],
+      "description": "[ENTITY] replied [ENTITY2] -> (entity1, replis, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "You tear them to pieces.\u201d\n\n\u201cKitty has no discretion in her coughs,\u201d said her father; \u201cshe times\nthem ill.\u201d\n\n\u201cI do not cough for my own amusement,\u201d replied Kitty, fretfully."
+      ]
+    },
+    {
+      "name": "marris",
+      "regex": "([A-Z][a-z]+)\\s+married\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "marris",
+        "entity2"
+      ],
+      "description": "[ENTITY] married [ENTITY2] -> (entity1, marris, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "Bennet to her husband, \u201cand all the others equally well\nmarried, I shall have nothing to wish for.\u201d\n\nIn a few days Mr."
+      ]
+    },
+    {
+      "name": "entered",
+      "regex": "([A-Z][a-z]+)\\s+entered\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "entered",
+        "entity2"
+      ],
+      "description": "[ENTITY] entered [ENTITY2] -> (entity1, entered, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "Lady Lucas quieted her fears a\nlittle by starting the idea of his\n\n[Illustration:\n\n     \u201cWhen the Party entered\u201d\n\n[_Copyright 1894 by George Allen._]]\n\nbeing gone to London only to get a large party for the ball; and a\nreport soon followed that Mr."
+      ]
+    },
+    {
+      "name": "entered",
+      "regex": "([A-Z][a-z]+)\\s+entered\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "entered",
+        "entity2"
+      ],
+      "description": "[ENTITY] entered [ENTITY2] -> (entity1, entered, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "And when the party entered the\nassembly-room, it consisted of only five altogether: Mr."
+      ]
+    },
+    {
+      "name": "remains",
+      "regex": "([A-Z][a-z]+)\\s+remained\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "remains",
+        "entity2"
+      ],
+      "description": "[ENTITY] remained [ENTITY2] -> (entity1, remains, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "Darcy walked off; and Elizabeth\nremained with no very cordial feelings towards him."
+      ]
+    },
+    {
+      "name": "asks",
+      "regex": "([A-Z][a-z]+)\\s+asked\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "asks",
+        "entity2"
+      ],
+      "description": "[ENTITY] asked [ENTITY2] -> (entity1, asks, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "First of all, he asked Miss Lucas."
+      ]
+    },
+    {
+      "name": "appears",
+      "regex": "([A-Z][a-z]+)\\s+appeared\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "appears",
+        "entity2"
+      ],
+      "description": "[ENTITY] appeared [ENTITY2] -> (entity1, appears, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "Bingley was endeared to Darcy by the\neasiness, openness, and ductility of his temper, though no disposition\ncould offer a greater contrast to his own, and though with his own he\nnever appeared dissatisfied."
+      ]
+    },
+    {
+      "name": "appears",
+      "regex": "([A-Z][a-z]+)\\s+appeared\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "appears",
+        "entity2"
+      ],
+      "description": "[ENTITY] appeared [ENTITY2] -> (entity1, appears, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "Bingley\nwas sure of being liked wherever he appeared; Darcy was continually\ngiving offence."
+      ]
+    },
+    {
+      "name": "lives_in",
+      "regex": "([A-Z][a-z]+)\\s+lived\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "lives_in",
+        "entity2"
+      ],
+      "description": "[ENTITY] lived [ENTITY2] -> (entity1, lives_in, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "[Illustration]\n\nWithin a short walk of Longbourn lived a family with whom the Bennets\nwere particularly intimate."
+      ]
+    },
+    {
+      "name": "saw",
+      "regex": "([A-Z][a-z]+)\\s+seemed\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "saw",
+        "entity2"
+      ],
+      "description": "[ENTITY] seemed [ENTITY2] -> (entity1, saw, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "Bingley\u2019s first choice.\u201d\n\n\u201cYes; but he seemed to like his second better.\u201d\n\n\u201cOh, you mean Jane, I suppose, because he danced with her twice."
+      ]
+    },
+    {
+      "name": "asks",
+      "regex": "([A-Z][a-z]+)\\s+asked\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "asks",
+        "entity2"
+      ],
+      "description": "[ENTITY] asked [ENTITY2] -> (entity1, asks, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "Darcy speaking to her.\u201d\n\n\u201cAy, because she asked him at last how he liked Netherfield, and he\ncould not help answering her; but she said he seemed very angry at being\nspoke to.\u201d\n\n\u201cMiss Bingley told me,\u201d said Jane, \u201cthat he never speaks much unless\namong his intimate acquaintance."
+      ]
+    },
+    {
+      "name": "replis",
+      "regex": "([A-Z][a-z]+)\\s+replied\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "replis",
+        "entity2"
+      ],
+      "description": "[ENTITY] replied [ENTITY2] -> (entity1, replis, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "If I may so express it, he has a _right_\nto be proud.\u201d\n\n\u201cThat is very true,\u201d replied Elizabeth, \u201cand I could easily forgive\n_his_ pride, if he had not mortified _mine_.\u201d\n\n\u201cPride,\u201d observed Mary, who piqued herself upon the solidity of her\nreflections, \u201cis a very common failing, I believe."
+      ]
+    },
+    {
+      "name": "marris",
+      "regex": "([A-Z][a-z]+)\\s+married\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "marris",
+        "entity2"
+      ],
+      "description": "[ENTITY] married [ENTITY2] -> (entity1, marris, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "Had she merely _dined_ with him, she might\nonly have discovered whether he had a good appetite; but you must\nremember that four evenings have been also spent together--and four\nevenings may do a great deal.\u201d\n\n\u201cYes: these four evenings have enabled them to ascertain that they both\nlike Vingt-un better than Commerce, but with respect to any other\nleading characteristic, I do not imagine that much has been unfolded.\u201d\n\n\u201cWell,\u201d said Charlotte, \u201cI wish Jane success with all my heart; and if\nshe were married to him to-morrow, I should think she had as good a\nchance of happiness as if she were to be studying his character for a\ntwelvemonth."
+      ]
+    },
+    {
+      "name": "saw",
+      "regex": "([A-Z][a-z]+)\\s+seemed\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "saw",
+        "entity2"
+      ],
+      "description": "[ENTITY] seemed [ENTITY2] -> (entity1, saw, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "I shall be late!\u201d (when she thought it over afterwards,\nit occurred to her that she ought to have wondered at this, but at the\ntime it all seemed quite natural); but when the Rabbit actually _took a\nwatch out of its waistcoat-pocket_, and looked at it, and then hurried\non, Alice started to her feet, for it flashed across her mind that she\nhad never before seen a rabbit with either a waistcoat-pocket, or a\nwatch to take out of it, and burning with curiosity, she ran across the\nfield after it, and fortunately was just in time to see it pop down a\nlarge rabbit-hole under the hedge."
+      ]
+    },
+    {
+      "name": "saw",
+      "regex": "([A-Z][a-z]+)\\s+seemed\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "saw",
+        "entity2"
+      ],
+      "description": "[ENTITY] seemed [ENTITY2] -> (entity1, saw, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "There seemed to be no use in waiting by the little door, so she went\nback to the table, half hoping she might find another key on it, or at\nany rate a book of rules for shutting people up like telescopes: this\ntime she found a little bottle on it, (\u201cwhich certainly was not here\nbefore,\u201d said Alice,) and round the neck of the bottle was a paper\nlabel, with the words \u201cDRINK ME,\u201d beautifully printed on it in large\nletters."
+      ]
+    },
+    {
+      "name": "followed",
+      "regex": "([A-Z][a-z]+)\\s+followed\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "followed",
+        "entity2"
+      ],
+      "description": "[ENTITY] followed [ENTITY2] -> (entity1, followed, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "\u201cCome, there\u2019s no use in crying like that!\u201d said Alice to herself,\nrather sharply; \u201cI advise you to leave off this minute!\u201d She generally\ngave herself very good advice, (though she very seldom followed it),\nand sometimes she scolded herself so severely as to bring tears into\nher eyes; and once she remembered trying to box her own ears for having\ncheated herself in a game of croquet she was playing against herself,\nfor this curious child was very fond of pretending to be two people."
+      ]
+    },
+    {
+      "name": "remains",
+      "regex": "([A-Z][a-z]+)\\s+remained\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "remains",
+        "entity2"
+      ],
+      "description": "[ENTITY] remained [ENTITY2] -> (entity1, remains, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "Which\nway?\u201d, holding her hand on the top of her head to feel which way it was\ngrowing, and she was quite surprised to find that she remained the same\nsize: to be sure, this generally happens when one eats cake, but Alice\nhad got so much into the way of expecting nothing but out-of-the-way\nthings to happen, that it seemed quite dull and stupid for life to go\non in the common way."
+      ]
+    },
+    {
+      "name": "remembers",
+      "regex": "([A-Z][a-z]+)\\s+remembered\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "remembers",
+        "entity2"
+      ],
+      "description": "[ENTITY] remembered [ENTITY2] -> (entity1, remembers, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "However, everything is queer to-day.\u201d\n\nJust then she heard something splashing about in the pool a little way\noff, and she swam nearer to make out what it was: at first she thought\nit must be a walrus or hippopotamus, but then she remembered how small\nshe was now, and she soon made out that it was only a mouse that had\nslipped in like herself."
+      ]
+    },
+    {
+      "name": "saw",
+      "regex": "([A-Z][a-z]+)\\s+seemed\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "saw",
+        "entity2"
+      ],
+      "description": "[ENTITY] seemed [ENTITY2] -> (entity1, saw, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "At last the Mouse, who seemed to be a person of authority among them,\ncalled out, \u201cSit down, all of you, and listen to me!"
+      ]
+    },
+    {
+      "name": "wants",
+      "regex": "([A-Z][a-z]+)\\s+wanted\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "wants",
+        "entity2"
+      ],
+      "description": "[ENTITY] wanted [ENTITY2] -> (entity1, wants, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "\u2018William\nthe Conqueror, whose cause was favoured by the pope, was soon submitted\nto by the English, who wanted leaders, and had been of late much\naccustomed to usurpation and conquest."
+      ]
+    },
+    {
+      "name": "wants",
+      "regex": "([A-Z][a-z]+)\\s+wanted\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "wants",
+        "entity2"
+      ],
+      "description": "[ENTITY] wanted [ENTITY2] -> (entity1, wants, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "\u201cWhat I was going to say,\u201d said the Dodo in an offended tone, \u201cwas,\nthat the best thing to get us dry would be a Caucus-race.\u201d\n\n\u201cWhat _is_ a Caucus-race?\u201d said Alice; not that she wanted much to\nknow, but the Dodo had paused as if it thought that _somebody_ ought to\nspeak, and no one else seemed inclined to say anything."
+      ]
+    },
+    {
+      "name": "saw",
+      "regex": "([A-Z][a-z]+)\\s+seemed\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "saw",
+        "entity2"
+      ],
+      "description": "[ENTITY] seemed [ENTITY2] -> (entity1, saw, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "Where _can_ I have dropped them, I wonder?\u201d Alice guessed in a\nmoment that it was looking for the fan and the pair of white kid\ngloves, and she very good-naturedly began hunting about for them, but\nthey were nowhere to be seen\u2014everything seemed to have changed since\nher swim in the pool, and the great hall, with the glass table and the\nlittle door, had vanished completely."
+      ]
+    },
+    {
+      "name": "saw",
+      "regex": "([A-Z][a-z]+)\\s+seemed\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "saw",
+        "entity2"
+      ],
+      "description": "[ENTITY] seemed [ENTITY2] -> (entity1, saw, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "What _will_ become of me?\u201d\n\nLuckily for Alice, the little magic bottle had now had its full effect,\nand she grew no larger: still it was very uncomfortable, and, as there\nseemed to be no sort of chance of her ever getting out of the room\nagain, no wonder she felt unhappy."
+      ]
+    },
+    {
+      "name": "appears",
+      "regex": "([A-Z][a-z]+)\\s+appeared\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "appears",
+        "entity2"
+      ],
+      "description": "[ENTITY] appeared [ENTITY2] -> (entity1, appears, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "Hardly knowing what she did, she picked up a little bit of stick, and\nheld it out to the puppy; whereupon the puppy jumped into the air off\nall its feet at once, with a yelp of delight, and rushed at the stick,\nand made believe to worry it; then Alice dodged behind a great thistle,\nto keep herself from being run over; and the moment she appeared on the\nother side, the puppy made another rush at the stick, and tumbled head\nover heels in its hurry to get hold of it; then Alice, thinking it was\nvery like having a game of play with a cart-horse, and expecting every\nmoment to be trampled under its feet, ran round the thistle again; then\nthe puppy began a series of short charges at the stick, running a very\nlittle way forwards each time and a long way back, and barking hoarsely\nall the while, till at last it sat down a good way off, panting, with\nits tongue hanging out of its mouth, and its great eyes half shut."
+      ]
+    },
+    {
+      "name": "saw",
+      "regex": "([A-Z][a-z]+)\\s+seemed\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "saw",
+        "entity2"
+      ],
+      "description": "[ENTITY] seemed [ENTITY2] -> (entity1, saw, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "This seemed to Alice a good opportunity for making her escape; so she\nset off at once, and ran till she was quite tired and out of breath,\nand till the puppy\u2019s bark sounded quite faint in the distance."
+      ]
+    },
+    {
+      "name": "saw",
+      "regex": "([A-Z][a-z]+)\\s+seemed\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "saw",
+        "entity2"
+      ],
+      "description": "[ENTITY] seemed [ENTITY2] -> (entity1, saw, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "Here was another puzzling question; and as Alice could not think of any\ngood reason, and as the Caterpillar seemed to be in a _very_ unpleasant\nstate of mind, she turned away."
+      ]
+    },
+    {
+      "name": "replis",
+      "regex": "([A-Z][a-z]+)\\s+replied\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "replis",
+        "entity2"
+      ],
+      "description": "[ENTITY] replied [ENTITY2] -> (entity1, replis, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "\u201cOh, I\u2019m not particular as to size,\u201d Alice hastily replied; \u201conly one\ndoesn\u2019t like changing so often, you know.\u201d\n\n\u201cI _don\u2019t_ know,\u201d said the Caterpillar."
+      ]
+    },
+    {
+      "name": "asks",
+      "regex": "([A-Z][a-z]+)\\s+asked\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "asks",
+        "entity2"
+      ],
+      "description": "[ENTITY] asked [ENTITY2] -> (entity1, asks, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "\u201cOf the mushroom,\u201d said the Caterpillar, just as if she had asked it\naloud; and in another moment it was out of sight."
+      ]
+    },
+    {
+      "name": "saw",
+      "regex": "([A-Z][a-z]+)\\s+seemed\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "saw",
+        "entity2"
+      ],
+      "description": "[ENTITY] seemed [ENTITY2] -> (entity1, saw, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "*      *      *      *      *      *      *\n\n    *      *      *      *      *      *\n\n*      *      *      *      *      *      *\n\n\n\u201cCome, my head\u2019s free at last!\u201d said Alice in a tone of delight, which\nchanged into alarm in another moment, when she found that her shoulders\nwere nowhere to be found: all she could see, when she looked down, was\nan immense length of neck, which seemed to rise like a stalk out of a\nsea of green leaves that lay far below her."
+      ]
+    },
+    {
+      "name": "asks",
+      "regex": "([A-Z][a-z]+)\\s+asked\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "asks",
+        "entity2"
+      ],
+      "description": "[ENTITY] asked [ENTITY2] -> (entity1, asks, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "\u201cHow am I to get in?\u201d asked Alice again, in a louder tone."
+      ]
+    },
+    {
+      "name": "followed",
+      "regex": "([A-Z][a-z]+)\\s+followed\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "followed",
+        "entity2"
+      ],
+      "description": "[ENTITY] followed [ENTITY2] -> (entity1, followed, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "While she\nwas trying to fix on one, the cook took the cauldron of soup off the\nfire, and at once set to work throwing everything within her reach at\nthe Duchess and the baby\u2014the fire-irons came first; then followed a\nshower of saucepans, plates, and dishes."
+      ]
+    },
+    {
+      "name": "saw",
+      "regex": "([A-Z][a-z]+)\\s+seemed\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "saw",
+        "entity2"
+      ],
+      "description": "[ENTITY] seemed [ENTITY2] -> (entity1, saw, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "You see the\nearth takes twenty-four hours to turn round on its axis\u2014\u201d\n\n\u201cTalking of axes,\u201d said the Duchess, \u201cchop off her head!\u201d\n\nAlice glanced rather anxiously at the cook, to see if she meant to take\nthe hint; but the cook was busily stirring the soup, and seemed not to\nbe listening, so she went on again: \u201cTwenty-four hours, I _think_; or\nis it twelve?"
+      ]
+    },
+    {
+      "name": "replis",
+      "regex": "([A-Z][a-z]+)\\s+replied\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "replis",
+        "entity2"
+      ],
+      "description": "[ENTITY] replied [ENTITY2] -> (entity1, replis, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "\u201cI said pig,\u201d replied Alice; \u201cand I wish you wouldn\u2019t keep appearing\nand vanishing so suddenly: you make one quite giddy.\u201d\n\n\u201cAll right,\u201d said the Cat; and this time it vanished quite slowly,\nbeginning with the end of the tail, and ending with the grin, which\nremained some time after the rest of it had gone."
+      ]
+    },
+    {
+      "name": "replis",
+      "regex": "([A-Z][a-z]+)\\s+replied\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "replis",
+        "entity2"
+      ],
+      "description": "[ENTITY] replied [ENTITY2] -> (entity1, replis, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "\u201cI do,\u201d Alice hastily replied; \u201cat least\u2014at least I mean what I\nsay\u2014that\u2019s the same thing, you know.\u201d\n\n\u201cNot the same thing a bit!\u201d said the Hatter."
+      ]
+    },
+    {
+      "name": "replis",
+      "regex": "([A-Z][a-z]+)\\s+replied\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "replis",
+        "entity2"
+      ],
+      "description": "[ENTITY] replied [ENTITY2] -> (entity1, replis, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "\u201cIt was the _best_ butter,\u201d the March Hare meekly replied."
+      ]
+    },
+    {
+      "name": "saw",
+      "regex": "([A-Z][a-z]+)\\s+seemed\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "saw",
+        "entity2"
+      ],
+      "description": "[ENTITY] seemed [ENTITY2] -> (entity1, saw, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "Alice felt dreadfully puzzled, The Hatter\u2019s remark seemed to have no\nsort of meaning in it, and yet it was certainly English."
+      ]
+    },
+    {
+      "name": "replis",
+      "regex": "([A-Z][a-z]+)\\s+replied\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "replis",
+        "entity2"
+      ],
+      "description": "[ENTITY] replied [ENTITY2] -> (entity1, replis, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "\u201cI dare say you never even spoke to Time!\u201d\n\n\u201cPerhaps not,\u201d Alice cautiously replied: \u201cbut I know I have to beat\ntime when I learn music.\u201d\n\n\u201cAh!"
+      ]
+    },
+    {
+      "name": "loves",
+      "regex": "([A-Z][a-z]+)\\s+loved\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "loves",
+        "entity2"
+      ],
+      "description": "[ENTITY] loved [ENTITY2] -> (entity1, loves, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "Some years ago he loved\na young Russian lady of moderate fortune, and having amassed a considerable\nsum in prize-money, the father of the girl consented to the match."
+      ]
+    },
+    {
+      "name": "appears",
+      "regex": "([A-Z][a-z]+)\\s+appeared\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "appears",
+        "entity2"
+      ],
+      "description": "[ENTITY] appeared [ENTITY2] -> (entity1, appears, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "When I appeared on deck the\nmaster said, \u201cHere is our captain, and he will not allow you to perish\non the open sea.\u201d\n\nOn perceiving me, the stranger addressed me in English, although with a\nforeign accent."
+      ]
+    },
+    {
+      "name": "replis",
+      "regex": "([A-Z][a-z]+)\\s+replied\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "replis",
+        "entity2"
+      ],
+      "description": "[ENTITY] replied [ENTITY2] -> (entity1, replis, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "His countenance instantly assumed an aspect of the deepest gloom, and\nhe replied, \u201cTo seek one who fled from me.\u201d\n\n\u201cAnd did the man whom you pursued travel in the same fashion?\u201d\n\n\u201cYes.\u201d\n\n\u201cThen I fancy we have seen him, for the day before we picked you up we\nsaw some dogs drawing a sledge, with a man in it, across the ice.\u201d\n\nThis aroused the stranger\u2019s attention, and he asked a multitude of\nquestions concerning the route which the d\u00e6mon, as he called him, had\npursued."
+      ]
+    },
+    {
+      "name": "rescus",
+      "regex": "([A-Z][a-z]+)\\s+rescued\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "rescus",
+        "entity2"
+      ],
+      "description": "[ENTITY] rescued [ENTITY2] -> (entity1, rescus, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "Soon after, when he was alone with me, he said, \u201cI have,\ndoubtless, excited your curiosity, as well as that of these good\npeople; but you are too considerate to make inquiries.\u201d\n\n\u201cCertainly; it would indeed be very impertinent and inhuman in me to\ntrouble you with any inquisitiveness of mine.\u201d\n\n\u201cAnd yet you rescued me from a strange and perilous situation; you have\nbenevolently restored me to life.\u201d\n\nSoon after this he inquired if I thought that the breaking up of the\nice had destroyed the other sledge."
+      ]
+    },
+    {
+      "name": "lives_in",
+      "regex": "([A-Z][a-z]+)\\s+lived\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "lives_in",
+        "entity2"
+      ],
+      "description": "[ENTITY] lived [ENTITY2] -> (entity1, lives_in, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "Having paid his debts,\ntherefore, in the most honourable manner, he retreated with his\ndaughter to the town of Lucerne, where he lived unknown and in\nwretchedness."
+      ]
+    },
+    {
+      "name": "loves",
+      "regex": "([A-Z][a-z]+)\\s+loved\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "loves",
+        "entity2"
+      ],
+      "description": "[ENTITY] loved [ENTITY2] -> (entity1, loves, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "My father loved Beaufort with the truest friendship and\nwas deeply grieved by his retreat in these unfortunate circumstances."
+      ]
+    },
+    {
+      "name": "entered",
+      "regex": "([A-Z][a-z]+)\\s+entered\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "entered",
+        "entity2"
+      ],
+      "description": "[ENTITY] entered [ENTITY2] -> (entity1, entered, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "This last blow overcame her, and she knelt\nby Beaufort\u2019s coffin weeping bitterly, when my father entered the\nchamber."
+      ]
+    },
+    {
+      "name": "died",
+      "regex": "([A-Z][a-z]+)\\s+died\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "died",
+        "entity2"
+      ],
+      "description": "[ENTITY] died [ENTITY2] -> (entity1, died, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "Whether he had died or still lingered in the dungeons of Austria\nwas not known."
+      ]
+    },
+    {
+      "name": "saw",
+      "regex": "([A-Z][a-z]+)\\s+seemed\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "saw",
+        "entity2"
+      ],
+      "description": "[ENTITY] seemed [ENTITY2] -> (entity1, saw, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "When my father returned from Milan, he found playing with me in the hall of\nour villa a child fairer than pictured cherub\u2014a creature who seemed\nto shed radiance from her looks and whose form and motions were lighter\nthan the chamois of the hills."
+      ]
+    },
+    {
+      "name": "saw",
+      "regex": "([A-Z][a-z]+)\\s+seemed\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "saw",
+        "entity2"
+      ],
+      "description": "[ENTITY] seemed [ENTITY2] -> (entity1, saw, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "Her presence had seemed\na blessing to them, but it would be unfair to her to keep her in poverty\nand want when Providence afforded her such powerful protection."
+      ]
+    },
+    {
+      "name": "loves",
+      "regex": "([A-Z][a-z]+)\\s+loved\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "loves",
+        "entity2"
+      ],
+      "description": "[ENTITY] loved [ENTITY2] -> (entity1, loves, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "I loved my brothers, Elizabeth, and\nClerval; these were \u201cold familiar faces,\u201d but I believed myself\ntotally unfitted for the company of strangers."
+      ]
+    },
+    {
+      "name": "ls",
+      "regex": "([A-Z][a-z]+)\\s+led\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "ls",
+        "entity2"
+      ],
+      "description": "[ENTITY] led [ENTITY2] -> (entity1, ls, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "Chance\u2014or rather the evil\ninfluence, the Angel of Destruction, which asserted omnipotent sway over me\nfrom the moment I turned my reluctant steps from my father\u2019s\ndoor\u2014led me first to M."
+      ]
+    },
+    {
+      "name": "appears",
+      "regex": "([A-Z][a-z]+)\\s+appeared\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "appears",
+        "entity2"
+      ],
+      "description": "[ENTITY] appeared [ENTITY2] -> (entity1, appears, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "\u201cScarcely had we proceeded two days on the sea, when about sunrise a\n  great many Whales and other monsters of the sea, appeared."
+      ]
+    },
+    {
+      "name": "learns",
+      "regex": "([A-Z][a-z]+)\\s+learned\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "learns",
+        "entity2"
+      ],
+      "description": "[ENTITY] learned [ENTITY2] -> (entity1, learns, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "\u201cWhat spermacetti is, men might justly doubt, since the learned\n  Hosmannus in his work of thirty years, saith plainly, _Nescio quid\n  sit_.\u201d \u2014_Sir T."
+      ]
+    },
+    {
+      "name": "kills",
+      "regex": "([A-Z][a-z]+)\\s+killed\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "kills",
+        "entity2"
+      ],
+      "description": "[ENTITY] killed [ENTITY2] -> (entity1, kills, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "\u201cMyself have agreed to try whether I can master and kill this\n  Sperma-ceti whale, for I could never hear of any of that sort that\n  was killed by any man, such is his fierceness and swiftness.\u201d\n  \u2014_Richard Strafford\u2019s Letter from the Bermudas."
+      ]
+    },
+    {
+      "name": "kills",
+      "regex": "([A-Z][a-z]+)\\s+killed\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "kills",
+        "entity2"
+      ],
+      "description": "[ENTITY] killed [ENTITY2] -> (entity1, kills, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "\u201cIn the afternoon we saw what was supposed to be a rock, but it was\n  found to be a dead whale, which some Asiatics had killed, and were\n  then towing ashore."
+      ]
+    },
+    {
+      "name": "ls",
+      "regex": "([A-Z][a-z]+)\\s+led\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "ls",
+        "entity2"
+      ],
+      "description": "[ENTITY] led [ENTITY2] -> (entity1, ls, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "\u201cIn the free element beneath me swam, Floundered and dived, in play,\n  in chace, in battle, Fishes of every colour, form, and kind; Which\n  language cannot paint, and mariner Had never seen; from dread\n  Leviathan To insect millions peopling every wave: Gather\u2019d in shoals\n  immense, like floating islands, Led by mysterious instincts through\n  that waste And trackless region, though on every side Assaulted by\n  voracious enemies, Whales, sharks, and monsters, arm\u2019d in front or\n  jaw, With swords, saws, spiral horns, or hooked fangs.\u201d\n  \u2014_Montgomery\u2019s World before the Flood_."
+      ]
+    },
+    {
+      "name": "attacks",
+      "regex": "([A-Z][a-z]+)\\s+attacked\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "attacks",
+        "entity2"
+      ],
+      "description": "[ENTITY] attacked [ENTITY2] -> (entity1, attacks, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "Chace, what is the matter?\u201d I answered, \u201cwe have been\n  stove by a whale.\u201d \u2014\u201c_Narrative of the Shipwreck of the Whale Ship\n  Essex of Nantucket, which was attacked and finally destroyed by a\n  large Sperm Whale in the Pacific Ocean_.\u201d _By Owen Chace of\n  Nantucket, first mate of said vessel."
+      ]
+    },
+    {
+      "name": "kills",
+      "regex": "([A-Z][a-z]+)\\s+killed\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "kills",
+        "entity2"
+      ],
+      "description": "[ENTITY] killed [ENTITY2] -> (entity1, kills, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "\u201cThe whale fell directly over him, and probably killed him in a\n  moment.\u201d \u2014\u201c_The Whale and his Captors, or The Whaleman\u2019s Adventures\n  and the Whale\u2019s Biography, gathered on the Homeward Cruise of the\n  Commodore Preble_.\u201d _By Rev."
+      ]
+    },
+    {
+      "name": "replis",
+      "regex": "([A-Z][a-z]+)\\s+replied\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "replis",
+        "entity2"
+      ],
+      "description": "[ENTITY] replied [ENTITY2] -> (entity1, replis, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "\u201cIf you make the least damn bit of noise,\u201d replied Samuel, \u201cI will\n  send you to hell.\u201d \u2014_Life of Samuel Comstock_ (_the mutineer_), _by\n  his brother, William Comstock."
+      ]
+    },
+    {
+      "name": "departs",
+      "regex": "([A-Z][a-z]+)\\s+departed\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "departs",
+        "entity2"
+      ],
+      "description": "[ENTITY] departed [ENTITY2] -> (entity1, departs, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "\u201cIt is generally well known that out of the crews of Whaling vessels\n  (American) few ever return in the ships on board of which they\n  departed.\u201d \u2014_Cruise in a Whale Boat_."
+      ]
+    },
+    {
+      "name": "ns",
+      "regex": "([A-Z][a-z]+)\\s+needed\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "ns",
+        "entity2"
+      ],
+      "description": "[ENTITY] needed [ENTITY2] -> (entity1, ns, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "Why did the poor poet of Tennessee, upon\nsuddenly receiving two handfuls of silver, deliberate whether to buy\nhim a coat, which he sadly needed, or invest his money in a pedestrian\ntrip to Rockaway Beach?"
+      ]
+    },
+    {
+      "name": "helped",
+      "regex": "([A-Z][a-z]+)\\s+helped\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "helped",
+        "entity2"
+      ],
+      "description": "[ENTITY] helped [ENTITY2] -> (entity1, helped, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "Then the wild and distant seas where he rolled his island\nbulk; the undeliverable, nameless perils of the whale; these, with all\nthe attending marvels of a thousand Patagonian sights and sounds,\nhelped to sway me to my wish."
+      ]
+    },
+    {
+      "name": "arrived",
+      "regex": "([A-Z][a-z]+)\\s+arrived\\s+([A-Z][a-z]+)",
+      "groups": [
+        "entity1",
+        "entity2"
+      ],
+      "fact": [
+        "entity1",
+        "arrived",
+        "entity2"
+      ],
+      "description": "[ENTITY] arrived [ENTITY2] -> (entity1, arrived, entity2)",
+      "discovered": true,
+      "confidence": 0.014705882352941176,
+      "examples": [
+        "Quitting the good city\nof old Manhatto, I duly arrived in New Bedford."
+      ]
+    }
+  ],
+  "total_failures_analyzed": 68
+}
