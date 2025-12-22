@@ -2,222 +2,252 @@
 
 ## Overview
 
-TruthSpace LCM is a **Dynamic Geometric Language Model** that performs all semantic operations as geometric operations in vector space. No neural networks, no training - just mathematics.
+TruthSpace LCM is a **Holographic Concept Language Model** that performs all semantic operations as geometric operations in concept space. No neural networks, no training - just mathematics.
 
 ## Core Principles
 
-> **Structure IS the data. Learning IS structure update.**
+> **All semantic operations are geometric operations in concept space.**
 
-- **Entities** = Positions in ℝ^256 (learned from context)
-- **Relations** = Vector offsets between entities (learned from pairs)
-- **Facts** = (subject, relation, object) triples
-- **Learning** = Iterative refinement until relations are consistent
+- **Concept Frames** = Order-free semantic representations
+- **Action Primitives** = Universal verbs (MOVE, SPEAK, THINK, etc.)
+- **Holographic Projection** = Questions are gaps; answers fill them
+- **Cross-Language** = Same concepts work across any language
 
-## Primary Component: GeometricLCM (`geometric_lcm.py`)
+## Primary Components
 
-The main component that provides dynamic learning and reasoning.
+### ConceptFrame (`concept_language.py`)
 
-### Data Structures
-
-```python
-GeoEntity:
-  - name: str
-  - position: np.ndarray (256D)
-  - entity_type: str
-
-GeoRelation:
-  - name: str
-  - vector: np.ndarray (256D offset)
-  - consistency: float (0-1)
-  - instance_count: int
-
-GeoFact:
-  - subject: str
-  - relation: str
-  - object: str
-```
-
-### Key Methods
+Language-agnostic semantic representation.
 
 ```python
-# Learning
-lcm.add_fact(subject, relation, object)  # Add a fact
-lcm.ingest(text)                          # Parse NL to facts
-lcm.tell(statement)                       # NL learning interface
-lcm.learn(n_iterations, target_consistency)  # Update structure
-
-# Inference
-lcm.query(subject, relation, k)           # subject --relation--> ?
-lcm.inverse_query(object, relation, k)    # ? --relation--> object
-lcm.analogy(a, b, c, k)                   # a:b :: c:?
-lcm.similar(entity, k)                    # Find similar entities
-lcm.multi_hop(start, [relations], k)      # Chain queries
-lcm.find_path(start, end, max_hops)       # Find paths
-
-# Natural Language
-lcm.ask(question)                         # NL question answering
-lcm.tell(statement)                       # NL fact learning
+ConceptFrame:
+  - agent: str       # Who performs the action
+  - action: str      # Primitive (MOVE, SPEAK, THINK, etc.)
+  - patient: str     # Who/what is affected
+  - theme: str       # What the action is about
+  - location: str    # Where it happens
+  - goal: str        # Destination or purpose
+  - source: str      # Origin
+  - aspect: str      # PERFECTIVE or IMPERFECTIVE
 ```
 
-### Learning Algorithm
+### ConceptExtractor (`concept_language.py`)
 
-```
-For each iteration:
-    1. Update relation vectors from current entity positions
-       relation.vector = average(object.position - subject.position)
-    
-    2. Update entity positions to align with relations
-       object.position → subject.position + relation.vector
-       subject.position → object.position - relation.vector
-    
-    3. Check consistency (pairwise similarity of offsets)
-       If consistency > target: STOP
+Extracts concept frames from text in any language.
+
+```python
+extractor = ConceptExtractor()
+frame = extractor.extract("Darcy walked to the garden.")
+# ConceptFrame(agent='darcy', action='MOVE', goal='garden')
 ```
 
-## Supporting Components
+### ConceptKnowledge (`concept_knowledge.py`)
 
-### Vocabulary (`vocabulary.py`)
+Language-agnostic knowledge storage and query.
 
-Provides deterministic word positions for initial entity placement.
+```python
+kb = ConceptKnowledge(dim=64)
+kb.add_frame(frame, source_text, source)
+results = kb.query_by_entity("darcy", k=10)
+results = kb.query_by_action("SPEAK", k=10)
+```
+
+### HolographicProjector (`concept_knowledge.py`)
+
+Resolves queries using holographic projection.
+
+```python
+projector = HolographicProjector(kb)
+axis, entity = projector.detect_question_axis("Who is Darcy?")
+# axis='WHO', entity='darcy'
+answers = projector.resolve("Who is Darcy?", k=3)
+```
+
+### ConceptQA (`concept_knowledge.py`)
+
+High-level Q&A interface.
+
+```python
+qa = ConceptQA()
+qa.load_corpus('concept_corpus.json')
+answer = qa.ask("Who is Darcy?")
+result = qa.ask_detailed("What did Holmes do?")
+```
+
+## Action Primitives
+
+Universal verbs that map surface forms to concepts:
+
+| Primitive | English | Spanish |
+|-----------|---------|---------|
+| MOVE | walk, run, go, travel | caminó, corrió, fue |
+| SPEAK | say, tell, ask, speak | dijo, habló, preguntó |
+| THINK | think, consider, believe | pensó, creyó, consideró |
+| PERCEIVE | see, hear, notice | vio, oyó, notó |
+| FEEL | feel, love, hate | sintió, amó, odió |
+| ACT | do, make, create | hizo, creó |
+| EXIST | is, was, be | es, fue, está |
+| POSSESS | have, own, hold | tiene, posee |
+
+## Holographic Principle
+
+From holographic stereoscopy:
 
 ```
-Word → Hash → Random Seed → Unit Vector in ℝ^256
+Question = Content - Gap    (has missing information)
+Answer   = Content + Fill   (provides missing information)
 ```
 
-### FactParser (in `geometric_lcm.py`)
+### Question Axes
 
-Parses natural language into facts using pattern matching.
-
-**Supported Patterns:**
-- "X is the capital of Y" → (Y, capital_of, X)
-- "X wrote Y" → (X, wrote, Y)
-- "X is in Y" → (X, located_in, Y)
-- "X is a Y" → (X, is_a, Y)
+| Axis | Gap | Fill |
+|------|-----|------|
+| WHO | Agent unknown | Identify the agent |
+| WHAT | Action/patient unknown | Describe what happened |
+| WHERE | Location unknown | Provide location |
+| WHEN | Time unknown | Provide time |
+| WHY | Purpose unknown | Explain reason |
+| HOW | Manner unknown | Describe method |
 
 ## Data Flow
 
 ```
-                    ┌─────────────┐
-                    │   Natural   │
-                    │   Language  │
-                    └──────┬──────┘
+                    ┌─────────────────┐
+                    │  Surface Text   │
+                    │ (any language)  │
+                    └────────┬────────┘
+                             │
+                             ▼
+                    ┌─────────────────┐
+                    │ ConceptExtractor│
+                    │ (verb mappings) │
+                    └────────┬────────┘
+                             │
+                             ▼
+              ┌──────────────────────────┐
+              │     CONCEPT FRAME        │
+              │ {AGENT, ACTION, PATIENT} │
+              │    (order-free)          │
+              └────────────┬─────────────┘
                            │
                            ▼
                     ┌─────────────┐
-                    │  FactParser │
-                    │  (patterns) │
+                    │   Vector    │
+                    │ (64D hash)  │
                     └──────┬──────┘
                            │
                            ▼
               ┌────────────────────────┐
-              │   Extract Facts:       │
-              │   (subject, rel, obj)  │
-              └───────────┬────────────┘
-                          │
-                          ▼
-                   ┌─────────────┐
-                   │   Learn     │
-                   │  (iterate)  │
-                   └──────┬──────┘
-                          │
-                          ▼
+              │   ConceptKnowledge     │
+              │   (storage & query)    │
+              └────────────┬───────────┘
+                           │
+                           ▼
               ┌────────────────────────┐
-              │  Updated Geometry:     │
-              │  - Entity positions    │
-              │  - Relation vectors    │
-              └────────────────────────┘
+              │  HolographicProjector  │
+              │   (fill the gap)       │
+              └────────────┬───────────┘
+                           │
+                           ▼
+                    ┌─────────────┐
+                    │   English   │
+                    │   Answer    │
+                    └─────────────┘
 ```
 
 ## Formulas
 
-### Relation Learning
+### Word Position
 ```
-relation.vector = (1/n) Σᵢ (objectᵢ.position - subjectᵢ.position)
-
-Normalized to unit length after averaging.
+pos(word) = hash(word) → ℝ^64 (deterministic unit vector)
 ```
 
-### Query (subject --relation--> ?)
+### Frame Vector
 ```
-target = subject.position + relation.vector
-answer = argmax_entity(cosine(target, entity.position))
-```
-
-### Analogy (a:b :: c:?)
-```
-relation = b.position - a.position
-target = c.position + relation
-answer = argmax_entity(cosine(target, entity.position))
+vec(frame) = Σ hash(ROLE:value) for each filled slot
+             (order-independent, normalized)
 ```
 
-### Consistency
+### Similarity
 ```
-consistency = mean(pairwise_cosine(all_relation_offsets))
+sim(a, b) = cos(θ) = (a·b) / (‖a‖·‖b‖)
+```
 
-Target: > 0.95 for reliable analogies
+### Query Resolution
+```
+1. Detect axis (WHO/WHAT/WHERE)
+2. Extract entity from question
+3. Query frames by entity
+4. Aggregate knowledge (action counts, relationships)
+5. Project to English (fill the gap)
 ```
 
 ## Directory Structure
 
 ```
 truthspace-lcm/
-├── truthspace_lcm/           # Main package
-│   ├── __init__.py           # Package exports
-│   ├── chat.py               # Interactive GeometricChat
-│   └── core/
-│       ├── __init__.py       # Core exports
-│       ├── geometric_lcm.py  # Dynamic Geometric LCM (main)
-│       ├── vocabulary.py     # Word positions, IDF, encoding
-│       ├── knowledge.py      # Facts, triples, Q&A pairs
-│       └── style.py          # Style extraction/transfer
+├── truthspace_lcm/              # Main package
+│   ├── __init__.py              # Package exports (v0.5.0)
+│   ├── chat.py                  # Holographic Q&A chat
+│   ├── concept_corpus.json      # Knowledge corpus (11,214 frames)
+│   ├── core/
+│   │   ├── __init__.py          # Core exports
+│   │   ├── vocabulary.py        # Word positions, IDF, encoding
+│   │   ├── concept_language.py  # ConceptFrame, ConceptExtractor
+│   │   └── concept_knowledge.py # ConceptKnowledge, HolographicProjector
+│   └── utils/
+│       └── extractors.py        # Shared extraction utilities
 ├── tests/
-│   ├── test_core.py          # Core tests (29)
-│   └── test_chat.py          # Chat tests (20)
-├── design_considerations/    # Research journey
-│   ├── 033_dynamic_geometric_lcm.md  # Current architecture
-│   └── 032_vsa_binding_extension.md  # VSA exploration
-├── experiments/              # Exploration and prototypes
-│   ├── sparse_vsa_exploration_v3.py  # 100% analogy breakthrough
-│   └── geometric_lcm_full.py         # Full system prototype
-├── run.py                    # Entry point
-└── requirements.txt          # Dependencies (numpy)
+│   ├── test_core.py             # Core tests (25)
+│   └── test_chat.py             # Chat tests (12)
+├── design_considerations/       # Research journey
+│   ├── 035_autonomous_bootstrap.md  # Concept language breakthrough
+│   └── 030_geometric_qa_projection.md  # Holographic Q&A
+├── scripts/                     # Utility scripts
+│   └── concept_chat.py          # Standalone chat script
+├── run.py                       # Entry point
+└── requirements.txt             # Dependencies (numpy)
 ```
 
 ## Validation Results
 
-### Analogy Accuracy
-- **100%** on capital-country analogies (france:paris :: germany:berlin)
-- **100%** on author-book analogies (melville:moby_dick :: shakespeare:hamlet)
-- Works across domains without interference
+### Extraction Accuracy
+| Language | Previous | Concept Language | Improvement |
+|----------|----------|------------------|-------------|
+| English | 0.524 | **0.852** | 1.6x |
+| Spanish | 0.058 | **0.806** | **14x** |
 
-### Relation Consistency
-- **99%+** consistency achieved after learning
-- Converges in **4-10 iterations** typically
+### Cross-Language Queries
+Query `{ACTION: SPEAK}` returns both:
+- English: "Bingley," cried his wife..."
+- Spanish: "También lo juro yo —dijo el labrador..."
 
-### Query Accuracy
-- **100%** on learned facts
-- Similarity scores > 0.98 for correct answers
+### Corpus Statistics
+- **11,214** concept frames
+- **1,759** unique entities
+- **3,029** entity relations
+- **14** literary works (English and Spanish)
 
 ## Design Decisions
 
-### Why Learned Positions (not just hash)?
-- **Hash gives random positions** - no semantic structure
-- **Learning aligns relations** - makes analogies work
-- **Key insight**: Relations must be INVARIANT across instances
+### Why Concept Frames (not triples)?
+- **Order-free** - No SVO/VSO dependency
+- **Richer** - Multiple slots (agent, patient, location, etc.)
+- **Universal** - Same structure for any language
 
-### Why Iterative Learning?
-- **Single pass insufficient** - relations not consistent
-- **Iteration aligns all pairs** - converges to stable structure
-- **Fast**: 4-10 iterations, ~0.01s for 100 facts
+### Why Action Primitives?
+- **Cross-language** - "walked" and "caminó" both → MOVE
+- **Semantic** - Captures meaning, not surface form
+- **Finite** - ~7 primitives cover most verbs
 
-### Why Vector Offsets for Relations?
-- **Simple**: relation = object - subject
-- **Invertible**: subject = object - relation
-- **Composable**: multi-hop = sum of relations
+### Why Holographic Projection?
+- **Gap-filling** - Natural model for Q&A
+- **Geometric** - Pure vector operations
+- **Interpretable** - Axis defines what's being asked
 
 ## Future Work
 
-1. **Hierarchical Relations** - Support sub-types (located_in → city_in_country)
-2. **Temporal Dynamics** - Track how structure changes over time
-3. **Larger Scale** - Test with thousands of entities
-4. **Integration** - Combine with style engine for styled responses
+1. **More Languages** - Add French, German, Chinese verb mappings
+2. **Temporal Reasoning** - Track when events happened
+3. **Causal Chains** - Link events by cause and effect
+4. **Dialogue Context** - Track conversation state

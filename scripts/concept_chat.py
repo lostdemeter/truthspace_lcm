@@ -1,106 +1,73 @@
 #!/usr/bin/env python3
 """
-TruthSpace LCM Chat Interface
+Concept Chat: Interactive Q&A using Holographic Concept Resolution
 
-Holographic Concept Q&A using language-agnostic concept frames.
-
-Architecture:
-    Question (any language)
-            ↓
-    Axis Detection (WHO/WHAT/WHERE/etc)
-            ↓
-    Concept Space Query (language-agnostic)
-            ↓
-    Knowledge Aggregation
-            ↓
-    Holographic Projection (fill the gap)
-            ↓
-    English Answer
-
-Holographic Principle:
-    Question = Content - Gap    (has missing information)
-    Answer   = Content + Fill   (provides missing information)
+This script provides an interactive chat interface that:
+1. Resolves questions in concept space (language-agnostic)
+2. Projects answers to English using holographic projection
+3. Fills the "gap" in questions with knowledge from literary works
 
 Usage:
-    python -m truthspace_lcm.chat
-    python -m truthspace_lcm.chat --debug
-    python -m truthspace_lcm.chat --corpus path/to/corpus.json
+    python scripts/concept_chat.py
+    python scripts/concept_chat.py --debug  # Show concept frames
 """
 
-import argparse
 import sys
+import argparse
 from pathlib import Path
 
-from .core import ConceptQA
+# Add project root to path
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
+from truthspace_lcm.core.concept_knowledge import ConceptQA
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description='TruthSpace LCM - Holographic Concept Q&A'
-    )
-    parser.add_argument(
-        '--debug', action='store_true',
-        help='Show concept frames and debug info'
-    )
-    parser.add_argument(
-        '--corpus', type=str, default=None,
-        help='Path to concept corpus JSON file'
-    )
+    parser = argparse.ArgumentParser(description='Concept Chat - Holographic Q&A')
+    parser.add_argument('--debug', action='store_true', help='Show concept frames')
+    parser.add_argument('--corpus', type=str, default='truthspace_lcm/concept_corpus.json',
+                        help='Path to concept corpus')
     args = parser.parse_args()
     
-    # Find corpus
-    if args.corpus:
-        corpus_path = Path(args.corpus)
-    else:
-        # Default: look in package directory
-        corpus_path = Path(__file__).parent / 'concept_corpus.json'
-    
-    # Initialize Q&A system
+    # Load knowledge base
     print("=" * 60)
-    print("  TruthSpace LCM - Holographic Concept Q&A")
+    print("  CONCEPT CHAT - Holographic Q&A Resolution")
     print("=" * 60)
     print()
+    print("Loading concept corpus...")
+    
+    qa = ConceptQA()
+    corpus_path = Path(args.corpus)
     
     if not corpus_path.exists():
         print(f"Error: Corpus not found at {corpus_path}")
-        print()
-        print("To build a corpus, run:")
-        print("  python scripts/build_concept_corpus.py")
-        return 1
+        print("Run the corpus builder first to create concept_corpus.json")
+        return
     
-    print(f"Loading corpus from {corpus_path}...")
-    qa = ConceptQA()
     count = qa.load_corpus(str(corpus_path))
-    print(f"Loaded {count} concept frames")
+    print(f"Loaded {count} concept frames from literary works")
     print()
     
-    # Show sample entities
+    # Show available entities
     entities = list(qa.knowledge.entities.keys())
-    top_entities = sorted(
-        entities,
-        key=lambda e: len(qa.knowledge.entities[e].get('actions', [])),
-        reverse=True
-    )[:8]
-    
-    print("Sample characters:")
-    for e in top_entities:
+    sample_entities = sorted(entities, key=lambda e: len(qa.knowledge.entities[e].get('actions', [])), reverse=True)[:10]
+    print("Sample characters you can ask about:")
+    for e in sample_entities:
         info = qa.knowledge.entities[e]
         actions = info.get('actions', [])
-        source = info.get('source', 'unknown')
-        print(f"  - {e.title()} ({source})")
+        print(f"  - {e.title()} ({len(actions)} action types)")
     print()
     
     print("Commands:")
-    print("  /debug    - Toggle debug mode")
-    print("  /entity X - Show info about entity X")
+    print("  /debug    - Toggle debug mode (show concept frames)")
+    print("  /entity X - Show all info about entity X")
     print("  /stats    - Show corpus statistics")
-    print("  /help     - Show this help")
     print("  /quit     - Exit")
     print()
     print("Ask questions like:")
-    print('  "Who is Darcy?"')
-    print('  "What did Holmes do?"')
-    print('  "Where is Netherfield?"')
+    print("  'Who is Darcy?'")
+    print("  'What did Holmes do?'")
+    print("  'Where is Netherfield?'")
     print()
     
     debug_mode = args.debug
@@ -119,22 +86,13 @@ def main():
         if user_input.startswith('/'):
             cmd = user_input.lower().split()[0]
             
-            if cmd == '/quit' or cmd == '/exit':
+            if cmd == '/quit':
                 print("Goodbye!")
                 break
             
             elif cmd == '/debug':
                 debug_mode = not debug_mode
                 print(f"Debug mode: {'ON' if debug_mode else 'OFF'}")
-                continue
-            
-            elif cmd == '/help':
-                print("\nCommands:")
-                print("  /debug    - Toggle debug mode")
-                print("  /entity X - Show info about entity X")
-                print("  /stats    - Show corpus statistics")
-                print("  /quit     - Exit")
-                print()
                 continue
             
             elif cmd == '/stats':
@@ -168,14 +126,11 @@ def main():
                     print(f"  Source: {info.get('source', 'unknown')}")
                     print(f"  Actions: {', '.join(info.get('actions', []))}")
                     
-                    # Get sample frames
+                    # Get frames
                     frames = qa.knowledge.query_by_entity(entity_name, k=5)
-                    if frames:
-                        print(f"\n  Sample occurrences:")
-                        for f in frames:
-                            action = f.get('action', '?')
-                            text = f.get('text', '')[:60]
-                            print(f"    [{action}] {text}...")
+                    print(f"\n  Sample frames:")
+                    for f in frames:
+                        print(f"    {f.get('action', '?')}: {f.get('text', '')[:60]}...")
                 else:
                     print(f"Entity '{entity_name}' not found")
                 print()
@@ -183,7 +138,6 @@ def main():
             
             else:
                 print(f"Unknown command: {cmd}")
-                print("Type /help for available commands")
                 continue
         
         # Process question
@@ -203,15 +157,13 @@ def main():
                 print(f"[DEBUG] Frames used: {best.get('frame_count', 1)}")
                 if best.get('frame'):
                     frame = best['frame']
-                    print(f"[DEBUG] Frame: agent={frame.get('agent')}, "
-                          f"action={frame.get('action')}, patient={frame.get('patient')}")
+                    print(f"[DEBUG] Frame: agent={frame.get('agent')}, action={frame.get('action')}, patient={frame.get('patient')}")
+                print(f"[DEBUG] Original: {best.get('original_text', '')[:80]}...")
         else:
             print("\nBot: I don't have information about that.")
         
         print()
-    
-    return 0
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main()

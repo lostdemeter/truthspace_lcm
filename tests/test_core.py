@@ -1,10 +1,10 @@
 """
-Tests for TruthSpace LCM Core - Geometric Language Model
+Tests for TruthSpace LCM Core - Concept Language System
 
 Tests the core functionality:
 - Vocabulary: hash-based word positions, IDF weighting, text encoding
-- GeometricLCM: fact learning, queries, analogies, multi-hop reasoning
-- Supporting modules: cosine similarity, tokenization
+- ConceptLanguage: concept frames, extraction, primitives
+- ConceptKnowledge: knowledge storage, querying, holographic projection
 """
 
 import sys
@@ -14,9 +14,17 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import numpy as np
 from truthspace_lcm.core import (
     Vocabulary,
-    GeometricLCM,
-    cosine_similarity,
     tokenize,
+    word_position,
+    cosine_similarity,
+    ConceptFrame,
+    ConceptExtractor,
+    ConceptStore,
+    ConceptKnowledge,
+    HolographicProjector,
+    ConceptQA,
+    ACTION_PRIMITIVES,
+    SEMANTIC_ROLES,
 )
 
 
@@ -89,360 +97,269 @@ class TestVocabulary:
         weight_rare = vocab.idf_weight("xyzzy")
         
         assert weight_rare > weight_common, "Rare words should have higher weight"
-    
-    def test_similarity(self):
-        """Test similarity computation."""
-        vocab = Vocabulary(dim=64)
-        
-        sim = vocab.similarity("hello world", "hello world")
-        assert sim > 0.99, f"Identical text should have sim ~1, got {sim}"
-        
-        sim = vocab.similarity("cat dog", "fish bird")
-        assert sim < 0.9, f"Different text should have lower sim, got {sim}"
 
 
-class TestCosine:
-    """Test cosine similarity."""
+class TestConceptFrame:
+    """Test ConceptFrame data structure."""
     
-    def test_identical_vectors(self):
-        """Identical vectors should have similarity 1."""
-        v = np.array([1, 2, 3])
-        assert abs(cosine_similarity(v, v) - 1.0) < 0.001
+    def test_create_frame(self):
+        """Test creating a concept frame."""
+        frame = ConceptFrame(
+            agent="darcy",
+            action="SPEAK",
+            patient="elizabeth"
+        )
+        
+        assert frame.agent == "darcy"
+        assert frame.action == "SPEAK"
+        assert frame.patient == "elizabeth"
     
-    def test_orthogonal_vectors(self):
-        """Orthogonal vectors should have similarity 0."""
-        v1 = np.array([1, 0, 0])
-        v2 = np.array([0, 1, 0])
-        assert abs(cosine_similarity(v1, v2)) < 0.001
+    def test_frame_to_dict(self):
+        """Test converting frame to dict."""
+        frame = ConceptFrame(
+            agent="holmes",
+            action="THINK",
+            location="london"
+        )
+        
+        d = frame.to_dict()
+        assert d['agent'] == "holmes"
+        assert d['action'] == "THINK"
+        assert d['location'] == "london"
     
-    def test_opposite_vectors(self):
-        """Opposite vectors should have similarity -1."""
-        v1 = np.array([1, 0, 0])
-        v2 = np.array([-1, 0, 0])
-        assert abs(cosine_similarity(v1, v2) + 1.0) < 0.001
-    
-    def test_zero_vector(self):
-        """Zero vector should return 0 similarity."""
-        v1 = np.array([1, 2, 3])
-        v2 = np.zeros(3)
-        assert cosine_similarity(v1, v2) == 0.0
+    def test_frame_from_kwargs(self):
+        """Test creating frame from kwargs."""
+        frame = ConceptFrame(
+            agent='alice',
+            action='MOVE',
+            goal='wonderland'
+        )
+        
+        assert frame.agent == 'alice'
+        assert frame.action == 'MOVE'
+        assert frame.goal == 'wonderland'
 
 
-class TestGeometricLCM:
-    """Test GeometricLCM - the core dynamic geometric language model."""
+class TestConceptExtractor:
+    """Test ConceptExtractor."""
     
-    def test_initialization(self):
-        """Test LCM initialization."""
-        lcm = GeometricLCM(dim=256)
+    def test_extract_simple_sentence(self):
+        """Test extracting from simple sentence."""
+        extractor = ConceptExtractor()
         
-        assert lcm.dim == 256
-        assert len(lcm.entities) == 0
-        assert len(lcm.relations) == 0
-        assert len(lcm.facts) == 0
+        frame = extractor.extract("Darcy walked to the garden.")
+        
+        assert frame is not None
+        assert frame.agent == "darcy"
+        assert frame.action == "MOVE"
     
-    def test_add_fact(self):
-        """Test adding facts."""
-        lcm = GeometricLCM(dim=256)
+    def test_extract_speech(self):
+        """Test extracting speech action."""
+        extractor = ConceptExtractor()
         
-        fact = lcm.add_fact("france", "capital_of", "paris")
+        frame = extractor.extract("Elizabeth said hello.")
         
-        assert fact.subject == "france"
-        assert fact.relation == "capital_of"
-        assert fact.object == "paris"
-        assert "france" in lcm.entities
-        assert "paris" in lcm.entities
-        assert "capital_of" in lcm.relations
+        assert frame is not None
+        assert frame.action == "SPEAK"
     
-    def test_ingest_text(self):
-        """Test text ingestion."""
-        lcm = GeometricLCM(dim=256)
+    def test_extract_thought(self):
+        """Test extracting thought action."""
+        extractor = ConceptExtractor()
         
-        facts = lcm.ingest("Paris is the capital of France.")
+        frame = extractor.extract("Holmes thought about the case.")
         
-        assert len(facts) > 0
-        assert "france" in lcm.entities
-        assert "paris" in lcm.entities
+        assert frame is not None
+        assert frame.action == "THINK"
     
-    def test_learn(self):
-        """Test learning updates structure."""
-        lcm = GeometricLCM(dim=256)
-        
-        lcm.add_fact("france", "capital_of", "paris")
-        lcm.add_fact("germany", "capital_of", "berlin")
-        lcm.add_fact("japan", "capital_of", "tokyo")
-        
-        consistency = lcm.learn(n_iterations=50)
-        
-        assert consistency > 0.9, f"Should achieve high consistency, got {consistency}"
+    def test_action_primitives_exist(self):
+        """Test that action primitives are defined."""
+        assert 'MOVE' in ACTION_PRIMITIVES
+        assert 'SPEAK' in ACTION_PRIMITIVES
+        assert 'THINK' in ACTION_PRIMITIVES
+        assert 'PERCEIVE' in ACTION_PRIMITIVES
+        assert 'FEEL' in ACTION_PRIMITIVES
     
-    def test_query(self):
-        """Test relational queries."""
-        lcm = GeometricLCM(dim=256)
+    def test_semantic_roles_exist(self):
+        """Test that semantic roles are defined."""
+        assert 'AGENT' in SEMANTIC_ROLES
+        assert 'PATIENT' in SEMANTIC_ROLES
+        assert 'LOCATION' in SEMANTIC_ROLES
+
+
+class TestConceptStore:
+    """Test ConceptStore."""
+    
+    def test_add_and_query(self):
+        """Test adding and querying frames."""
+        store = ConceptStore(dim=64)
         
-        lcm.add_fact("france", "capital_of", "paris")
-        lcm.add_fact("germany", "capital_of", "berlin")
-        lcm.learn(n_iterations=50)
+        frame1 = ConceptFrame(agent="darcy", action="SPEAK")
+        frame2 = ConceptFrame(agent="elizabeth", action="MOVE")
         
-        results = lcm.query("france", "capital_of", k=1)
+        store.add(frame1, "Darcy spoke")
+        store.add(frame2, "Elizabeth walked")
+        
+        # Query for SPEAK action
+        query = ConceptFrame(action="SPEAK")
+        results = store.query(query, k=1)
         
         assert len(results) > 0
-        assert results[0][0] == "paris", f"Expected paris, got {results[0][0]}"
+        assert results[0][0].agent == "darcy"
     
-    def test_inverse_query(self):
-        """Test inverse relational queries."""
-        lcm = GeometricLCM(dim=256)
+    def test_store_frames(self):
+        """Test store frames list."""
+        store = ConceptStore(dim=64)
         
-        lcm.add_fact("france", "capital_of", "paris")
-        lcm.add_fact("germany", "capital_of", "berlin")
-        lcm.learn(n_iterations=50)
+        assert len(store.frames) == 0
         
-        results = lcm.inverse_query("paris", "capital_of", k=1)
-        
-        assert len(results) > 0
-        assert results[0][0] == "france", f"Expected france, got {results[0][0]}"
-    
-    def test_analogy(self):
-        """Test analogical reasoning."""
-        lcm = GeometricLCM(dim=256)
-        
-        lcm.add_fact("france", "capital_of", "paris")
-        lcm.add_fact("germany", "capital_of", "berlin")
-        lcm.add_fact("japan", "capital_of", "tokyo")
-        lcm.learn(n_iterations=50)
-        
-        # france:paris :: germany:?
-        results = lcm.analogy("france", "paris", "germany", k=1)
-        
-        assert len(results) > 0
-        assert results[0][0] == "berlin", f"Expected berlin, got {results[0][0]}"
-    
-    def test_analogy_cross_domain(self):
-        """Test analogies don't cross domains incorrectly."""
-        lcm = GeometricLCM(dim=256)
-        
-        # Geography
-        lcm.add_fact("france", "capital_of", "paris")
-        lcm.add_fact("germany", "capital_of", "berlin")
-        
-        # Literature
-        lcm.add_fact("melville", "wrote", "moby_dick")
-        lcm.add_fact("shakespeare", "wrote", "hamlet")
-        
-        lcm.learn(n_iterations=50)
-        
-        # Geography analogy should stay in geography
-        results = lcm.analogy("france", "paris", "germany", k=1)
-        assert results[0][0] == "berlin"
-        
-        # Literature analogy should stay in literature
-        results = lcm.analogy("melville", "moby_dick", "shakespeare", k=1)
-        assert results[0][0] == "hamlet"
-    
-    def test_similar(self):
-        """Test finding similar entities."""
-        lcm = GeometricLCM(dim=256)
-        
-        lcm.add_fact("france", "capital_of", "paris")
-        lcm.add_fact("germany", "capital_of", "berlin")
-        lcm.add_fact("italy", "capital_of", "rome")
-        lcm.learn(n_iterations=50)
-        
-        results = lcm.similar("paris", k=3)
-        
-        assert len(results) > 0
-        # Other capitals should be similar to paris
-        similar_names = [r[0] for r in results]
-        assert "berlin" in similar_names or "rome" in similar_names
-    
-    def test_multi_hop(self):
-        """Test multi-hop reasoning."""
-        lcm = GeometricLCM(dim=256)
-        
-        lcm.add_fact("france", "capital_of", "paris")
-        lcm.add_fact("france", "located_in", "europe")
-        lcm.learn(n_iterations=50)
-        
-        # france --capital_of--> ?
-        results = lcm.multi_hop("france", ["capital_of"], k=1)
-        
-        assert len(results) > 0
-        assert results[0][0] == "paris"
-    
-    def test_incremental_learning(self):
-        """Test that new facts can be added incrementally."""
-        lcm = GeometricLCM(dim=256)
-        
-        # Initial facts
-        lcm.add_fact("france", "capital_of", "paris")
-        lcm.add_fact("germany", "capital_of", "berlin")
-        lcm.learn(n_iterations=30)
-        
-        # Add new fact
-        lcm.add_fact("japan", "capital_of", "tokyo")
-        lcm.learn(n_iterations=30)
-        
-        # Should work for new entity
-        results = lcm.analogy("france", "paris", "japan", k=1)
-        assert results[0][0] == "tokyo"
-    
-    def test_relation_consistency(self):
-        """Test that relations achieve high consistency."""
-        lcm = GeometricLCM(dim=256)
-        
-        # Add multiple instances of same relation
-        pairs = [
-            ("france", "paris"),
-            ("germany", "berlin"),
-            ("japan", "tokyo"),
-            ("italy", "rome"),
-            ("spain", "madrid"),
-        ]
-        
-        for country, capital in pairs:
-            lcm.add_fact(country, "capital_of", capital)
-        
-        lcm.learn(n_iterations=100, target_consistency=0.95)
-        
-        consistency = lcm.relations["capital_of"].consistency
-        assert consistency > 0.9, f"Should have >90% consistency, got {consistency:.1%}"
-    
-    def test_natural_language_ask(self):
-        """Test natural language question answering."""
-        lcm = GeometricLCM(dim=256)
-        
-        lcm.ingest("Paris is the capital of France.")
-        lcm.ingest("Berlin is the capital of Germany.")
-        lcm.learn(n_iterations=30)
-        
-        answer = lcm.ask("What is the capital of France?")
-        
-        assert "paris" in answer.lower()
-    
-    def test_natural_language_tell(self):
-        """Test natural language fact ingestion."""
-        lcm = GeometricLCM(dim=256)
-        
-        result = lcm.tell("Tokyo is the capital of Japan.")
-        
-        assert "learned" in result.lower()
-        assert "japan" in lcm.entities
-        assert "tokyo" in lcm.entities
-    
-    def test_persistence(self):
-        """Test save and load."""
-        import tempfile
-        import os
-        
-        lcm1 = GeometricLCM(dim=256)
-        lcm1.add_fact("france", "capital_of", "paris")
-        lcm1.add_fact("germany", "capital_of", "berlin")
-        lcm1.learn(n_iterations=30)
-        
-        # Save
-        filepath = tempfile.mktemp(suffix=".json")
-        lcm1.save(filepath)
-        
-        # Load into new instance
-        lcm2 = GeometricLCM()
-        lcm2.load(filepath)
-        
-        # Verify
-        assert len(lcm2.entities) == len(lcm1.entities)
-        assert len(lcm2.relations) == len(lcm1.relations)
-        
-        results = lcm2.query("france", "capital_of", k=1)
-        assert results[0][0] == "paris"
-        
-        # Cleanup
-        os.remove(filepath)
+        store.add(ConceptFrame(agent="test"), "test")
+        assert len(store.frames) == 1
 
 
-class TestScaling:
-    """Test scaling behavior."""
+class TestConceptKnowledge:
+    """Test ConceptKnowledge."""
     
-    def test_many_facts(self):
-        """Test with many facts."""
-        lcm = GeometricLCM(dim=256)
+    def test_add_frame(self):
+        """Test adding frames to knowledge base."""
+        kb = ConceptKnowledge(dim=64)
         
-        # Add 50 country-capital pairs
-        for i in range(50):
-            lcm.add_fact(f"country_{i}", "capital_of", f"capital_{i}")
+        frame = ConceptFrame(agent="darcy", action="SPEAK", patient="elizabeth")
+        kb.add_frame(frame, "Darcy spoke to Elizabeth", "Test")
         
-        lcm.learn(n_iterations=100, target_consistency=0.95)
-        
-        # Should still work
-        results = lcm.query("country_0", "capital_of", k=1)
-        assert results[0][0] == "capital_0"
-        
-        # Analogies should work
-        results = lcm.analogy("country_0", "capital_0", "country_25", k=1)
-        assert results[0][0] == "capital_25"
+        assert len(kb.frames) == 1
+        assert "darcy" in kb.entities
     
-    def test_multiple_relations(self):
-        """Test with multiple relation types."""
-        lcm = GeometricLCM(dim=256)
+    def test_query_by_entity(self):
+        """Test querying by entity."""
+        kb = ConceptKnowledge(dim=64)
         
-        # Different relation types
-        lcm.add_fact("france", "capital_of", "paris")
-        lcm.add_fact("germany", "capital_of", "berlin")
-        lcm.add_fact("melville", "wrote", "moby_dick")
-        lcm.add_fact("shakespeare", "wrote", "hamlet")
-        lcm.add_fact("paris", "located_in", "france")
-        lcm.add_fact("berlin", "located_in", "germany")
+        frame1 = ConceptFrame(agent="darcy", action="SPEAK")
+        frame2 = ConceptFrame(agent="darcy", action="MOVE")
+        frame3 = ConceptFrame(agent="elizabeth", action="THINK")
         
-        lcm.learn(n_iterations=50)
+        kb.add_frame(frame1, "Darcy spoke", "Test")
+        kb.add_frame(frame2, "Darcy walked", "Test")
+        kb.add_frame(frame3, "Elizabeth thought", "Test")
         
-        # Each relation should work independently
-        assert lcm.query("france", "capital_of", k=1)[0][0] == "paris"
-        assert lcm.query("melville", "wrote", k=1)[0][0] == "moby_dick"
+        results = kb.query_by_entity("darcy", k=10)
+        assert len(results) == 2
+    
+    def test_query_by_action(self):
+        """Test querying by action."""
+        kb = ConceptKnowledge(dim=64)
+        
+        frame1 = ConceptFrame(agent="darcy", action="SPEAK")
+        frame2 = ConceptFrame(agent="elizabeth", action="SPEAK")
+        frame3 = ConceptFrame(agent="holmes", action="THINK")
+        
+        kb.add_frame(frame1, "Darcy spoke", "Test")
+        kb.add_frame(frame2, "Elizabeth spoke", "Test")
+        kb.add_frame(frame3, "Holmes thought", "Test")
+        
+        results = kb.query_by_action("SPEAK", k=10)
+        assert len(results) == 2
 
 
-def run_all_tests():
+class TestHolographicProjector:
+    """Test HolographicProjector."""
+    
+    def test_detect_who_axis(self):
+        """Test detecting WHO question axis."""
+        kb = ConceptKnowledge(dim=64)
+        projector = HolographicProjector(kb)
+        
+        axis, entity = projector.detect_question_axis("Who is Darcy?")
+        assert axis == "WHO"
+        assert entity == "darcy"
+    
+    def test_detect_what_axis(self):
+        """Test detecting WHAT question axis."""
+        kb = ConceptKnowledge(dim=64)
+        projector = HolographicProjector(kb)
+        
+        axis, entity = projector.detect_question_axis("What did Holmes do?")
+        assert axis == "WHAT"
+        assert entity == "holmes"
+    
+    def test_detect_where_axis(self):
+        """Test detecting WHERE question axis."""
+        kb = ConceptKnowledge(dim=64)
+        projector = HolographicProjector(kb)
+        
+        axis, entity = projector.detect_question_axis("Where is London?")
+        assert axis == "WHERE"
+        assert entity == "london"
+
+
+class TestConceptQA:
+    """Test ConceptQA end-to-end."""
+    
+    def test_ingest_and_ask(self):
+        """Test ingesting text and asking questions."""
+        qa = ConceptQA()
+        
+        # Ingest some text
+        qa.ingest_text("Darcy walked to the garden. Elizabeth spoke to Jane.", "Test")
+        
+        # Ask a question
+        result = qa.ask_detailed("Who is Darcy?")
+        
+        assert result['axis'] == "WHO"
+        assert result['entity'] == "darcy"
+    
+    def test_ask_simple(self):
+        """Test simple ask interface."""
+        qa = ConceptQA()
+        
+        qa.ingest_text("Holmes thought about the mystery.", "Test")
+        
+        answer = qa.ask("Who is Holmes?")
+        assert isinstance(answer, str)
+        assert len(answer) > 0
+
+
+def run_tests():
     """Run all tests."""
-    print("=" * 60)
-    print("TruthSpace LCM Core Test Suite")
-    print("=" * 60)
-    print()
-    
     test_classes = [
         TestVocabulary,
-        TestCosine,
-        TestGeometricLCM,
-        TestScaling,
+        TestConceptFrame,
+        TestConceptExtractor,
+        TestConceptStore,
+        TestConceptKnowledge,
+        TestHolographicProjector,
+        TestConceptQA,
     ]
     
-    total_passed = 0
-    total_failed = 0
+    total = 0
+    passed = 0
+    failed = 0
     
     for test_class in test_classes:
-        print(f"Testing {test_class.__name__}...")
+        print(f"\n{test_class.__name__}")
+        print("-" * 40)
         
         instance = test_class()
-        methods = [m for m in dir(instance) if m.startswith('test_')]
         
-        passed = 0
-        failed = 0
-        
-        for method_name in methods:
-            try:
-                getattr(instance, method_name)()
-                print(f"  ✓ {method_name}")
-                passed += 1
-            except Exception as e:
-                print(f"  ✗ {method_name}: {e}")
-                failed += 1
-        
-        total_passed += passed
-        total_failed += failed
-        print()
+        for name in dir(instance):
+            if name.startswith("test_"):
+                total += 1
+                try:
+                    getattr(instance, name)()
+                    print(f"  ✓ {name}")
+                    passed += 1
+                except AssertionError as e:
+                    print(f"  ✗ {name}: {e}")
+                    failed += 1
+                except Exception as e:
+                    print(f"  ✗ {name}: {type(e).__name__}: {e}")
+                    failed += 1
     
-    print("=" * 60)
-    print(f"Results: {total_passed} passed, {total_failed} failed")
-    print("=" * 60)
+    print("\n" + "=" * 40)
+    print(f"Total: {total}, Passed: {passed}, Failed: {failed}")
     
-    return total_failed == 0
+    return failed == 0
 
 
 if __name__ == "__main__":
-    success = run_all_tests()
+    success = run_tests()
     sys.exit(0 if success else 1)

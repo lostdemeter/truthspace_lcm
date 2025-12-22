@@ -1,20 +1,19 @@
 # TruthSpace LCM
 
-**Dynamic Geometric Language Model** - A conversational AI using pure geometric operations in semantic space. No training, no neural networks - just geometry.
+**Holographic Concept Language Model** - A conversational AI using holographic concept resolution. No training, no neural networks - just geometry.
 
 ## Philosophy
 
-> *"Structure IS the data. Learning IS structure update."*
+> *"All semantic operations are geometric operations in concept space."*
 
-This system demonstrates that **pure geometry can replace trained neural networks** for language understanding. Knowledge is stored as geometry - entity positions and relation vectors - not as neural network weights.
+This system demonstrates that **pure geometry can replace trained neural networks** for language understanding. Knowledge is stored as **concept frames** - language-agnostic semantic representations that can be queried across languages.
 
 ## Features
 
-- **Dynamic Learning** - Learn new facts from natural language in real-time
-- **Relational Queries** - "What is the capital of France?" → "paris"
-- **Analogical Reasoning** - "france:paris :: germany:?" → "berlin" (100% accuracy)
-- **Multi-hop Reasoning** - Find paths between entities through relations
-- **256-dimensional semantic space** - Hash-based positions with learned structure
+- **Concept Language** - Order-free semantic frames (like Chinese: no conjugation, flexible order)
+- **Holographic Q&A** - Questions are gaps; answers fill them via geometric projection
+- **Cross-Language** - Same concepts work across English, Spanish, and more
+- **64-dimensional semantic space** - Hash-based positions with conceptual primitives
 - **No training** - Deterministic, interpretable, reproducible
 
 ## Installation
@@ -37,40 +36,38 @@ python run.py
 
 ```
 ============================================================
-  TRUTHSPACE GEOMETRIC CHAT SYSTEM
-  Structure IS the data. Learning IS structure update.
+  TruthSpace LCM - Holographic Concept Q&A
 ============================================================
 
-Type /help for commands, /quit to exit.
-Ask questions or teach me new facts!
+Loading corpus from truthspace_lcm/concept_corpus.json...
+Loaded 11214 concept frames
 
-You: What is the capital of France?
+Sample characters:
+  - Darcy (Pride and Prejudice)
+  - Holmes (Sherlock Holmes)
+  - Alice (Alice in Wonderland)
 
-GCS: The capital of france is paris.
+You: Who is Darcy?
 
-You: Beijing is the capital of China.
+Bot: Darcy is a character from Pride and Prejudice who appears 
+     and possesses things often involving elizabeth
 
-GCS: Learned: china --capital_of--> beijing
+You: What did Holmes do?
 
-You: /analogy france paris china
+Bot: Holmes was present, had
 
-GCS: Analogy: france:paris :: china:?
-       beijing: 0.996
-       berlin: 0.321
-       tokyo: 0.288
+You: /entity watson
 
-You: /status
+Entity: Watson
+  Source: Sherlock Holmes
+  Actions: THINK, EXIST, POSSESS
 
-GCS: SYSTEM STATUS
-     Entities: 26
-     Relations: 4
-     Facts: 16
-```
+You: /stats
 
-### Demo Mode
-
-```bash
-python run.py demo
+Corpus Statistics:
+  Total frames: 11214
+  Unique entities: 1759
+  Entity relations: 3029
 ```
 
 ### Run Tests
@@ -82,103 +79,128 @@ python run.py test
 ### Python API
 
 ```python
-from truthspace_lcm.core import GeometricLCM
+from truthspace_lcm import ConceptQA
 
-# Create the geometric language model
-lcm = GeometricLCM(dim=256)
+# Create Q&A system
+qa = ConceptQA()
+qa.load_corpus('truthspace_lcm/concept_corpus.json')
 
-# Learn facts from natural language
-lcm.tell("Paris is the capital of France.")
-lcm.tell("Berlin is the capital of Germany.")
-lcm.tell("Tokyo is the capital of Japan.")
+# Ask questions (holographic resolution)
+answer = qa.ask("Who is Darcy?")
+# "Darcy is a character from Pride and Prejudice..."
 
-# Query relations
-results = lcm.query("france", "capital_of", k=1)
-print(results)  # [('paris', 0.99)]
+# Detailed response with concept frame
+result = qa.ask_detailed("What did Holmes do?")
+# {'axis': 'WHAT', 'entity': 'holmes', 'answers': [...]}
 
-# Solve analogies
-results = lcm.analogy("france", "paris", "germany", k=1)
-print(results)  # [('berlin', 0.98)]
+# Ingest new text
+qa.ingest_text("The detective examined the clues.", source="Mystery")
 
-# Natural language questions
-answer = lcm.ask("What is the capital of France?")
-print(answer)  # "The capital of france is paris."
+# Query by entity
+frames = qa.knowledge.query_by_entity("darcy", k=5)
 
-# Multi-hop reasoning
-paths = lcm.find_path("france", "europe", max_hops=2)
-print(paths)  # [(['france', 'located_in', 'europe'], 0.98)]
-
-# Save and load
-lcm.save("knowledge.json")
-lcm.load("knowledge.json")
+# Query by action primitive
+frames = qa.knowledge.query_by_action("SPEAK", k=10)
 ```
 
 ## Architecture
 
 ```
+Surface Text (any language)
+        ↓
+   Language-Specific Parser
+        ↓
+   CONCEPT FRAME (order-free)
+   {AGENT: X, ACTION: Y, PATIENT: Z, LOCATION: W}
+        ↓
+   Vector Representation (language-agnostic)
+        ↓
+   Storage / Query / Holographic Projection
+        ↓
+   English Answer
+```
+
+### Project Structure
+
+```
 truthspace_lcm/
-├── __init__.py          # Package exports
-├── chat.py              # Interactive GeometricChat demo
-└── core/
-    ├── __init__.py      # Core exports
-    ├── geometric_lcm.py # Dynamic Geometric Language Model (main)
-    ├── vocabulary.py    # Hash-based word positions, IDF weighting
-    ├── knowledge.py     # Facts, triples, Q&A pairs
-    └── style.py         # Style extraction, classification, transfer
+├── __init__.py              # Package exports (v0.5.0)
+├── chat.py                  # Holographic Q&A chat interface
+├── concept_corpus.json      # Knowledge corpus (11,214 frames)
+├── core/
+│   ├── __init__.py          # Core exports
+│   ├── vocabulary.py        # Hash-based word positions, IDF weighting
+│   ├── concept_language.py  # ConceptFrame, ConceptExtractor, primitives
+│   └── concept_knowledge.py # ConceptKnowledge, HolographicProjector, Q&A
+└── utils/
+    └── extractors.py        # Shared extraction utilities
 ```
 
 ## Core Concepts
 
-### Structure IS the Data
+### Concept Frames
 
-Traditional LLMs store knowledge in billions of neural network weights. TruthSpace stores knowledge as **geometry**:
+Language-agnostic semantic representation with slots:
+- **AGENT** - Who performs the action
+- **ACTION** - Primitive (MOVE, SPEAK, THINK, PERCEIVE, FEEL, ACT, EXIST)
+- **PATIENT** - Who/what is affected
+- **LOCATION/GOAL/SOURCE** - Spatial relations
 
-- **Entities** have positions in 256D space
-- **Relations** are learned vector offsets between entities
-- **Facts** are (subject, relation, object) triples
+No word order - just slots filled with concepts.
 
-### Learning IS Structure Update
+### Holographic Principle
 
-When you teach TruthSpace a new fact:
-1. Entity positions are created/updated
-2. Relation vectors are refined to be consistent across all instances
-3. The geometric structure converges (typically in 4-10 iterations)
+From holographic stereoscopy:
+```
+Question = Content - Gap    (has missing information)
+Answer   = Content + Fill   (provides missing information)
+```
 
-### Analogies Work Because Relations Are Invariant
+The **axis** (WHO/WHAT/WHERE) defines the gap. The answer fills it.
 
-After learning:
-- `paris - france ≈ berlin - germany ≈ tokyo - japan`
-- All point in the same "capital_of" direction
-- So `france + (paris - france) ≈ paris` works for any country
+### Action Primitives
+
+Universal verbs that work across languages:
+- **MOVE** - walk, run, go, travel, caminó, fue
+- **SPEAK** - say, tell, ask, speak, dijo, habló
+- **THINK** - think, consider, believe, pensó, creyó
+- **PERCEIVE** - see, hear, notice, vio, oyó
+- **FEEL** - feel, love, hate, sintió, amó
+- **ACT** - do, make, create, hizo, creó
+- **EXIST** - is, was, be, exist, es, fue
 
 ## Core Formulas
 
 | Operation | Formula |
 |-----------|---------|
-| Entity Position | `pos(e) = hash(e) → ℝ^256` (initial, then learned) |
-| Relation Vector | `rel = avg(object - subject)` across all instances |
-| Query | `target = subject + relation` → find nearest entity |
-| Analogy | `answer = c + (b - a)` for a:b :: c:? |
-| Consistency | Pairwise similarity of relation offsets (target: >95%) |
+| Word Position | `pos(w) = hash(w) → ℝ^64` (deterministic) |
+| Frame Vector | `vec(frame) = Σ hash(ROLE:value)` (order-independent) |
+| Similarity | `cos(θ) = (a·b) / (‖a‖·‖b‖)` |
+| Query | Find frames with highest similarity to query frame |
+| Projection | Fill the gap slot based on question axis |
 
 ## Testing
 
 ```bash
-python run.py test          # Run all tests (49 total)
-python tests/test_core.py   # Core tests (29)
-python tests/test_chat.py   # Chat tests (20)
+python run.py test          # Run all tests (37 total)
+python tests/test_core.py   # Core tests (25)
+python tests/test_chat.py   # Chat tests (12)
 ```
 
 ## Design Documents
 
 See `design_considerations/` for the research journey:
-- `033_dynamic_geometric_lcm.md` - Dynamic Geometric LCM architecture
-- `032_vsa_binding_extension.md` - VSA binding operations
-- `030_geometric_qa_projection.md` - Q&A as geometric projection
+- `035_autonomous_bootstrap.md` - Concept language breakthrough
+- `030_geometric_qa_projection.md` - Q&A as holographic projection
+- `031_unified_projection_framework.md` - Unified projection theory
 
-See `experiments/` for exploration:
-- `sparse_vsa_exploration_v3.py` - Breakthrough: 100% analogy accuracy
-- `geometric_lcm_full.py` - Full system with NL parsing
+## Corpus
+
+The included `concept_corpus.json` contains **11,214 concept frames** extracted from 14 literary works:
+- Pride and Prejudice, Dracula, Alice in Wonderland
+- Sherlock Holmes, Frankenstein, Moby Dick
+- Tale of Two Cities, Tom Sawyer, Great Expectations
+- White Fang, Don Quixote (EN & ES), Les Misérables, War and Peace
 
 ## License
 
