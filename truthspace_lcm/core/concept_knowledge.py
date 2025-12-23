@@ -521,8 +521,10 @@ class HolographicProjector:
                 else:
                     top_patients = sorted(patients.items(), key=lambda x: -x[1])[:2]
                 
+                # Pass frames for quote extraction
                 answer = self._build_who_answer(entity, top_actions, top_patients, sources, 
-                                               noise_level=getattr(self, 'noise_level', 0.0))
+                                               noise_level=getattr(self, 'noise_level', 0.0),
+                                               frames=entity_frames)
             elif axis == 'WHAT':
                 # WHAT questions use OUTWARD navigation (universal patterns)
                 top_actions = sorted(action_counts.items(), key=lambda x: -x[1])[:3]
@@ -577,9 +579,9 @@ class HolographicProjector:
         return answers
     
     def _build_who_answer(self, entity: str, actions: List, patients: List, sources: set, 
-                          noise_level: float = 0.0) -> str:
+                          noise_level: float = 0.0, frames: List = None) -> str:
         """Build a WHO answer using pattern-based generator with optional noise."""
-        return self.answer_generator.generate_who_answer(entity, actions, patients, sources, noise_level)
+        return self.answer_generator.generate_who_answer(entity, actions, patients, sources, noise_level, frames)
     
     def _build_what_answer(self, entity: str, actions: List, patients: List) -> str:
         """Build a WHAT answer using pattern-based generator."""

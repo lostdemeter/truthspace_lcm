@@ -363,6 +363,89 @@ CERTAINTY_VOCABULARY = {
 
 
 # =============================================================================
+# REVERSE TUNING: Answer → Dial Settings (Phase Conjugation)
+# =============================================================================
+
+# Signature patterns for detecting dial settings from answers
+DIAL_SIGNATURES = {
+    'x': {  # Style axis
+        'formal': ['articulated', 'contemplated', 'proceeded', 'scrutinized', 
+                   'executed', 'individual', 'figure', 'literary'],
+        'casual': ['said', 'thought', 'went', 'looked', 'did', 'guy', 'person'],
+    },
+    'y': {  # Perspective axis
+        'subjective': ['I find', 'It strikes me', 'From my perspective', 
+                       'One cannot help', 'I would say'],
+        'meta': ['Thematically', 'Symbolically', 'From a literary perspective', 
+                 'As an archetype', 'In the broader context', 'archetypal'],
+    },
+    'w': {  # Certainty axis
+        'definitive': ['certainly', 'undoubtedly', 'without question', 
+                       'is undoubtedly', 'closely tied'],
+        'hedged': ['perhaps', 'arguably', 'it seems', 'appears to be', 
+                   'possibly connected', 'may be'],
+    },
+}
+
+
+def reverse_tune(answer: str) -> dict:
+    """
+    Phase conjugation: Given an answer, recover the dial settings that produced it.
+    
+    This is the inverse of the forward dial → answer mapping.
+    
+    Args:
+        answer: The answer text to analyze
+        
+    Returns:
+        dict with keys 'x', 'y', 'z', 'w' containing estimated dial values [-1, 1]
+    """
+    answer_lower = answer.lower()
+    words = answer.split()
+    
+    # Initialize dial estimates
+    dial = {'x': 0.0, 'y': 0.0, 'z': 0.0, 'w': 0.0}
+    
+    # X-axis: Style (formal ↔ casual)
+    for word in DIAL_SIGNATURES['x']['formal']:
+        if word.lower() in answer_lower:
+            dial['x'] -= 0.5
+    for word in DIAL_SIGNATURES['x']['casual']:
+        if word.lower() in answer_lower:
+            dial['x'] += 0.5
+    
+    # Y-axis: Perspective (subjective ↔ meta)
+    for phrase in DIAL_SIGNATURES['y']['subjective']:
+        if phrase.lower() in answer_lower:
+            dial['y'] -= 0.7
+    for phrase in DIAL_SIGNATURES['y']['meta']:
+        if phrase.lower() in answer_lower:
+            dial['y'] += 0.7
+    
+    # Z-axis: Depth (based on length)
+    if len(words) < 12:
+        dial['z'] = -0.8
+    elif len(words) > 25:
+        dial['z'] = 0.8
+    else:
+        dial['z'] = (len(words) - 18) / 10  # Linear interpolation
+    
+    # W-axis: Certainty (definitive ↔ hedged)
+    for phrase in DIAL_SIGNATURES['w']['definitive']:
+        if phrase.lower() in answer_lower:
+            dial['w'] -= 0.5
+    for phrase in DIAL_SIGNATURES['w']['hedged']:
+        if phrase.lower() in answer_lower:
+            dial['w'] += 0.5
+    
+    # Clamp all values to [-1, 1]
+    for axis in dial:
+        dial[axis] = max(-1.0, min(1.0, dial[axis]))
+    
+    return dial
+
+
+# =============================================================================
 # ANSWER TEMPLATES (learned from Q&A patterns)
 # =============================================================================
 
@@ -667,6 +750,80 @@ class PatternAnswerGenerator:
         closers = PERSPECTIVE_VOCABULARY['closers'].get(perspective, ['.'])
         return random.choice(closers)
     
+    def _extract_best_quote(self, frames: List, entity: str, max_len: int = 80) -> str:
+        """
+        Extract the best quote from frames for this entity.
+        
+        Prioritizes:
+        1. Direct speech (contains quotes)
+        2. Action descriptions (SPEAK, THINK actions)
+        3. Shorter, cleaner text
+        """
+        if not frames:
+            return ""
+        
+        candidates = []
+        entity_lower = entity.lower()
+        
+        for frame in frames:
+            text = frame.get('text', '')
+            if not text or len(text) < 10:
+                continue
+            
+            # Clean up text
+            text = text.strip()
+            text = re.sub(r'\s+', ' ', text)
+            
+            # Skip if too long or too short
+            if len(text) > 200 or len(text) < 15:
+                continue
+            
+            # Score the quote
+            score = 0
+            
+            # Prefer direct speech (has quotes)
+            if '"' in text or "'" in text:
+                score += 10
+            
+            # Prefer SPEAK or THINK actions
+            action = frame.get('action', '')
+            if action in ('SPEAK', 'THINK'):
+                score += 5
+            
+            # Prefer text that mentions the entity
+            if entity_lower in text.lower():
+                score += 3
+            
+            # Prefer medium length (not too short, not too long)
+            if 30 < len(text) < 100:
+                score += 2
+            
+            # Penalize text with special characters or formatting
+            if '***' in text or '---' in text or '[' in text:
+                score -= 5
+            
+            candidates.append((score, text))
+        
+        if not candidates:
+            return ""
+        
+        # Sort by score and take best
+        candidates.sort(key=lambda x: -x[0])
+        best_text = candidates[0][1]
+        
+        # Truncate if needed
+        if len(best_text) > max_len:
+            # Try to break at a sentence or clause
+            for sep in ['. ', ', ', ' ']:
+                idx = best_text[:max_len].rfind(sep)
+                if idx > 20:
+                    best_text = best_text[:idx + 1].strip()
+                    break
+            else:
+                best_text = best_text[:max_len-3] + '...'
+        
+        return best_text
+    
     def generate_who_answer(
         self,
         entity: str,
@@ -674,6 +831,7 @@ class PatternAnswerGenerator:
         patients: List[Tuple[str, int]],
         sources: set,
         noise_level: float = 0.0,
+        frames: List = None,
     ) -> str:
         """
         Generate a WHO IS answer using learned patterns.
@@ -682,6 +840,7 @@ class PatternAnswerGenerator:
         
         Args:
             noise_level: 0.0 = cookie-cutter (geodesic), 1.0 = maximum variation
+            frames: Optional list of frames with original text for quote extraction
         """
         # Get source
         source = list(sources)[0] if sources else "the story"
@@ -738,20 +897,27 @@ class PatternAnswerGenerator:
             # Get elaboration (depth axis)
             elaboration = self._get_depth_elaboration(role)
             
+            # Extract a quote from source text if available (for elaborate mode)
+            quote = ""
+            if frames and self.dial.z > 0.3:  # Only include quotes in elaborate mode
+                quote = self._extract_best_quote(frames, entity, max_len=80)
+                if quote:
+                    quote = f' For example: "{quote}"'
+            
             # Build the answer with all four axes
             if related and self.dial.include_relationship():
                 relationship = self._get_certainty_relationship(related)
                 
                 # Construct based on perspective and certainty
                 if opener:
-                    answer = f"{opener} {entity.title()} {copula} {self._get_perspective_framing(role)} from {source} who {action_desc}, {relationship}{closer}{elaboration}"
+                    answer = f"{opener} {entity.title()} {copula} {self._get_perspective_framing(role)} from {source} who {action_desc}, {relationship}{closer}{elaboration}{quote}"
                 else:
-                    answer = f"{entity.title()} {copula} a {char_desc} from {source} who {action_desc}, {relationship}{closer}{elaboration}"
+                    answer = f"{entity.title()} {copula} a {char_desc} from {source} who {action_desc}, {relationship}{closer}{elaboration}{quote}"
             else:
                 if opener:
-                    answer = f"{opener} {entity.title()} {copula} {self._get_perspective_framing(role)} from {source} who {action_desc}{closer}{elaboration}"
+                    answer = f"{opener} {entity.title()} {copula} {self._get_perspective_framing(role)} from {source} who {action_desc}{closer}{elaboration}{quote}"
                 else:
-                    answer = f"{entity.title()} {copula} a {char_desc} from {source} who {action_desc}{closer}{elaboration}"
+                    answer = f"{entity.title()} {copula} a {char_desc} from {source} who {action_desc}{closer}{elaboration}{quote}"
             
             # Clean up any double spaces or punctuation issues
             answer = re.sub(r'\s+', ' ', answer)

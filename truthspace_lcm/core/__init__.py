@@ -68,6 +68,11 @@ from .concept_knowledge import (
     QUESTION_AXES,
 )
 
+from .answer_patterns import (
+    reverse_tune,
+    DIAL_SIGNATURES,
+)
+
 __all__ = [
     # Vocabulary (foundation)
     "Vocabulary",
@@ -87,4 +92,7 @@ __all__ = [
     "HolographicProjector",
     "ConceptQA",
     "QUESTION_AXES",
+    # Reverse Tuning (Phase Conjugation)
+    "reverse_tune",
+    "DIAL_SIGNATURES",
 ]
