@@ -82,6 +82,11 @@ from .learnable_structure import (
     ACTION_VOCABULARY,
 )
 
+from .conversation_memory import (
+    ConversationMemory,
+    ConversationTurn,
+)
+
 __all__ = [
     # Vocabulary (foundation)
     "Vocabulary",
@@ -111,4 +116,7 @@ __all__ = [
     "ROLE_VOCABULARY",
     "QUALITY_VOCABULARY",
     "ACTION_VOCABULARY",
+    # Conversation Memory (Multi-Turn Dialogue)
+    "ConversationMemory",
+    "ConversationTurn",
 ]

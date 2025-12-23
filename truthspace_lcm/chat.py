@@ -45,6 +45,7 @@ import sys
 from pathlib import Path
 
 from .core import ConceptQA
+from .core.conversation_memory import ConversationMemory
 
 
 def main():
@@ -102,6 +103,9 @@ def main():
     count = qa.load_corpus(str(corpus_path))
     print(f"Loaded {count} concept frames")
     
+    # Initialize conversation memory
+    memory = ConversationMemory(max_turns=10)
+    
     # Show dial settings
     style_label = 'formal' if args.style < -0.3 else ('casual' if args.style > 0.3 else 'neutral')
     perspective_label = 'subjective' if args.perspective < -0.3 else ('meta' if args.perspective > 0.3 else 'objective')
@@ -143,6 +147,7 @@ def main():
     print('  "Who is Darcy?"')
     print('  "What did Holmes do?"')
     print('  "Where is Netherfield?"')
+    print('  "What did he do?" (uses conversation memory)')
     print()
     
     debug_mode = args.debug
@@ -182,6 +187,8 @@ def main():
                 print("  /dial       - Show current dial settings")
                 print("  /learn E T  - Teach: entity E should have answer T")
                 print("  /learned    - Show learned structure")
+                print("  /memory     - Show conversation memory")
+                print("  /clear      - Clear conversation memory")
                 print("  /quit       - Exit")
                 print()
                 continue
@@ -359,10 +366,33 @@ def main():
                 print()
                 continue
             
+            elif cmd == '/memory':
+                # Show conversation memory
+                if memory:
+                    print(f"\n{memory.get_summary()}")
+                else:
+                    print("\nNo conversation memory yet.")
+                print()
+                continue
+            
+            elif cmd == '/clear':
+                # Clear conversation memory
+                memory.clear()
+                print("Conversation memory cleared.")
+                print()
+                continue
+            
             else:
                 print(f"Unknown command: {cmd}")
                 print("Type /help for available commands")
                 continue
+        
+        # Resolve pronouns using conversation memory
+        original_input = user_input
+        if memory.has_pronoun(user_input) and memory.focus_entity:
+            user_input = memory.resolve_pronouns(user_input)
+            if debug_mode:
+                print(f"[DEBUG] Pronoun resolved: '{original_input}' → '{user_input}'")
         
         # Process question
         result = qa.ask_detailed(user_input)
@@ -375,10 +405,19 @@ def main():
             
             print(f"\nBot: {best['answer']}")
             
+            # Add turn to conversation memory
+            memory.add_turn(
+                query=original_input,
+                answer=best['answer'],
+                entity=result.get('entity'),
+                axis=result.get('axis')
+            )
+            
             if debug_mode:
                 print(f"\n[DEBUG] Confidence: {best['confidence']:.2f}")
                 print(f"[DEBUG] Source: {best['source']}")
                 print(f"[DEBUG] Frames used: {best.get('frame_count', 1)}")
+                print(f"[DEBUG] Focus entity: {memory.focus_entity}")
                 if best.get('frame'):
                     frame = best['frame']
                     print(f"[DEBUG] Frame: agent={frame.get('agent')}, "
