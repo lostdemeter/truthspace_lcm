@@ -12,7 +12,7 @@ TruthSpace LCM is a **Holographic Concept Language Model** that performs all sem
 - **Action Primitives** = Universal verbs (MOVE, SPEAK, THINK, etc.)
 - **Holographic Projection** = Questions are gaps; answers fill them
 - **φ-Based Navigation** = Golden ratio powers for importance and coherence
-- **2D φ-Dial Control** = Style × Perspective via complex φ
+- **3D φ-Dial Control** = Style × Perspective × Depth
 - **Cross-Language** = Same concepts work across any language
 
 ## Primary Components
@@ -208,16 +208,18 @@ weight = φ^(-log(freq))    # Rare entities score higher
 φ^(-n) × φ^(+n) = 1        # Conservation law (self-dual)
 ```
 
-### Complex φ-Dial
+### 3D φ-Dial
 ```
-φ^(x + iy) = φ^x · e^(iy·ln(φ))
+φ^(x + iy) × scale(z)
 
 Where:
   x = horizontal dial (-1 to +1): Style (formal ↔ casual)
   y = vertical dial (-1 to +1): Perspective (subjective ↔ meta)
+  z = depth dial (-1 to +1): Elaboration (terse ↔ elaborate)
   
   Magnitude (φ^x) = WHAT words we choose
   Phase (y·ln(φ)) = HOW we frame the content
+  Scale (z) = HOW MUCH detail we include
 ```
 
 ### Query Resolution
@@ -227,7 +229,7 @@ Where:
 3. Extract entity from question
 4. Query frames by entity with φ-weighted importance
 5. Aggregate knowledge (action counts, relationships)
-6. Apply 2D φ-dial (style × perspective)
+6. Apply 3D φ-dial (style × perspective × depth)
 7. Project to English (fill the gap)
 ```
 
@@ -252,10 +254,11 @@ truthspace-lcm/
 │   ├── test_core.py             # Core tests (25)
 │   └── test_chat.py             # Chat tests (12)
 ├── design_considerations/       # Research journey
-│   ├── 039_phi_zipf_duality.md      # φ and Zipf as dual fractals
-│   ├── 040_phi_inversion_navigation.md  # φ-inversion navigation
-│   ├── 041_phi_dial_unified_control.md  # 1D φ-dial
+│   ├── 043_3d_phi_dial_depth.md     # 3D φ-dial with depth
 │   ├── 042_complex_phi_dial.md      # 2D complex φ-dial
+│   ├── 041_phi_dial_unified_control.md  # 1D φ-dial
+│   ├── 040_phi_inversion_navigation.md  # φ-inversion navigation
+│   ├── 039_phi_zipf_duality.md      # φ and Zipf as dual fractals
 │   ├── 038_relationship_formation_autobalance.md  # Spatial attention
 │   └── 035_autonomous_bootstrap.md  # Concept language breakthrough
 ├── scripts/                     # Utility scripts
@@ -299,27 +302,25 @@ Query `{ACTION: SPEAK}` returns both:
 - **Geometric** - Pure vector operations
 - **Interpretable** - Axis defines what's being asked
 
-## The 2D φ-Dial
+## The 3D φ-Dial
 
-The complex φ-dial provides unified control over answer generation:
+The 3D φ-dial provides complete control over answer generation:
 
-```
-                    UNIVERSAL (+x)
-                         │
-         Casual+Meta     │     Casual+Subjective
-         "Holmes         │     "I find Holmes to be
-          represents     │      quite the clever
-          the archetype" │      fellow, really"
-                         │
-    ─────────────────────●─────────────────────────
-                         │                    
-         Formal+Meta     │     Formal+Subjective
-         "Holmes is an   │     "One observes that
-          archetypal     │      Holmes demonstrates
-          figure..."     │      remarkable acuity..."
-                         │
-                    SPECIFIC (-x)
-```
+| Axis | Name | Range | Controls |
+|------|------|-------|----------|
+| **X** | Style | -1 to +1 | WHAT words (formal ↔ casual) |
+| **Y** | Perspective | -1 to +1 | HOW framed (subjective ↔ meta) |
+| **Z** | Depth | -1 to +1 | HOW MUCH detail (terse ↔ elaborate) |
+
+### Z-Axis: Depth/Elaboration
+
+| z | Depth | Max Actions | Relationship | Source | Elaboration |
+|---|-------|-------------|--------------|--------|-------------|
+| -1 | Terse | 1 | No | No | No |
+| 0 | Standard | 2 | Yes | No | No |
+| +1 | Elaborate | 4 | Yes | Yes | Yes |
+
+### X,Y Plane: Style × Perspective
 
 | Quadrant | x | y | Style | Perspective | Label |
 |----------|---|---|-------|-------------|-------|

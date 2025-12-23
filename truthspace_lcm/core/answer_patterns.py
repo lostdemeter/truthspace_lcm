@@ -55,42 +55,51 @@ class PhiDial:
 
 class ComplexPhiDial:
     """
-    2D control mechanism using complex φ-navigation.
+    3D control mechanism using φ-navigation.
     
-    "We control the horizontal. We control the vertical."
+    "We control the horizontal. We control the vertical. We control the depth."
     
-    HORIZONTAL (x): Specificity/Style
+    X-AXIS (horizontal): Style
         -1 = formal, specific, rare words
         +1 = casual, universal, common words
         
-    VERTICAL (y): Perspective/Voice
+    Y-AXIS (vertical): Perspective
         -1 = subjective, experiential, personal
          0 = objective, factual, neutral
         +1 = meta, analytical, reflective
-    
-    Together: φ^(x + iy) = φ^x · e^(iy·ln(φ))
+        
+    Z-AXIS (depth): Elaboration
+        -1 = terse, minimal, just the facts
+         0 = standard, balanced
+        +1 = elaborate, detailed, full context
     
     The MAGNITUDE (φ^x) controls WHAT words we choose.
     The PHASE (y·ln(φ)) controls HOW we frame the content.
+    The SCALE (z) controls HOW MUCH detail we include.
     """
     
     PHI = (1 + np.sqrt(5)) / 2  # Golden ratio
     
-    def __init__(self, x: float = 0.0, y: float = 0.0):
+    def __init__(self, x: float = 0.0, y: float = 0.0, z: float = 0.0):
         """
-        Initialize the 2D φ-dial.
+        Initialize the 3D φ-dial.
         
         Args:
-            x: Horizontal dial (-1 to +1): Specificity/Style
+            x: Horizontal dial (-1 to +1): Style
                -1 = formal, specific, rare
                +1 = casual, universal, common
-            y: Vertical dial (-1 to +1): Perspective/Voice
+            y: Vertical dial (-1 to +1): Perspective
                -1 = subjective, experiential
                 0 = objective, factual
                +1 = meta, analytical
+            z: Depth dial (-1 to +1): Elaboration
+               -1 = terse, minimal
+                0 = standard, balanced
+               +1 = elaborate, detailed
         """
         self.x = max(-1.0, min(1.0, x))  # Horizontal: style
         self.y = max(-1.0, min(1.0, y))  # Vertical: perspective
+        self.z = max(-1.0, min(1.0, z))  # Depth: elaboration
     
     def weight(self, value: float) -> float:
         """Apply horizontal φ-dial weighting (magnitude)."""
@@ -113,12 +122,44 @@ class ComplexPhiDial:
             return 'meta'
         return 'objective'
     
+    def get_depth(self) -> str:
+        """Get depth/elaboration level from z position."""
+        if self.z < -0.3:
+            return 'terse'
+        elif self.z > 0.3:
+            return 'elaborate'
+        return 'standard'
+    
+    def get_max_actions(self) -> int:
+        """How many action verbs to include based on depth."""
+        if self.z < -0.3:
+            return 1      # Terse: just one
+        elif self.z > 0.3:
+            return 4      # Elaborate: up to 4
+        return 2          # Standard: 2
+    
+    def include_relationship(self) -> bool:
+        """Whether to include relationship info."""
+        return self.z > -0.5  # Only skip for very terse
+    
+    def include_source(self) -> bool:
+        """Whether to include source attribution."""
+        return self.z > 0.0   # Only for standard+
+    
+    def include_elaboration(self) -> bool:
+        """Whether to add closing elaboration."""
+        return self.z > 0.3   # Only for elaborate
+    
     def get_quadrant(self) -> Tuple[str, str]:
         """Get (style, perspective) tuple."""
         return (self.get_style(), self.get_perspective())
     
+    def get_octant(self) -> Tuple[str, str, str]:
+        """Get (style, perspective, depth) tuple."""
+        return (self.get_style(), self.get_perspective(), self.get_depth())
+    
     def get_quadrant_label(self) -> str:
-        """Get human-readable quadrant label."""
+        """Get human-readable quadrant label (2D, ignoring z)."""
         style, perspective = self.get_quadrant()
         labels = {
             ('formal', 'subjective'): 'Literary/Immersive',
@@ -132,6 +173,10 @@ class ComplexPhiDial:
             ('neutral', 'meta'): 'Balanced/Reflective',
         }
         return labels.get((style, perspective), f'{style}+{perspective}')
+    
+    def get_octant_label(self) -> str:
+        """Get human-readable octant label (3D)."""
+        return f'{self.get_quadrant_label()} ({self.get_depth()})'
 
 
 # Style-specific vocabulary (horizontal axis)
@@ -227,6 +272,35 @@ PERSPECTIVE_VOCABULARY = {
             ', representing broader themes of the genre.',
             ', embodying timeless literary patterns.',
             ', a quintessential example of the form.',
+        ],
+    },
+}
+
+# Depth-specific vocabulary (z-axis)
+DEPTH_VOCABULARY = {
+    # Elaboration phrases added at the end for elaborate mode
+    'elaboration': {
+        'detective': [
+            'Known for remarkable deductive abilities and keen observation.',
+            'A master of logical reasoning and forensic analysis.',
+            'Renowned for solving the most baffling mysteries.',
+        ],
+        'character': [
+            'A memorable presence in the narrative.',
+            'Central to the story\'s development.',
+            'Whose actions shape the course of events.',
+        ],
+        'lover': [
+            'Whose romantic journey forms the heart of the story.',
+            'A figure of passion and emotional depth.',
+        ],
+        'thinker': [
+            'A contemplative figure given to deep reflection.',
+            'Whose thoughts reveal the inner workings of the narrative.',
+        ],
+        'default': [
+            'A significant figure in the work.',
+            'Whose presence enriches the narrative.',
         ],
     },
 }
@@ -385,16 +459,17 @@ class PatternAnswerGenerator:
     """
     Generate answers using learned patterns from Q&A training.
     
-    Now with 2D φ-dial control:
-        - Horizontal (x): Style (formal ↔ casual)
-        - Vertical (y): Perspective (subjective ↔ objective ↔ meta)
+    Now with 3D φ-dial control:
+        - X (horizontal): Style (formal ↔ casual)
+        - Y (vertical): Perspective (subjective ↔ objective ↔ meta)
+        - Z (depth): Elaboration (terse ↔ standard ↔ elaborate)
     
-    "We control the horizontal. We control the vertical."
+    "We control the horizontal. We control the vertical. We control the depth."
     """
     
-    def __init__(self, x: float = 0.0, y: float = 0.0):
+    def __init__(self, x: float = 0.0, y: float = 0.0, z: float = 0.0):
         """
-        Initialize the pattern generator with 2D φ-dial.
+        Initialize the pattern generator with 3D φ-dial.
         
         Args:
             x: Horizontal dial (-1 to +1): Style
@@ -404,11 +479,15 @@ class PatternAnswerGenerator:
                -1 = subjective, experiential
                 0 = objective, factual
                +1 = meta, analytical
+            z: Depth dial (-1 to +1): Elaboration
+               -1 = terse, minimal
+                0 = standard, balanced
+               +1 = elaborate, detailed
         """
         self.who_templates = WHO_IS_TEMPLATES
         self.what_templates = WHAT_DID_TEMPLATES
         self.where_templates = WHERE_IS_TEMPLATES
-        self.dial = ComplexPhiDial(x, y)
+        self.dial = ComplexPhiDial(x, y, z)
         
         # Noise words to filter from relationships
         self.noise_words = {
@@ -418,17 +497,33 @@ class PatternAnswerGenerator:
             'aunt', 'uncle', 'mother', 'father',
         }
     
-    def set_dial(self, x: float = 0.0, y: float = 0.0):
-        """Set both dials at once."""
-        self.dial = ComplexPhiDial(x, y)
+    def set_dial(self, x: float = None, y: float = None, z: float = None):
+        """Set dial values. Only updates provided values."""
+        new_x = x if x is not None else self.dial.x
+        new_y = y if y is not None else self.dial.y
+        new_z = z if z is not None else self.dial.z
+        self.dial = ComplexPhiDial(new_x, new_y, new_z)
     
     def set_style(self, x: float):
         """Set the horizontal style dial (-1 = formal, +1 = casual)."""
-        self.dial = ComplexPhiDial(x, self.dial.y)
+        self.dial = ComplexPhiDial(x, self.dial.y, self.dial.z)
     
     def set_perspective(self, y: float):
         """Set the vertical perspective dial (-1 = subjective, +1 = meta)."""
-        self.dial = ComplexPhiDial(self.dial.x, y)
+        self.dial = ComplexPhiDial(self.dial.x, y, self.dial.z)
+    
+    def set_depth(self, z: float):
+        """Set the depth dial (-1 = terse, +1 = elaborate)."""
+        self.dial = ComplexPhiDial(self.dial.x, self.dial.y, z)
+    
+    def _get_depth_elaboration(self, role: str) -> str:
+        """Get elaboration phrase based on depth and role."""
+        if not self.dial.include_elaboration():
+            return ''
+        elaborations = DEPTH_VOCABULARY['elaboration'].get(
+            role, DEPTH_VOCABULARY['elaboration']['default']
+        )
+        return ' ' + random.choice(elaborations)
     
     def _get_styled_verb(self, action: str) -> str:
         """Get verb with style applied via φ-dial."""
@@ -524,17 +619,18 @@ class PatternAnswerGenerator:
                 related = patient
                 break
         
-        # GEODESIC PATH (noise_level = 0): Now with 2D φ-dial control!
-        # Horizontal (x) controls STYLE, Vertical (y) controls PERSPECTIVE
+        # GEODESIC PATH (noise_level = 0): Now with 3D φ-dial control!
+        # X controls STYLE, Y controls PERSPECTIVE, Z controls DEPTH
         if noise_level == 0:
-            # Get styled action descriptions (horizontal axis)
+            # Get styled action descriptions (horizontal axis + depth)
+            max_actions = self.dial.get_max_actions()
             action_descs = []
             for action, count in actions:
                 if action != 'EXIST' and action != 'POSSESS':
                     desc = self._get_styled_verb(action)
                     if desc not in action_descs:
                         action_descs.append(desc)
-                    if len(action_descs) >= 2:
+                    if len(action_descs) >= max_actions:
                         break
             
             action_desc = " and ".join(action_descs) if action_descs else "appears"
@@ -546,20 +642,23 @@ class PatternAnswerGenerator:
             # Get styled descriptor (horizontal axis)
             char_desc = self._get_styled_descriptor('character')
             
-            # Build the answer with both axes
-            if related:
+            # Get elaboration (depth axis)
+            elaboration = self._get_depth_elaboration(role)
+            
+            # Build the answer with all three axes
+            if related and self.dial.include_relationship():
                 relationship = self._get_perspective_relationship(related)
                 
                 # Construct based on perspective
                 if opener:
-                    answer = f"{opener} {entity.title()} is {self._get_perspective_framing(role)} from {source} who {action_desc}, {relationship}{closer}"
+                    answer = f"{opener} {entity.title()} is {self._get_perspective_framing(role)} from {source} who {action_desc}, {relationship}{closer}{elaboration}"
                 else:
-                    answer = f"{entity.title()} is a {char_desc} from {source} who {action_desc}, {relationship}{closer}"
+                    answer = f"{entity.title()} is a {char_desc} from {source} who {action_desc}, {relationship}{closer}{elaboration}"
             else:
                 if opener:
-                    answer = f"{opener} {entity.title()} is {self._get_perspective_framing(role)} from {source} who {action_desc}{closer}"
+                    answer = f"{opener} {entity.title()} is {self._get_perspective_framing(role)} from {source} who {action_desc}{closer}{elaboration}"
                 else:
-                    answer = f"{entity.title()} is a {char_desc} from {source} who {action_desc}{closer}"
+                    answer = f"{entity.title()} is a {char_desc} from {source} who {action_desc}{closer}{elaboration}"
             
             # Clean up any double spaces or punctuation issues
             answer = re.sub(r'\s+', ' ', answer)

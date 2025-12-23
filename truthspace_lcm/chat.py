@@ -67,6 +67,10 @@ def main():
         '--perspective', '-y', type=float, default=0.0,
         help='Perspective dial: -1 (subjective) to +1 (meta)'
     )
+    parser.add_argument(
+        '--depth', '-z', type=float, default=0.0,
+        help='Depth dial: -1 (terse) to +1 (elaborate)'
+    )
     args = parser.parse_args()
     
     # Find corpus
@@ -90,14 +94,15 @@ def main():
         return 1
     
     print(f"Loading corpus from {corpus_path}...")
-    qa = ConceptQA(style_x=args.style, perspective_y=args.perspective)
+    qa = ConceptQA(style_x=args.style, perspective_y=args.perspective, depth_z=args.depth)
     count = qa.load_corpus(str(corpus_path))
     print(f"Loaded {count} concept frames")
     
     # Show dial settings
     style_label = 'formal' if args.style < -0.3 else ('casual' if args.style > 0.3 else 'neutral')
     perspective_label = 'subjective' if args.perspective < -0.3 else ('meta' if args.perspective > 0.3 else 'objective')
-    print(f"φ-Dial: style={style_label} (x={args.style:+.1f}), perspective={perspective_label} (y={args.perspective:+.1f})")
+    depth_label = 'terse' if args.depth < -0.3 else ('elaborate' if args.depth > 0.3 else 'standard')
+    print(f"φ-Dial: style={style_label} (x={args.style:+.1f}), perspective={perspective_label} (y={args.perspective:+.1f}), depth={depth_label} (z={args.depth:+.1f})")
     print()
     
     # Show sample entities
@@ -122,6 +127,7 @@ def main():
     print("  /stats      - Show corpus statistics")
     print("  /style X    - Set style dial (-1=formal, +1=casual)")
     print("  /perspective Y - Set perspective dial (-1=subjective, +1=meta)")
+    print("  /depth Z    - Set depth dial (-1=terse, +1=elaborate)")
     print("  /dial       - Show current dial settings")
     print("  /help       - Show this help")
     print("  /quit       - Exit")
@@ -164,6 +170,7 @@ def main():
                 print("  /stats      - Show corpus statistics")
                 print("  /style X    - Set style dial (-1=formal, +1=casual)")
                 print("  /perspective Y - Set perspective dial (-1=subjective, +1=meta)")
+                print("  /depth Z    - Set depth dial (-1=terse, +1=elaborate)")
                 print("  /dial       - Show current dial settings")
                 print("  /quit       - Exit")
                 print()
@@ -172,10 +179,12 @@ def main():
             elif cmd == '/dial':
                 style_label = 'formal' if qa.style_x < -0.3 else ('casual' if qa.style_x > 0.3 else 'neutral')
                 perspective_label = 'subjective' if qa.perspective_y < -0.3 else ('meta' if qa.perspective_y > 0.3 else 'objective')
+                depth_label = 'terse' if qa.depth_z < -0.3 else ('elaborate' if qa.depth_z > 0.3 else 'standard')
                 print(f"\nφ-Dial Settings:")
                 print(f"  Style (x):       {qa.style_x:+.1f} ({style_label})")
                 print(f"  Perspective (y): {qa.perspective_y:+.1f} ({perspective_label})")
-                print(f"  Quadrant: {qa.projector.answer_generator.dial.get_quadrant_label()}")
+                print(f"  Depth (z):       {qa.depth_z:+.1f} ({depth_label})")
+                print(f"  Octant: {qa.projector.answer_generator.dial.get_octant_label()}")
                 print()
                 continue
             
@@ -203,6 +212,20 @@ def main():
                     qa.set_perspective(y)
                     perspective_label = 'subjective' if y < -0.3 else ('meta' if y > 0.3 else 'objective')
                     print(f"Perspective set to {y:+.1f} ({perspective_label})")
+                except ValueError:
+                    print("Invalid value. Use a number between -1 and 1.")
+                continue
+            
+            elif cmd.startswith('/depth'):
+                parts = user_input.split()
+                if len(parts) < 2:
+                    print("Usage: /depth <value>  (e.g., /depth -1 for terse, /depth 1 for elaborate)")
+                    continue
+                try:
+                    z = float(parts[1])
+                    qa.set_depth(z)
+                    depth_label = 'terse' if z < -0.3 else ('elaborate' if z > 0.3 else 'standard')
+                    print(f"Depth set to {z:+.1f} ({depth_label})")
                 except ValueError:
                     print("Invalid value. Use a number between -1 and 1.")
                 continue

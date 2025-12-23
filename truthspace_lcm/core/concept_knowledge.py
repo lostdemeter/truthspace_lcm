@@ -230,9 +230,10 @@ class HolographicProjector:
         Answer -> Project filled slot to English
     """
     
-    def __init__(self, knowledge: ConceptKnowledge, style_x: float = 0.0, perspective_y: float = 0.0):
+    def __init__(self, knowledge: ConceptKnowledge, style_x: float = 0.0, 
+                 perspective_y: float = 0.0, depth_z: float = 0.0):
         """
-        Initialize the holographic projector with 2D φ-dial control.
+        Initialize the holographic projector with 3D φ-dial control.
         
         Args:
             knowledge: The concept knowledge base
@@ -243,16 +244,21 @@ class HolographicProjector:
                 -1 = subjective, experiential
                  0 = objective, factual
                 +1 = meta, analytical
+            depth_z: Depth dial (-1 to +1): Elaboration
+                -1 = terse, minimal
+                 0 = standard, balanced
+                +1 = elaborate, detailed
         """
         self.knowledge = knowledge
         self.noise_level = 0.0  # 0.0 = geodesic (cookie-cutter), 1.0 = max variation
         
-        # 2D φ-dial control: "We control the horizontal. We control the vertical."
+        # 3D φ-dial control: "We control the horizontal. We control the vertical. We control the depth."
         self.style_x = style_x
         self.perspective_y = perspective_y
+        self.depth_z = depth_z
         
-        # Pattern-based answer generator with 2D φ-dial
-        self.answer_generator = PatternAnswerGenerator(x=style_x, y=perspective_y)
+        # Pattern-based answer generator with 3D φ-dial
+        self.answer_generator = PatternAnswerGenerator(x=style_x, y=perspective_y, z=depth_z)
         
         # Concept extractor for parsing questions
         self.extractor = ConceptExtractor()
@@ -618,9 +624,9 @@ class ConceptQA:
     """
     
     def __init__(self, corpus_path: Optional[str] = None, 
-                 style_x: float = 0.0, perspective_y: float = 0.0):
+                 style_x: float = 0.0, perspective_y: float = 0.0, depth_z: float = 0.0):
         """
-        Initialize the Q&A system with 2D φ-dial control.
+        Initialize the Q&A system with 3D φ-dial control.
         
         Args:
             corpus_path: Optional path to concept corpus
@@ -631,32 +637,40 @@ class ConceptQA:
                 -1 = subjective, experiential
                  0 = objective, factual
                 +1 = meta, analytical
+            depth_z: Depth dial (-1 to +1): Elaboration
+                -1 = terse, minimal
+                 0 = standard, balanced
+                +1 = elaborate, detailed
         """
         self.knowledge = ConceptKnowledge()
-        self.projector = HolographicProjector(self.knowledge, style_x, perspective_y)
+        self.projector = HolographicProjector(self.knowledge, style_x, perspective_y, depth_z)
         
         # Store dial settings
         self.style_x = style_x
         self.perspective_y = perspective_y
+        self.depth_z = depth_z
         
         if corpus_path:
             self.load_corpus(corpus_path)
     
-    def set_dial(self, x: float = None, y: float = None):
+    def set_dial(self, x: float = None, y: float = None, z: float = None):
         """
-        Set the 2D φ-dial for style and perspective control.
+        Set the 3D φ-dial for style, perspective, and depth control.
         
         Args:
             x: Horizontal dial (-1 to +1): Style (formal ↔ casual)
             y: Vertical dial (-1 to +1): Perspective (subjective ↔ meta)
+            z: Depth dial (-1 to +1): Elaboration (terse ↔ elaborate)
         """
         if x is not None:
             self.style_x = x
         if y is not None:
             self.perspective_y = y
+        if z is not None:
+            self.depth_z = z
         
         # Update the answer generator's dial
-        self.projector.answer_generator.set_dial(self.style_x, self.perspective_y)
+        self.projector.answer_generator.set_dial(self.style_x, self.perspective_y, self.depth_z)
     
     def set_style(self, x: float):
         """Set horizontal style dial (-1 = formal, +1 = casual)."""
@@ -665,6 +679,10 @@ class ConceptQA:
     def set_perspective(self, y: float):
         """Set vertical perspective dial (-1 = subjective, +1 = meta)."""
         self.set_dial(y=y)
+    
+    def set_depth(self, z: float):
+        """Set depth dial (-1 = terse, +1 = elaborate)."""
+        self.set_dial(z=z)
     
     def load_corpus(self, corpus_path: str) -> int:
         """Load concept corpus."""
@@ -696,8 +714,8 @@ class ConceptQA:
         # Format response
         response = best['answer']
         
-        # Add source attribution if available
-        if best.get('source'):
+        # Add source attribution based on depth dial
+        if best.get('source') and self.projector.answer_generator.dial.include_source():
             response += f" (from {best['source']})"
         
         return response
