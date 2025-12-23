@@ -71,6 +71,10 @@ def main():
         '--depth', '-z', type=float, default=0.0,
         help='Depth dial: -1 (terse) to +1 (elaborate)'
     )
+    parser.add_argument(
+        '--certainty', '-w', type=float, default=0.0,
+        help='Certainty dial: -1 (definitive) to +1 (hedged)'
+    )
     args = parser.parse_args()
     
     # Find corpus
@@ -94,7 +98,7 @@ def main():
         return 1
     
     print(f"Loading corpus from {corpus_path}...")
-    qa = ConceptQA(style_x=args.style, perspective_y=args.perspective, depth_z=args.depth)
+    qa = ConceptQA(style_x=args.style, perspective_y=args.perspective, depth_z=args.depth, certainty_w=args.certainty)
     count = qa.load_corpus(str(corpus_path))
     print(f"Loaded {count} concept frames")
     
@@ -102,7 +106,9 @@ def main():
     style_label = 'formal' if args.style < -0.3 else ('casual' if args.style > 0.3 else 'neutral')
     perspective_label = 'subjective' if args.perspective < -0.3 else ('meta' if args.perspective > 0.3 else 'objective')
     depth_label = 'terse' if args.depth < -0.3 else ('elaborate' if args.depth > 0.3 else 'standard')
-    print(f"φ-Dial: style={style_label} (x={args.style:+.1f}), perspective={perspective_label} (y={args.perspective:+.1f}), depth={depth_label} (z={args.depth:+.1f})")
+    certainty_label = 'definitive' if args.certainty < -0.3 else ('hedged' if args.certainty > 0.3 else 'neutral')
+    print(f"φ-Dial: style={style_label} (x={args.style:+.1f}), perspective={perspective_label} (y={args.perspective:+.1f})")
+    print(f"        depth={depth_label} (z={args.depth:+.1f}), certainty={certainty_label} (w={args.certainty:+.1f})")
     print()
     
     # Show sample entities
@@ -128,6 +134,7 @@ def main():
     print("  /style X    - Set style dial (-1=formal, +1=casual)")
     print("  /perspective Y - Set perspective dial (-1=subjective, +1=meta)")
     print("  /depth Z    - Set depth dial (-1=terse, +1=elaborate)")
+    print("  /certainty W - Set certainty dial (-1=definitive, +1=hedged)")
     print("  /dial       - Show current dial settings")
     print("  /help       - Show this help")
     print("  /quit       - Exit")
@@ -171,6 +178,7 @@ def main():
                 print("  /style X    - Set style dial (-1=formal, +1=casual)")
                 print("  /perspective Y - Set perspective dial (-1=subjective, +1=meta)")
                 print("  /depth Z    - Set depth dial (-1=terse, +1=elaborate)")
+                print("  /certainty W - Set certainty dial (-1=definitive, +1=hedged)")
                 print("  /dial       - Show current dial settings")
                 print("  /quit       - Exit")
                 print()
@@ -180,11 +188,13 @@ def main():
                 style_label = 'formal' if qa.style_x < -0.3 else ('casual' if qa.style_x > 0.3 else 'neutral')
                 perspective_label = 'subjective' if qa.perspective_y < -0.3 else ('meta' if qa.perspective_y > 0.3 else 'objective')
                 depth_label = 'terse' if qa.depth_z < -0.3 else ('elaborate' if qa.depth_z > 0.3 else 'standard')
-                print(f"\nφ-Dial Settings:")
+                certainty_label = 'definitive' if qa.certainty_w < -0.3 else ('hedged' if qa.certainty_w > 0.3 else 'neutral')
+                print(f"\nφ-Dial Settings (4D Quaternion):")
                 print(f"  Style (x):       {qa.style_x:+.1f} ({style_label})")
                 print(f"  Perspective (y): {qa.perspective_y:+.1f} ({perspective_label})")
                 print(f"  Depth (z):       {qa.depth_z:+.1f} ({depth_label})")
-                print(f"  Octant: {qa.projector.answer_generator.dial.get_octant_label()}")
+                print(f"  Certainty (w):   {qa.certainty_w:+.1f} ({certainty_label})")
+                print(f"  Label: {qa.projector.answer_generator.dial.get_full_label()}")
                 print()
                 continue
             
@@ -226,6 +236,20 @@ def main():
                     qa.set_depth(z)
                     depth_label = 'terse' if z < -0.3 else ('elaborate' if z > 0.3 else 'standard')
                     print(f"Depth set to {z:+.1f} ({depth_label})")
+                except ValueError:
+                    print("Invalid value. Use a number between -1 and 1.")
+                continue
+            
+            elif cmd.startswith('/certainty'):
+                parts = user_input.split()
+                if len(parts) < 2:
+                    print("Usage: /certainty <value>  (e.g., /certainty -1 for definitive, /certainty 1 for hedged)")
+                    continue
+                try:
+                    w = float(parts[1])
+                    qa.set_certainty(w)
+                    certainty_label = 'definitive' if w < -0.3 else ('hedged' if w > 0.3 else 'neutral')
+                    print(f"Certainty set to {w:+.1f} ({certainty_label})")
                 except ValueError:
                     print("Invalid value. Use a number between -1 and 1.")
                 continue

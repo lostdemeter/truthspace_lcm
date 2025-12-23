@@ -12,7 +12,7 @@ TruthSpace LCM is a **Holographic Concept Language Model** that performs all sem
 - **Action Primitives** = Universal verbs (MOVE, SPEAK, THINK, etc.)
 - **Holographic Projection** = Questions are gaps; answers fill them
 - **φ-Based Navigation** = Golden ratio powers for importance and coherence
-- **3D φ-Dial Control** = Style × Perspective × Depth
+- **4D φ-Dial Control** = Style × Perspective × Depth × Certainty (quaternion)
 - **Cross-Language** = Same concepts work across any language
 
 ## Primary Components
@@ -208,18 +208,20 @@ weight = φ^(-log(freq))    # Rare entities score higher
 φ^(-n) × φ^(+n) = 1        # Conservation law (self-dual)
 ```
 
-### 3D φ-Dial
+### 4D Quaternion φ-Dial
 ```
-φ^(x + iy) × scale(z)
+q = w + xi + yj + zk
 
 Where:
-  x = horizontal dial (-1 to +1): Style (formal ↔ casual)
-  y = vertical dial (-1 to +1): Perspective (subjective ↔ meta)
-  z = depth dial (-1 to +1): Elaboration (terse ↔ elaborate)
+  x = Style dial (-1 to +1): formal ↔ casual
+  y = Perspective dial (-1 to +1): subjective ↔ meta
+  z = Depth dial (-1 to +1): terse ↔ elaborate
+  w = Certainty dial (-1 to +1): definitive ↔ hedged
   
-  Magnitude (φ^x) = WHAT words we choose
-  Phase (y·ln(φ)) = HOW we frame the content
-  Scale (z) = HOW MUCH detail we include
+  x (i-axis) = WHAT words we choose
+  y (j-axis) = HOW we frame the content
+  z (k-axis) = HOW MUCH detail we include
+  w (scalar) = HOW SURE we are
 ```
 
 ### Query Resolution
@@ -229,7 +231,7 @@ Where:
 3. Extract entity from question
 4. Query frames by entity with φ-weighted importance
 5. Aggregate knowledge (action counts, relationships)
-6. Apply 3D φ-dial (style × perspective × depth)
+6. Apply 4D φ-dial (style × perspective × depth × certainty)
 7. Project to English (fill the gap)
 ```
 
@@ -254,6 +256,7 @@ truthspace-lcm/
 │   ├── test_core.py             # Core tests (25)
 │   └── test_chat.py             # Chat tests (12)
 ├── design_considerations/       # Research journey
+│   ├── 044_quaternion_phi_dial.md   # 4D quaternion φ-dial
 │   ├── 043_3d_phi_dial_depth.md     # 3D φ-dial with depth
 │   ├── 042_complex_phi_dial.md      # 2D complex φ-dial
 │   ├── 041_phi_dial_unified_control.md  # 1D φ-dial
@@ -302,23 +305,24 @@ Query `{ACTION: SPEAK}` returns both:
 - **Geometric** - Pure vector operations
 - **Interpretable** - Axis defines what's being asked
 
-## The 3D φ-Dial
+## The 4D Quaternion φ-Dial
 
-The 3D φ-dial provides complete control over answer generation:
+The 4D φ-dial provides complete control over answer generation:
 
 | Axis | Name | Range | Controls |
 |------|------|-------|----------|
 | **X** | Style | -1 to +1 | WHAT words (formal ↔ casual) |
 | **Y** | Perspective | -1 to +1 | HOW framed (subjective ↔ meta) |
 | **Z** | Depth | -1 to +1 | HOW MUCH detail (terse ↔ elaborate) |
+| **W** | Certainty | -1 to +1 | HOW SURE (definitive ↔ hedged) |
 
-### Z-Axis: Depth/Elaboration
+### W-Axis: Certainty/Modality
 
-| z | Depth | Max Actions | Relationship | Source | Elaboration |
-|---|-------|-------------|--------------|--------|-------------|
-| -1 | Terse | 1 | No | No | No |
-| 0 | Standard | 2 | Yes | No | No |
-| +1 | Elaborate | 4 | Yes | Yes | Yes |
+| w | Certainty | Copula | Relationship |
+|---|-----------|--------|--------------|
+| -1 | Definitive | "is undoubtedly" | "closely tied to" |
+| 0 | Neutral | "is" | "associated with" |
+| +1 | Hedged | "appears to be" | "possibly connected to" |
 
 ### X,Y Plane: Style × Perspective
 

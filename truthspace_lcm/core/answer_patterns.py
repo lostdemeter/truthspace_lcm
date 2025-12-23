@@ -53,53 +53,67 @@ class PhiDial:
         return 'neutral'
 
 
-class ComplexPhiDial:
+class QuaternionPhiDial:
     """
-    3D control mechanism using φ-navigation.
+    4D control mechanism using quaternion-inspired φ-navigation.
     
-    "We control the horizontal. We control the vertical. We control the depth."
+    "We control the horizontal. We control the vertical. 
+     We control the depth. We control the certainty."
     
-    X-AXIS (horizontal): Style
+    X-AXIS: Style
         -1 = formal, specific, rare words
         +1 = casual, universal, common words
         
-    Y-AXIS (vertical): Perspective
+    Y-AXIS: Perspective
         -1 = subjective, experiential, personal
          0 = objective, factual, neutral
         +1 = meta, analytical, reflective
         
-    Z-AXIS (depth): Elaboration
+    Z-AXIS: Depth/Elaboration
         -1 = terse, minimal, just the facts
          0 = standard, balanced
         +1 = elaborate, detailed, full context
+        
+    W-AXIS: Certainty/Modality
+        -1 = definitive, certain, assertive
+         0 = neutral, balanced
+        +1 = hedged, tentative, qualified
+    
+    Quaternion structure: q = w + xi + yj + zk
     
     The MAGNITUDE (φ^x) controls WHAT words we choose.
     The PHASE (y·ln(φ)) controls HOW we frame the content.
     The SCALE (z) controls HOW MUCH detail we include.
+    The MODALITY (w) controls HOW SURE we are.
     """
     
     PHI = (1 + np.sqrt(5)) / 2  # Golden ratio
     
-    def __init__(self, x: float = 0.0, y: float = 0.0, z: float = 0.0):
+    def __init__(self, x: float = 0.0, y: float = 0.0, z: float = 0.0, w: float = 0.0):
         """
-        Initialize the 3D φ-dial.
+        Initialize the 4D φ-dial.
         
         Args:
-            x: Horizontal dial (-1 to +1): Style
+            x: Style dial (-1 to +1)
                -1 = formal, specific, rare
                +1 = casual, universal, common
-            y: Vertical dial (-1 to +1): Perspective
+            y: Perspective dial (-1 to +1)
                -1 = subjective, experiential
                 0 = objective, factual
                +1 = meta, analytical
-            z: Depth dial (-1 to +1): Elaboration
+            z: Depth dial (-1 to +1)
                -1 = terse, minimal
                 0 = standard, balanced
                +1 = elaborate, detailed
+            w: Certainty dial (-1 to +1)
+               -1 = definitive, assertive
+                0 = neutral
+               +1 = hedged, tentative
         """
-        self.x = max(-1.0, min(1.0, x))  # Horizontal: style
-        self.y = max(-1.0, min(1.0, y))  # Vertical: perspective
-        self.z = max(-1.0, min(1.0, z))  # Depth: elaboration
+        self.x = max(-1.0, min(1.0, x))  # Style
+        self.y = max(-1.0, min(1.0, y))  # Perspective
+        self.z = max(-1.0, min(1.0, z))  # Depth
+        self.w = max(-1.0, min(1.0, w))  # Certainty
     
     def weight(self, value: float) -> float:
         """Apply horizontal φ-dial weighting (magnitude)."""
@@ -107,7 +121,7 @@ class ComplexPhiDial:
         return self.PHI ** (self.x * log_val)
     
     def get_style(self) -> str:
-        """Get style from horizontal position."""
+        """Get style from x position."""
         if self.x < -0.3:
             return 'formal'
         elif self.x > 0.3:
@@ -115,7 +129,7 @@ class ComplexPhiDial:
         return 'neutral'
     
     def get_perspective(self) -> str:
-        """Get perspective from vertical position."""
+        """Get perspective from y position."""
         if self.y < -0.3:
             return 'subjective'
         elif self.y > 0.3:
@@ -129,6 +143,14 @@ class ComplexPhiDial:
         elif self.z > 0.3:
             return 'elaborate'
         return 'standard'
+    
+    def get_certainty(self) -> str:
+        """Get certainty/modality from w position."""
+        if self.w < -0.3:
+            return 'definitive'
+        elif self.w > 0.3:
+            return 'hedged'
+        return 'neutral'
     
     def get_max_actions(self) -> int:
         """How many action verbs to include based on depth."""
@@ -158,8 +180,12 @@ class ComplexPhiDial:
         """Get (style, perspective, depth) tuple."""
         return (self.get_style(), self.get_perspective(), self.get_depth())
     
+    def get_hexadecant(self) -> Tuple[str, str, str, str]:
+        """Get (style, perspective, depth, certainty) tuple."""
+        return (self.get_style(), self.get_perspective(), self.get_depth(), self.get_certainty())
+    
     def get_quadrant_label(self) -> str:
-        """Get human-readable quadrant label (2D, ignoring z)."""
+        """Get human-readable quadrant label (2D, x and y only)."""
         style, perspective = self.get_quadrant()
         labels = {
             ('formal', 'subjective'): 'Literary/Immersive',
@@ -177,6 +203,14 @@ class ComplexPhiDial:
     def get_octant_label(self) -> str:
         """Get human-readable octant label (3D)."""
         return f'{self.get_quadrant_label()} ({self.get_depth()})'
+    
+    def get_full_label(self) -> str:
+        """Get human-readable 4D label."""
+        return f'{self.get_quadrant_label()} ({self.get_depth()}/{self.get_certainty()})'
+
+
+# Backwards compatibility alias
+ComplexPhiDial = QuaternionPhiDial
 
 
 # Style-specific vocabulary (horizontal axis)
@@ -302,6 +336,28 @@ DEPTH_VOCABULARY = {
             'A significant figure in the work.',
             'Whose presence enriches the narrative.',
         ],
+    },
+}
+
+# Certainty-specific vocabulary (w-axis)
+CERTAINTY_VOCABULARY = {
+    # Copula (is/was) modifications
+    'copula': {
+        'definitive': 'is undoubtedly',
+        'neutral': 'is',
+        'hedged': 'appears to be',
+    },
+    # Relationship certainty
+    'relationship': {
+        'definitive': 'closely tied to',
+        'neutral': 'associated with',
+        'hedged': 'possibly connected to',
+    },
+    # Openers (only used when perspective is objective)
+    'opener': {
+        'definitive': ['Without question,', 'Certainly,', 'Undoubtedly,'],
+        'neutral': [''],
+        'hedged': ['Perhaps', 'Arguably,', 'It seems that'],
     },
 }
 
@@ -459,35 +515,41 @@ class PatternAnswerGenerator:
     """
     Generate answers using learned patterns from Q&A training.
     
-    Now with 3D φ-dial control:
-        - X (horizontal): Style (formal ↔ casual)
-        - Y (vertical): Perspective (subjective ↔ objective ↔ meta)
-        - Z (depth): Elaboration (terse ↔ standard ↔ elaborate)
+    Now with 4D φ-dial control (quaternion-inspired):
+        - X: Style (formal ↔ casual)
+        - Y: Perspective (subjective ↔ objective ↔ meta)
+        - Z: Depth (terse ↔ standard ↔ elaborate)
+        - W: Certainty (definitive ↔ neutral ↔ hedged)
     
-    "We control the horizontal. We control the vertical. We control the depth."
+    "We control the horizontal. We control the vertical. 
+     We control the depth. We control the certainty."
     """
     
-    def __init__(self, x: float = 0.0, y: float = 0.0, z: float = 0.0):
+    def __init__(self, x: float = 0.0, y: float = 0.0, z: float = 0.0, w: float = 0.0):
         """
-        Initialize the pattern generator with 3D φ-dial.
+        Initialize the pattern generator with 4D φ-dial.
         
         Args:
-            x: Horizontal dial (-1 to +1): Style
+            x: Style dial (-1 to +1)
                -1 = formal, specific, rare
                +1 = casual, universal, common
-            y: Vertical dial (-1 to +1): Perspective
+            y: Perspective dial (-1 to +1)
                -1 = subjective, experiential
                 0 = objective, factual
                +1 = meta, analytical
-            z: Depth dial (-1 to +1): Elaboration
+            z: Depth dial (-1 to +1)
                -1 = terse, minimal
                 0 = standard, balanced
                +1 = elaborate, detailed
+            w: Certainty dial (-1 to +1)
+               -1 = definitive, assertive
+                0 = neutral
+               +1 = hedged, tentative
         """
         self.who_templates = WHO_IS_TEMPLATES
         self.what_templates = WHAT_DID_TEMPLATES
         self.where_templates = WHERE_IS_TEMPLATES
-        self.dial = ComplexPhiDial(x, y, z)
+        self.dial = QuaternionPhiDial(x, y, z, w)
         
         # Noise words to filter from relationships
         self.noise_words = {
@@ -497,24 +559,29 @@ class PatternAnswerGenerator:
             'aunt', 'uncle', 'mother', 'father',
         }
     
-    def set_dial(self, x: float = None, y: float = None, z: float = None):
+    def set_dial(self, x: float = None, y: float = None, z: float = None, w: float = None):
         """Set dial values. Only updates provided values."""
         new_x = x if x is not None else self.dial.x
         new_y = y if y is not None else self.dial.y
         new_z = z if z is not None else self.dial.z
-        self.dial = ComplexPhiDial(new_x, new_y, new_z)
+        new_w = w if w is not None else self.dial.w
+        self.dial = QuaternionPhiDial(new_x, new_y, new_z, new_w)
     
     def set_style(self, x: float):
         """Set the horizontal style dial (-1 = formal, +1 = casual)."""
-        self.dial = ComplexPhiDial(x, self.dial.y, self.dial.z)
+        self.dial = QuaternionPhiDial(x, self.dial.y, self.dial.z, self.dial.w)
     
     def set_perspective(self, y: float):
         """Set the vertical perspective dial (-1 = subjective, +1 = meta)."""
-        self.dial = ComplexPhiDial(self.dial.x, y, self.dial.z)
+        self.dial = QuaternionPhiDial(self.dial.x, y, self.dial.z, self.dial.w)
     
     def set_depth(self, z: float):
         """Set the depth dial (-1 = terse, +1 = elaborate)."""
-        self.dial = ComplexPhiDial(self.dial.x, self.dial.y, z)
+        self.dial = QuaternionPhiDial(self.dial.x, self.dial.y, z, self.dial.w)
+    
+    def set_certainty(self, w: float):
+        """Set the certainty dial (-1 = definitive, +1 = hedged)."""
+        self.dial = QuaternionPhiDial(self.dial.x, self.dial.y, self.dial.z, w)
     
     def _get_depth_elaboration(self, role: str) -> str:
         """Get elaboration phrase based on depth and role."""
@@ -524,6 +591,25 @@ class PatternAnswerGenerator:
             role, DEPTH_VOCABULARY['elaboration']['default']
         )
         return ' ' + random.choice(elaborations)
+    
+    def _get_certainty_copula(self) -> str:
+        """Get copula (is/appears to be) based on certainty."""
+        certainty = self.dial.get_certainty()
+        return CERTAINTY_VOCABULARY['copula'].get(certainty, 'is')
+    
+    def _get_certainty_relationship(self, related: str) -> str:
+        """Get relationship phrase based on certainty."""
+        certainty = self.dial.get_certainty()
+        rel_phrase = CERTAINTY_VOCABULARY['relationship'].get(certainty, 'associated with')
+        return f'{rel_phrase} {related}'
+    
+    def _get_certainty_opener(self) -> str:
+        """Get certainty opener (only used when perspective is objective)."""
+        if self.dial.get_perspective() != 'objective':
+            return ''  # Don't stack with perspective opener
+        certainty = self.dial.get_certainty()
+        openers = CERTAINTY_VOCABULARY['opener'].get(certainty, [''])
+        return random.choice(openers)
     
     def _get_styled_verb(self, action: str) -> str:
         """Get verb with style applied via φ-dial."""
@@ -619,8 +705,8 @@ class PatternAnswerGenerator:
                 related = patient
                 break
         
-        # GEODESIC PATH (noise_level = 0): Now with 3D φ-dial control!
-        # X controls STYLE, Y controls PERSPECTIVE, Z controls DEPTH
+        # GEODESIC PATH (noise_level = 0): Now with 4D φ-dial control!
+        # X=STYLE, Y=PERSPECTIVE, Z=DEPTH, W=CERTAINTY
         if noise_level == 0:
             # Get styled action descriptions (horizontal axis + depth)
             max_actions = self.dial.get_max_actions()
@@ -636,8 +722,15 @@ class PatternAnswerGenerator:
             action_desc = " and ".join(action_descs) if action_descs else "appears"
             
             # Get perspective components (vertical axis)
-            opener = self._get_perspective_opener()
+            perspective_opener = self._get_perspective_opener()
             closer = self._get_perspective_closer()
+            
+            # Get certainty components (w-axis)
+            certainty_opener = self._get_certainty_opener()
+            copula = self._get_certainty_copula()
+            
+            # Combine openers (use perspective opener if present, else certainty opener)
+            opener = perspective_opener if perspective_opener else certainty_opener
             
             # Get styled descriptor (horizontal axis)
             char_desc = self._get_styled_descriptor('character')
@@ -645,20 +738,20 @@ class PatternAnswerGenerator:
             # Get elaboration (depth axis)
             elaboration = self._get_depth_elaboration(role)
             
-            # Build the answer with all three axes
+            # Build the answer with all four axes
             if related and self.dial.include_relationship():
-                relationship = self._get_perspective_relationship(related)
+                relationship = self._get_certainty_relationship(related)
                 
-                # Construct based on perspective
+                # Construct based on perspective and certainty
                 if opener:
-                    answer = f"{opener} {entity.title()} is {self._get_perspective_framing(role)} from {source} who {action_desc}, {relationship}{closer}{elaboration}"
+                    answer = f"{opener} {entity.title()} {copula} {self._get_perspective_framing(role)} from {source} who {action_desc}, {relationship}{closer}{elaboration}"
                 else:
-                    answer = f"{entity.title()} is a {char_desc} from {source} who {action_desc}, {relationship}{closer}{elaboration}"
+                    answer = f"{entity.title()} {copula} a {char_desc} from {source} who {action_desc}, {relationship}{closer}{elaboration}"
             else:
                 if opener:
-                    answer = f"{opener} {entity.title()} is {self._get_perspective_framing(role)} from {source} who {action_desc}{closer}{elaboration}"
+                    answer = f"{opener} {entity.title()} {copula} {self._get_perspective_framing(role)} from {source} who {action_desc}{closer}{elaboration}"
                 else:
-                    answer = f"{entity.title()} is a {char_desc} from {source} who {action_desc}{closer}{elaboration}"
+                    answer = f"{entity.title()} {copula} a {char_desc} from {source} who {action_desc}{closer}{elaboration}"
             
             # Clean up any double spaces or punctuation issues
             answer = re.sub(r'\s+', ' ', answer)

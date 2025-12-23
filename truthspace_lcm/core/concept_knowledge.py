@@ -231,34 +231,39 @@ class HolographicProjector:
     """
     
     def __init__(self, knowledge: ConceptKnowledge, style_x: float = 0.0, 
-                 perspective_y: float = 0.0, depth_z: float = 0.0):
+                 perspective_y: float = 0.0, depth_z: float = 0.0, certainty_w: float = 0.0):
         """
-        Initialize the holographic projector with 3D φ-dial control.
+        Initialize the holographic projector with 4D φ-dial control.
         
         Args:
             knowledge: The concept knowledge base
-            style_x: Horizontal dial (-1 to +1): Style
+            style_x: Style dial (-1 to +1)
                 -1 = formal, specific, rare
                 +1 = casual, universal, common
-            perspective_y: Vertical dial (-1 to +1): Perspective
+            perspective_y: Perspective dial (-1 to +1)
                 -1 = subjective, experiential
                  0 = objective, factual
                 +1 = meta, analytical
-            depth_z: Depth dial (-1 to +1): Elaboration
+            depth_z: Depth dial (-1 to +1)
                 -1 = terse, minimal
                  0 = standard, balanced
                 +1 = elaborate, detailed
+            certainty_w: Certainty dial (-1 to +1)
+                -1 = definitive, assertive
+                 0 = neutral
+                +1 = hedged, tentative
         """
         self.knowledge = knowledge
         self.noise_level = 0.0  # 0.0 = geodesic (cookie-cutter), 1.0 = max variation
         
-        # 3D φ-dial control: "We control the horizontal. We control the vertical. We control the depth."
+        # 4D φ-dial control (quaternion-inspired)
         self.style_x = style_x
         self.perspective_y = perspective_y
         self.depth_z = depth_z
+        self.certainty_w = certainty_w
         
-        # Pattern-based answer generator with 3D φ-dial
-        self.answer_generator = PatternAnswerGenerator(x=style_x, y=perspective_y, z=depth_z)
+        # Pattern-based answer generator with 4D φ-dial
+        self.answer_generator = PatternAnswerGenerator(x=style_x, y=perspective_y, z=depth_z, w=certainty_w)
         
         # Concept extractor for parsing questions
         self.extractor = ConceptExtractor()
@@ -624,43 +629,50 @@ class ConceptQA:
     """
     
     def __init__(self, corpus_path: Optional[str] = None, 
-                 style_x: float = 0.0, perspective_y: float = 0.0, depth_z: float = 0.0):
+                 style_x: float = 0.0, perspective_y: float = 0.0, 
+                 depth_z: float = 0.0, certainty_w: float = 0.0):
         """
-        Initialize the Q&A system with 3D φ-dial control.
+        Initialize the Q&A system with 4D φ-dial control.
         
         Args:
             corpus_path: Optional path to concept corpus
-            style_x: Horizontal dial (-1 to +1): Style
+            style_x: Style dial (-1 to +1)
                 -1 = formal, specific, rare
                 +1 = casual, universal, common
-            perspective_y: Vertical dial (-1 to +1): Perspective
+            perspective_y: Perspective dial (-1 to +1)
                 -1 = subjective, experiential
                  0 = objective, factual
                 +1 = meta, analytical
-            depth_z: Depth dial (-1 to +1): Elaboration
+            depth_z: Depth dial (-1 to +1)
                 -1 = terse, minimal
                  0 = standard, balanced
                 +1 = elaborate, detailed
+            certainty_w: Certainty dial (-1 to +1)
+                -1 = definitive, assertive
+                 0 = neutral
+                +1 = hedged, tentative
         """
         self.knowledge = ConceptKnowledge()
-        self.projector = HolographicProjector(self.knowledge, style_x, perspective_y, depth_z)
+        self.projector = HolographicProjector(self.knowledge, style_x, perspective_y, depth_z, certainty_w)
         
         # Store dial settings
         self.style_x = style_x
         self.perspective_y = perspective_y
         self.depth_z = depth_z
+        self.certainty_w = certainty_w
         
         if corpus_path:
             self.load_corpus(corpus_path)
     
-    def set_dial(self, x: float = None, y: float = None, z: float = None):
+    def set_dial(self, x: float = None, y: float = None, z: float = None, w: float = None):
         """
-        Set the 3D φ-dial for style, perspective, and depth control.
+        Set the 4D φ-dial for style, perspective, depth, and certainty control.
         
         Args:
-            x: Horizontal dial (-1 to +1): Style (formal ↔ casual)
-            y: Vertical dial (-1 to +1): Perspective (subjective ↔ meta)
-            z: Depth dial (-1 to +1): Elaboration (terse ↔ elaborate)
+            x: Style dial (-1 to +1): formal ↔ casual
+            y: Perspective dial (-1 to +1): subjective ↔ meta
+            z: Depth dial (-1 to +1): terse ↔ elaborate
+            w: Certainty dial (-1 to +1): definitive ↔ hedged
         """
         if x is not None:
             self.style_x = x
@@ -668,21 +680,27 @@ class ConceptQA:
             self.perspective_y = y
         if z is not None:
             self.depth_z = z
+        if w is not None:
+            self.certainty_w = w
         
         # Update the answer generator's dial
-        self.projector.answer_generator.set_dial(self.style_x, self.perspective_y, self.depth_z)
+        self.projector.answer_generator.set_dial(self.style_x, self.perspective_y, self.depth_z, self.certainty_w)
     
     def set_style(self, x: float):
-        """Set horizontal style dial (-1 = formal, +1 = casual)."""
+        """Set style dial (-1 = formal, +1 = casual)."""
         self.set_dial(x=x)
     
     def set_perspective(self, y: float):
-        """Set vertical perspective dial (-1 = subjective, +1 = meta)."""
+        """Set perspective dial (-1 = subjective, +1 = meta)."""
         self.set_dial(y=y)
     
     def set_depth(self, z: float):
         """Set depth dial (-1 = terse, +1 = elaborate)."""
         self.set_dial(z=z)
+    
+    def set_certainty(self, w: float):
+        """Set certainty dial (-1 = definitive, +1 = hedged)."""
+        self.set_dial(w=w)
     
     def load_corpus(self, corpus_path: str) -> int:
         """Load concept corpus."""

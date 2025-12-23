@@ -12,7 +12,7 @@ This system demonstrates that **pure geometry can replace trained neural network
 
 - **Concept Language** - Order-free semantic frames (like Chinese: no conjugation, flexible order)
 - **Holographic Q&A** - Questions are gaps; answers fill them via geometric projection
-- **3D φ-Dial Control** - Style × Perspective × Depth (terse↔elaborate)
+- **4D φ-Dial Control** - Style × Perspective × Depth × Certainty (quaternion)
 - **φ-Based Navigation** - Golden ratio powers for entity importance and coherence
 - **Cross-Language** - Same concepts work across English, Spanish, and more
 - **Spatial Attention** - Zipf/φ-based weighting for meaningful relationships
@@ -43,7 +43,8 @@ python run.py
 
 Loading corpus from truthspace_lcm/concept_corpus.json...
 Loaded 11214 concept frames
-φ-Dial: style=neutral (x=+0.0), perspective=objective (y=+0.0), depth=standard (z=+0.0)
+φ-Dial: style=neutral (x=+0.0), perspective=objective (y=+0.0)
+        depth=standard (z=+0.0), certainty=neutral (w=+0.0)
 
 Sample characters:
   - Darcy (Pride and Prejudice)
@@ -78,11 +79,12 @@ You: /dial
 ### Command Line Options
 
 ```bash
-python run.py                              # Default (neutral/objective/standard)
+python run.py                              # Default (all neutral)
 python run.py --style -1 --perspective 1   # Formal + Meta
 python run.py -x 1 -y -1                   # Casual + Subjective
 python run.py --depth -1                   # Terse mode
-python run.py -z 1                         # Elaborate mode
+python run.py --certainty -1               # Definitive mode
+python run.py -w 1                         # Hedged mode
 ```
 
 ### Run Tests
@@ -96,8 +98,8 @@ python run.py test
 ```python
 from truthspace_lcm import ConceptQA
 
-# Create Q&A system with 3D φ-dial control
-qa = ConceptQA(style_x=0.0, perspective_y=0.0, depth_z=0.0)
+# Create Q&A system with 4D φ-dial control
+qa = ConceptQA(style_x=0.0, perspective_y=0.0, depth_z=0.0, certainty_w=0.0)
 qa.load_corpus('truthspace_lcm/concept_corpus.json')
 
 # Ask questions (holographic resolution)
@@ -105,14 +107,15 @@ answer = qa.ask("Who is Holmes?")
 # "Holmes is a character from Sherlock Holmes who spoke..."
 
 # Change dial dynamically
-qa.set_dial(x=-1, y=1, z=1)  # Formal + Meta + Elaborate
+qa.set_dial(x=-1, y=1, z=1, w=-1)  # Formal + Meta + Elaborate + Definitive
 answer = qa.ask("Who is Holmes?")
-# "From a literary perspective, Holmes is an archetypal figure..."
+# "Thematically, Holmes is undoubtedly an archetypal figure..."
 
 # Or set individually
 qa.set_style(-1)        # Formal
 qa.set_perspective(1)   # Meta
 qa.set_depth(-1)        # Terse
+qa.set_certainty(1)     # Hedged
 
 # Detailed response with concept frame
 result = qa.ask_detailed("What did Holmes do?")
@@ -128,23 +131,24 @@ frames = qa.knowledge.query_by_entity("darcy", k=5)
 frames = qa.knowledge.query_by_action("SPEAK", k=10)
 ```
 
-### The 3D φ-Dial
+### The 4D Quaternion φ-Dial
 
-Control **style**, **perspective**, and **depth** using the 3D φ-dial:
+Control **style**, **perspective**, **depth**, and **certainty** using the 4D φ-dial:
 
 | Axis | Name | Range | Controls |
 |------|------|-------|----------|
 | **X** | Style | -1 to +1 | WHAT words (formal ↔ casual) |
 | **Y** | Perspective | -1 to +1 | HOW framed (subjective ↔ meta) |
 | **Z** | Depth | -1 to +1 | HOW MUCH detail (terse ↔ elaborate) |
+| **W** | Certainty | -1 to +1 | HOW SURE (definitive ↔ hedged) |
 
-**Depth Examples (z-axis):**
+**Certainty Examples (w-axis):**
 
-| z | Depth | Example Output |
-|---|-------|----------------|
-| -1 | Terse | "Holmes is a character from Sherlock Holmes who spoke." |
-| 0 | Standard | "Holmes is a character... who spoke, frequently associated with Watson." |
-| +1 | Elaborate | "Holmes is a character... who spoke and considered, frequently associated with Watson. Central to the story's development. (from Sherlock Holmes)" |
+| w | Certainty | Example Output |
+|---|-----------|----------------|
+| -1 | Definitive | "Certainly, Holmes is undoubtedly a character... closely tied to Watson." |
+| 0 | Neutral | "Holmes is a character... associated with Watson." |
+| +1 | Hedged | "Perhaps Holmes appears to be a character... possibly connected to Watson." |
 
 **Style × Perspective (x,y plane):**
 
@@ -231,7 +235,7 @@ Universal verbs that work across languages:
 | Frame Vector | `vec(frame) = Σ hash(ROLE:value)` (order-independent) |
 | Similarity | `cos(θ) = (a·b) / (‖a‖·‖b‖)` |
 | φ-Weighting | `weight = φ^(-log(freq))` (rare = important) |
-| φ-Dial | `φ^(x + iy) × scale(z)` where x=style, y=perspective, z=depth |
+| φ-Dial | `q = w + xi + yj + zk` (quaternion: style, perspective, depth, certainty) |
 | Query | Find frames with highest similarity to query frame |
 | Projection | Fill the gap slot based on question axis |
 
@@ -246,13 +250,13 @@ python tests/test_chat.py   # Chat tests (12)
 ## Design Documents
 
 See `design_considerations/` for the research journey:
+- `044_quaternion_phi_dial.md` - 4D quaternion φ-dial with certainty
 - `043_3d_phi_dial_depth.md` - 3D φ-dial with depth/elaboration control
 - `042_complex_phi_dial.md` - 2D complex φ-dial (style × perspective)
 - `041_phi_dial_unified_control.md` - The φ-dial unified control
 - `040_phi_inversion_navigation.md` - φ-inversion as navigation mechanism
 - `039_phi_zipf_duality.md` - φ and Zipf as dual self-similar fractals
 - `038_relationship_formation_autobalance.md` - Spatial attention and importance
-- `035_autonomous_bootstrap.md` - Concept language breakthrough
 
 ## Corpus
 
