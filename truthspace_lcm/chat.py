@@ -46,6 +46,8 @@ from pathlib import Path
 
 from .core import ConceptQA
 from .core.conversation_memory import ConversationMemory
+from .core.reasoning_engine import ReasoningEngine
+from .core.holographic_generator import HolographicGenerator
 
 
 def main():
@@ -109,6 +111,10 @@ def main():
     
     # Initialize conversation memory
     memory = ConversationMemory(max_turns=10)
+    
+    # Initialize reasoning engine and holographic generator
+    reasoning = ReasoningEngine(qa.knowledge)
+    hologen = HolographicGenerator(qa.knowledge)
     
     # Show dial settings
     style_label = 'formal' if args.style < -0.3 else ('casual' if args.style > 0.3 else 'neutral')
@@ -193,6 +199,10 @@ def main():
                 print("  /learned    - Show learned structure")
                 print("  /memory     - Show conversation memory")
                 print("  /clear      - Clear conversation memory")
+                print("  /why Q      - Multi-hop reasoning for WHY question")
+                print("  /how Q      - Multi-hop reasoning for HOW question")
+                print("  /path A B   - Find relationship path between A and B")
+                print("  /holo E     - Holographic generation for entity E")
                 print("  /quit       - Exit")
                 print()
                 continue
@@ -383,6 +393,65 @@ def main():
                 # Clear conversation memory
                 memory.clear()
                 print("Conversation memory cleared.")
+                print()
+                continue
+            
+            elif cmd == '/why':
+                # Multi-hop reasoning for WHY
+                rest = user_input[4:].strip()
+                if not rest:
+                    print("Usage: /why <question>")
+                else:
+                    path = reasoning.reason(f"Why {rest}")
+                    print(f"\n{path.answer}")
+                    if path.steps:
+                        print("Reasoning chain:")
+                        for step in path.steps:
+                            print(f"  → {step}")
+                print()
+                continue
+            
+            elif cmd == '/how':
+                # Multi-hop reasoning for HOW
+                rest = user_input[4:].strip()
+                if not rest:
+                    print("Usage: /how <question>")
+                else:
+                    path = reasoning.reason(f"How {rest}")
+                    print(f"\n{path.answer}")
+                    if path.steps:
+                        print("Reasoning chain:")
+                        for step in path.steps:
+                            print(f"  → {step}")
+                print()
+                continue
+            
+            elif cmd == '/path':
+                # Find relationship path between entities
+                parts = user_input[5:].strip().split()
+                if len(parts) < 2:
+                    print("Usage: /path <entity1> <entity2>")
+                else:
+                    entity1, entity2 = parts[0], parts[1]
+                    path = reasoning.reason(f"What is the relationship between {entity1} and {entity2}?")
+                    print(f"\n{path.answer}")
+                    if path.steps:
+                        print("Path:")
+                        for step in path.steps:
+                            print(f"  → {step}")
+                print()
+                continue
+            
+            elif cmd == '/holo':
+                # Holographic generation
+                entity = user_input[5:].strip().lower()
+                if not entity:
+                    print("Usage: /holo <entity>")
+                else:
+                    # Use learned structure if available
+                    learnable = qa.projector.answer_generator.learnable
+                    output = hologen.generate(f"Who is {entity}?", entity=entity, learnable=learnable)
+                    print(f"\nHolographic: {output}")
                 print()
                 continue
             

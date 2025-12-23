@@ -87,6 +87,17 @@ from .conversation_memory import (
     ConversationTurn,
 )
 
+from .reasoning_engine import (
+    ReasoningEngine,
+    ReasoningStep,
+    ReasoningPath,
+)
+
+from .holographic_generator import (
+    HolographicGenerator,
+    InterferencePattern,
+)
+
 __all__ = [
     # Vocabulary (foundation)
     "Vocabulary",
@@ -119,4 +130,11 @@ __all__ = [
     # Conversation Memory (Multi-Turn Dialogue)
     "ConversationMemory",
     "ConversationTurn",
+    # Reasoning Engine (Multi-Hop)
+    "ReasoningEngine",
+    "ReasoningStep",
+    "ReasoningPath",
+    # Holographic Generator
+    "HolographicGenerator",
+    "InterferencePattern",
 ]
