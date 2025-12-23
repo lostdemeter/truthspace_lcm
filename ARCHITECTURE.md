@@ -7,12 +7,15 @@ TruthSpace LCM is a **Holographic Concept Language Model** that performs all sem
 ## Core Principles
 
 > **All semantic operations are geometric operations in concept space.**
+> **Error = Construction Blueprint.**
 
 - **Concept Frames** = Order-free semantic representations
 - **Action Primitives** = Universal verbs (MOVE, SPEAK, THINK, etc.)
 - **Holographic Projection** = Questions are gaps; answers fill them
 - **φ-Based Navigation** = Golden ratio powers for importance and coherence
 - **4D φ-Dial Control** = Style × Perspective × Depth × Certainty (quaternion)
+- **Gradient-Free Learning** = Error-driven structure building, no backprop
+- **Conversation Memory** = Multi-turn dialogue with pronoun resolution
 - **Cross-Language** = Same concepts work across any language
 
 ## Primary Components
@@ -101,6 +104,51 @@ attention.initialize(frames, known_entities)
 # Get important relations with navigation direction
 relations = attention.get_important_relations('holmes', k=5, navigation='inward')
 # [('watson', 0.19), ('lestrade', 0.12), ...]
+```
+
+### LearnableStructure (`learnable_structure.py`)
+
+Gradient-free learning via error-driven structure building.
+
+```python
+from truthspace_lcm.core import LearnableStructure, train_from_examples
+
+structure = LearnableStructure()
+structure.add_known_entities(['holmes', 'watson', 'darcy', 'elizabeth'])
+
+# Train from examples (entity, source, target_answer)
+examples = [
+    ('holmes', 'Sherlock Holmes', 'Holmes is a brilliant detective who investigates with Watson.'),
+    ('darcy', 'Pride and Prejudice', 'Darcy is a proud gentleman who loves Elizabeth.'),
+]
+result = train_from_examples(structure, examples)
+# {'epochs': 2, 'final_overlap': 0.96}
+
+# Generate using learned structure
+answer = structure.generate('holmes', 'Sherlock Holmes')
+# "Holmes is a brilliant detective from Sherlock Holmes who investigates with Watson."
+```
+
+### ConversationMemory (`conversation_memory.py`)
+
+Multi-turn dialogue with pronoun resolution and context decay.
+
+```python
+from truthspace_lcm.core import ConversationMemory
+
+memory = ConversationMemory(max_turns=10)
+
+# Add turns
+memory.add_turn("Who is Holmes?", "Holmes is a detective...", entity="holmes")
+memory.add_turn("What did he do?", "He investigated...", entity="holmes")
+
+# Resolve pronouns
+resolved = memory.resolve_pronouns("What did he do?")
+# "What did Holmes do?"
+
+# Get context with φ^(-n) decay
+context = memory.get_recent_context(k=3)
+# [(turn, weight), ...] - most recent has highest weight
 ```
 
 ## Action Primitives
@@ -240,30 +288,32 @@ Where:
 ```
 truthspace-lcm/
 ├── truthspace_lcm/              # Main package
-│   ├── __init__.py              # Package exports (v0.6.0)
+│   ├── __init__.py              # Package exports (v0.7.0)
 │   ├── chat.py                  # Holographic Q&A chat with φ-dial
 │   ├── concept_corpus.json      # Knowledge corpus (11,214 frames)
+│   ├── training_data.py         # Pre-defined training examples
 │   ├── core/
 │   │   ├── __init__.py          # Core exports
 │   │   ├── vocabulary.py        # Word positions, IDF, encoding
 │   │   ├── concept_language.py  # ConceptFrame, ConceptExtractor
 │   │   ├── concept_knowledge.py # ConceptKnowledge, HolographicProjector
-│   │   ├── answer_patterns.py   # ComplexPhiDial, PatternAnswerGenerator
-│   │   └── spatial_attention.py # φ-based navigation, importance scoring
+│   │   ├── answer_patterns.py   # QuaternionPhiDial, PatternAnswerGenerator
+│   │   ├── spatial_attention.py # φ-based navigation, importance scoring
+│   │   ├── learnable_structure.py # Gradient-free learning, EntityProfile
+│   │   └── conversation_memory.py # Multi-turn dialogue, pronoun resolution
 │   └── utils/
 │       └── extractors.py        # Shared extraction utilities
 ├── tests/
 │   ├── test_core.py             # Core tests (25)
 │   └── test_chat.py             # Chat tests (12)
-├── design_considerations/       # Research journey
-│   ├── 044_quaternion_phi_dial.md   # 4D quaternion φ-dial
-│   ├── 043_3d_phi_dial_depth.md     # 3D φ-dial with depth
-│   ├── 042_complex_phi_dial.md      # 2D complex φ-dial
-│   ├── 041_phi_dial_unified_control.md  # 1D φ-dial
-│   ├── 040_phi_inversion_navigation.md  # φ-inversion navigation
-│   ├── 039_phi_zipf_duality.md      # φ and Zipf as dual fractals
-│   ├── 038_relationship_formation_autobalance.md  # Spatial attention
-│   └── 035_autonomous_bootstrap.md  # Concept language breakthrough
+├── design_considerations/       # Research journey (50+ documents)
+│   ├── 050_geometric_llm_roadmap.md   # Roadmap for LLM-level capability
+│   ├── 049_gradient_free_learning.md  # Error-driven structure learning
+│   ├── 048_clock_geodesic_unification.md  # Clock + geodesic connection
+│   ├── 047_geodesic_generation.md     # Generation as concept space navigation
+│   ├── 044_quaternion_phi_dial.md     # 4D quaternion φ-dial
+│   ├── 043_3d_phi_dial_depth.md       # 3D φ-dial with depth
+│   └── ...                            # Earlier design documents
 ├── scripts/                     # Utility scripts
 ├── run.py                       # Entry point
 └── requirements.txt             # Dependencies (numpy)
@@ -346,10 +396,52 @@ The φ-structure supports dual navigation:
 
 Key property: `φ^(-n) × φ^(+n) = 1` (conservation law)
 
+## Gradient-Free Learning
+
+The system learns without gradients or backpropagation:
+
+```
+Traditional ML: error = how wrong we are → adjust weights
+Geometric LCM:  error = what's missing → add structure
+```
+
+### Learning Algorithm
+
+```python
+def train(structure, examples):
+    for entity, source, target in examples:
+        generated = structure.generate(entity, source)
+        missing = target_words - generated_words
+        
+        for word in missing:
+            category = classify(word)  # role, quality, action, relation
+            structure.add(entity, category, word)
+```
+
+### Results
+
+| Metric | Value |
+|--------|-------|
+| Starting overlap | ~50% |
+| Final overlap | ~96% |
+| Epochs needed | 2 |
+| Gradients used | 0 |
+
+### Comparison to Neural Networks
+
+| Aspect | Neural Network | Geometric LCM |
+|--------|----------------|---------------|
+| Parameters | Weights (continuous) | Mappings (discrete) |
+| Learning | Gradient descent | Error-driven addition |
+| Convergence | Thousands of epochs | 1-2 epochs |
+| Interpretability | Black box | Fully transparent |
+| Memory | Forgets old data | Accumulates knowledge |
+| Updates | Requires retraining | Incremental |
+
 ## Future Work
 
-1. **More Languages** - Add French, German, Chinese verb mappings
-2. **Temporal Reasoning** - Track when events happened
-3. **Causal Chains** - Implement oscillating navigation for WHY
-4. **Dialogue Context** - Track conversation state
-5. **Adaptive φ-Dial** - Learn user preferences for style/perspective
+1. **Multi-Hop Reasoning** - Chain multiple reasoning steps for WHY/HOW questions
+2. **Holographic Generation** - Replace templates with interference patterns
+3. **More Languages** - Add French, German, Chinese verb mappings
+4. **Temporal Reasoning** - Track when events happened
+5. **Causal Chains** - Implement oscillating navigation for WHY

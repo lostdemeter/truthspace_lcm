@@ -1,10 +1,11 @@
 # TruthSpace LCM
 
-**Holographic Concept Language Model** - A conversational AI using holographic concept resolution. No training, no neural networks - just geometry.
+**Holographic Concept Language Model** - A conversational AI using holographic concept resolution. Gradient-free learning, no neural networks - just geometry.
 
 ## Philosophy
 
 > *"All semantic operations are geometric operations in concept space."*
+> *"Error = Construction Blueprint"*
 
 This system demonstrates that **pure geometry can replace trained neural networks** for language understanding. Knowledge is stored as **concept frames** - language-agnostic semantic representations that can be queried across languages.
 
@@ -13,10 +14,11 @@ This system demonstrates that **pure geometry can replace trained neural network
 - **Concept Language** - Order-free semantic frames (like Chinese: no conjugation, flexible order)
 - **Holographic Q&A** - Questions are gaps; answers fill them via geometric projection
 - **4D φ-Dial Control** - Style × Perspective × Depth × Certainty (quaternion)
+- **Gradient-Free Learning** - Error-driven structure building, no backprop needed
+- **Conversation Memory** - Multi-turn dialogue with pronoun resolution
 - **φ-Based Navigation** - Golden ratio powers for entity importance and coherence
 - **Cross-Language** - Same concepts work across English, Spanish, and more
 - **Spatial Attention** - Zipf/φ-based weighting for meaningful relationships
-- **No training** - Deterministic, interpretable, reproducible
 
 ## Installation
 
@@ -43,37 +45,33 @@ python run.py
 
 Loading corpus from truthspace_lcm/concept_corpus.json...
 Loaded 11214 concept frames
-φ-Dial: style=neutral (x=+0.0), perspective=objective (y=+0.0)
-        depth=standard (z=+0.0), certainty=neutral (w=+0.0)
-
-Sample characters:
-  - Darcy (Pride and Prejudice)
-  - Holmes (Sherlock Holmes)
-  - Alice (Alice in Wonderland)
+Training GeometricLCM with quality examples...
+  Epochs: 2
+  Final overlap: 96.4%
+  Learned: 14 entities, 14 roles, 10 qualities, 12 actions
 
 You: Who is Holmes?
 
-Bot: Holmes is a character from Sherlock Holmes who spoke, 
-     frequently associated with Watson.
+Bot: Holmes is a brilliant detective from Sherlock Holmes 
+     who investigates with Watson.
 
-You: /style -1
-Style set to -1.0 (formal)
+You: What did he do?
 
-You: /perspective 1
-Perspective set to +1.0 (meta)
+Bot: Holmes investigated crimes and solved mysteries.
+     (pronoun "he" resolved to Holmes via conversation memory)
 
-You: Who is Holmes?
+You: Who is Darcy?
 
-Bot: From a literary perspective, Holmes is an archetypal figure 
-     from Sherlock Holmes who articulated, with Watson serving as 
-     a narrative foil, embodying timeless literary patterns.
+Bot: Darcy is a proud gentleman from Pride and Prejudice 
+     who loves Elizabeth.
 
-You: /dial
+You: /memory
 
-φ-Dial Settings:
-  Style (x):       -1.0 (formal)
-  Perspective (y): +1.0 (meta)
-  Quadrant: Scholarly/Analytical
+Conversation (3 turns):
+  Q: Who is Holmes? [holmes]
+  Q: What did he do? [holmes]
+  Q: Who is Darcy? [darcy]
+Focus: darcy
 ```
 
 ### Command Line Options
@@ -180,16 +178,19 @@ Surface Text (any language)
 
 ```
 truthspace_lcm/
-├── __init__.py              # Package exports (v0.6.0)
+├── __init__.py              # Package exports (v0.7.0)
 ├── chat.py                  # Holographic Q&A chat with φ-dial
 ├── concept_corpus.json      # Knowledge corpus (11,214 frames)
+├── training_data.py         # Pre-defined training examples
 ├── core/
 │   ├── __init__.py          # Core exports
 │   ├── vocabulary.py        # Hash-based word positions, IDF weighting
 │   ├── concept_language.py  # ConceptFrame, ConceptExtractor, primitives
 │   ├── concept_knowledge.py # ConceptKnowledge, HolographicProjector, Q&A
-│   ├── answer_patterns.py   # ComplexPhiDial, PatternAnswerGenerator
-│   └── spatial_attention.py # φ-based navigation, importance scoring
+│   ├── answer_patterns.py   # QuaternionPhiDial, PatternAnswerGenerator
+│   ├── spatial_attention.py # φ-based navigation, importance scoring
+│   ├── learnable_structure.py # Gradient-free learning, EntityProfile
+│   └── conversation_memory.py # Multi-turn dialogue, pronoun resolution
 └── utils/
     └── extractors.py        # Shared extraction utilities
 ```
@@ -250,6 +251,10 @@ python tests/test_chat.py   # Chat tests (12)
 ## Design Documents
 
 See `design_considerations/` for the research journey:
+- `050_geometric_llm_roadmap.md` - Roadmap for LLM-level capability
+- `049_gradient_free_learning.md` - Error-driven structure learning
+- `048_clock_geodesic_unification.md` - Clock + geodesic connection
+- `047_geodesic_generation.md` - Generation as concept space navigation
 - `044_quaternion_phi_dial.md` - 4D quaternion φ-dial with certainty
 - `043_3d_phi_dial_depth.md` - 3D φ-dial with depth/elaboration control
 - `042_complex_phi_dial.md` - 2D complex φ-dial (style × perspective)
@@ -265,6 +270,33 @@ The included `concept_corpus.json` contains **11,214 concept frames** extracted 
 - Sherlock Holmes, Frankenstein, Moby Dick
 - Tale of Two Cities, Tom Sawyer, Great Expectations
 - White Fang, Don Quixote (EN & ES), Les Misérables, War and Peace
+
+## Gradient-Free Learning
+
+The system learns without gradients or backpropagation:
+
+```python
+from truthspace_lcm import ConceptQA
+from truthspace_lcm.training_data import train_model
+
+qa = ConceptQA()
+qa.load_corpus('truthspace_lcm/concept_corpus.json')
+
+# Train with quality examples (2 epochs, 96% overlap)
+train_model(qa)
+
+# Before: "Holmes is a character who spoke, associated with watson."
+# After:  "Holmes is a brilliant detective who investigates with Watson."
+```
+
+**Key insight**: Error = Construction Blueprint. Each error points to missing structure. Add the structure. Model improves.
+
+| Aspect | Neural Network | Geometric LCM |
+|--------|----------------|---------------|
+| Parameters | Weights (continuous) | Mappings (discrete) |
+| Learning | Gradient descent | Error-driven addition |
+| Convergence | Thousands of epochs | 1-2 epochs |
+| Interpretability | Black box | Fully transparent |
 
 ## License
 
