@@ -337,15 +337,47 @@ class ConceptExtractor:
         self.relation_map.update(ENGLISH_RELATIONS)
         self.relation_map.update(SPANISH_RELATIONS)
         
-        # Skip words (function words)
+        # Skip words (function words that should NOT be entities)
         self.skip_words = {
-            # English
+            # English articles/determiners
             'the', 'a', 'an', 'and', 'but', 'or', 'if', 'when', 'then',
             'this', 'that', 'these', 'those', 'it', 'its',
+            # English prepositions (often sentence-initial)
+            'in', 'on', 'at', 'to', 'from', 'with', 'by', 'for', 'of',
+            'into', 'onto', 'upon', 'about', 'after', 'before', 'between',
+            'without', 'within', 'through', 'during', 'until', 'unless',
+            # English adverbs/conjunctions (often sentence-initial)
+            'there', 'here', 'where', 'when', 'why', 'how', 'what', 'which',
+            'so', 'as', 'no', 'not', 'yes', 'now', 'then', 'thus', 'hence',
+            'very', 'much', 'more', 'most', 'less', 'least', 'too', 'also',
+            'however', 'therefore', 'moreover', 'nevertheless', 'meanwhile',
+            'presently', 'suddenly', 'immediately', 'finally', 'certainly',
+            'perhaps', 'probably', 'possibly', 'surely', 'indeed', 'really',
+            'still', 'yet', 'already', 'always', 'never', 'often', 'sometimes',
+            'well', 'quite', 'rather', 'almost', 'nearly', 'hardly', 'scarcely',
+            # English common verbs (shouldn't be entities)
+            'let', 'do', 'did', 'does', 'done', 'be', 'is', 'are', 'was', 'were',
+            'have', 'has', 'had', 'can', 'could', 'will', 'would', 'shall', 'should',
+            'may', 'might', 'must', 'need', 'ought',
+            # English titles (keep separate from names)
+            'mr', 'mrs', 'miss', 'ms', 'dr', 'sir', 'lord', 'lady', 'don',
+            # English misc
+            'all', 'any', 'some', 'none', 'each', 'every', 'both', 'either', 'neither',
+            'one', 'two', 'three', 'first', 'second', 'third', 'last', 'next',
+            'such', 'same', 'other', 'another', 'only', 'own', 'just', 'even',
+            'nothing', 'something', 'anything', 'everything', 'nobody', 'somebody',
+            'chapter', 'part', 'book', 'volume', 'page',
+            # Exclamations and common words that get capitalized
+            'oh', 'ah', 'alas', 'indeed', 'yes', 'no', 'god', 'heaven', 'lord',
+            'once', 'twice', 'again', 'away', 'back', 'down', 'up', 'out',
+            'long', 'little', 'great', 'old', 'young', 'good', 'bad', 'new',
             # Spanish
             'el', 'la', 'los', 'las', 'un', 'una', 'unos', 'unas',
             'y', 'pero', 'o', 'si', 'cuando', 'entonces',
             'este', 'esta', 'estos', 'estas', 'ese', 'esa',
+            'en', 'de', 'por', 'para', 'con', 'sin', 'sobre', 'entre',
+            'aquí', 'allí', 'donde', 'como', 'qué', 'cuál',
+            'no', 'sí', 'muy', 'más', 'menos', 'tan', 'también',
         }
         
         # Pronouns (need special handling)

@@ -1,0 +1,100 @@
+# Q&A Training Data for Pattern Transfer
+# 
+# These are general knowledge statements NOT about literature.
+# The goal is to see if the structural patterns transfer to literary queries.
+#
+# Format: Declarative sentences about historical figures.
+# Each sentence teaches a pattern that should transfer to literary characters.
+
+# === WHO IS patterns (character introductions) ===
+
+Einstein is a scientist from Germany who developed the theory of relativity.
+Einstein thought deeply about physics and changed our understanding of the universe.
+Marie Curie is a scientist from Poland who discovered radium.
+Curie worked tirelessly in her laboratory often involving Pierre.
+Napoleon is a leader from France who conquered much of Europe.
+Napoleon commanded armies and fought many battles often involving Wellington.
+Cleopatra is a queen from Egypt who ruled during ancient times.
+Cleopatra spoke many languages and negotiated with Caesar.
+Shakespeare is a writer from England who created many famous plays.
+Shakespeare wrote tragedies and comedies often involving love and death.
+Lincoln is a president from America who freed the slaves.
+Lincoln spoke eloquently and led the nation through civil war.
+Mozart is a composer from Austria who created beautiful music.
+Mozart composed symphonies and operas often involving emotion.
+Galileo is a scientist from Italy who observed the stars.
+Galileo looked through his telescope and discovered moons around Jupiter.
+
+# === WHAT DID patterns (actions and accomplishments) ===
+
+Einstein thought about physics and developed new theories.
+Einstein traveled to many countries and gave lectures about relativity.
+Curie discovered radioactive elements and won two Nobel prizes.
+Curie worked in her laboratory and conducted experiments.
+Napoleon conquered territories and established new laws.
+Napoleon led armies and fought against coalitions.
+Cleopatra ruled Egypt and formed alliances with Rome.
+Cleopatra spoke to ambassadors and negotiated treaties.
+Shakespeare wrote plays and performed at the Globe theatre.
+Shakespeare created characters and told stories about human nature.
+Lincoln led the country and preserved the union.
+Lincoln spoke at Gettysburg and inspired the nation.
+Mozart composed music and performed for royalty.
+Mozart created operas and conducted orchestras.
+Galileo observed the heavens and challenged old beliefs.
+Galileo built telescopes and discovered new phenomena.
+
+# === WHERE patterns (locations) ===
+
+Paris is located in France along the Seine river.
+London is located in England along the Thames river.
+Rome is located in Italy and was the center of an empire.
+Cairo is located in Egypt near the pyramids.
+Vienna is located in Austria and was home to many composers.
+Berlin is located in Germany and has a rich history.
+Tokyo is located in Japan and is a modern metropolis.
+Moscow is located in Russia and has the Kremlin.
+
+# === Relationship patterns (character interactions) ===
+
+Einstein worked with Bohr on quantum mechanics.
+Curie collaborated with Pierre on radioactivity research.
+Napoleon fought against Wellington at Waterloo.
+Cleopatra allied with Caesar against her enemies.
+Shakespeare worked with actors at the Globe.
+Lincoln debated with Douglas about slavery.
+Mozart studied with Haydn in Vienna.
+Galileo corresponded with Kepler about astronomy.
+
+# === Character description patterns (traits) ===
+
+Einstein was brilliant and curious about the nature of reality.
+Curie was determined and dedicated to her research.
+Napoleon was ambitious and sought to dominate Europe.
+Cleopatra was intelligent and skilled in diplomacy.
+Shakespeare was creative and understood human emotions.
+Lincoln was honest and committed to justice.
+Mozart was talented and composed from a young age.
+Galileo was observant and questioned traditional beliefs.
+
+# === Action patterns with objects ===
+
+Einstein developed theories about space and time.
+Curie discovered elements like radium and polonium.
+Napoleon conquered countries including Italy and Spain.
+Cleopatra ruled territories along the Nile.
+Shakespeare created characters like Hamlet and Macbeth.
+Lincoln signed documents like the Emancipation Proclamation.
+Mozart composed works like The Magic Flute.
+Galileo observed objects like the moons of Jupiter.
+
+# === Emotional and mental state patterns ===
+
+Einstein wondered about the mysteries of the universe.
+Curie felt passionate about scientific discovery.
+Napoleon desired power and glory above all else.
+Cleopatra loved her country and its ancient traditions.
+Shakespeare understood the depths of human emotion.
+Lincoln believed in equality for all people.
+Mozart loved music from his earliest memories.
+Galileo questioned everything he was taught.

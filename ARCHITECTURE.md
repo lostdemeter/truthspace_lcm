@@ -11,6 +11,8 @@ TruthSpace LCM is a **Holographic Concept Language Model** that performs all sem
 - **Concept Frames** = Order-free semantic representations
 - **Action Primitives** = Universal verbs (MOVE, SPEAK, THINK, etc.)
 - **Holographic Projection** = Questions are gaps; answers fill them
+- **φ-Based Navigation** = Golden ratio powers for importance and coherence
+- **2D φ-Dial Control** = Style × Perspective via complex φ
 - **Cross-Language** = Same concepts work across any language
 
 ## Primary Components
@@ -65,13 +67,40 @@ answers = projector.resolve("Who is Darcy?", k=3)
 
 ### ConceptQA (`concept_knowledge.py`)
 
-High-level Q&A interface.
+High-level Q&A interface with 2D φ-dial control.
 
 ```python
-qa = ConceptQA()
+qa = ConceptQA(style_x=0.0, perspective_y=0.0)
 qa.load_corpus('concept_corpus.json')
 answer = qa.ask("Who is Darcy?")
-result = qa.ask_detailed("What did Holmes do?")
+
+# Change style/perspective dynamically
+qa.set_dial(x=-1, y=1)  # Formal + Meta
+answer = qa.ask("Who is Holmes?")
+```
+
+### ComplexPhiDial (`answer_patterns.py`)
+
+2D control mechanism using complex φ-navigation.
+
+```python
+dial = ComplexPhiDial(x=-1, y=1)  # Formal + Meta
+style = dial.get_style()          # 'formal'
+perspective = dial.get_perspective()  # 'meta'
+quadrant = dial.get_quadrant_label()  # 'Scholarly/Analytical'
+```
+
+### SpatialAttention (`spatial_attention.py`)
+
+φ-based importance scoring for entity relationships.
+
+```python
+attention = SpatialAttention()
+attention.initialize(frames, known_entities)
+
+# Get important relations with navigation direction
+relations = attention.get_important_relations('holmes', k=5, navigation='inward')
+# [('watson', 0.19), ('lestrade', 0.12), ...]
 ```
 
 ## Action Primitives
@@ -173,13 +202,33 @@ vec(frame) = Σ hash(ROLE:value) for each filled slot
 sim(a, b) = cos(θ) = (a·b) / (‖a‖·‖b‖)
 ```
 
+### φ-Based Weighting
+```
+weight = φ^(-log(freq))    # Rare entities score higher
+φ^(-n) × φ^(+n) = 1        # Conservation law (self-dual)
+```
+
+### Complex φ-Dial
+```
+φ^(x + iy) = φ^x · e^(iy·ln(φ))
+
+Where:
+  x = horizontal dial (-1 to +1): Style (formal ↔ casual)
+  y = vertical dial (-1 to +1): Perspective (subjective ↔ meta)
+  
+  Magnitude (φ^x) = WHAT words we choose
+  Phase (y·ln(φ)) = HOW we frame the content
+```
+
 ### Query Resolution
 ```
 1. Detect axis (WHO/WHAT/WHERE)
-2. Extract entity from question
-3. Query frames by entity
-4. Aggregate knowledge (action counts, relationships)
-5. Project to English (fill the gap)
+2. Determine navigation direction (inward/outward)
+3. Extract entity from question
+4. Query frames by entity with φ-weighted importance
+5. Aggregate knowledge (action counts, relationships)
+6. Apply 2D φ-dial (style × perspective)
+7. Project to English (fill the gap)
 ```
 
 ## Directory Structure
@@ -187,24 +236,29 @@ sim(a, b) = cos(θ) = (a·b) / (‖a‖·‖b‖)
 ```
 truthspace-lcm/
 ├── truthspace_lcm/              # Main package
-│   ├── __init__.py              # Package exports (v0.5.0)
-│   ├── chat.py                  # Holographic Q&A chat
+│   ├── __init__.py              # Package exports (v0.6.0)
+│   ├── chat.py                  # Holographic Q&A chat with φ-dial
 │   ├── concept_corpus.json      # Knowledge corpus (11,214 frames)
 │   ├── core/
 │   │   ├── __init__.py          # Core exports
 │   │   ├── vocabulary.py        # Word positions, IDF, encoding
 │   │   ├── concept_language.py  # ConceptFrame, ConceptExtractor
-│   │   └── concept_knowledge.py # ConceptKnowledge, HolographicProjector
+│   │   ├── concept_knowledge.py # ConceptKnowledge, HolographicProjector
+│   │   ├── answer_patterns.py   # ComplexPhiDial, PatternAnswerGenerator
+│   │   └── spatial_attention.py # φ-based navigation, importance scoring
 │   └── utils/
 │       └── extractors.py        # Shared extraction utilities
 ├── tests/
 │   ├── test_core.py             # Core tests (25)
 │   └── test_chat.py             # Chat tests (12)
 ├── design_considerations/       # Research journey
-│   ├── 035_autonomous_bootstrap.md  # Concept language breakthrough
-│   └── 030_geometric_qa_projection.md  # Holographic Q&A
+│   ├── 039_phi_zipf_duality.md      # φ and Zipf as dual fractals
+│   ├── 040_phi_inversion_navigation.md  # φ-inversion navigation
+│   ├── 041_phi_dial_unified_control.md  # 1D φ-dial
+│   ├── 042_complex_phi_dial.md      # 2D complex φ-dial
+│   ├── 038_relationship_formation_autobalance.md  # Spatial attention
+│   └── 035_autonomous_bootstrap.md  # Concept language breakthrough
 ├── scripts/                     # Utility scripts
-│   └── concept_chat.py          # Standalone chat script
 ├── run.py                       # Entry point
 └── requirements.txt             # Dependencies (numpy)
 ```
@@ -245,9 +299,52 @@ Query `{ACTION: SPEAK}` returns both:
 - **Geometric** - Pure vector operations
 - **Interpretable** - Axis defines what's being asked
 
+## The 2D φ-Dial
+
+The complex φ-dial provides unified control over answer generation:
+
+```
+                    UNIVERSAL (+x)
+                         │
+         Casual+Meta     │     Casual+Subjective
+         "Holmes         │     "I find Holmes to be
+          represents     │      quite the clever
+          the archetype" │      fellow, really"
+                         │
+    ─────────────────────●─────────────────────────
+                         │                    
+         Formal+Meta     │     Formal+Subjective
+         "Holmes is an   │     "One observes that
+          archetypal     │      Holmes demonstrates
+          figure..."     │      remarkable acuity..."
+                         │
+                    SPECIFIC (-x)
+```
+
+| Quadrant | x | y | Style | Perspective | Label |
+|----------|---|---|-------|-------------|-------|
+| Q1 | +1 | -1 | Casual | Subjective | Conversational |
+| Q2 | +1 | +1 | Casual | Meta | Pop Culture |
+| Q3 | -1 | -1 | Formal | Subjective | Literary |
+| Q4 | -1 | +1 | Formal | Meta | Scholarly |
+
+## φ-Navigation Modes
+
+The φ-structure supports dual navigation:
+
+| Mode | Formula | Use Case |
+|------|---------|----------|
+| INWARD | φ^(-n) | WHO/WHERE questions (specific entities) |
+| OUTWARD | φ^(+n) | WHAT/HOW questions (universal patterns) |
+| BALANCED | 1.0 | Similarity queries |
+| OSCILLATING | alternate | WHY questions (causal chains) |
+
+Key property: `φ^(-n) × φ^(+n) = 1` (conservation law)
+
 ## Future Work
 
 1. **More Languages** - Add French, German, Chinese verb mappings
 2. **Temporal Reasoning** - Track when events happened
-3. **Causal Chains** - Link events by cause and effect
+3. **Causal Chains** - Implement oscillating navigation for WHY
 4. **Dialogue Context** - Track conversation state
+5. **Adaptive φ-Dial** - Learn user preferences for style/perspective

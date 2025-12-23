@@ -26,6 +26,8 @@ from .concept_language import (
     ACTION_PRIMITIVES, SEMANTIC_ROLES,
     ENGLISH_VERBS, SPANISH_VERBS
 )
+from .answer_patterns import PatternAnswerGenerator
+from .spatial_attention import SpatialAttention, get_attention, initialize_attention
 
 
 # =============================================================================
@@ -136,6 +138,9 @@ class ConceptKnowledge:
         # Pre-compute vectors for all frames
         self.frame_vectors = [self._frame_to_vector(f) for f in self.frames]
         
+        # Initialize spatial attention with corpus frames and known entities
+        initialize_attention(self.frames, set(self.entities.keys()))
+        
         return len(self.frames)
     
     def add_frame(self, frame: ConceptFrame, source_text: str = '', source: str = ''):
@@ -225,8 +230,31 @@ class HolographicProjector:
         Answer -> Project filled slot to English
     """
     
-    def __init__(self, knowledge: ConceptKnowledge):
+    def __init__(self, knowledge: ConceptKnowledge, style_x: float = 0.0, perspective_y: float = 0.0):
+        """
+        Initialize the holographic projector with 2D φ-dial control.
+        
+        Args:
+            knowledge: The concept knowledge base
+            style_x: Horizontal dial (-1 to +1): Style
+                -1 = formal, specific, rare
+                +1 = casual, universal, common
+            perspective_y: Vertical dial (-1 to +1): Perspective
+                -1 = subjective, experiential
+                 0 = objective, factual
+                +1 = meta, analytical
+        """
         self.knowledge = knowledge
+        self.noise_level = 0.0  # 0.0 = geodesic (cookie-cutter), 1.0 = max variation
+        
+        # 2D φ-dial control: "We control the horizontal. We control the vertical."
+        self.style_x = style_x
+        self.perspective_y = perspective_y
+        
+        # Pattern-based answer generator with 2D φ-dial
+        self.answer_generator = PatternAnswerGenerator(x=style_x, y=perspective_y)
+        
+        # Concept extractor for parsing questions
         self.extractor = ConceptExtractor()
         
         # Reverse verb mapping: primitive -> English verbs
@@ -245,13 +273,26 @@ class HolographicProjector:
         question_lower = question.lower().strip()
         
         # Skip words that aren't real entities
-        skip_words = {'who', 'what', 'where', 'when', 'why', 'how', 'did', 'does', 
-                      'do', 'is', 'are', 'was', 'were', 'the', 'a', 'an'}
+        skip_words = {
+            'who', 'what', 'where', 'when', 'why', 'how', 'did', 'does', 
+            'do', 'is', 'are', 'was', 'were', 'the', 'a', 'an', 'to', 'of',
+            'in', 'on', 'at', 'for', 'with', 'about', 'from', 'by',
+            'mr', 'mrs', 'miss', 'ms', 'dr', 'sir', 'lord', 'lady',
+        }
         
-        # Find capitalized words (entities), excluding question words
+        # First try: Find capitalized words (entities), excluding question words
         all_caps = re.findall(r'\b([A-Z][a-z]+)\b', question)
         entities = [e for e in all_caps if e.lower() not in skip_words]
         entity = entities[0].lower() if entities else ''
+        
+        # Second try: If no capitalized entity found, extract from lowercase question
+        if not entity:
+            # Remove question words and common words, find remaining content words
+            words = re.findall(r'\b([a-z]+)\b', question_lower)
+            content_words = [w for w in words if w not in skip_words and len(w) > 2]
+            if content_words:
+                # Take the last content word (usually the subject in "who is X?")
+                entity = content_words[-1]
         
         # Check each axis pattern
         for axis, info in QUESTION_AXES.items():
@@ -426,7 +467,8 @@ class HolographicProjector:
         # Step 3: Query concept space - get MORE frames for aggregation
         if entity:
             # Query by entity - get many frames to aggregate
-            entity_frames = self.knowledge.query_by_entity(entity, k=20)
+            # Use k=100 to get representative sample of entity's actions
+            entity_frames = self.knowledge.query_by_entity(entity, k=100)
             
             # Aggregate actions for this entity
             action_counts = {}
@@ -447,16 +489,44 @@ class HolographicProjector:
                 sources.add(f.get('source', ''))
             
             # Build aggregated answer based on axis
+            # Determine navigation direction based on question axis
+            navigation = self._get_navigation_for_axis(axis)
+            
             if axis == 'WHO':
                 # Describe who this entity is based on their actions
                 top_actions = sorted(action_counts.items(), key=lambda x: -x[1])[:3]
-                top_patients = sorted(patients.items(), key=lambda x: -x[1])[:2]
                 
-                answer = self._build_who_answer(entity, top_actions, top_patients, sources)
+                # Use SPATIAL ATTENTION with question-driven navigation
+                attention = get_attention()
+                if attention._initialized:
+                    # Get attention-weighted important relations using appropriate navigation
+                    important_relations = attention.get_important_relations(
+                        entity, k=3, navigation=navigation
+                    )
+                    if important_relations:
+                        top_patients = important_relations
+                    else:
+                        top_patients = sorted(patients.items(), key=lambda x: -x[1])[:2]
+                else:
+                    top_patients = sorted(patients.items(), key=lambda x: -x[1])[:2]
+                
+                answer = self._build_who_answer(entity, top_actions, top_patients, sources, 
+                                               noise_level=getattr(self, 'noise_level', 0.0))
             elif axis == 'WHAT':
-                # Describe what this entity did
+                # WHAT questions use OUTWARD navigation (universal patterns)
                 top_actions = sorted(action_counts.items(), key=lambda x: -x[1])[:3]
-                top_patients = sorted(patients.items(), key=lambda x: -x[1])[:2]
+                
+                attention = get_attention()
+                if attention._initialized:
+                    important_relations = attention.get_important_relations(
+                        entity, k=3, navigation='outward'
+                    )
+                    if important_relations:
+                        top_patients = important_relations
+                    else:
+                        top_patients = sorted(patients.items(), key=lambda x: -x[1])[:2]
+                else:
+                    top_patients = sorted(patients.items(), key=lambda x: -x[1])[:2]
                 
                 answer = self._build_what_answer(entity, top_actions, top_patients)
             elif axis == 'WHERE':
@@ -495,79 +565,40 @@ class HolographicProjector:
         
         return answers
     
-    def _build_who_answer(self, entity: str, actions: List, patients: List, sources: set) -> str:
-        """Build a WHO answer by aggregating entity knowledge."""
-        action_descs = {
-            'MOVE': 'travels',
-            'SPEAK': 'speaks',
-            'THINK': 'contemplates',
-            'PERCEIVE': 'observes',
-            'FEEL': 'experiences emotions',
-            'ACT': 'takes action',
-            'EXIST': 'appears',
-            'POSSESS': 'possesses things',
-        }
-        
-        parts = [f"{entity.title()} is a character"]
-        
-        # Add source
-        source_list = [s for s in sources if s]
-        if source_list:
-            parts[0] += f" from {source_list[0]}"
-        
-        # Add main actions
-        if actions:
-            action_words = []
-            for action, count in actions[:2]:
-                desc = action_descs.get(action, 'acts')
-                action_words.append(desc)
-            if action_words:
-                parts.append(f"who {' and '.join(action_words)}")
-        
-        # Add relationships
-        if patients:
-            top_patient = patients[0][0]
-            parts.append(f"often involving {top_patient}")
-        
-        return ' '.join(parts)
+    def _build_who_answer(self, entity: str, actions: List, patients: List, sources: set, 
+                          noise_level: float = 0.0) -> str:
+        """Build a WHO answer using pattern-based generator with optional noise."""
+        return self.answer_generator.generate_who_answer(entity, actions, patients, sources, noise_level)
     
     def _build_what_answer(self, entity: str, actions: List, patients: List) -> str:
-        """Build a WHAT answer describing entity's actions."""
-        action_verbs = {
-            'MOVE': 'traveled',
-            'SPEAK': 'spoke',
-            'THINK': 'thought',
-            'PERCEIVE': 'observed',
-            'FEEL': 'felt',
-            'ACT': 'acted',
-            'EXIST': 'was present',
-            'POSSESS': 'had',
-        }
-        
-        if not actions:
-            return f"{entity.title()} appears in the story"
-        
-        # Build action description
-        action_parts = []
-        for action, count in actions[:2]:
-            verb = action_verbs.get(action, 'did something')
-            action_parts.append(verb)
-        
-        result = f"{entity.title()} {', '.join(action_parts)}"
-        
-        # Add patient if relevant
-        if patients:
-            top_patient = patients[0][0]
-            result += f" regarding {top_patient}"
-        
-        return result
+        """Build a WHAT answer using pattern-based generator."""
+        return self.answer_generator.generate_what_answer(entity, actions, patients)
     
     def _build_where_answer(self, entity: str, locations: set) -> str:
-        """Build a WHERE answer."""
-        if locations:
-            loc_list = list(locations)[:3]
-            return f"{entity.title()} appears at: {', '.join(loc_list)}"
-        return f"Location of {entity} not specified"
+        """Build a WHERE answer using pattern-based generator."""
+        return self.answer_generator.generate_where_answer(entity, locations)
+    
+    def _get_navigation_for_axis(self, axis: str) -> str:
+        """
+        Map question axis to φ-navigation direction.
+        
+        The φ-structure supports dual navigation:
+            - INWARD (φ^-n): Find specific instances (WHO, WHERE, WHEN)
+            - OUTWARD (φ^+n): Find universal patterns (WHAT, HOW)
+            - OSCILLATING: Traverse causal chains (WHY)
+        
+        This is derived from the self-dual property of φ:
+            φ^(-n) × φ^(+n) = 1 (always)
+        """
+        mapping = {
+            'WHO': 'inward',      # Find specific individuals
+            'WHAT': 'outward',    # Find universal categories
+            'WHERE': 'inward',    # Find specific locations
+            'WHEN': 'inward',     # Find specific times
+            'HOW': 'outward',     # Find general patterns
+            'WHY': 'inward',      # TODO: implement oscillating for causal chains
+        }
+        return mapping.get(axis, 'inward')
 
 
 # =============================================================================
@@ -586,18 +617,60 @@ class ConceptQA:
     then project to the target language (English).
     """
     
-    def __init__(self, corpus_path: Optional[str] = None):
+    def __init__(self, corpus_path: Optional[str] = None, 
+                 style_x: float = 0.0, perspective_y: float = 0.0):
+        """
+        Initialize the Q&A system with 2D φ-dial control.
+        
+        Args:
+            corpus_path: Optional path to concept corpus
+            style_x: Horizontal dial (-1 to +1): Style
+                -1 = formal, specific, rare
+                +1 = casual, universal, common
+            perspective_y: Vertical dial (-1 to +1): Perspective
+                -1 = subjective, experiential
+                 0 = objective, factual
+                +1 = meta, analytical
+        """
         self.knowledge = ConceptKnowledge()
-        self.projector = HolographicProjector(self.knowledge)
+        self.projector = HolographicProjector(self.knowledge, style_x, perspective_y)
+        
+        # Store dial settings
+        self.style_x = style_x
+        self.perspective_y = perspective_y
         
         if corpus_path:
             self.load_corpus(corpus_path)
+    
+    def set_dial(self, x: float = None, y: float = None):
+        """
+        Set the 2D φ-dial for style and perspective control.
+        
+        Args:
+            x: Horizontal dial (-1 to +1): Style (formal ↔ casual)
+            y: Vertical dial (-1 to +1): Perspective (subjective ↔ meta)
+        """
+        if x is not None:
+            self.style_x = x
+        if y is not None:
+            self.perspective_y = y
+        
+        # Update the answer generator's dial
+        self.projector.answer_generator.set_dial(self.style_x, self.perspective_y)
+    
+    def set_style(self, x: float):
+        """Set horizontal style dial (-1 = formal, +1 = casual)."""
+        self.set_dial(x=x)
+    
+    def set_perspective(self, y: float):
+        """Set vertical perspective dial (-1 = subjective, +1 = meta)."""
+        self.set_dial(y=y)
     
     def load_corpus(self, corpus_path: str) -> int:
         """Load concept corpus."""
         return self.knowledge.load_corpus(corpus_path)
     
-    def ask(self, question: str, k: int = 3) -> str:
+    def ask(self, question: str, k: int = 3, noise_level: float = 0.0) -> str:
         """
         Ask a question and get an answer.
         
@@ -605,7 +678,13 @@ class ConceptQA:
         1. Parse question to detect axis (the gap)
         2. Query concept space for relevant frames
         3. Project best match to English (fill the gap)
+        
+        Args:
+            noise_level: 0.0 = geodesic (cookie-cutter), 1.0 = max variation
         """
+        # Set noise level on projector
+        self.projector.noise_level = noise_level
+        
         answers = self.projector.resolve(question, k=k)
         
         if not answers:

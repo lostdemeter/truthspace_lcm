@@ -134,9 +134,9 @@ class TestHolographicProjectorChat:
         kb = ConceptKnowledge(dim=64)
         projector = HolographicProjector(kb)
         
-        # Should extract capitalized names
+        # Should extract capitalized names, skipping titles like Mr/Mrs
         _, entity = projector.detect_question_axis("Who is Mr. Darcy?")
-        assert entity == "mr"  # First capitalized word
+        assert entity == "darcy"  # Skip title, get actual name
         
         _, entity = projector.detect_question_axis("What did Sherlock Holmes do?")
         assert entity == "sherlock"

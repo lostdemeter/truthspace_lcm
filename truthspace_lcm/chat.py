@@ -21,9 +21,22 @@ Holographic Principle:
     Question = Content - Gap    (has missing information)
     Answer   = Content + Fill   (provides missing information)
 
+2D φ-Dial Control:
+    "We control the horizontal. We control the vertical."
+    
+    Horizontal (x): Style
+        -1 = formal, specific, rare
+        +1 = casual, universal, common
+        
+    Vertical (y): Perspective
+        -1 = subjective, experiential
+         0 = objective, factual
+        +1 = meta, analytical
+
 Usage:
     python -m truthspace_lcm.chat
     python -m truthspace_lcm.chat --debug
+    python -m truthspace_lcm.chat --style -1 --perspective 1  # Formal + Meta
     python -m truthspace_lcm.chat --corpus path/to/corpus.json
 """
 
@@ -45,6 +58,14 @@ def main():
     parser.add_argument(
         '--corpus', type=str, default=None,
         help='Path to concept corpus JSON file'
+    )
+    parser.add_argument(
+        '--style', '-x', type=float, default=0.0,
+        help='Style dial: -1 (formal) to +1 (casual)'
+    )
+    parser.add_argument(
+        '--perspective', '-y', type=float, default=0.0,
+        help='Perspective dial: -1 (subjective) to +1 (meta)'
     )
     args = parser.parse_args()
     
@@ -69,9 +90,14 @@ def main():
         return 1
     
     print(f"Loading corpus from {corpus_path}...")
-    qa = ConceptQA()
+    qa = ConceptQA(style_x=args.style, perspective_y=args.perspective)
     count = qa.load_corpus(str(corpus_path))
     print(f"Loaded {count} concept frames")
+    
+    # Show dial settings
+    style_label = 'formal' if args.style < -0.3 else ('casual' if args.style > 0.3 else 'neutral')
+    perspective_label = 'subjective' if args.perspective < -0.3 else ('meta' if args.perspective > 0.3 else 'objective')
+    print(f"φ-Dial: style={style_label} (x={args.style:+.1f}), perspective={perspective_label} (y={args.perspective:+.1f})")
     print()
     
     # Show sample entities
@@ -91,11 +117,14 @@ def main():
     print()
     
     print("Commands:")
-    print("  /debug    - Toggle debug mode")
-    print("  /entity X - Show info about entity X")
-    print("  /stats    - Show corpus statistics")
-    print("  /help     - Show this help")
-    print("  /quit     - Exit")
+    print("  /debug      - Toggle debug mode")
+    print("  /entity X   - Show info about entity X")
+    print("  /stats      - Show corpus statistics")
+    print("  /style X    - Set style dial (-1=formal, +1=casual)")
+    print("  /perspective Y - Set perspective dial (-1=subjective, +1=meta)")
+    print("  /dial       - Show current dial settings")
+    print("  /help       - Show this help")
+    print("  /quit       - Exit")
     print()
     print("Ask questions like:")
     print('  "Who is Darcy?"')
@@ -130,11 +159,52 @@ def main():
             
             elif cmd == '/help':
                 print("\nCommands:")
-                print("  /debug    - Toggle debug mode")
-                print("  /entity X - Show info about entity X")
-                print("  /stats    - Show corpus statistics")
-                print("  /quit     - Exit")
+                print("  /debug      - Toggle debug mode")
+                print("  /entity X   - Show info about entity X")
+                print("  /stats      - Show corpus statistics")
+                print("  /style X    - Set style dial (-1=formal, +1=casual)")
+                print("  /perspective Y - Set perspective dial (-1=subjective, +1=meta)")
+                print("  /dial       - Show current dial settings")
+                print("  /quit       - Exit")
                 print()
+                continue
+            
+            elif cmd == '/dial':
+                style_label = 'formal' if qa.style_x < -0.3 else ('casual' if qa.style_x > 0.3 else 'neutral')
+                perspective_label = 'subjective' if qa.perspective_y < -0.3 else ('meta' if qa.perspective_y > 0.3 else 'objective')
+                print(f"\nφ-Dial Settings:")
+                print(f"  Style (x):       {qa.style_x:+.1f} ({style_label})")
+                print(f"  Perspective (y): {qa.perspective_y:+.1f} ({perspective_label})")
+                print(f"  Quadrant: {qa.projector.answer_generator.dial.get_quadrant_label()}")
+                print()
+                continue
+            
+            elif cmd.startswith('/style'):
+                parts = user_input.split()
+                if len(parts) < 2:
+                    print("Usage: /style <value>  (e.g., /style -1 for formal, /style 1 for casual)")
+                    continue
+                try:
+                    x = float(parts[1])
+                    qa.set_style(x)
+                    style_label = 'formal' if x < -0.3 else ('casual' if x > 0.3 else 'neutral')
+                    print(f"Style set to {x:+.1f} ({style_label})")
+                except ValueError:
+                    print("Invalid value. Use a number between -1 and 1.")
+                continue
+            
+            elif cmd.startswith('/perspective'):
+                parts = user_input.split()
+                if len(parts) < 2:
+                    print("Usage: /perspective <value>  (e.g., /perspective -1 for subjective, /perspective 1 for meta)")
+                    continue
+                try:
+                    y = float(parts[1])
+                    qa.set_perspective(y)
+                    perspective_label = 'subjective' if y < -0.3 else ('meta' if y > 0.3 else 'objective')
+                    print(f"Perspective set to {y:+.1f} ({perspective_label})")
+                except ValueError:
+                    print("Invalid value. Use a number between -1 and 1.")
                 continue
             
             elif cmd == '/stats':
