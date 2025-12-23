@@ -74,7 +74,7 @@ ACTION_VOCABULARY = {
     'narrates', 'chronicles', 'records', 'writes', 'reads',
     # Emotion
     'loves', 'hates', 'fears', 'admires', 'respects', 'despises',
-    'envies', 'pities', 'sympathizes', 'empathizes',
+    'envies', 'pities', 'sympathizes', 'empathizes', 'deceives', 'betrays',
     # Action
     'fights', 'battles', 'struggles', 'challenges', 'confronts',
     'helps', 'assists', 'aids', 'supports', 'protects', 'defends',
@@ -82,6 +82,20 @@ ACTION_VOCABULARY = {
     # Movement
     'travels', 'journeys', 'visits', 'arrives', 'departs', 'leaves',
     'returns', 'escapes', 'flees', 'chases', 'pursues', 'follows',
+}
+
+# Words that should never be treated as entities
+NOISE_ENTITIES = {
+    'who', 'what', 'where', 'when', 'why', 'how', 'which',
+    'the', 'a', 'an', 'is', 'are', 'was', 'were', 'be', 'been',
+    'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would',
+    'could', 'should', 'may', 'might', 'must', 'shall',
+    'this', 'that', 'these', 'those', 'it', 'its',
+    'and', 'or', 'but', 'if', 'then', 'else', 'so', 'as',
+    'with', 'from', 'to', 'for', 'of', 'in', 'on', 'at', 'by',
+    'start', 'end', 'chapter', 'part', 'book', 'volume', 'page',
+    'illustration', 'contents', 'preface', 'introduction',
+    'pride', 'prejudice', 'adventures', 'hound', 'valley', 'sign',
 }
 
 
@@ -137,7 +151,10 @@ class LearnableStructure:
     
     def add_known_entity(self, entity: str):
         """Register an entity as known (for relation detection)."""
-        self.known_entities.add(entity.lower())
+        entity_lower = entity.lower()
+        # Filter out noise words
+        if entity_lower not in NOISE_ENTITIES and len(entity_lower) > 2:
+            self.known_entities.add(entity_lower)
     
     def add_known_entities(self, entities: List[str]):
         """Register multiple entities."""
@@ -267,8 +284,12 @@ class LearnableStructure:
         # Relations
         if profile.relations:
             relation = profile.relations[0]
-            # Grammar: "who loves Elizabeth" not "who loves with Elizabeth"
-            if profile.actions and profile.actions[0] in ('loves', 'admires', 'hates', 'fears'):
+            # Grammar: transitive verbs take direct object, others use "with"
+            transitive_verbs = {
+                'loves', 'admires', 'hates', 'fears', 'challenges', 'helps',
+                'assists', 'deceives', 'betrays', 'protects', 'follows', 'pursues',
+            }
+            if profile.actions and profile.actions[0] in transitive_verbs:
                 parts.append(relation.title())
             else:
                 parts.append(f'with {relation.title()}')

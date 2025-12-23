@@ -673,6 +673,15 @@ class PatternAnswerGenerator:
         """Initialize the learnable structure."""
         from .learnable_structure import LearnableStructure
         self.learnable = LearnableStructure()
+        
+        # Always add main character names
+        main_characters = [
+            'holmes', 'watson', 'moriarty', 'lestrade', 'mycroft', 'irene', 'adler',
+            'darcy', 'elizabeth', 'jane', 'bingley', 'wickham', 'lydia', 'collins',
+            'charlotte', 'bennet', 'catherine', 'georgiana', 'fitzwilliam',
+        ]
+        self.learnable.add_known_entities(main_characters)
+        
         if known_entities:
             self.learnable.add_known_entities(known_entities)
     

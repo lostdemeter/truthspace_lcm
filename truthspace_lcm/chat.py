@@ -103,6 +103,10 @@ def main():
     count = qa.load_corpus(str(corpus_path))
     print(f"Loaded {count} concept frames")
     
+    # Train the model with quality examples
+    from .training_data import train_model
+    train_model(qa, verbose=True)
+    
     # Initialize conversation memory
     memory = ConversationMemory(max_turns=10)
     
