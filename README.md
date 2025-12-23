@@ -18,6 +18,9 @@ This system demonstrates that **pure geometry can replace trained neural network
 - **Conversation Memory** - Multi-turn dialogue with pronoun resolution
 - **Multi-Hop Reasoning** - Graph traversal for WHY/HOW questions
 - **Holographic Generation** - Interference-based text generation
+- **Code Generation** - Generate Python from natural language
+- **Planning & Execution** - Decompose tasks, execute in sandbox
+- **Chart Generation** - Create matplotlib visualizations
 - **φ-Based Navigation** - Golden ratio powers for entity importance and coherence
 - **Cross-Language** - Same concepts work across English, Spanish, and more
 - **Spatial Attention** - Zipf/φ-based weighting for meaningful relationships
@@ -194,7 +197,9 @@ truthspace_lcm/
 │   ├── learnable_structure.py # Gradient-free learning, EntityProfile
 │   ├── conversation_memory.py # Multi-turn dialogue, pronoun resolution
 │   ├── reasoning_engine.py  # Multi-hop reasoning, graph traversal
-│   └── holographic_generator.py # Interference-based generation
+│   ├── holographic_generator.py # Interference-based generation
+│   ├── code_generator.py    # Python code generation
+│   └── planner.py           # Task planning and sandboxed execution
 └── utils/
     └── extractors.py        # Shared extraction utilities
 ```
@@ -340,6 +345,60 @@ output = hologen.generate("Who is Holmes?", entity="holmes", learnable=learnable
 ```
 
 **The principle**: Multiple source texts interfere like light waves. Constructive interference (common concepts) = include. Destructive interference (noise) = exclude.
+
+## Code Generation
+
+Generate Python code from natural language:
+
+```python
+from truthspace_lcm.core import CodeGenerator
+
+codegen = CodeGenerator()
+
+code = codegen.generate("Write a function to add two numbers")
+# → def add(a, b):
+#       """Add two numbers"""
+#       return a + b
+
+# Teach new functions
+codegen.learn('factorial', ['n'], 'return 1 if n <= 1 else n * factorial(n-1)')
+```
+
+## Planning & Execution
+
+Plan and execute tasks in a sandboxed environment:
+
+```python
+from truthspace_lcm.core import Planner
+
+planner = Planner()
+
+# Plan and execute
+plan = planner.plan("Calculate the sum of squares of [1, 2, 3, 4]")
+result = planner.execute(plan)
+# → Result: 30
+
+# Show plan without executing
+plan = planner.plan("Find even numbers in [1, 2, 3, 4, 5, 6]")
+# → Step 1: Define data
+# → Step 2: Filter by condition
+# → Step 3: Return result
+```
+
+## Agent Demo
+
+Run the full agent demo showing all capabilities:
+
+```bash
+python demo_agent.py
+```
+
+This demonstrates:
+- Knowledge Q&A about Sherlock Holmes
+- Task planning and execution
+- Code generation
+- Matplotlib chart generation
+- Combined agent workflow
 
 ## License
 

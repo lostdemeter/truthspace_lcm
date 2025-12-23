@@ -197,6 +197,55 @@ output = hologen.generate("Who is Holmes?", entity="holmes", learnable=learnable
 # "Holmes is a brilliant detective from Sherlock Holmes who investigates with Watson."
 ```
 
+### CodeGenerator (`code_generator.py`)
+
+Generate Python code from natural language requests.
+
+```python
+from truthspace_lcm.core import CodeGenerator
+
+codegen = CodeGenerator()
+
+# Generate from request
+code = codegen.generate("Write a function to add two numbers")
+# def add(a, b):
+#     """Add two numbers"""
+#     return a + b
+
+# Teach new functions
+codegen.learn('factorial', ['n'], 'return 1 if n <= 1 else n * factorial(n-1)')
+
+# 30+ built-in operations: add, subtract, multiply, reverse, greet, etc.
+```
+
+### Planner (`planner.py`)
+
+Task decomposition and sandboxed execution.
+
+```python
+from truthspace_lcm.core import Planner
+
+planner = Planner()
+
+# Plan a task
+plan = planner.plan("Calculate the sum of squares of [1, 2, 3, 4]")
+# Step 1: Define data
+# Step 2: Compute squares
+# Step 3: Sum the squares
+# Step 4: Return result
+
+# Execute in sandbox
+result = planner.execute(plan)
+# result.final_result = 30
+# result.success = True
+
+# Sandbox provides:
+# - Safe builtins (math, types, iteration)
+# - Safe modules (math, random, statistics, matplotlib)
+# - Timeout protection
+# - No file/network access
+```
+
 ## Action Primitives
 
 Universal verbs that map surface forms to concepts:
@@ -348,7 +397,9 @@ truthspace-lcm/
 │   │   ├── learnable_structure.py # Gradient-free learning, EntityProfile
 │   │   ├── conversation_memory.py # Multi-turn dialogue, pronoun resolution
 │   │   ├── reasoning_engine.py    # Multi-hop reasoning, graph traversal
-│   │   └── holographic_generator.py # Interference-based generation
+│   │   ├── holographic_generator.py # Interference-based generation
+│   │   ├── code_generator.py      # Python code generation
+│   │   └── planner.py             # Task planning and sandboxed execution
 │   └── utils/
 │       └── extractors.py        # Shared extraction utilities
 ├── tests/
@@ -490,7 +541,10 @@ def train(structure, examples):
 
 1. ~~**Multi-Hop Reasoning** - Chain multiple reasoning steps for WHY/HOW questions~~ ✓ DONE
 2. ~~**Holographic Generation** - Replace templates with interference patterns~~ ✓ DONE
-3. **More Languages** - Add French, German, Chinese verb mappings
-4. **Temporal Reasoning** - Track when events happened
-5. **Causal Chains** - Improve oscillating navigation for WHY
-6. **Scale Testing** - Benchmark against LLMs on larger corpora
+3. ~~**Code Generation** - Generate Python from natural language~~ ✓ DONE
+4. ~~**Planning & Execution** - Decompose tasks, execute in sandbox~~ ✓ DONE
+5. **More Languages** - Add French, German, Chinese verb mappings
+6. **Temporal Reasoning** - Track when events happened
+7. **Causal Chains** - Improve oscillating navigation for WHY
+8. **Scale Testing** - Benchmark against LLMs on larger corpora
+9. **Tool Use** - Integrate with external APIs and tools
