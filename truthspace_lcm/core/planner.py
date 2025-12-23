@@ -189,6 +189,17 @@ SAFE_MODULES = {
     'collections': __import__('collections'),
 }
 
+# Try to import matplotlib for charting (optional)
+try:
+    import matplotlib
+    matplotlib.use('Agg')  # Non-interactive backend
+    import matplotlib.pyplot as plt
+    SAFE_MODULES['plt'] = plt
+    SAFE_MODULES['matplotlib'] = matplotlib
+    HAS_MATPLOTLIB = True
+except ImportError:
+    HAS_MATPLOTLIB = False
+
 
 class Sandbox:
     """Sandboxed Python execution environment."""
