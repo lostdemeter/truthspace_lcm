@@ -103,6 +103,13 @@ from .code_generator import (
     CodeFrame,
 )
 
+from .planner import (
+    Planner,
+    PlanStep,
+    ExecutionPlan,
+    Sandbox,
+)
+
 __all__ = [
     # Vocabulary (foundation)
     "Vocabulary",
@@ -145,4 +152,9 @@ __all__ = [
     # Code Generator
     "CodeGenerator",
     "CodeFrame",
+    # Planner
+    "Planner",
+    "PlanStep",
+    "ExecutionPlan",
+    "Sandbox",
 ]

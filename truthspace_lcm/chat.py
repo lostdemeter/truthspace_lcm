@@ -49,6 +49,7 @@ from .core.conversation_memory import ConversationMemory
 from .core.reasoning_engine import ReasoningEngine
 from .core.holographic_generator import HolographicGenerator
 from .core.code_generator import CodeGenerator
+from .core.planner import Planner
 
 
 def main():
@@ -117,6 +118,7 @@ def main():
     reasoning = ReasoningEngine(qa.knowledge)
     hologen = HolographicGenerator(qa.knowledge)
     codegen = CodeGenerator()
+    planner = Planner(codegen)
     
     # Show dial settings
     style_label = 'formal' if args.style < -0.3 else ('casual' if args.style > 0.3 else 'neutral')
@@ -208,6 +210,8 @@ def main():
                 print("  /code REQ   - Generate Python code from request")
                 print("  /teach N A B - Teach function: name, args, body")
                 print("  /ops        - List known code operations")
+                print("  /run TASK   - Plan and execute a task")
+                print("  /plan TASK  - Show plan without executing")
                 print("  /quit       - Exit")
                 print()
                 continue
@@ -498,6 +502,39 @@ def main():
                 # Group by category
                 for i in range(0, len(ops), 6):
                     print(f"  {', '.join(ops[i:i+6])}")
+                print()
+                continue
+            
+            elif cmd == '/run':
+                # Plan and execute a task
+                task = user_input[4:].strip()
+                if not task:
+                    print("Usage: /run <task>")
+                    print("Example: /run Calculate the sum of [1, 2, 3, 4, 5]")
+                else:
+                    plan = planner.plan(task)
+                    print(f"\nExecuting: {task}")
+                    print(f"Plan: {len(plan.steps)} steps")
+                    result = planner.execute(plan, verbose=True)
+                    print(f"\n{'✓' if result.success else '✗'} Result: {result.final_result}")
+                print()
+                continue
+            
+            elif cmd == '/plan':
+                # Show plan without executing
+                task = user_input[5:].strip()
+                if not task:
+                    print("Usage: /plan <task>")
+                    print("Example: /plan Calculate the average of [1, 2, 3]")
+                else:
+                    plan = planner.plan(task)
+                    print(f"\nPlan for: {task}")
+                    print(f"Goal: {plan.goal}")
+                    print("Steps:")
+                    for step in plan.steps:
+                        deps = f" (depends on: {step.depends_on})" if step.depends_on else ""
+                        print(f"  {step.step_id}. [{step.step_type.value}] {step.description}{deps}")
+                        print(f"     Code: {step.code}")
                 print()
                 continue
             
