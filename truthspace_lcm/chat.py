@@ -48,6 +48,7 @@ from .core import ConceptQA
 from .core.conversation_memory import ConversationMemory
 from .core.reasoning_engine import ReasoningEngine
 from .core.holographic_generator import HolographicGenerator
+from .core.code_generator import CodeGenerator
 
 
 def main():
@@ -115,6 +116,7 @@ def main():
     # Initialize reasoning engine and holographic generator
     reasoning = ReasoningEngine(qa.knowledge)
     hologen = HolographicGenerator(qa.knowledge)
+    codegen = CodeGenerator()
     
     # Show dial settings
     style_label = 'formal' if args.style < -0.3 else ('casual' if args.style > 0.3 else 'neutral')
@@ -203,6 +205,9 @@ def main():
                 print("  /how Q      - Multi-hop reasoning for HOW question")
                 print("  /path A B   - Find relationship path between A and B")
                 print("  /holo E     - Holographic generation for entity E")
+                print("  /code REQ   - Generate Python code from request")
+                print("  /teach N A B - Teach function: name, args, body")
+                print("  /ops        - List known code operations")
                 print("  /quit       - Exit")
                 print()
                 continue
@@ -452,6 +457,47 @@ def main():
                     learnable = qa.projector.answer_generator.learnable
                     output = hologen.generate(f"Who is {entity}?", entity=entity, learnable=learnable)
                     print(f"\nHolographic: {output}")
+                print()
+                continue
+            
+            elif cmd == '/code':
+                # Generate Python code
+                request = user_input[5:].strip()
+                if not request:
+                    print("Usage: /code <request>")
+                    print("Example: /code Write a function to add two numbers")
+                else:
+                    code = codegen.generate(request)
+                    print(f"\n```python\n{code}\n```")
+                print()
+                continue
+            
+            elif cmd == '/teach':
+                # Teach a new function
+                # Format: /teach name arg1,arg2 body
+                parts = user_input[6:].strip().split(' ', 2)
+                if len(parts) < 3:
+                    print("Usage: /teach <name> <args> <body>")
+                    print("Example: /teach square n return n * n")
+                else:
+                    name = parts[0]
+                    args = [a.strip() for a in parts[1].split(',')]
+                    body = parts[2]
+                    codegen.learn(name, args, body, f"User-defined: {name}")
+                    print(f"\nLearned function '{name}' with args {args}")
+                    # Show the generated code
+                    code = codegen.generate(f"Write a function to {name}")
+                    print(f"```python\n{code}\n```")
+                print()
+                continue
+            
+            elif cmd == '/ops':
+                # List known operations
+                ops = codegen.list_operations()
+                print(f"\nKnown operations ({len(ops)}):")
+                # Group by category
+                for i in range(0, len(ops), 6):
+                    print(f"  {', '.join(ops[i:i+6])}")
                 print()
                 continue
             

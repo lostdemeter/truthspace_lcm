@@ -98,6 +98,11 @@ from .holographic_generator import (
     InterferencePattern,
 )
 
+from .code_generator import (
+    CodeGenerator,
+    CodeFrame,
+)
+
 __all__ = [
     # Vocabulary (foundation)
     "Vocabulary",
@@ -137,4 +142,7 @@ __all__ = [
     # Holographic Generator
     "HolographicGenerator",
     "InterferencePattern",
+    # Code Generator
+    "CodeGenerator",
+    "CodeFrame",
 ]
