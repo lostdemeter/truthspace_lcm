@@ -151,6 +151,52 @@ context = memory.get_recent_context(k=3)
 # [(turn, weight), ...] - most recent has highest weight
 ```
 
+### ReasoningEngine (`reasoning_engine.py`)
+
+Multi-hop reasoning through concept graph traversal.
+
+```python
+from truthspace_lcm.core import ReasoningEngine
+
+engine = ReasoningEngine(knowledge)
+
+# WHY questions - find causal chains
+path = engine.reason("Why did Holmes investigate?")
+# path.answer: "Based on the reasoning chain: holmes → scotchman → ..."
+# path.steps: [ReasoningStep(entity='holmes', action='INVERSE_EXIST', relation='scotchman')]
+
+# HOW questions - find process chains
+path = engine.reason("How did Darcy act?")
+# path.answer: "The process involves: darcy → elizabeth → charlotte → bingley"
+
+# Relationship paths - BFS between entities
+path = engine.reason("What is the relationship between Darcy and Elizabeth?")
+# path.answer: "Darcy is connected to Elizabeth through 1 steps."
+```
+
+### HolographicGenerator (`holographic_generator.py`)
+
+Interference-based text generation using complex numbers.
+
+```python
+from truthspace_lcm.core import HolographicGenerator
+
+hologen = HolographicGenerator(knowledge)
+
+# Encode text as complex vector (magnitude + phase)
+# - Magnitude = importance (IDF-weighted)
+# - Phase = category (content/action/modifier/quality)
+
+# Interfere multiple sources
+pattern = hologen.interfere(sources)
+# Constructive interference = high magnitude = include
+# Destructive interference = low magnitude = exclude
+
+# Generate with learned structure
+output = hologen.generate("Who is Holmes?", entity="holmes", learnable=learnable)
+# "Holmes is a brilliant detective from Sherlock Holmes who investigates with Watson."
+```
+
 ## Action Primitives
 
 Universal verbs that map surface forms to concepts:
@@ -300,7 +346,9 @@ truthspace-lcm/
 │   │   ├── answer_patterns.py   # QuaternionPhiDial, PatternAnswerGenerator
 │   │   ├── spatial_attention.py # φ-based navigation, importance scoring
 │   │   ├── learnable_structure.py # Gradient-free learning, EntityProfile
-│   │   └── conversation_memory.py # Multi-turn dialogue, pronoun resolution
+│   │   ├── conversation_memory.py # Multi-turn dialogue, pronoun resolution
+│   │   ├── reasoning_engine.py    # Multi-hop reasoning, graph traversal
+│   │   └── holographic_generator.py # Interference-based generation
 │   └── utils/
 │       └── extractors.py        # Shared extraction utilities
 ├── tests/
@@ -440,8 +488,9 @@ def train(structure, examples):
 
 ## Future Work
 
-1. **Multi-Hop Reasoning** - Chain multiple reasoning steps for WHY/HOW questions
-2. **Holographic Generation** - Replace templates with interference patterns
+1. ~~**Multi-Hop Reasoning** - Chain multiple reasoning steps for WHY/HOW questions~~ ✓ DONE
+2. ~~**Holographic Generation** - Replace templates with interference patterns~~ ✓ DONE
 3. **More Languages** - Add French, German, Chinese verb mappings
 4. **Temporal Reasoning** - Track when events happened
-5. **Causal Chains** - Implement oscillating navigation for WHY
+5. **Causal Chains** - Improve oscillating navigation for WHY
+6. **Scale Testing** - Benchmark against LLMs on larger corpora

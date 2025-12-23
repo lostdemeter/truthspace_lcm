@@ -16,6 +16,8 @@ This system demonstrates that **pure geometry can replace trained neural network
 - **4D φ-Dial Control** - Style × Perspective × Depth × Certainty (quaternion)
 - **Gradient-Free Learning** - Error-driven structure building, no backprop needed
 - **Conversation Memory** - Multi-turn dialogue with pronoun resolution
+- **Multi-Hop Reasoning** - Graph traversal for WHY/HOW questions
+- **Holographic Generation** - Interference-based text generation
 - **φ-Based Navigation** - Golden ratio powers for entity importance and coherence
 - **Cross-Language** - Same concepts work across English, Spanish, and more
 - **Spatial Attention** - Zipf/φ-based weighting for meaningful relationships
@@ -190,7 +192,9 @@ truthspace_lcm/
 │   ├── answer_patterns.py   # QuaternionPhiDial, PatternAnswerGenerator
 │   ├── spatial_attention.py # φ-based navigation, importance scoring
 │   ├── learnable_structure.py # Gradient-free learning, EntityProfile
-│   └── conversation_memory.py # Multi-turn dialogue, pronoun resolution
+│   ├── conversation_memory.py # Multi-turn dialogue, pronoun resolution
+│   ├── reasoning_engine.py  # Multi-hop reasoning, graph traversal
+│   └── holographic_generator.py # Interference-based generation
 └── utils/
     └── extractors.py        # Shared extraction utilities
 ```
@@ -297,6 +301,45 @@ train_model(qa)
 | Learning | Gradient descent | Error-driven addition |
 | Convergence | Thousands of epochs | 1-2 epochs |
 | Interpretability | Black box | Fully transparent |
+
+## Multi-Hop Reasoning
+
+Chain multiple reasoning steps for complex questions:
+
+```python
+from truthspace_lcm.core import ReasoningEngine
+
+engine = ReasoningEngine(qa.knowledge)
+
+# Find relationship path
+path = engine.reason("What is the relationship between Darcy and Elizabeth?")
+# → Darcy is connected to Elizabeth through 1 steps.
+#   → darcy --POSSESS--> elizabeth
+
+# WHY questions
+path = engine.reason("Why did Holmes investigate?")
+# → Based on the reasoning chain: holmes → scotchman → ...
+
+# HOW questions  
+path = engine.reason("How did Darcy act?")
+# → The process involves: darcy → elizabeth → charlotte → bingley
+```
+
+## Holographic Generation
+
+Generate text using interference patterns:
+
+```python
+from truthspace_lcm.core import HolographicGenerator
+
+hologen = HolographicGenerator(qa.knowledge)
+
+# Generate with learned structure
+output = hologen.generate("Who is Holmes?", entity="holmes", learnable=learnable)
+# → "Holmes is a brilliant detective from Sherlock Holmes who investigates with Watson."
+```
+
+**The principle**: Multiple source texts interfere like light waves. Constructive interference (common concepts) = include. Destructive interference (noise) = exclude.
 
 ## License
 
