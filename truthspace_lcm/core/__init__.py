@@ -73,6 +73,15 @@ from .answer_patterns import (
     DIAL_SIGNATURES,
 )
 
+from .learnable_structure import (
+    LearnableStructure,
+    EntityProfile,
+    train_from_examples,
+    ROLE_VOCABULARY,
+    QUALITY_VOCABULARY,
+    ACTION_VOCABULARY,
+)
+
 __all__ = [
     # Vocabulary (foundation)
     "Vocabulary",
@@ -95,4 +104,11 @@ __all__ = [
     # Reverse Tuning (Phase Conjugation)
     "reverse_tune",
     "DIAL_SIGNATURES",
+    # Learnable Structure (Gradient-Free Learning)
+    "LearnableStructure",
+    "EntityProfile",
+    "train_from_examples",
+    "ROLE_VOCABULARY",
+    "QUALITY_VOCABULARY",
+    "ACTION_VOCABULARY",
 ]

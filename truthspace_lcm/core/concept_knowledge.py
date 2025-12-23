@@ -138,10 +138,82 @@ class ConceptKnowledge:
         # Pre-compute vectors for all frames
         self.frame_vectors = [self._frame_to_vector(f) for f in self.frames]
         
+        # Build quality entity set for geodesic generation
+        self._build_quality_entities()
+        
         # Initialize spatial attention with corpus frames and known entities
         initialize_attention(self.frames, set(self.entities.keys()))
         
         return len(self.frames)
+    
+    def _build_quality_entities(self):
+        """
+        Build a set of quality entities for geodesic generation.
+        
+        Quality entities are those that:
+        1. Appear as agent at least 5 times
+        2. Are not common English words
+        
+        This filters out noise words that were incorrectly extracted as entities.
+        """
+        from collections import Counter
+        
+        # Common words that should not be treated as entities
+        common_words = {
+            'man', 'woman', 'said', 'get', 'know', 'think', 'see', 'come', 'go', 'take',
+            'give', 'make', 'find', 'tell', 'ask', 'use', 'try', 'leave', 'call', 'keep',
+            'let', 'begin', 'seem', 'help', 'show', 'hear', 'play', 'run', 'move', 'live',
+            'believe', 'hold', 'bring', 'happen', 'write', 'sit', 'stand', 'lose', 'pay',
+            'meet', 'set', 'learn', 'change', 'lead', 'understand', 'watch', 'follow',
+            'stop', 'speak', 'read', 'allow', 'add', 'spend', 'grow', 'open', 'walk',
+            'win', 'offer', 'remember', 'love', 'consider', 'appear', 'buy', 'wait',
+            'serve', 'die', 'send', 'expect', 'build', 'stay', 'fall', 'cut', 'reach',
+            'kill', 'remain', 'suggest', 'raise', 'pass', 'sell', 'require', 'report',
+            'decide', 'pull', 'room', 'house', 'door', 'hand', 'head', 'face', 'eye',
+            'eyes', 'day', 'time', 'year', 'way', 'thing', 'world', 'life', 'work',
+            'part', 'place', 'case', 'week', 'night', 'point', 'home', 'water', 'fact',
+            'money', 'lot', 'right', 'study', 'book', 'word', 'business', 'issue', 'side',
+            'kind', 'four', 'half', 'story', 'white', 'small', 'large', 'old', 'young',
+            'good', 'bad', 'new', 'first', 'last', 'long', 'great', 'little', 'own',
+            'other', 'same', 'able', 'just', 'being', 'few', 'more', 'most', 'such',
+            'only', 'over', 'after', 'also', 'back', 'any', 'judge', 'better', 'best',
+            'answer', 'above', 'although', 'altogether', 'among', 'anybody', 'allowing',
+        }
+        
+        # Count agent occurrences
+        agent_counts = Counter()
+        for frame in self.frames:
+            agent = frame.get('agent', '').lower()
+            if agent and len(agent) > 2 and agent not in common_words:
+                agent_counts[agent] += 1
+        
+        # Quality entities: appear as agent >= 5 times
+        self.quality_entities = {name for name, count in agent_counts.items() if count >= 5}
+    
+    def get_entity_relations(self, entity: str, k: int = 5) -> list:
+        """
+        Get quality relations for an entity (for geodesic generation).
+        
+        Only returns relations to other quality entities, filtering out noise.
+        """
+        from collections import Counter
+        
+        if not hasattr(self, 'quality_entities'):
+            self._build_quality_entities()
+        
+        entity_lower = entity.lower()
+        relations = Counter()
+        
+        for frame in self.frames:
+            if frame.get('agent', '').lower() != entity_lower:
+                continue
+            
+            for role in ['patient', 'theme', 'goal']:
+                related = frame.get(role, '').lower()
+                if related and related != entity_lower and related in self.quality_entities:
+                    relations[related] += 1
+        
+        return relations.most_common(k)
     
     def add_frame(self, frame: ConceptFrame, source_text: str = '', source: str = ''):
         """Add a single frame to the knowledge base."""

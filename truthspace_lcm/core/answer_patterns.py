@@ -634,6 +634,9 @@ class PatternAnswerGenerator:
         self.where_templates = WHERE_IS_TEMPLATES
         self.dial = QuaternionPhiDial(x, y, z, w)
         
+        # Learnable structure for gradient-free learning
+        self.learnable = None  # Initialized lazily
+        
         # Noise words to filter from relationships
         self.noise_words = {
             'evidence', 'chapter', 'part', 'book', 'volume', 'venus', 'allegro',
@@ -665,6 +668,54 @@ class PatternAnswerGenerator:
     def set_certainty(self, w: float):
         """Set the certainty dial (-1 = definitive, +1 = hedged)."""
         self.dial = QuaternionPhiDial(self.dial.x, self.dial.y, self.dial.z, w)
+    
+    def init_learnable(self, known_entities: list = None):
+        """Initialize the learnable structure."""
+        from .learnable_structure import LearnableStructure
+        self.learnable = LearnableStructure()
+        if known_entities:
+            self.learnable.add_known_entities(known_entities)
+    
+    def learn_from_correction(self, entity: str, target: str, source: str = 'the story') -> list:
+        """
+        Learn from a user correction.
+        
+        Args:
+            entity: The entity being described
+            target: The correct answer the user provided
+            source: The source text name
+        
+        Returns:
+            List of what was learned
+        """
+        if self.learnable is None:
+            self.init_learnable()
+        
+        # Generate current answer
+        generated = self.generate_from_learned(entity, source)
+        
+        # Learn from the difference
+        learned = self.learnable.learn_from_error(entity, target, generated)
+        
+        return learned
+    
+    def generate_from_learned(self, entity: str, source: str = 'the story') -> str:
+        """
+        Generate answer using learned structure if available.
+        
+        Falls back to template-based generation if no learned structure.
+        """
+        if self.learnable is None:
+            return f"{entity.title()} is a character from {source}."
+        
+        return self.learnable.generate(entity, source)
+    
+    def has_learned_profile(self, entity: str) -> bool:
+        """Check if we have a learned profile for this entity."""
+        if self.learnable is None:
+            return False
+        profile = self.learnable.get_profile(entity)
+        return profile.role is not None or len(profile.qualities) > 0
     
     def _get_depth_elaboration(self, role: str) -> str:
         """Get elaboration phrase based on depth and role."""
@@ -844,6 +895,11 @@ class PatternAnswerGenerator:
         """
         # Get source
         source = list(sources)[0] if sources else "the story"
+        
+        # Check if we have a learned profile for this entity
+        if self.learnable is not None and self.has_learned_profile(entity):
+            # Use learned structure for generation
+            return self.generate_from_learned(entity, source)
         
         # Infer role from dominant action
         role = "character"

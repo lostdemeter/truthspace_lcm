@@ -180,6 +180,8 @@ def main():
                 print("  /depth Z    - Set depth dial (-1=terse, +1=elaborate)")
                 print("  /certainty W - Set certainty dial (-1=definitive, +1=hedged)")
                 print("  /dial       - Show current dial settings")
+                print("  /learn E T  - Teach: entity E should have answer T")
+                print("  /learned    - Show learned structure")
                 print("  /quit       - Exit")
                 print()
                 continue
@@ -268,6 +270,65 @@ def main():
                 print(f"\n  Frames by source:")
                 for src, cnt in sorted(sources.items(), key=lambda x: -x[1]):
                     print(f"    {src}: {cnt}")
+                print()
+                continue
+            
+            elif cmd.startswith('/learn'):
+                # Learn from a correction: /learn <entity> <correct answer>
+                parts = user_input.split(maxsplit=2)
+                if len(parts) < 3:
+                    print("Usage: /learn <entity> <correct answer>")
+                    print("Example: /learn holmes Holmes is a brilliant detective who investigates with Watson.")
+                    continue
+                
+                entity = parts[1].lower()
+                target = parts[2]
+                
+                # Initialize learnable if needed
+                if qa.projector.answer_generator.learnable is None:
+                    known = list(qa.knowledge.entities.keys())[:100]
+                    qa.projector.answer_generator.init_learnable(known)
+                
+                # Get source for this entity
+                entity_info = qa.knowledge.entities.get(entity, {})
+                source = entity_info.get('source', 'the story') if isinstance(entity_info, dict) else 'the story'
+                
+                # Learn
+                learned = qa.projector.answer_generator.learn_from_correction(entity, target, source)
+                
+                if learned:
+                    print(f"Learned from correction:")
+                    for item in learned:
+                        print(f"  + {item}")
+                    
+                    # Show updated generation
+                    new_answer = qa.projector.answer_generator.generate_from_learned(entity, source)
+                    print(f"\nNew answer: \"{new_answer}\"")
+                else:
+                    print("Nothing new to learn from this correction.")
+                print()
+                continue
+            
+            elif cmd == '/learned':
+                # Show learned structure
+                if qa.projector.answer_generator.learnable is None:
+                    print("No learned structure yet. Use /learn to teach me.")
+                else:
+                    stats = qa.projector.answer_generator.learnable.get_stats()
+                    print(f"\nLearned Structure:")
+                    print(f"  Entities with profiles: {stats['entities']}")
+                    print(f"  Roles learned: {stats['roles_learned']}")
+                    print(f"  Qualities learned: {stats['qualities_learned']}")
+                    print(f"  Actions learned: {stats['actions_learned']}")
+                    print(f"  Relations learned: {stats['relations_learned']}")
+                    
+                    # Show profiles
+                    if stats['entities'] > 0:
+                        print(f"\nProfiles:")
+                        for entity, profile in qa.projector.answer_generator.learnable.profiles.items():
+                            if profile.role or profile.qualities:
+                                print(f"  {entity}: role={profile.role}, qualities={profile.qualities}, "
+                                      f"actions={profile.actions}, relations={profile.relations}")
                 print()
                 continue
             
