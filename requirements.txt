@@ -9,6 +9,14 @@ requests>=2.25.0
 # HTML parsing
 beautifulsoup4>=4.9.0
 
+# API Server
+fastapi>=0.100.0
+uvicorn>=0.23.0
+pydantic>=2.0.0
+
+# Visualization (optional)
+matplotlib>=3.5.0
+
 # Development dependencies (optional)
 # pytest>=7.0.0
 # black>=22.0.0
