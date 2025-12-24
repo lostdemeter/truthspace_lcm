@@ -24,6 +24,10 @@ This system demonstrates that **pure geometry can replace trained neural network
 - **φ-Based Navigation** - Golden ratio powers for entity importance and coherence
 - **Cross-Language** - Same concepts work across English, Spanish, and more
 - **Spatial Attention** - Zipf/φ-based weighting for meaningful relationships
+- **OpenAI-Compatible API** - REST API with streaming support for integration with clients
+- **Extensible Tool System** - Plugin-based tools (time, calculator, charts)
+- **Compound Query Resolution** - Handle multi-part questions with coreference resolution
+- **Self-Knowledge** - Model knows its own capabilities, limitations, and identity
 
 ## Installation
 
@@ -202,6 +206,31 @@ truthspace_lcm/
 │   └── planner.py           # Task planning and sandboxed execution
 └── utils/
     └── extractors.py        # Shared extraction utilities
+
+api/
+├── __init__.py              # API package
+└── server.py                # FastAPI server with OpenAI-compatible endpoints
+
+core/
+├── __init__.py              # Core module exports
+├── orchestrator.py          # Request routing and handler management
+├── self_knowledge.py        # Model identity, capabilities, limitations
+├── query_resolver.py        # Compound query splitting and coreference
+├── conversation_context.py  # Entity/topic tracking across turns
+├── response_templates.py    # Consistent response formatting
+├── handlers/
+│   ├── __init__.py          # Handler exports
+│   ├── base.py              # Abstract handler interface
+│   ├── knowledge.py         # Q&A and reasoning handler
+│   ├── code.py              # Code generation handler
+│   ├── tools.py             # Tool execution handler
+│   └── chat.py              # Conversational/meta handler
+└── tools/
+    ├── __init__.py          # Tool exports
+    ├── base.py              # Tool interface and registry
+    ├── time_tool.py         # Current time/date
+    ├── calculator.py        # Math operations
+    └── chart_tool.py        # Matplotlib visualizations
 ```
 
 ## Core Concepts
@@ -399,6 +428,99 @@ This demonstrates:
 - Code generation
 - Matplotlib chart generation
 - Combined agent workflow
+
+## OpenAI-Compatible API
+
+Run GeometricLCM as an OpenAI-compatible API server:
+
+```bash
+python run_api.py --host 0.0.0.0 --port 8000
+```
+
+### Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/v1/chat/completions` | POST | Chat completions (streaming supported) |
+| `/v1/models` | GET | List available models |
+| `/health` | GET | Health check |
+
+### Example Usage
+
+```bash
+# Simple question
+curl -X POST http://localhost:8000/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{"model": "geometric-lcm", "messages": [{"role": "user", "content": "Who is Holmes?"}]}'
+
+# Compound query
+curl -X POST http://localhost:8000/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{"model": "geometric-lcm", "messages": [{"role": "user", "content": "What time is it and who is Darcy?"}]}'
+
+# Streaming
+curl -X POST http://localhost:8000/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{"model": "geometric-lcm", "messages": [{"role": "user", "content": "Hello!"}], "stream": true}'
+```
+
+### Compatible Clients
+
+- **Goose** - Point to `http://localhost:8000` (without `/v1`)
+- **Open WebUI** - Use `http://localhost:8000/v1` as base URL
+- Any OpenAI-compatible client
+
+## Tool System
+
+Extensible tools that the model can invoke:
+
+| Tool | Description | Example |
+|------|-------------|--------|
+| **TimeTool** | Current time/date | "What time is it?" |
+| **CalculatorTool** | Math operations | "Calculate 25 * 4 + 10" |
+| **ChartTool** | Matplotlib charts | "Create a bar chart..." |
+
+### Adding Custom Tools
+
+```python
+from core.tools import Tool, ToolResult, ToolRegistry
+
+class MyTool(Tool):
+    @property
+    def name(self) -> str:
+        return "mytool"
+    
+    @property
+    def description(self) -> str:
+        return "Does something useful"
+    
+    @property
+    def triggers(self) -> list[str]:
+        return ["do something", "my tool"]
+    
+    def execute(self, query: str, **kwargs) -> ToolResult:
+        return ToolResult.success_result("Done!")
+
+# Register
+registry = ToolRegistry()
+registry.register(MyTool())
+```
+
+## Compound Query Resolution
+
+Handle multi-part questions with automatic splitting and coreference resolution:
+
+```python
+# Input: "Who is Darcy and how did he meet Elizabeth?"
+# Split into:
+#   1. "Who is Darcy?"
+#   2. "How did Darcy meet Elizabeth?"  (pronoun resolved)
+
+# Input: "What is 25 * 50 and what time is it?"
+# Split into:
+#   1. "What is 25 * 50?" → Calculator tool
+#   2. "What time is it?" → Time tool
+```
 
 ## License
 

@@ -18,6 +18,119 @@ TruthSpace LCM is a **Holographic Concept Language Model** that performs all sem
 - **Conversation Memory** = Multi-turn dialogue with pronoun resolution
 - **Cross-Language** = Same concepts work across any language
 
+## API Architecture
+
+### OpenAI-Compatible API (`api/server.py`)
+
+FastAPI server providing OpenAI-compatible endpoints:
+
+```python
+# Endpoints
+POST /v1/chat/completions  # Chat with streaming support
+GET  /v1/models            # List available models
+GET  /health               # Health check
+
+# Also available without /v1 prefix for Goose compatibility
+POST /chat/completions
+GET  /models
+```
+
+### Orchestrator (`core/orchestrator.py`)
+
+Central routing and request management:
+
+```python
+Orchestrator:
+  - handlers: list[Handler]     # Registered handlers
+  - classifier: IntentClassifier # Intent detection
+  - query_resolver: QueryResolver # Compound query handling
+  - conversation_context: ConversationContext # Entity tracking
+  
+  def process(message, system_prompt) -> str:
+      # 1. Resolve compound queries
+      # 2. Route to best handler
+      # 3. Combine responses
+      # 4. Update context
+```
+
+### Handlers (`core/handlers/`)
+
+Modular request handlers:
+
+| Handler | Intents | Purpose |
+|---------|---------|--------|
+| KnowledgeHandler | QUESTION | Q&A, reasoning |
+| CodeHandler | CODE | Python generation |
+| ToolHandler | EXECUTE, CHART | Tools, calculations |
+| ChatHandler | GREETING, FAREWELL, META | Conversation, self-knowledge |
+
+### Tool System (`core/tools/`)
+
+Extensible tool registry:
+
+```python
+Tool (abstract):
+  - name: str              # Tool identifier
+  - description: str       # What it does
+  - triggers: list[str]    # Activation patterns
+  - execute(query) -> ToolResult
+
+ToolRegistry:
+  - register(tool)         # Add a tool
+  - find_best_tool(query)  # Match query to tool
+  - list_tools()           # Get all tools
+
+# Built-in tools:
+- TimeTool      # Current time/date
+- CalculatorTool # Math operations  
+- ChartTool     # Matplotlib charts
+```
+
+### Query Resolution (`core/query_resolver.py`)
+
+Compound query splitting and coreference resolution:
+
+```python
+QuerySplitter:
+  # "Who is Holmes and what time is it?"
+  # → ["Who is Holmes?", "What time is it?"]
+
+CoreferenceResolver:
+  # "Who is Darcy and how did he meet Elizabeth?"
+  # → ["Who is Darcy?", "How did Darcy meet Elizabeth?"]
+  # (pronoun "he" resolved to "Darcy")
+```
+
+### Self-Knowledge (`core/self_knowledge.py`)
+
+Model identity and meta-information:
+
+```python
+SelfKnowledge:
+  - identity: dict         # Name, creator, philosophy
+  - capabilities: list     # What the model can do
+  - knowledge_domains: list # Sherlock Holmes, Pride and Prejudice
+  - limitations: list      # What it cannot do
+  
+  def answer_meta_question(query) -> str
+  def get_system_prompt() -> str
+  def get_full_introduction() -> str
+```
+
+### Conversation Context (`core/conversation_context.py`)
+
+Entity and topic tracking across turns:
+
+```python
+ConversationContext:
+  - entities: deque[EntityMention]  # Recently mentioned
+  - current_topic: TopicState       # Active topic/domain
+  
+  def get_recent_entities(n) -> list[str]
+  def resolve_reference("he") -> "darcy"
+  def get_current_domain() -> "Pride and Prejudice"
+```
+
 ## Primary Components
 
 ### ConceptFrame (`concept_language.py`)
@@ -543,8 +656,12 @@ def train(structure, examples):
 2. ~~**Holographic Generation** - Replace templates with interference patterns~~ ✓ DONE
 3. ~~**Code Generation** - Generate Python from natural language~~ ✓ DONE
 4. ~~**Planning & Execution** - Decompose tasks, execute in sandbox~~ ✓ DONE
-5. **More Languages** - Add French, German, Chinese verb mappings
-6. **Temporal Reasoning** - Track when events happened
-7. **Causal Chains** - Improve oscillating navigation for WHY
-8. **Scale Testing** - Benchmark against LLMs on larger corpora
-9. **Tool Use** - Integrate with external APIs and tools
+5. ~~**OpenAI-Compatible API** - REST API with streaming support~~ ✓ DONE
+6. ~~**Tool System** - Extensible tools with plugin registry~~ ✓ DONE
+7. ~~**Compound Queries** - Multi-part questions with coreference~~ ✓ DONE
+8. ~~**Self-Knowledge** - Model identity and capabilities~~ ✓ DONE
+9. **More Languages** - Add French, German, Chinese verb mappings
+10. **Temporal Reasoning** - Track when events happened
+11. **Causal Chains** - Improve oscillating navigation for WHY
+12. **Scale Testing** - Benchmark against LLMs on larger corpora
+13. **More Tools** - Web search, file operations, external APIs
