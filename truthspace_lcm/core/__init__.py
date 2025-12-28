@@ -1,86 +1,95 @@
 """
 TruthSpace LCM Core Module
 
-Concept Language approach to knowledge extraction and Q&A.
+Fully Geometric Language Understanding with Holographic Templates and Semantic Quaternions.
 
 Core Principle: All semantic operations are geometric operations in concept space.
 
 Architecture:
     Surface Text (any language)
             ↓
-    Language-Specific Parser
+    Position-Based Frame Extraction
             ↓
-    CONCEPT FRAME (order-free)
-    {AGENT: X, ACTION: Y, PATIENT: Z, LOCATION: W}
+    GEOMETRIC FRAME (position bands)
+    {INITIATOR: [0, 0.33), MEDIATOR: [0.33, 0.66), RECEIVER: [0.66, 1]}
             ↓
-    Vector Representation (language-agnostic)
+    φ-Space Representation (language-agnostic)
             ↓
-    Storage / Query / Holographic Projection
+    Holographic Template Projection + Semantic Quaternion
+            ↓
+    φ-Dial Styled Response
 
 Primary Components:
-- Vocabulary: Hash-based word positions with IDF weighting
-- ConceptLanguage: Order-free semantic frames with universal primitives
-- ConceptKnowledge: Language-agnostic knowledge storage and query
-- HolographicProjector: Resolves queries by filling the "gap" in questions
+- GeometricKnowledge: Position-based frame extraction, geometric stop words
+- GeometricMorphology: Verb equivalence learned from parallel structures
+- GeometricConjugation: Output generation learned from parallel structures
+- GeometricQA: Question answering using geometric principles
+- HolographicGeometricQA: Enhanced QA with holographic templates + quaternions
+- HolographicTemplateProjector: Dynamic templates via interference
+- SemanticQuaternionNavigator: 4D concept encoding for analogies (100% accuracy)
 
-Core Formulas:
-- Word Position: pos(w) = hash(w) → ℝ^dim (deterministic)
-- Frame Vector: vec(frame) = Σ hash(ROLE:value) (order-independent)
-- Similarity: cos(θ) = (a·b) / (‖a‖·‖b‖)
+Two Quaternions:
+- φ-Dial (OUTPUT): Style, Perspective, Depth, Certainty
+- Semantic (ENCODING): Gender, Age, Agency (φ-direction), Animacy
 
-Holographic Principle:
-    Question = Content - Gap    (has missing information)
-    Answer   = Content + Fill   (provides missing information)
+Core Formulas (Geometric):
+- Position: p(w) = normalized position in sentence [0, 1]
+- φ-direction: (initiator_count - receiver_count) / total_roles
+- Stop word: no semantic role OR short+frequent
+- Morphology: learned from parallel structures ("I love. I loved.")
+- Phase: φ-direction × π (geometric encoding, not hash)
+- Magnitude: role_strength (how strongly typed)
 
 Usage:
-    from truthspace_lcm.core import ConceptQA
+    from truthspace_lcm.core import HolographicGeometricQA
     
-    # Load knowledge corpus
-    qa = ConceptQA()
+    # Create enhanced QA system
+    qa = HolographicGeometricQA()
     qa.load_corpus('concept_corpus.json')
     
-    # Ask questions
+    # Ask questions (uses holographic templates)
     answer = qa.ask("Who is Darcy?")
-    # "Darcy is a character from Pride and Prejudice..."
+    
+    # Complete analogies (uses semantic quaternions)
+    results = qa.complete_analogy("king", "queen", "man")  # -> woman
 """
 
-from .vocabulary import (
-    Vocabulary,
-    tokenize,
-    word_position,
-    cosine_similarity,
-    euclidean_distance,
-    DEFAULT_DIM,
+# =============================================================================
+# PRIMARY GEOMETRIC COMPONENTS
+# =============================================================================
+
+from .geometric import (
+    PHI,
+    MORPHOLOGY_BOOTSTRAP,
+    GeometricConcept,
+    Frame,
+    VerbCluster,
+    GeometricMorphology,
+    GeometricConjugation,
+    GeometricKnowledge,
+    GeometricQA,
+    HolographicGeometricQA,
 )
 
-from .concept_language import (
-    ConceptFrame,
-    ConceptExtractor,
-    ConceptStore,
-    ACTION_PRIMITIVES,
-    SEMANTIC_ROLES,
+from .holographic_templates import (
+    HolographicTemplateProjector,
+    HolographicResponseSynthesizer,
+    HolographicConceptNavigator,
+    HolographicSummarizer,
+    HolographicParaphraser,
+    ProjectedTemplate,
+    QAPair,
 )
 
-from .concept_knowledge import (
-    ConceptKnowledge,
-    HolographicProjector,
-    ConceptQA,
-    QUESTION_AXES,
+from .semantic_quaternion import (
+    SemanticQuaternion,
+    SemanticQuaternionNavigator,
+    SemanticFeatureLearner,
 )
 
-from .answer_patterns import (
-    reverse_tune,
-    DIAL_SIGNATURES,
-)
-
-from .learnable_structure import (
-    LearnableStructure,
-    EntityProfile,
-    train_from_examples,
-    ROLE_VOCABULARY,
-    QUALITY_VOCABULARY,
-    ACTION_VOCABULARY,
-)
+# =============================================================================
+# SUPPORTING COMPONENTS
+# =============================================================================
 
 from .conversation_memory import (
     ConversationMemory,
@@ -111,47 +120,49 @@ from .planner import (
 )
 
 __all__ = [
-    # Vocabulary (foundation)
-    "Vocabulary",
-    "tokenize",
-    "word_position",
-    "cosine_similarity",
-    "euclidean_distance",
-    "DEFAULT_DIM",
-    # Concept Language
-    "ConceptFrame",
-    "ConceptExtractor",
-    "ConceptStore",
-    "ACTION_PRIMITIVES",
-    "SEMANTIC_ROLES",
-    # Concept Knowledge & Holographic Q&A
-    "ConceptKnowledge",
-    "HolographicProjector",
-    "ConceptQA",
-    "QUESTION_AXES",
-    # Reverse Tuning (Phase Conjugation)
-    "reverse_tune",
-    "DIAL_SIGNATURES",
-    # Learnable Structure (Gradient-Free Learning)
-    "LearnableStructure",
-    "EntityProfile",
-    "train_from_examples",
-    "ROLE_VOCABULARY",
-    "QUALITY_VOCABULARY",
-    "ACTION_VOCABULARY",
-    # Conversation Memory (Multi-Turn Dialogue)
+    # Primary Geometric Components
+    "PHI",
+    "MORPHOLOGY_BOOTSTRAP",
+    "GeometricConcept",
+    "Frame",
+    "VerbCluster",
+    "GeometricMorphology",
+    "GeometricConjugation",
+    "GeometricKnowledge",
+    "GeometricQA",
+    "HolographicGeometricQA",
+    
+    # Holographic Templates
+    "HolographicTemplateProjector",
+    "HolographicResponseSynthesizer",
+    "HolographicConceptNavigator",
+    "HolographicSummarizer",
+    "HolographicParaphraser",
+    "ProjectedTemplate",
+    "QAPair",
+    
+    # Semantic Quaternions
+    "SemanticQuaternion",
+    "SemanticQuaternionNavigator",
+    "SemanticFeatureLearner",
+    
+    # Conversation Memory
     "ConversationMemory",
     "ConversationTurn",
-    # Reasoning Engine (Multi-Hop)
+    
+    # Reasoning Engine
     "ReasoningEngine",
     "ReasoningStep",
     "ReasoningPath",
+    
     # Holographic Generator
     "HolographicGenerator",
     "InterferencePattern",
+    
     # Code Generator
     "CodeGenerator",
     "CodeFrame",
+    
     # Planner
     "Planner",
     "PlanStep",

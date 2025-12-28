@@ -1,0 +1,17 @@
+{
+  "max_tokens": 500,
+  "min_tokens": 10,
+  "temperature": 0.7,
+  "top_p": 1.0,
+  "presence_penalty": 0.0,
+  "frequency_penalty": 0.0,
+  "style": 0.0,
+  "perspective": 0.0,
+  "depth": 0.3,
+  "certainty": 0.0,
+  "code_completeness": "full",
+  "include_imports": true,
+  "include_types": true,
+  "include_docstrings": true,
+  "response_format": "natural"
+}

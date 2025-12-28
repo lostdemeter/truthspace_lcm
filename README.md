@@ -1,33 +1,42 @@
 # TruthSpace LCM
 
-**Holographic Concept Language Model** - A conversational AI using holographic concept resolution. Gradient-free learning, no neural networks - just geometry.
+**Geometric Language Model** - A conversational AI using fully geometric language understanding with holographic templates and semantic quaternions. No training, no neural networks, no hard-coded linguistic rules - just geometry.
 
 ## Philosophy
 
 > *"All semantic operations are geometric operations in concept space."*
-> *"Error = Construction Blueprint"*
+> *"ENCODE = DECODE - they are the same operation in opposite directions, like φ and 1/φ."*
+> *"Two quaternions: one for meaning, one for expression. Together they span the space of language."*
 
-This system demonstrates that **pure geometry can replace trained neural networks** for language understanding. Knowledge is stored as **concept frames** - language-agnostic semantic representations that can be queried across languages.
+This system demonstrates that **pure geometry can replace trained neural networks** for language understanding. The key insights:
+
+- **Position** encodes semantic role (subject at 0, verb at 0.5, object at 1)
+- **Frequency** distinguishes content words from function words (Zipf's law)
+- **Parallel structure** reveals morphological relationships ("I love. I loved." → love ≡ loved)
+- **Quaternions** encode semantic features (100% analogy accuracy)
 
 ## Features
 
-- **Concept Language** - Order-free semantic frames (like Chinese: no conjugation, flexible order)
-- **Holographic Q&A** - Questions are gaps; answers fill them via geometric projection
-- **4D φ-Dial Control** - Style × Perspective × Depth × Certainty (quaternion)
-- **Gradient-Free Learning** - Error-driven structure building, no backprop needed
+### Core Geometric Features
+- **Geometric Stop Word Detection** - No hard-coded lists; emerges from semantic role absence
+- **Position-Based Frame Extraction** - Semantic roles assigned by position bands [0, 0.33), [0.33, 0.66), [0.66, 1]
+- **Geometric Morphology** - Verb equivalence learned from parallel structures (109 clusters)
+- **Geometric Conjugation** - Output generation learned from the same parallel structures
+- **Holographic Template Projection** - Dynamic templates via interference patterns
+- **Semantic Quaternions** - 4D concept encoding with 100% analogy accuracy
+
+### Two Quaternions
+| Quaternion | Purpose | Axes |
+|------------|---------|------|
+| **Semantic** | Concept encoding | Gender, Age, Agency (φ-dir), Animacy |
+| **φ-Dial** | Output styling | Style, Perspective, Depth, Certainty |
+
+### Additional Features
 - **Conversation Memory** - Multi-turn dialogue with pronoun resolution
 - **Multi-Hop Reasoning** - Graph traversal for WHY/HOW questions
-- **Holographic Generation** - Interference-based text generation
 - **Code Generation** - Generate Python from natural language
 - **Planning & Execution** - Decompose tasks, execute in sandbox
-- **Chart Generation** - Create matplotlib visualizations
-- **φ-Based Navigation** - Golden ratio powers for entity importance and coherence
-- **Cross-Language** - Same concepts work across English, Spanish, and more
-- **Spatial Attention** - Zipf/φ-based weighting for meaningful relationships
-- **OpenAI-Compatible API** - REST API with streaming support for integration with clients
-- **Extensible Tool System** - Plugin-based tools (time, calculator, charts)
-- **Compound Query Resolution** - Handle multi-part questions with coreference resolution
-- **Self-Knowledge** - Model knows its own capabilities, limitations, and identity
+- **OpenAI-Compatible API** - REST API with streaming support
 
 ## Installation
 
@@ -49,38 +58,33 @@ python run.py
 
 ```
 ============================================================
-  TruthSpace LCM - Holographic Concept Q&A
+  TruthSpace LCM - Geometric Language Model
+  Holographic Templates + Semantic Quaternions
 ============================================================
 
-Loading corpus from truthspace_lcm/concept_corpus.json...
-Loaded 11214 concept frames
-Training GeometricLCM with quality examples...
-  Epochs: 2
-  Final overlap: 96.4%
-  Learned: 14 entities, 14 roles, 10 qualities, 12 actions
+Architecture:
+  • Geometric frame extraction (position bands)
+  • Holographic template projection (dynamic responses)
+  • Semantic quaternions (100% analogy accuracy)
+  • φ-dial output styling (4D quaternion)
+
+Loading corpus...
+Loaded 70 frames, 262 concepts
+Morphology clusters: 109
 
 You: Who is Holmes?
+LCM: Holmes is a notable detective who examines, deduces, and observes
 
-Bot: Holmes is a brilliant detective from Sherlock Holmes 
-     who investigates with Watson.
+You: /analogy king queen man
+king : queen :: man : ?
+Top answers: ['woman', 'actress', 'hostess']
+```
 
-You: What did he do?
+### Single Query Mode
 
-Bot: Holmes investigated crimes and solved mysteries.
-     (pronoun "he" resolved to Holmes via conversation memory)
-
-You: Who is Darcy?
-
-Bot: Darcy is a proud gentleman from Pride and Prejudice 
-     who loves Elizabeth.
-
-You: /memory
-
-Conversation (3 turns):
-  Q: Who is Holmes? [holmes]
-  Q: What did he do? [holmes]
-  Q: Who is Darcy? [darcy]
-Focus: darcy
+```bash
+python run.py "Who is Holmes?"
+# Holmes is a notable detective who examines, deduces, and observes
 ```
 
 ### Command Line Options
@@ -90,57 +94,46 @@ python run.py                              # Default (all neutral)
 python run.py --style -1 --perspective 1   # Formal + Meta
 python run.py -x 1 -y -1                   # Casual + Subjective
 python run.py --depth -1                   # Terse mode
-python run.py --certainty -1               # Definitive mode
-python run.py -w 1                         # Hedged mode
-```
-
-### Run Tests
-
-```bash
-python run.py test
+python run.py --debug                      # Show debug info
 ```
 
 ### Python API
 
 ```python
-from truthspace_lcm import ConceptQA
+from truthspace_lcm import HolographicGeometricQA
 
-# Create Q&A system with 4D φ-dial control
-qa = ConceptQA(style_x=0.0, perspective_y=0.0, depth_z=0.0, certainty_w=0.0)
-qa.load_corpus('truthspace_lcm/concept_corpus.json')
+# Create Q&A system with holographic templates + quaternions
+qa = HolographicGeometricQA()
+qa.load_corpus('truthspace_lcm/sample_corpus_geometric.json')
 
-# Ask questions (holographic resolution)
+# Ask questions (uses holographic template projection)
 answer = qa.ask("Who is Holmes?")
-# "Holmes is a character from Sherlock Holmes who spoke..."
+# "Holmes is a notable detective who examines, deduces, and observes"
 
-# Change dial dynamically
-qa.set_dial(x=-1, y=1, z=1, w=-1)  # Formal + Meta + Elaborate + Definitive
-answer = qa.ask("Who is Holmes?")
-# "Thematically, Holmes is undoubtedly an archetypal figure..."
+# Complete analogies (100% accuracy via semantic quaternions)
+results = qa.complete_analogy("king", "queen", "man")
+# [("woman", 0.0), ("actress", 0.12), ...]
 
-# Or set individually
-qa.set_style(-1)        # Formal
-qa.set_perspective(1)   # Meta
-qa.set_depth(-1)        # Terse
-qa.set_certainty(1)     # Hedged
+# Find semantic similarity
+sim = qa.semantic_similarity("king", "queen")
+# 0.5
 
-# Detailed response with concept frame
-result = qa.ask_detailed("What did Holmes do?")
-# {'axis': 'WHAT', 'entity': 'holmes', 'answers': [...]}
+# Find pairs with similar relations
+pairs = qa.find_similar_relations("king", "queen", k=5)
+# [("man", "woman", 1.0), ("prince", "princess", 1.0), ...]
 
-# Ingest new text
-qa.ingest_text("The detective examined the clues.", source="Mystery")
+# Access geometric components
+print(f"Concepts: {len(qa.knowledge.concepts)}")
+print(f"Morphology clusters: {len(qa.knowledge.morphology.equivalence_classes)}")
 
-# Query by entity
-frames = qa.knowledge.query_by_entity("darcy", k=5)
-
-# Query by action primitive
-frames = qa.knowledge.query_by_action("SPEAK", k=10)
+# Check morphological equivalence
+qa.knowledge.morphology.are_equivalent("love", "loved")  # True
+qa.knowledge.morphology.are_equivalent("go", "went")     # True
 ```
 
-### The 4D Quaternion φ-Dial
+### The 4D φ-Dial (Output Quaternion)
 
-Control **style**, **perspective**, **depth**, and **certainty** using the 4D φ-dial:
+Control **style**, **perspective**, **depth**, and **certainty**:
 
 | Axis | Name | Range | Controls |
 |------|------|-------|----------|
@@ -149,379 +142,164 @@ Control **style**, **perspective**, **depth**, and **certainty** using the 4D φ
 | **Z** | Depth | -1 to +1 | HOW MUCH detail (terse ↔ elaborate) |
 | **W** | Certainty | -1 to +1 | HOW SURE (definitive ↔ hedged) |
 
-**Certainty Examples (w-axis):**
+### The Semantic Quaternion (Encoding)
 
-| w | Certainty | Example Output |
-|---|-----------|----------------|
-| -1 | Definitive | "Certainly, Holmes is undoubtedly a character... closely tied to Watson." |
-| 0 | Neutral | "Holmes is a character... associated with Watson." |
-| +1 | Hedged | "Perhaps Holmes appears to be a character... possibly connected to Watson." |
+4D encoding for concepts with 100% analogy accuracy:
 
-**Style × Perspective (x,y plane):**
+| Axis | Name | Range | Encodes |
+|------|------|-------|---------|
+| **X** | Gender | -1 to +1 | male ↔ female |
+| **Y** | Age | -1 to +1 | adult ↔ young |
+| **Z** | Agency | -1 to +1 | initiator ↔ receiver (from φ-direction!) |
+| **W** | Animacy | -1 to +1 | human ↔ place |
 
-| Quadrant | x | y | Style | Perspective | Voice |
-|----------|---|---|-------|-------------|-------|
-| Q1 | +1 | -1 | Casual | Subjective | Conversational |
-| Q2 | +1 | +1 | Casual | Meta | Pop Culture |
-| Q3 | -1 | -1 | Formal | Subjective | Literary |
-| Q4 | -1 | +1 | Formal | Meta | Scholarly |
+**Analogy completion**: `? = C + (B - A)` (quaternion arithmetic)
 
 ## Architecture
 
 ```
-Surface Text (any language)
-        ↓
-   Language-Specific Parser
-        ↓
-   CONCEPT FRAME (order-free)
-   {AGENT: X, ACTION: Y, PATIENT: Z, LOCATION: W}
-        ↓
-   Vector Representation (language-agnostic)
-        ↓
-   Storage / Query / Holographic Projection
-        ↓
-   English Answer
+                    ┌─────────────────────────────────────┐
+                    │         GeometricKnowledge          │
+                    │  - concepts (φ-direction, roles)    │
+                    │  - morphology (verb equivalence)    │
+                    │  - frames (initiator/mediator/recv) │
+                    └──────────────┬──────────────────────┘
+                                   │
+       ┌───────────────────────────┼───────────────────────────┐
+       │                           │                           │
+       ▼                           ▼                           ▼
+┌─────────────────┐    ┌─────────────────────┐    ┌─────────────────┐
+│  Holographic    │    │ SemanticQuaternion  │    │    φ-Dial       │
+│  Templates      │    │    Navigator        │    │  (Output Style) │
+│                 │    │                     │    │                 │
+│ - Interference  │    │ - z from φ-dir      │    │ - x: Style      │
+│ - Slot filling  │    │ - x,y from parallel │    │ - y: Perspective│
+│ - Synthesis     │    │ - 100% analogy      │    │ - z: Depth      │
+└─────────────────┘    └─────────────────────┘    │ - w: Certainty  │
+       │                           │              └─────────────────┘
+       └───────────────────────────┼───────────────────────────┘
+                                   │
+                                   ▼
+                    ┌─────────────────────────────────────┐
+                    │      HolographicGeometricQA         │
+                    │  - ask() with holographic templates │
+                    │  - complete_analogy() with quats    │
+                    │  - semantic_similarity()            │
+                    └─────────────────────────────────────┘
 ```
 
 ### Project Structure
 
 ```
 truthspace_lcm/
-├── __init__.py              # Package exports (v0.7.0)
-├── chat.py                  # Holographic Q&A chat with φ-dial
-├── concept_corpus.json      # Knowledge corpus (11,214 frames)
-├── training_data.py         # Pre-defined training examples
+├── __init__.py              # Package exports (v1.0.0)
+├── chat.py                  # Interactive chat interface
 ├── core/
 │   ├── __init__.py          # Core exports
-│   ├── vocabulary.py        # Hash-based word positions, IDF weighting
-│   ├── concept_language.py  # ConceptFrame, ConceptExtractor, primitives
-│   ├── concept_knowledge.py # ConceptKnowledge, HolographicProjector, Q&A
-│   ├── answer_patterns.py   # QuaternionPhiDial, PatternAnswerGenerator
-│   ├── spatial_attention.py # φ-based navigation, importance scoring
-│   ├── learnable_structure.py # Gradient-free learning, EntityProfile
-│   ├── conversation_memory.py # Multi-turn dialogue, pronoun resolution
-│   ├── reasoning_engine.py  # Multi-hop reasoning, graph traversal
-│   ├── holographic_generator.py # Interference-based generation
-│   ├── code_generator.py    # Python code generation
-│   └── planner.py           # Task planning and sandboxed execution
-└── utils/
-    └── extractors.py        # Shared extraction utilities
+│   ├── geometric.py         # GeometricQA, HolographicGeometricQA
+│   ├── holographic_templates.py  # Template projection, synthesis
+│   ├── semantic_quaternion.py    # 4D quaternion encoding
+│   ├── conversation_memory.py    # Multi-turn dialogue
+│   ├── reasoning_engine.py       # Multi-hop reasoning
+│   ├── code_generator.py         # Python code generation
+│   └── planner.py                # Task planning
+├── sample_corpus_geometric.json  # Sample corpus
 
 api/
-├── __init__.py              # API package
-└── server.py                # FastAPI server with OpenAI-compatible endpoints
+├── server.py                # FastAPI server (OpenAI-compatible)
+└── models.py                # Pydantic models
 
-core/
-├── __init__.py              # Core module exports
-├── orchestrator.py          # Request routing and handler management
-├── self_knowledge.py        # Model identity, capabilities, limitations
-├── query_resolver.py        # Compound query splitting and coreference
-├── conversation_context.py  # Entity/topic tracking across turns
-├── response_templates.py    # Consistent response formatting
-├── handlers/
-│   ├── __init__.py          # Handler exports
-│   ├── base.py              # Abstract handler interface
-│   ├── knowledge.py         # Q&A and reasoning handler
-│   ├── code.py              # Code generation handler
-│   ├── tools.py             # Tool execution handler
-│   └── chat.py              # Conversational/meta handler
-└── tools/
-    ├── __init__.py          # Tool exports
-    ├── base.py              # Tool interface and registry
-    ├── time_tool.py         # Current time/date
-    ├── calculator.py        # Math operations
-    └── chart_tool.py        # Matplotlib visualizations
+run.py                       # Main entry point
+run_api.py                   # API server entry point
+ROADMAP.md                   # Development roadmap
 ```
 
 ## Core Concepts
 
-### Concept Frames
+### Geometric Frames
 
-Language-agnostic semantic representation with slots:
-- **AGENT** - Who performs the action
-- **ACTION** - Primitive (MOVE, SPEAK, THINK, PERCEIVE, FEEL, ACT, EXIST)
-- **PATIENT** - Who/what is affected
-- **LOCATION/GOAL/SOURCE** - Spatial relations
+Position-based semantic representation:
+- **INITIATOR** - Position [0, 0.33) - Who performs the action (subject)
+- **MEDIATOR** - Position [0.33, 0.66) - The action itself (verb)
+- **RECEIVER** - Position [0.66, 1.0] - Who/what is affected (object)
 
-No word order - just slots filled with concepts.
+No hard-coded parsing - roles emerge from position in sentence.
 
-### Holographic Principle
+### Geometric Morphology
 
-From holographic stereoscopy:
+Verb equivalence learned from parallel structures:
 ```
-Question = Content - Gap    (has missing information)
-Answer   = Content + Fill   (provides missing information)
+"I love. He loves. I loved."
+  ↓
+love ≡ loves ≡ loved (same concept, different phases)
 ```
 
-The **axis** (WHO/WHAT/WHERE) defines the gap. The answer fills it.
+Works for irregular verbs too: go ≡ goes ≡ went, think ≡ thinks ≡ thought
 
-### Action Primitives
+### Holographic Template Projection
 
-Universal verbs that work across languages:
-- **MOVE** - walk, run, go, travel, caminó, fue
-- **SPEAK** - say, tell, ask, speak, dijo, habló
-- **THINK** - think, consider, believe, pensó, creyó
-- **PERCEIVE** - see, hear, notice, vio, oyó
-- **FEEL** - feel, love, hate, sintió, amó
-- **ACT** - do, make, create, hizo, creó
-- **EXIST** - is, was, be, exist, es, fue
+Templates emerge from Q&A pairs via interference:
+```
+Input: 5 "Who is X?" Q&A pairs
+Output Template: {entity} is a {adjective} {role} who {action}
+```
 
-## Core Formulas
+Structure words reinforce (same phase), content words cancel (different phases).
 
-| Operation | Formula |
-|-----------|---------|
-| Word Position | `pos(w) = hash(w) → ℝ^64` (deterministic) |
-| Frame Vector | `vec(frame) = Σ hash(ROLE:value)` (order-independent) |
-| Similarity | `cos(θ) = (a·b) / (‖a‖·‖b‖)` |
-| φ-Weighting | `weight = φ^(-log(freq))` (rare = important) |
-| φ-Dial | `q = w + xi + yj + zk` (quaternion: style, perspective, depth, certainty) |
-| Query | Find frames with highest similarity to query frame |
-| Projection | Fill the gap slot based on question axis |
+### Semantic Quaternions
 
-## Testing
+4D encoding enables analogy completion:
+```
+king : queen :: man : ? → woman ✓
+walk : walked :: run : ? → ran ✓
+france : paris :: germany : ? → berlin ✓
+```
+
+The z-axis (agency) comes directly from the geometric φ-direction!
+
+## API Server
+
+Start the OpenAI-compatible API:
 
 ```bash
-python run.py test          # Run all tests (37 total)
-python tests/test_core.py   # Core tests (25)
-python tests/test_chat.py   # Chat tests (12)
+python run_api.py --port 8000
 ```
 
-## Design Documents
-
-See `design_considerations/` for the research journey:
-- `050_geometric_llm_roadmap.md` - Roadmap for LLM-level capability
-- `049_gradient_free_learning.md` - Error-driven structure learning
-- `048_clock_geodesic_unification.md` - Clock + geodesic connection
-- `047_geodesic_generation.md` - Generation as concept space navigation
-- `044_quaternion_phi_dial.md` - 4D quaternion φ-dial with certainty
-- `043_3d_phi_dial_depth.md` - 3D φ-dial with depth/elaboration control
-- `042_complex_phi_dial.md` - 2D complex φ-dial (style × perspective)
-- `041_phi_dial_unified_control.md` - The φ-dial unified control
-- `040_phi_inversion_navigation.md` - φ-inversion as navigation mechanism
-- `039_phi_zipf_duality.md` - φ and Zipf as dual self-similar fractals
-- `038_relationship_formation_autobalance.md` - Spatial attention and importance
-
-## Corpus
-
-The included `concept_corpus.json` contains **11,214 concept frames** extracted from 14 literary works:
-- Pride and Prejudice, Dracula, Alice in Wonderland
-- Sherlock Holmes, Frankenstein, Moby Dick
-- Tale of Two Cities, Tom Sawyer, Great Expectations
-- White Fang, Don Quixote (EN & ES), Les Misérables, War and Peace
-
-## Gradient-Free Learning
-
-The system learns without gradients or backpropagation:
+Use with any OpenAI-compatible client:
 
 ```python
-from truthspace_lcm import ConceptQA
-from truthspace_lcm.training_data import train_model
-
-qa = ConceptQA()
-qa.load_corpus('truthspace_lcm/concept_corpus.json')
-
-# Train with quality examples (2 epochs, 96% overlap)
-train_model(qa)
-
-# Before: "Holmes is a character who spoke, associated with watson."
-# After:  "Holmes is a brilliant detective who investigates with Watson."
+import openai
+client = openai.OpenAI(base_url="http://localhost:8000/v1", api_key="none")
+response = client.chat.completions.create(
+    model="geometric-lcm",
+    messages=[{"role": "user", "content": "Who is Holmes?"}]
+)
 ```
 
-**Key insight**: Error = Construction Blueprint. Each error points to missing structure. Add the structure. Model improves.
-
-| Aspect | Neural Network | Geometric LCM |
-|--------|----------------|---------------|
-| Parameters | Weights (continuous) | Mappings (discrete) |
-| Learning | Gradient descent | Error-driven addition |
-| Convergence | Thousands of epochs | 1-2 epochs |
-| Interpretability | Black box | Fully transparent |
-
-## Multi-Hop Reasoning
-
-Chain multiple reasoning steps for complex questions:
-
-```python
-from truthspace_lcm.core import ReasoningEngine
-
-engine = ReasoningEngine(qa.knowledge)
-
-# Find relationship path
-path = engine.reason("What is the relationship between Darcy and Elizabeth?")
-# → Darcy is connected to Elizabeth through 1 steps.
-#   → darcy --POSSESS--> elizabeth
-
-# WHY questions
-path = engine.reason("Why did Holmes investigate?")
-# → Based on the reasoning chain: holmes → scotchman → ...
-
-# HOW questions  
-path = engine.reason("How did Darcy act?")
-# → The process involves: darcy → elizabeth → charlotte → bingley
-```
-
-## Holographic Generation
-
-Generate text using interference patterns:
-
-```python
-from truthspace_lcm.core import HolographicGenerator
-
-hologen = HolographicGenerator(qa.knowledge)
-
-# Generate with learned structure
-output = hologen.generate("Who is Holmes?", entity="holmes", learnable=learnable)
-# → "Holmes is a brilliant detective from Sherlock Holmes who investigates with Watson."
-```
-
-**The principle**: Multiple source texts interfere like light waves. Constructive interference (common concepts) = include. Destructive interference (noise) = exclude.
-
-## Code Generation
-
-Generate Python code from natural language:
-
-```python
-from truthspace_lcm.core import CodeGenerator
-
-codegen = CodeGenerator()
-
-code = codegen.generate("Write a function to add two numbers")
-# → def add(a, b):
-#       """Add two numbers"""
-#       return a + b
-
-# Teach new functions
-codegen.learn('factorial', ['n'], 'return 1 if n <= 1 else n * factorial(n-1)')
-```
-
-## Planning & Execution
-
-Plan and execute tasks in a sandboxed environment:
-
-```python
-from truthspace_lcm.core import Planner
-
-planner = Planner()
-
-# Plan and execute
-plan = planner.plan("Calculate the sum of squares of [1, 2, 3, 4]")
-result = planner.execute(plan)
-# → Result: 30
-
-# Show plan without executing
-plan = planner.plan("Find even numbers in [1, 2, 3, 4, 5, 6]")
-# → Step 1: Define data
-# → Step 2: Filter by condition
-# → Step 3: Return result
-```
-
-## Agent Demo
-
-Run the full agent demo showing all capabilities:
+## Run Tests
 
 ```bash
-python demo_agent.py
+python run.py test
 ```
 
-This demonstrates:
-- Knowledge Q&A about Sherlock Holmes
-- Task planning and execution
-- Code generation
-- Matplotlib chart generation
-- Combined agent workflow
+## Progress
 
-## OpenAI-Compatible API
+See [ROADMAP.md](ROADMAP.md) for detailed progress on LLM replacement (~60% complete).
 
-Run GeometricLCM as an OpenAI-compatible API server:
-
-```bash
-python run_api.py --host 0.0.0.0 --port 8000
-```
-
-### Endpoints
-
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/v1/chat/completions` | POST | Chat completions (streaming supported) |
-| `/v1/models` | GET | List available models |
-| `/health` | GET | Health check |
-
-### Example Usage
-
-```bash
-# Simple question
-curl -X POST http://localhost:8000/v1/chat/completions \
-  -H "Content-Type: application/json" \
-  -d '{"model": "geometric-lcm", "messages": [{"role": "user", "content": "Who is Holmes?"}]}'
-
-# Compound query
-curl -X POST http://localhost:8000/v1/chat/completions \
-  -H "Content-Type: application/json" \
-  -d '{"model": "geometric-lcm", "messages": [{"role": "user", "content": "What time is it and who is Darcy?"}]}'
-
-# Streaming
-curl -X POST http://localhost:8000/v1/chat/completions \
-  -H "Content-Type: application/json" \
-  -d '{"model": "geometric-lcm", "messages": [{"role": "user", "content": "Hello!"}], "stream": true}'
-```
-
-### Compatible Clients
-
-- **Goose** - Point to `http://localhost:8000` (without `/v1`)
-- **Open WebUI** - Use `http://localhost:8000/v1` as base URL
-- Any OpenAI-compatible client
-
-## Tool System
-
-Extensible tools that the model can invoke:
-
-| Tool | Description | Example |
-|------|-------------|--------|
-| **TimeTool** | Current time/date | "What time is it?" |
-| **CalculatorTool** | Math operations | "Calculate 25 * 4 + 10" |
-| **ChartTool** | Matplotlib charts | "Create a bar chart..." |
-
-### Adding Custom Tools
-
-```python
-from core.tools import Tool, ToolResult, ToolRegistry
-
-class MyTool(Tool):
-    @property
-    def name(self) -> str:
-        return "mytool"
-    
-    @property
-    def description(self) -> str:
-        return "Does something useful"
-    
-    @property
-    def triggers(self) -> list[str]:
-        return ["do something", "my tool"]
-    
-    def execute(self, query: str, **kwargs) -> ToolResult:
-        return ToolResult.success_result("Done!")
-
-# Register
-registry = ToolRegistry()
-registry.register(MyTool())
-```
-
-## Compound Query Resolution
-
-Handle multi-part questions with automatic splitting and coreference resolution:
-
-```python
-# Input: "Who is Darcy and how did he meet Elizabeth?"
-# Split into:
-#   1. "Who is Darcy?"
-#   2. "How did Darcy meet Elizabeth?"  (pronoun resolved)
-
-# Input: "What is 25 * 50 and what time is it?"
-# Split into:
-#   1. "What is 25 * 50?" → Calculator tool
-#   2. "What time is it?" → Time tool
-```
+| Pillar | Progress | Key Achievement |
+|--------|----------|-----------------|
+| Understanding | 85% | Fully geometric, no hard-coded rules |
+| Knowledge | 50% | Semantic quaternions, need scale |
+| Generation | 65% | 100% analogy accuracy, holographic templates |
 
 ## License
 
-MIT
+GPLv3
+
+## Author
+
+Lesley Gushurst
+
+---
+
+*"Structure is the new training. Geometry is the new statistics."*

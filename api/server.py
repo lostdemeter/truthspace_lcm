@@ -74,48 +74,49 @@ async def startup_event():
     # Add parent directory to path for imports
     sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     
-    from truthspace_lcm import ConceptQA
-    from truthspace_lcm.core.reasoning_engine import ReasoningEngine
-    from truthspace_lcm.core.holographic_generator import HolographicGenerator
+    # Use HolographicGeometricQA - the unified system with templates + quaternions
+    from truthspace_lcm.core import HolographicGeometricQA
     from truthspace_lcm.core.code_generator import CodeGenerator
     from truthspace_lcm.core.planner import Planner
-    from truthspace_lcm.training_data import train_model
     
-    # Import orchestrator and handlers
+    # Import orchestrator, handlers, and config
     from core.orchestrator import Orchestrator
-    from core.handlers import KnowledgeHandler, CodeHandler, ToolHandler, ChatHandler
+    from core.handlers import CodeHandler, ToolHandler, ChatHandler
+    from core.geometric_handler import GeometricKnowledgeHandler
+    from core.generation_config import GenerationConfig, get_default_config
     
-    print("Initializing GeometricLCM...")
+    print("Initializing GeometricLCM (Holographic + Quaternions)...")
     
-    # Initialize ConceptQA
-    qa = ConceptQA()
+    # Initialize HolographicGeometricQA with quality corpus
+    qa = HolographicGeometricQA()
     corpus_path = os.path.join(
         os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
         "truthspace_lcm",
-        "concept_corpus.json"
+        "concept_corpus_quality.json"
     )
-    qa.load_corpus(corpus_path)
-    
-    # Train with quality examples
-    train_model(qa, verbose=True)
+    count = qa.load_corpus(corpus_path)
+    print(f"  Loaded {count} frames from corpus")
+    print(f"  Total concepts: {len(qa.knowledge.concepts)}")
+    print(f"  Morphology clusters: {len(qa.knowledge.morphology.equivalence_classes)}")
+    print(f"  Conjugation clusters: {len(qa.knowledge.conjugation.clusters)}")
     
     # Initialize components
-    reasoning = ReasoningEngine(qa.knowledge)
-    hologen = HolographicGenerator(qa.knowledge)
     codegen = CodeGenerator()
     planner = Planner(codegen)
     
     # Create orchestrator and register handlers
+    # Note: Using simplified geometric handlers
     orchestrator = Orchestrator()
-    orchestrator.register_handler(KnowledgeHandler(qa=qa, reasoning=reasoning, hologen=hologen))
+    orchestrator.register_handler(GeometricKnowledgeHandler(qa=qa))
     orchestrator.register_handler(CodeHandler(codegen=codegen))
     orchestrator.register_handler(ToolHandler(planner=planner, qa=qa))
     orchestrator.register_handler(ChatHandler())
     
     _lcm_state["orchestrator"] = orchestrator
+    _lcm_state["qa"] = qa  # Store for direct access
     _lcm_state["initialized"] = True
     
-    print("GeometricLCM initialized with modular handlers!")
+    print("GeometricLCM initialized with geometric handlers!")
     print(f"  Handlers: {[h.name for h in orchestrator.handlers]}")
 
 
@@ -251,12 +252,15 @@ async def list_models():
     )
 
 
-def process_message(messages: list[ChatMessage], orchestrator) -> str:
+def process_message(messages: list[ChatMessage], orchestrator, 
+                    request: ChatRequest = None) -> str:
     """
     Process messages through the orchestrator.
     
     The orchestrator handles intent classification and routing to handlers.
     """
+    from core.generation_config import create_config_from_request
+    
     # Get the last user message
     user_message = None
     system_prompt = None
@@ -270,16 +274,27 @@ def process_message(messages: list[ChatMessage], orchestrator) -> str:
     if not user_message:
         return "I didn't receive a message. How can I help you?"
     
-    # Process through orchestrator
-    return orchestrator.process(user_message, system_prompt)
+    # Create generation config from request parameters
+    config = None
+    if request:
+        config = create_config_from_request(
+            max_tokens=request.max_tokens,
+            temperature=request.temperature,
+            top_p=request.top_p,
+            presence_penalty=request.presence_penalty,
+            frequency_penalty=request.frequency_penalty,
+        )
+    
+    # Process through orchestrator with config
+    return orchestrator.process(user_message, system_prompt, config=config)
 
 
 async def generate_stream(request: ChatRequest) -> AsyncGenerator[str, None]:
     """Generate streaming response chunks."""
     orchestrator = get_orchestrator()
     
-    # Generate the full response
-    response_text = process_message(request.messages, orchestrator)
+    # Generate the full response with config from request
+    response_text = process_message(request.messages, orchestrator, request)
     
     # Create response ID
     response_id = f"chatcmpl-{uuid.uuid4().hex[:12]}"
@@ -320,12 +335,17 @@ async def chat_completions(request: ChatRequest):
             media_type="text/event-stream",
         )
     
-    # Generate response
-    response_text = process_message(request.messages, orchestrator)
+    # Generate response with config from request
+    response_text = process_message(request.messages, orchestrator, request)
     
     # Calculate token counts (approximate)
     prompt_tokens = sum(len(m.content.split()) for m in request.messages)
     completion_tokens = len(response_text.split())
+    
+    # Determine finish reason based on truncation
+    finish_reason = "stop"
+    if request.max_tokens and completion_tokens >= request.max_tokens * 0.75:
+        finish_reason = "length"  # Likely truncated
     
     return ChatResponse(
         model=request.model,
@@ -333,7 +353,7 @@ async def chat_completions(request: ChatRequest):
             Choice(
                 index=0,
                 message=ChatMessage(role="assistant", content=response_text),
-                finish_reason="stop",
+                finish_reason=finish_reason,
             )
         ],
         usage=Usage(

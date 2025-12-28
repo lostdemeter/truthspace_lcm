@@ -7,6 +7,9 @@ and holographic text generation.
 
 from .base import Handler, HandlerResult, Context, Intent
 from ..response_templates import get_formatter
+from ..natural_response import generate_character_response, get_natural_generator
+from ..dynamic_profile import generate_dynamic_response, get_profile_builder
+from ..tachyon_response import generate_tachyon_response, get_tachyon_generator
 
 
 class KnowledgeHandler(Handler):
@@ -76,7 +79,63 @@ class KnowledgeHandler(Handler):
         message = context.message
         msg_lower = message.lower()
         
-        # Try standard Q&A first
+        # Get depth from generation config if available
+        depth = 0.0
+        if context.metadata and 'generation_config' in context.metadata:
+            config = context.metadata['generation_config']
+            if config:
+                depth = getattr(config, 'depth', 0.0)
+        
+        # Check for "who is" questions
+        if msg_lower.startswith("who is") or msg_lower.startswith("who's"):
+            # Extract entity name
+            entity = msg_lower.replace("who is", "").replace("who's", "").strip().rstrip("?")
+            
+            # Try Tachyon response FIRST (bidirectional reasoning with style projection)
+            # Use depth=0.4 by default for 1-paragraph book report style output
+            # User can override via generation_config
+            tachyon_depth = depth if depth != 0.0 else 0.4
+            
+            if self.qa and self.qa.knowledge:
+                tachyon_response = generate_tachyon_response(
+                    entity,
+                    frames=self.qa.knowledge.frames,
+                    depth=tachyon_depth
+                )
+                if tachyon_response:
+                    return HandlerResult.success_result(
+                        tachyon_response,
+                        confidence=0.85,
+                        source="tachyon",
+                        entity=entity
+                    )
+            
+            # Fall back to hand-coded profiles (for characters not in corpus)
+            natural_response = generate_character_response(entity, depth=depth)
+            if natural_response:
+                return HandlerResult.success_result(
+                    natural_response,
+                    confidence=0.95,
+                    source="natural",
+                    entity=entity
+                )
+            
+            # Fall back to dynamic profile (legacy)
+            if self.qa and self.qa.knowledge:
+                dynamic_response = generate_dynamic_response(
+                    entity, 
+                    knowledge=self.qa.knowledge, 
+                    depth=depth
+                )
+                if dynamic_response:
+                    return HandlerResult.success_result(
+                        dynamic_response,
+                        confidence=0.7,
+                        source="dynamic",
+                        entity=entity
+                    )
+        
+        # Try standard Q&A
         result = self.qa.ask_detailed(message)
         
         if result['answers'] and result['answers'][0]['confidence'] > 0.3:
@@ -96,6 +155,40 @@ class KnowledgeHandler(Handler):
                 source="qa",
                 query=message
             )
+        
+        # Try dynamic profile for any entity mention (fallback)
+        # This is scalable - works for ANY entity in the knowledge base
+        if self.qa and self.qa.knowledge:
+            # Check if any quality entity is mentioned
+            quality_entities = getattr(self.qa.knowledge, 'quality_entities', set())
+            for entity in quality_entities:
+                if entity in msg_lower:
+                    dynamic_response = generate_dynamic_response(
+                        entity,
+                        knowledge=self.qa.knowledge,
+                        depth=depth
+                    )
+                    if dynamic_response:
+                        return HandlerResult.success_result(
+                            dynamic_response,
+                            confidence=0.8,
+                            source="dynamic",
+                            entity=entity
+                        )
+        
+        # Fall back to hand-coded profiles for known characters
+        known_entities = ["holmes", "sherlock", "watson", "moriarty", "lestrade", "irene", 
+                         "mycroft", "darcy", "elizabeth", "jane", "bingley", "wickham", "lydia"]
+        for entity in known_entities:
+            if entity in msg_lower:
+                natural_response = generate_character_response(entity, depth=depth)
+                if natural_response:
+                    return HandlerResult.success_result(
+                        natural_response,
+                        confidence=0.75,
+                        source="natural",
+                        entity=entity
+                    )
         
         # Try holographic generation for entity questions
         if self.hologen:

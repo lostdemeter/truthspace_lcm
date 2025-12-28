@@ -13,6 +13,8 @@ from .handlers.base import Handler, HandlerResult, Context, Intent
 from .self_knowledge import get_self_knowledge
 from .query_resolver import get_query_resolver, ResolvedQuery
 from .conversation_context import get_conversation_context
+from .generation_config import GenerationConfig, get_default_config, create_config_from_request
+from .response_length import ResponseLengthController, create_length_controller
 
 
 class IntentClassifier:
@@ -81,7 +83,7 @@ class Orchestrator:
     for each request based on intent classification and handler confidence.
     """
     
-    def __init__(self):
+    def __init__(self, config: Optional[GenerationConfig] = None):
         """Initialize the orchestrator."""
         self.handlers: list[Handler] = []
         self.classifier = IntentClassifier()
@@ -90,12 +92,18 @@ class Orchestrator:
         self.default_system_prompt = self.self_knowledge.get_system_prompt()
         self.query_resolver = get_query_resolver()
         self.conversation_context = get_conversation_context()
+        self.config = config or get_default_config()
+        self.length_controller = create_length_controller(
+            max_tokens=self.config.max_tokens,
+            depth=self.config.depth
+        )
     
     def register_handler(self, handler: Handler):
         """Register a handler."""
         self.handlers.append(handler)
     
-    def process(self, message: str, system_prompt: Optional[str] = None) -> str:
+    def process(self, message: str, system_prompt: Optional[str] = None,
+                 config: Optional[GenerationConfig] = None) -> str:
         """
         Process a message and return a response.
         
@@ -104,19 +112,35 @@ class Orchestrator:
         Args:
             message: The user's message
             system_prompt: Optional system prompt
+            config: Optional generation config (overrides default)
             
         Returns:
             The response string
         """
+        # Use provided config or default
+        active_config = config or self.config
+        
+        # Update length controller if config changed
+        if config:
+            self.length_controller = create_length_controller(
+                max_tokens=active_config.max_tokens,
+                depth=active_config.depth
+            )
         # Resolve compound queries
         resolved = self.query_resolver.resolve(message)
         
         if resolved.is_compound:
             # Process each sub-query and combine results
-            response = self._process_compound(resolved, system_prompt)
+            response = self._process_compound(resolved, system_prompt, active_config)
         else:
             # Single query - process normally
-            response = self._process_single(message, system_prompt)
+            response = self._process_single(message, system_prompt, active_config)
+        
+        # Apply length control
+        response, stats = self.length_controller.truncate(response)
+        if stats.was_truncated:
+            # Could log this or add metadata
+            pass
         
         # Update history
         self.history.append({
@@ -137,17 +161,19 @@ class Orchestrator:
         
         return response
     
-    def _process_single(self, message: str, system_prompt: Optional[str] = None) -> str:
+    def _process_single(self, message: str, system_prompt: Optional[str] = None,
+                         config: Optional[GenerationConfig] = None) -> str:
         """Process a single (non-compound) query."""
         # Classify intent
         intent = self.classifier.classify(message)
         
-        # Create context
+        # Create context with generation config
         context = Context(
             message=message,
             intent=intent,
             history=self.history.copy(),
-            system_prompt=system_prompt
+            system_prompt=system_prompt,
+            metadata={'generation_config': config} if config else {}
         )
         
         # Find best handler
@@ -171,13 +197,15 @@ class Orchestrator:
         
         return result.response
     
-    def _process_compound(self, resolved: ResolvedQuery, system_prompt: Optional[str] = None) -> str:
+    def _process_compound(self, resolved: ResolvedQuery, system_prompt: Optional[str] = None,
+                           config: Optional[GenerationConfig] = None) -> str:
         """
         Process a compound query by handling each sub-query.
         
         Args:
             resolved: The resolved compound query
             system_prompt: Optional system prompt
+            config: Optional generation config
             
         Returns:
             Combined response string
@@ -189,7 +217,7 @@ class Orchestrator:
             query_text = sub_query.final_text
             
             # Process this sub-query
-            response = self._process_single(query_text, system_prompt)
+            response = self._process_single(query_text, system_prompt, config)
             responses.append(response)
         
         # Combine responses
@@ -214,3 +242,21 @@ class Orchestrator:
             if intent in handler.supported_intents:
                 return handler
         return None
+    
+    def set_config(self, config: GenerationConfig):
+        """Update the generation configuration."""
+        self.config = config
+        self.length_controller = create_length_controller(
+            max_tokens=config.max_tokens,
+            depth=config.depth
+        )
+    
+    def update_config(self, **kwargs):
+        """
+        Update specific config parameters.
+        
+        Args:
+            **kwargs: Config parameters to update (max_tokens, temperature, etc.)
+        """
+        config = create_config_from_request(**kwargs)
+        self.set_config(config)

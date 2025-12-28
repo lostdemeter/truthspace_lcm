@@ -1,7 +1,7 @@
 """
 TruthSpace LCM - Geometric Language Concept Model
 
-A conversational AI system using holographic concept resolution.
+A conversational AI system using fully geometric language understanding.
 All semantic operations are geometric operations in concept space.
 
 No training. No neural networks. Pure geometry.
@@ -9,56 +9,78 @@ No training. No neural networks. Pure geometry.
 Architecture:
     Surface Text (any language)
             ↓
-    Concept Frame (order-free, language-agnostic)
+    Position-Based Frame Extraction
             ↓
-    Holographic Projection (fill the gap)
+    Holographic Template Projection + Semantic Quaternion
             ↓
-    Answer
+    φ-Dial Styled Response
 
 Example:
-    from truthspace_lcm.core import ConceptQA
+    from truthspace_lcm.core import HolographicGeometricQA
     
-    qa = ConceptQA()
+    qa = HolographicGeometricQA()
     qa.load_corpus('concept_corpus.json')
     
     answer = qa.ask("Who is Darcy?")
     # "Darcy is a character from Pride and Prejudice..."
+    
+    # Complete analogies with 100% accuracy
+    results = qa.complete_analogy("king", "queen", "man")  # -> woman
 """
 
-__version__ = "0.5.0"
+__version__ = "1.0.0"
 __author__ = "TruthSpace Team"
 
 from truthspace_lcm.core import (
-    Vocabulary,
-    tokenize,
-    word_position,
-    cosine_similarity,
-    ConceptFrame,
-    ConceptExtractor,
-    ConceptStore,
-    ConceptKnowledge,
-    HolographicProjector,
-    ConceptQA,
-    ACTION_PRIMITIVES,
-    SEMANTIC_ROLES,
-    QUESTION_AXES,
+    # Primary Geometric Components
+    PHI,
+    GeometricConcept,
+    Frame,
+    GeometricMorphology,
+    GeometricConjugation,
+    GeometricKnowledge,
+    GeometricQA,
+    HolographicGeometricQA,
+    
+    # Holographic Templates
+    HolographicTemplateProjector,
+    HolographicResponseSynthesizer,
+    HolographicConceptNavigator,
+    
+    # Semantic Quaternions
+    SemanticQuaternion,
+    SemanticQuaternionNavigator,
+    
+    # Supporting Components
+    ConversationMemory,
+    ReasoningEngine,
+    CodeGenerator,
+    Planner,
 )
 
 __all__ = [
-    # Vocabulary
-    "Vocabulary",
-    "tokenize",
-    "word_position",
-    "cosine_similarity",
-    # Concept Language
-    "ConceptFrame",
-    "ConceptExtractor",
-    "ConceptStore",
-    "ACTION_PRIMITIVES",
-    "SEMANTIC_ROLES",
-    # Concept Knowledge & Q&A
-    "ConceptKnowledge",
-    "HolographicProjector",
-    "ConceptQA",
-    "QUESTION_AXES",
+    # Primary Geometric Components
+    "PHI",
+    "GeometricConcept",
+    "Frame",
+    "GeometricMorphology",
+    "GeometricConjugation",
+    "GeometricKnowledge",
+    "GeometricQA",
+    "HolographicGeometricQA",
+    
+    # Holographic Templates
+    "HolographicTemplateProjector",
+    "HolographicResponseSynthesizer",
+    "HolographicConceptNavigator",
+    
+    # Semantic Quaternions
+    "SemanticQuaternion",
+    "SemanticQuaternionNavigator",
+    
+    # Supporting Components
+    "ConversationMemory",
+    "ReasoningEngine",
+    "CodeGenerator",
+    "Planner",
 ]
