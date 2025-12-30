@@ -1,0 +1,4496 @@
+{
+  "frames": [
+    {
+      "initiator": "adventures",
+      "mediator": "sherlock",
+      "receiver": "holmes",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "The Adventures of Sherlock Holmes by Arthur Conan Doyle Contents I"
+    },
+    {
+      "initiator": "with",
+      "mediator": "with",
+      "receiver": "twisted",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "The Man with the Twisted Lip VII"
+    },
+    {
+      "initiator": "adventure",
+      "mediator": "blue",
+      "receiver": "blue",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "The Adventure of the Blue Carbuncle VIII"
+    },
+    {
+      "initiator": "adventure",
+      "mediator": "speckled",
+      "receiver": "speckled",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "The Adventure of the Speckled Band IX"
+    },
+    {
+      "initiator": "adventure",
+      "mediator": "engineer",
+      "receiver": "thumb",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "The Adventure of the Engineer\u2019s Thumb X"
+    },
+    {
+      "initiator": "adventure",
+      "mediator": "noble",
+      "receiver": "noble",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "The Adventure of the Noble Bachelor XI"
+    },
+    {
+      "initiator": "adventure",
+      "mediator": "beryl",
+      "receiver": "beryl",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "The Adventure of the Beryl Coronet XII"
+    },
+    {
+      "initiator": "adventure",
+      "mediator": "copper",
+      "receiver": "copper",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "The Adventure of the Copper Beeches I"
+    },
+    {
+      "initiator": "sherlock",
+      "mediator": "holmes",
+      "receiver": "always",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "To Sherlock Holmes she is always _the_ woman"
+    },
+    {
+      "initiator": "have",
+      "mediator": "seldom",
+      "receiver": "heard",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I have seldom heard him mention her under any other name"
+    },
+    {
+      "initiator": "eyes",
+      "mediator": "eclipses",
+      "receiver": "predominates",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "In his eyes she eclipses and predominates the whole of her sex"
+    },
+    {
+      "initiator": "that",
+      "mediator": "felt",
+      "receiver": "emotion",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "It was not that he felt any emotion akin to love for Irene Adler"
+    },
+    {
+      "initiator": "emotions",
+      "mediator": "that",
+      "receiver": "were",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "All emotions, and that one particularly, were abhorrent to his cold, precise but admirably balanced mind"
+    },
+    {
+      "initiator": "take",
+      "mediator": "most",
+      "receiver": "perfect",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "He was, I take it, the most perfect reasoning and observing machine that the world has seen, but as a lover he would have placed himself in a false position"
+    },
+    {
+      "initiator": "never",
+      "mediator": "spoke",
+      "receiver": "softer",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "He never spoke of the softer passions, save with a gibe and a sneer"
+    },
+    {
+      "initiator": "they",
+      "mediator": "were",
+      "receiver": "admirable",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "They were admirable things for the observer\u2014excellent for drawing the veil from men\u2019s motives and actions"
+    },
+    {
+      "initiator": "trained",
+      "mediator": "reasoner",
+      "receiver": "admit",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "But for the trained reasoner to admit such intrusions into his own delicate and finely adjusted temperament was to introduce a distracting factor which might throw a doubt upon all his mental results"
+    },
+    {
+      "initiator": "grit",
+      "mediator": "sensitive",
+      "receiver": "instrument",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Grit in a sensitive instrument, or a crack in one of his own high-power lenses, would not be more disturbing than a strong emotion in a nature such as his"
+    },
+    {
+      "initiator": "there",
+      "mediator": "woman",
+      "receiver": "that",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "And yet there was but one woman to him, and that woman was the late Irene Adler, of dubious and questionable memory"
+    },
+    {
+      "initiator": "seen",
+      "mediator": "seen",
+      "receiver": "little",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I had seen little of Holmes lately"
+    },
+    {
+      "initiator": "marriage",
+      "mediator": "drifted",
+      "receiver": "away",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "My marriage had drifted us away from each other"
+    },
+    {
+      "initiator": "still",
+      "mediator": "ever",
+      "receiver": "attracted",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "He was still, as ever, deeply attracted by the study of crime, and occupied his immense faculties and extraordinary powers of observation in following out those clues, and clearing up those mysteries which had been abandoned as hopeless by the official police"
+    },
+    {
+      "initiator": "beyond",
+      "mediator": "these",
+      "receiver": "signs",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Beyond these signs of his activity, however, which I merely shared with all the readers of the daily press, I knew little of my former friend and companion"
+    },
+    {
+      "initiator": "night",
+      "mediator": "twentieth",
+      "receiver": "march",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "One night\u2014it was on the twentieth of March, 1888\u2014I was returning from a journey to a patient (for I had now returned to civil practice), when my way led me through Baker Street"
+    },
+    {
+      "initiator": "passed",
+      "mediator": "well",
+      "receiver": "remembered",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "As I passed the well-remembered door, which must always be associated in my mind with my wooing, and with the dark incidents of the Study in Scarlet, I was seized with a keen desire to see Holmes again, and to know how he was employing his extraordinary powers"
+    },
+    {
+      "initiator": "rooms",
+      "mediator": "were",
+      "receiver": "even",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "His rooms were brilliantly lit, and, even as I looked up, I saw his tall, spare figure pass twice in a dark silhouette against the blind"
+    },
+    {
+      "initiator": "pacing",
+      "mediator": "room",
+      "receiver": "with",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "He was pacing the room swiftly, eagerly, with his head sunk upon his chest and his hands clasped behind him"
+    },
+    {
+      "initiator": "knew",
+      "mediator": "every",
+      "receiver": "mood",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "To me, who knew his every mood and habit, his attitude and manner told their own story"
+    },
+    {
+      "initiator": "risen",
+      "mediator": "drug",
+      "receiver": "created",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "He had risen out of his drug-created dreams and was hot upon the scent of some new problem"
+    },
+    {
+      "initiator": "rang",
+      "mediator": "bell",
+      "receiver": "shown",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I rang the bell and was shown up to the chamber which had formerly been in part my own"
+    },
+    {
+      "initiator": "seldom",
+      "mediator": "glad",
+      "receiver": "think",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "It seldom was; but he was glad, I think, to see me"
+    },
+    {
+      "initiator": "with",
+      "mediator": "word",
+      "receiver": "spoken",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "With hardly a word spoken, but with a kindly eye, he waved me to an armchair, threw across his case of cigars, and indicated a spirit case and a gasogene in the corner"
+    },
+    {
+      "initiator": "then",
+      "mediator": "stood",
+      "receiver": "before",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Then he stood before the fire and looked me over in his singular introspective fashion"
+    },
+    {
+      "initiator": "think",
+      "mediator": "watson",
+      "receiver": "that",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cI think, Watson, that you have put on seven and a half pounds since I saw you"
+    },
+    {
+      "initiator": "indeed",
+      "mediator": "should",
+      "receiver": "have",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cIndeed, I should have thought a little more"
+    },
+    {
+      "initiator": "just",
+      "mediator": "trifle",
+      "receiver": "more",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Just a trifle more, I fancy, Watson"
+    },
+    {
+      "initiator": "practice",
+      "mediator": "practice",
+      "receiver": "again",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "And in practice again, I observe"
+    },
+    {
+      "initiator": "tell",
+      "mediator": "that",
+      "receiver": "intended",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "You did not tell me that you intended to go into harness"
+    },
+    {
+      "initiator": "then",
+      "mediator": "know",
+      "receiver": "know",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cThen, how do you know"
+    },
+    {
+      "initiator": "know",
+      "mediator": "that",
+      "receiver": "have",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "How do I know that you have been getting yourself very wet lately, and that you have a most clumsy and careless servant girl"
+    },
+    {
+      "initiator": "dear",
+      "mediator": "holmes",
+      "receiver": "said",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cMy dear Holmes,\u201d said I, \u201cthis is too much"
+    },
+    {
+      "initiator": "would",
+      "mediator": "have",
+      "receiver": "been",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "You would certainly have been burned, had you lived a few centuries ago"
+    },
+    {
+      "initiator": "true",
+      "mediator": "that",
+      "receiver": "country",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "It is true that I had a country walk on Thursday and came home in a dreadful mess, but as I have changed my clothes I can\u2019t imagine how you deduce it"
+    },
+    {
+      "initiator": "mary",
+      "mediator": "jane",
+      "receiver": "incorrigible",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "As to Mary Jane, she is incorrigible, and my wife has given her notice, but there, again, I fail to see how you work it out"
+    },
+    {
+      "initiator": "chuckled",
+      "mediator": "himself",
+      "receiver": "rubbed",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d He chuckled to himself and rubbed his long, nervous hands together"
+    },
+    {
+      "initiator": "simplicity",
+      "mediator": "itself",
+      "receiver": "said",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cIt is simplicity itself,\u201d said he; \u201cmy eyes tell me that on the inside of your left shoe, just where the firelight strikes it, the leather is scored by six almost parallel cuts"
+    },
+    {
+      "initiator": "they",
+      "mediator": "have",
+      "receiver": "been",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Obviously they have been caused by someone who has very carelessly scraped round the edges of the sole in order to remove crusted mud from it"
+    },
+    {
+      "initiator": "hence",
+      "mediator": "double",
+      "receiver": "deduction",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Hence, you see, my double deduction that you had been out in vile weather, and that you had a particularly malignant boot-slitting specimen of the London slavey"
+    },
+    {
+      "initiator": "when",
+      "mediator": "hear",
+      "receiver": "give",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cWhen I hear you give your reasons,\u201d I remarked, \u201cthe thing always appears to me to be so ridiculously simple that I could easily do it myself, though at each successive instance of your reasoning I am baffled until you explain your process"
+    },
+    {
+      "initiator": "believe",
+      "mediator": "that",
+      "receiver": "eyes",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "And yet I believe that my eyes are as good as yours"
+    },
+    {
+      "initiator": "quite",
+      "mediator": "answered",
+      "receiver": "lighting",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cQuite so,\u201d he answered, lighting a cigarette, and throwing himself down into an armchair"
+    },
+    {
+      "initiator": "example",
+      "mediator": "have",
+      "receiver": "seen",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "For example, you have frequently seen the steps which lead up from the hall to this room"
+    },
+    {
+      "initiator": "well",
+      "mediator": "some",
+      "receiver": "hundreds",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cWell, some hundreds of times"
+    },
+    {
+      "initiator": "then",
+      "mediator": "many",
+      "receiver": "there",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cThen how many are there"
+    },
+    {
+      "initiator": "know",
+      "mediator": "that",
+      "receiver": "there",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Now, I know that there are seventeen steps, because I have both seen and observed"
+    },
+    {
+      "initiator": "since",
+      "mediator": "interested",
+      "receiver": "these",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "By the way, since you are interested in these little problems, and since you are good enough to chronicle one or two of my trifling experiences, you may be interested in this"
+    },
+    {
+      "initiator": "threw",
+      "mediator": "over",
+      "receiver": "sheet",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d He threw over a sheet of thick, pink-tinted notepaper which had been lying open upon the table"
+    },
+    {
+      "initiator": "came",
+      "mediator": "last",
+      "receiver": "post",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cIt came by the last post,\u201d said he"
+    },
+    {
+      "initiator": "read",
+      "mediator": "aloud",
+      "receiver": "aloud",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cRead it aloud"
+    },
+    {
+      "initiator": "note",
+      "mediator": "undated",
+      "receiver": "without",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d The note was undated, and without either signature or address"
+    },
+    {
+      "initiator": "there",
+      "mediator": "will",
+      "receiver": "call",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cThere will call upon you to-night, at a quarter to eight o\u2019clock,\u201d it said, \u201ca gentleman who desires to consult you upon a matter of the very deepest moment"
+    },
+    {
+      "initiator": "your",
+      "mediator": "recent",
+      "receiver": "services",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Your recent services to one of the royal houses of Europe have shown that you are one who may safely be trusted with matters which are of an importance which can hardly be exaggerated"
+    },
+    {
+      "initiator": "this",
+      "mediator": "account",
+      "receiver": "have",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "This account of you we have from all quarters received"
+    },
+    {
+      "initiator": "your",
+      "mediator": "chamber",
+      "receiver": "then",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Be in your chamber then at that hour, and do not take it amiss if your visitor wear a mask"
+    },
+    {
+      "initiator": "this",
+      "mediator": "indeed",
+      "receiver": "mystery",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cThis is indeed a mystery,\u201d I remarked"
+    },
+    {
+      "initiator": "what",
+      "mediator": "imagine",
+      "receiver": "that",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cWhat do you imagine that it means"
+    },
+    {
+      "initiator": "have",
+      "mediator": "data",
+      "receiver": "data",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cI have no data yet"
+    },
+    {
+      "initiator": "capital",
+      "mediator": "mistake",
+      "receiver": "theorise",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "It is a capital mistake to theorise before one has data"
+    },
+    {
+      "initiator": "begins",
+      "mediator": "twist",
+      "receiver": "facts",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Insensibly one begins to twist facts to suit theories, instead of theories to suit facts"
+    },
+    {
+      "initiator": "what",
+      "mediator": "deduce",
+      "receiver": "from",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "What do you deduce from it"
+    },
+    {
+      "initiator": "examined",
+      "mediator": "writing",
+      "receiver": "paper",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d I carefully examined the writing, and the paper upon which it was written"
+    },
+    {
+      "initiator": "wrote",
+      "mediator": "well",
+      "receiver": "remarked",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cThe man who wrote it was presumably well to do,\u201d I remarked, endeavouring to imitate my companion\u2019s processes"
+    },
+    {
+      "initiator": "such",
+      "mediator": "paper",
+      "receiver": "could",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cSuch paper could not be bought under half a crown a packet"
+    },
+    {
+      "initiator": "strong",
+      "mediator": "strong",
+      "receiver": "stiff",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "It is peculiarly strong and stiff"
+    },
+    {
+      "initiator": "peculiar",
+      "mediator": "that",
+      "receiver": "very",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cPeculiar\u2014that is the very word,\u201d said Holmes"
+    },
+    {
+      "initiator": "english",
+      "mediator": "english",
+      "receiver": "paper",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cIt is not an English paper at all"
+    },
+    {
+      "initiator": "hold",
+      "mediator": "light",
+      "receiver": "light",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Hold it up to the light"
+    },
+    {
+      "initiator": "large",
+      "mediator": "with",
+      "receiver": "small",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d I did so, and saw a large \u201cE\u201d with a small \u201cg,\u201d a \u201cP,\u201d and a large \u201cG\u201d with a small \u201ct\u201d woven into the texture of the paper"
+    },
+    {
+      "initiator": "what",
+      "mediator": "make",
+      "receiver": "that",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cWhat do you make of that"
+    },
+    {
+      "initiator": "asked",
+      "mediator": "holmes",
+      "receiver": "holmes",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d asked Holmes"
+    },
+    {
+      "initiator": "name",
+      "mediator": "maker",
+      "receiver": "doubt",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cThe name of the maker, no doubt; or his monogram, rather"
+    },
+    {
+      "initiator": "german",
+      "mediator": "german",
+      "receiver": "speaking",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "It is in a German-speaking country\u2014in Bohemia, not far from Carlsbad"
+    },
+    {
+      "initiator": "remarkable",
+      "mediator": "being",
+      "receiver": "scene",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u2018Remarkable as being the scene of the death of Wallenstein, and for its numerous glass-factories and paper-mills"
+    },
+    {
+      "initiator": "what",
+      "mediator": "what",
+      "receiver": "make",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u2019 Ha, ha, my boy, what do you make of that"
+    },
+    {
+      "initiator": "eyes",
+      "mediator": "sparkled",
+      "receiver": "sent",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d His eyes sparkled, and he sent up a great blue triumphant cloud from his cigarette"
+    },
+    {
+      "initiator": "paper",
+      "mediator": "made",
+      "receiver": "bohemia",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cThe paper was made in Bohemia,\u201d I said"
+    },
+    {
+      "initiator": "wrote",
+      "mediator": "wrote",
+      "receiver": "note",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "And the man who wrote the note is a German"
+    },
+    {
+      "initiator": "note",
+      "mediator": "peculiar",
+      "receiver": "construction",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Do you note the peculiar construction of the sentence\u2014\u2018This account of you we have from all quarters received"
+    },
+    {
+      "initiator": "frenchman",
+      "mediator": "russian",
+      "receiver": "could",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u2019 A Frenchman or Russian could not have written that"
+    },
+    {
+      "initiator": "german",
+      "mediator": "uncourteous",
+      "receiver": "uncourteous",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "It is the German who is so uncourteous to his verbs"
+    },
+    {
+      "initiator": "only",
+      "mediator": "remains",
+      "receiver": "therefore",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "It only remains, therefore, to discover what is wanted by this German who writes upon Bohemian paper and prefers wearing a mask to showing his face"
+    },
+    {
+      "initiator": "here",
+      "mediator": "comes",
+      "receiver": "mistaken",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "And here he comes, if I am not mistaken, to resolve all our doubts"
+    },
+    {
+      "initiator": "spoke",
+      "mediator": "there",
+      "receiver": "sharp",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d As he spoke there was the sharp sound of horses\u2019 hoofs and grating wheels against the curb, followed by a sharp pull at the bell"
+    },
+    {
+      "initiator": "pair",
+      "mediator": "sound",
+      "receiver": "sound",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cA pair, by the sound,\u201d said he"
+    },
+    {
+      "initiator": "continued",
+      "mediator": "glancing",
+      "receiver": "window",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cYes,\u201d he continued, glancing out of the window"
+    },
+    {
+      "initiator": "nice",
+      "mediator": "little",
+      "receiver": "brougham",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cA nice little brougham and a pair of beauties"
+    },
+    {
+      "initiator": "hundred",
+      "mediator": "fifty",
+      "receiver": "guineas",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "A hundred and fifty guineas apiece"
+    },
+    {
+      "initiator": "there",
+      "mediator": "money",
+      "receiver": "this",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "There\u2019s money in this case, Watson, if there is nothing else"
+    },
+    {
+      "initiator": "think",
+      "mediator": "that",
+      "receiver": "better",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cI think that I had better go, Holmes"
+    },
+    {
+      "initiator": "lost",
+      "mediator": "lost",
+      "receiver": "without",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I am lost without my Boswell"
+    },
+    {
+      "initiator": "this",
+      "mediator": "promises",
+      "receiver": "interesting",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "And this promises to be interesting"
+    },
+    {
+      "initiator": "would",
+      "mediator": "pity",
+      "receiver": "miss",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "It would be a pity to miss it"
+    },
+    {
+      "initiator": "your",
+      "mediator": "client",
+      "receiver": "never",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cBut your client\u2014\u201d \u201cNever mind him"
+    },
+    {
+      "initiator": "want",
+      "mediator": "your",
+      "receiver": "help",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I may want your help, and so may he"
+    },
+    {
+      "initiator": "down",
+      "mediator": "that",
+      "receiver": "armchair",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Sit down in that armchair, Doctor, and give us your best attention"
+    },
+    {
+      "initiator": "slow",
+      "mediator": "heavy",
+      "receiver": "step",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d A slow and heavy step, which had been heard upon the stairs and in the passage, paused immediately outside the door"
+    },
+    {
+      "initiator": "then",
+      "mediator": "there",
+      "receiver": "loud",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Then there was a loud and authoritative tap"
+    },
+    {
+      "initiator": "entered",
+      "mediator": "could",
+      "receiver": "have",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "A man entered who could hardly have been less than six feet six inches in height, with the chest and limbs of a Hercules"
+    },
+    {
+      "initiator": "dress",
+      "mediator": "rich",
+      "receiver": "with",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "His dress was rich with a richness which would, in England, be looked upon as akin to bad taste"
+    },
+    {
+      "initiator": "heavy",
+      "mediator": "bands",
+      "receiver": "astrakhan",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Heavy bands of astrakhan were slashed across the sleeves and fronts of his double-breasted coat, while the deep blue cloak which was thrown over his shoulders was lined with flame-coloured silk and secured at the neck with a brooch which consisted of a single flaming beryl"
+    },
+    {
+      "initiator": "boots",
+      "mediator": "which",
+      "receiver": "extended",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Boots which extended halfway up his calves, and which were trimmed at the tops with rich brown fur, completed the impression of barbaric opulence which was suggested by his whole appearance"
+    },
+    {
+      "initiator": "carried",
+      "mediator": "broad",
+      "receiver": "brimmed",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "He carried a broad-brimmed hat in his hand, while he wore across the upper part of his face, extending down past the cheekbones, a black vizard mask, which he had apparently adjusted that very moment, for his hand was still raised to it as he entered"
+    },
+    {
+      "initiator": "from",
+      "mediator": "lower",
+      "receiver": "part",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "From the lower part of the face he appeared to be a man of strong character, with a thick, hanging lip, and a long, straight chin suggestive of resolution pushed to the length of obstinacy"
+    },
+    {
+      "initiator": "asked",
+      "mediator": "with",
+      "receiver": "deep",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d he asked with a deep harsh voice and a strongly marked German accent"
+    },
+    {
+      "initiator": "told",
+      "mediator": "that",
+      "receiver": "would",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cI told you that I would call"
+    },
+    {
+      "initiator": "looked",
+      "mediator": "from",
+      "receiver": "other",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d He looked from one to the other of us, as if uncertain which to address"
+    },
+    {
+      "initiator": "pray",
+      "mediator": "take",
+      "receiver": "seat",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cPray take a seat,\u201d said Holmes"
+    },
+    {
+      "initiator": "this",
+      "mediator": "friend",
+      "receiver": "colleague",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cThis is my friend and colleague, Dr Watson, who is occasionally good enough to help me in my cases"
+    },
+    {
+      "initiator": "whom",
+      "mediator": "have",
+      "receiver": "honour",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Whom have I the honour to address"
+    },
+    {
+      "initiator": "address",
+      "mediator": "count",
+      "receiver": "kramm",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cYou may address me as the Count Von Kramm, a Bohemian nobleman"
+    },
+    {
+      "initiator": "understand",
+      "mediator": "that",
+      "receiver": "this",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I understand that this gentleman, your friend, is a man of honour and discretion, whom I may trust with a matter of the most extreme importance"
+    },
+    {
+      "initiator": "should",
+      "mediator": "much",
+      "receiver": "prefer",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "If not, I should much prefer to communicate with you alone"
+    },
+    {
+      "initiator": "rose",
+      "mediator": "holmes",
+      "receiver": "caught",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d I rose to go, but Holmes caught me by the wrist and pushed me back into my chair"
+    },
+    {
+      "initiator": "both",
+      "mediator": "both",
+      "receiver": "none",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cIt is both, or none,\u201d said he"
+    },
+    {
+      "initiator": "before",
+      "mediator": "this",
+      "receiver": "gentleman",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cYou may say before this gentleman anything which you may say to me"
+    },
+    {
+      "initiator": "count",
+      "mediator": "shrugged",
+      "receiver": "broad",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d The Count shrugged his broad shoulders"
+    },
+    {
+      "initiator": "then",
+      "mediator": "must",
+      "receiver": "begin",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cThen I must begin,\u201d said he, \u201cby binding you both to absolute secrecy for two years; at the end of that time the matter will be of no importance"
+    },
+    {
+      "initiator": "present",
+      "mediator": "much",
+      "receiver": "that",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "At present it is not too much to say that it is of such weight it may have an influence upon European history"
+    },
+    {
+      "initiator": "promise",
+      "mediator": "promise",
+      "receiver": "said",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cI promise,\u201d said Holmes"
+    },
+    {
+      "initiator": "will",
+      "mediator": "excuse",
+      "receiver": "this",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cYou will excuse this mask,\u201d continued our strange visitor"
+    },
+    {
+      "initiator": "august",
+      "mediator": "person",
+      "receiver": "employs",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cThe august person who employs me wishes his agent to be unknown to you, and I may confess at once that the title by which I have just called myself is not exactly my own"
+    },
+    {
+      "initiator": "aware",
+      "mediator": "said",
+      "receiver": "said",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cI was aware of it,\u201d said Holmes dryly"
+    },
+    {
+      "initiator": "circumstances",
+      "mediator": "great",
+      "receiver": "delicacy",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cThe circumstances are of great delicacy, and every precaution has to be taken to quench what might grow to be an immense scandal and seriously compromise one of the reigning families of Europe"
+    },
+    {
+      "initiator": "speak",
+      "mediator": "matter",
+      "receiver": "implicates",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "To speak plainly, the matter implicates the great House of Ormstein, hereditary kings of Bohemia"
+    },
+    {
+      "initiator": "also",
+      "mediator": "aware",
+      "receiver": "that",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cI was also aware of that,\u201d murmured Holmes, settling himself down in his armchair and closing his eyes"
+    },
+    {
+      "initiator": "visitor",
+      "mediator": "glanced",
+      "receiver": "with",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Our visitor glanced with some apparent surprise at the languid, lounging figure of the man who had been no doubt depicted to him as the most incisive reasoner and most energetic agent in Europe"
+    },
+    {
+      "initiator": "holmes",
+      "mediator": "reopened",
+      "receiver": "eyes",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Holmes slowly reopened his eyes and looked impatiently at his gigantic client"
+    },
+    {
+      "initiator": "your",
+      "mediator": "majesty",
+      "receiver": "would",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cIf your Majesty would condescend to state your case,\u201d he remarked, \u201cI should be better able to advise you"
+    },
+    {
+      "initiator": "sprang",
+      "mediator": "from",
+      "receiver": "chair",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d The man sprang from his chair and paced up and down the room in uncontrollable agitation"
+    },
+    {
+      "initiator": "then",
+      "mediator": "with",
+      "receiver": "gesture",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Then, with a gesture of desperation, he tore the mask from his face and hurled it upon the ground"
+    },
+    {
+      "initiator": "right",
+      "mediator": "cried",
+      "receiver": "king",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cYou are right,\u201d he cried; \u201cI am the King"
+    },
+    {
+      "initiator": "should",
+      "mediator": "attempt",
+      "receiver": "conceal",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Why should I attempt to conceal it"
+    },
+    {
+      "initiator": "murmured",
+      "mediator": "holmes",
+      "receiver": "holmes",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d murmured Holmes"
+    },
+    {
+      "initiator": "matter",
+      "mediator": "delicate",
+      "receiver": "that",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Yet the matter was so delicate that I could not confide it to an agent without putting myself in his power"
+    },
+    {
+      "initiator": "have",
+      "mediator": "come",
+      "receiver": "_incognito_",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I have come _incognito_ from Prague for the purpose of consulting you"
+    },
+    {
+      "initiator": "then",
+      "mediator": "pray",
+      "receiver": "consult",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cThen, pray consult,\u201d said Holmes, shutting his eyes once more"
+    },
+    {
+      "initiator": "facts",
+      "mediator": "these",
+      "receiver": "some",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cThe facts are briefly these: Some five years ago, during a lengthy visit to Warsaw, I made the acquaintance of the well-known adventuress, Irene Adler"
+    },
+    {
+      "initiator": "name",
+      "mediator": "doubt",
+      "receiver": "familiar",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "The name is no doubt familiar to you"
+    },
+    {
+      "initiator": "look",
+      "mediator": "index",
+      "receiver": "doctor",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cKindly look her up in my index, Doctor,\u201d murmured Holmes without opening his eyes"
+    },
+    {
+      "initiator": "many",
+      "mediator": "years",
+      "receiver": "adopted",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "For many years he had adopted a system of docketing all paragraphs concerning men and things, so that it was difficult to name a subject or a person on which he could not at once furnish information"
+    },
+    {
+      "initiator": "this",
+      "mediator": "case",
+      "receiver": "found",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "In this case I found her biography sandwiched in between that of a Hebrew rabbi and that of a staff-commander who had written a monograph upon the deep-sea fishes"
+    },
+    {
+      "initiator": "born",
+      "mediator": "jersey",
+      "receiver": "year",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Born in New Jersey in the year 1858"
+    },
+    {
+      "initiator": "prima",
+      "mediator": "donna",
+      "receiver": "imperial",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Prima donna Imperial Opera of Warsaw\u2014yes"
+    },
+    {
+      "initiator": "your",
+      "mediator": "majesty",
+      "receiver": "understand",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Your Majesty, as I understand, became entangled with this young person, wrote her some compromising letters, and is now desirous of getting those letters back"
+    },
+    {
+      "initiator": "there",
+      "mediator": "there",
+      "receiver": "secret",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "But how\u2014\u201d \u201cWas there a secret marriage"
+    },
+    {
+      "initiator": "legal",
+      "mediator": "papers",
+      "receiver": "certificates",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cNo legal papers or certificates"
+    },
+    {
+      "initiator": "then",
+      "mediator": "fail",
+      "receiver": "follow",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cThen I fail to follow your Majesty"
+    },
+    {
+      "initiator": "this",
+      "mediator": "young",
+      "receiver": "person",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "If this young person should produce her letters for blackmailing or other purposes, how is she to prove their authenticity"
+    },
+    {
+      "initiator": "there",
+      "mediator": "writing",
+      "receiver": "writing",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cThere is the writing"
+    },
+    {
+      "initiator": "pooh",
+      "mediator": "pooh",
+      "receiver": "pooh",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cPooh, pooh"
+    },
+    {
+      "initiator": "private",
+      "mediator": "private",
+      "receiver": "note",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cMy private note-paper"
+    },
+    {
+      "initiator": "were",
+      "mediator": "both",
+      "receiver": "photograph",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cWe were both in the photograph"
+    },
+    {
+      "initiator": "your",
+      "mediator": "majesty",
+      "receiver": "indeed",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Your Majesty has indeed committed an indiscretion"
+    },
+    {
+      "initiator": "have",
+      "mediator": "compromised",
+      "receiver": "yourself",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cYou have compromised yourself seriously"
+    },
+    {
+      "initiator": "only",
+      "mediator": "only",
+      "receiver": "crown",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cI was only Crown Prince then"
+    },
+    {
+      "initiator": "must",
+      "mediator": "must",
+      "receiver": "recovered",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cIt must be recovered"
+    },
+    {
+      "initiator": "have",
+      "mediator": "tried",
+      "receiver": "failed",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cWe have tried and failed"
+    },
+    {
+      "initiator": "your",
+      "mediator": "majesty",
+      "receiver": "must",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cYour Majesty must pay"
+    },
+    {
+      "initiator": "must",
+      "mediator": "must",
+      "receiver": "bought",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "It must be bought"
+    },
+    {
+      "initiator": "will",
+      "mediator": "will",
+      "receiver": "sell",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cShe will not sell"
+    },
+    {
+      "initiator": "stolen",
+      "mediator": "then",
+      "receiver": "then",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cStolen, then"
+    },
+    {
+      "initiator": "five",
+      "mediator": "attempts",
+      "receiver": "have",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cFive attempts have been made"
+    },
+    {
+      "initiator": "twice",
+      "mediator": "burglars",
+      "receiver": "ransacked",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Twice burglars in my pay ransacked her house"
+    },
+    {
+      "initiator": "once",
+      "mediator": "diverted",
+      "receiver": "luggage",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Once we diverted her luggage when she travelled"
+    },
+    {
+      "initiator": "there",
+      "mediator": "been",
+      "receiver": "result",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "There has been no result"
+    },
+    {
+      "initiator": "holmes",
+      "mediator": "laughed",
+      "receiver": "laughed",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d Holmes laughed"
+    },
+    {
+      "initiator": "quite",
+      "mediator": "pretty",
+      "receiver": "little",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cIt is quite a pretty little problem,\u201d said he"
+    },
+    {
+      "initiator": "very",
+      "mediator": "serious",
+      "receiver": "returned",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cBut a very serious one to me,\u201d returned the King reproachfully"
+    },
+    {
+      "initiator": "what",
+      "mediator": "does",
+      "receiver": "propose",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "And what does she propose to do with the photograph"
+    },
+    {
+      "initiator": "about",
+      "mediator": "about",
+      "receiver": "married",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cI am about to be married"
+    },
+    {
+      "initiator": "have",
+      "mediator": "heard",
+      "receiver": "have",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cSo I have heard"
+    },
+    {
+      "initiator": "clotilde",
+      "mediator": "lothman",
+      "receiver": "saxe",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cTo Clotilde Lothman von Saxe-Meningen, second daughter of the King of Scandinavia"
+    },
+    {
+      "initiator": "know",
+      "mediator": "strict",
+      "receiver": "principles",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "You may know the strict principles of her family"
+    },
+    {
+      "initiator": "herself",
+      "mediator": "very",
+      "receiver": "soul",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "She is herself the very soul of delicacy"
+    },
+    {
+      "initiator": "shadow",
+      "mediator": "doubt",
+      "receiver": "conduct",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "A shadow of a doubt as to my conduct would bring the matter to an end"
+    },
+    {
+      "initiator": "irene",
+      "mediator": "irene",
+      "receiver": "adler",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cAnd Irene Adler"
+    },
+    {
+      "initiator": "threatens",
+      "mediator": "send",
+      "receiver": "them",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cThreatens to send them the photograph"
+    },
+    {
+      "initiator": "know",
+      "mediator": "that",
+      "receiver": "will",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I know that she will do it"
+    },
+    {
+      "initiator": "know",
+      "mediator": "soul",
+      "receiver": "soul",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "You do not know her, but she has a soul of steel"
+    },
+    {
+      "initiator": "face",
+      "mediator": "most",
+      "receiver": "beautiful",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "She has the face of the most beautiful of women, and the mind of the most resolute of men"
+    },
+    {
+      "initiator": "that",
+      "mediator": "will",
+      "receiver": "next",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "That will be next Monday"
+    },
+    {
+      "initiator": "then",
+      "mediator": "have",
+      "receiver": "three",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cOh, then we have three days yet,\u201d said Holmes with a yawn"
+    },
+    {
+      "initiator": "that",
+      "mediator": "very",
+      "receiver": "fortunate",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cThat is very fortunate, as I have one or two matters of importance to look into just at present"
+    },
+    {
+      "initiator": "your",
+      "mediator": "majesty",
+      "receiver": "will",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Your Majesty will, of course, stay in London for the present"
+    },
+    {
+      "initiator": "will",
+      "mediator": "find",
+      "receiver": "langham",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "You will find me at the Langham under the name of the Count Von Kramm"
+    },
+    {
+      "initiator": "then",
+      "mediator": "shall",
+      "receiver": "drop",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cThen I shall drop you a line to let you know how we progress"
+    },
+    {
+      "initiator": "there",
+      "mediator": "three",
+      "receiver": "hundred",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cThere are three hundred pounds in gold and seven hundred in notes,\u201d he said"
+    },
+    {
+      "initiator": "holmes",
+      "mediator": "scribbled",
+      "receiver": "receipt",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Holmes scribbled a receipt upon a sheet of his note-book and handed it to him"
+    },
+    {
+      "initiator": "briony",
+      "mediator": "lodge",
+      "receiver": "serpentine",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cIs Briony Lodge, Serpentine Avenue, St John\u2019s Wood"
+    },
+    {
+      "initiator": "holmes",
+      "mediator": "took",
+      "receiver": "note",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d Holmes took a note of it"
+    },
+    {
+      "initiator": "photograph",
+      "mediator": "photograph",
+      "receiver": "cabinet",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cWas the photograph a cabinet"
+    },
+    {
+      "initiator": "then",
+      "mediator": "good",
+      "receiver": "night",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cThen, good-night, your Majesty, and I trust that we shall soon have some good news for you"
+    },
+    {
+      "initiator": "good",
+      "mediator": "night",
+      "receiver": "watson",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "And good-night, Watson,\u201d he added, as the wheels of the royal brougham rolled down the street"
+    },
+    {
+      "initiator": "will",
+      "mediator": "good",
+      "receiver": "enough",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cIf you will be good enough to call to-morrow afternoon at three o\u2019clock I should like to chat this little matter over with you"
+    },
+    {
+      "initiator": "three",
+      "mediator": "clock",
+      "receiver": "baker",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "At three o\u2019clock precisely I was at Baker Street, but Holmes had not yet returned"
+    },
+    {
+      "initiator": "landlady",
+      "mediator": "informed",
+      "receiver": "that",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "The landlady informed me that he had left the house shortly after eight o\u2019clock in the morning"
+    },
+    {
+      "initiator": "down",
+      "mediator": "beside",
+      "receiver": "fire",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I sat down beside the fire, however, with the intention of awaiting him, however long he might be"
+    },
+    {
+      "initiator": "accustomed",
+      "mediator": "invariable",
+      "receiver": "success",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "So accustomed was I to his invariable success that the very possibility of his failing had ceased to enter into my head"
+    },
+    {
+      "initiator": "close",
+      "mediator": "upon",
+      "receiver": "four",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "It was close upon four before the door opened, and a drunken-looking groom, ill-kempt and side-whiskered, with an inflamed face and disreputable clothes, walked into the room"
+    },
+    {
+      "initiator": "accustomed",
+      "mediator": "friend",
+      "receiver": "amazing",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Accustomed as I was to my friend\u2019s amazing powers in the use of disguises, I had to look three times before I was certain that it was indeed he"
+    },
+    {
+      "initiator": "with",
+      "mediator": "vanished",
+      "receiver": "into",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "With a nod he vanished into the bedroom, whence he emerged in five minutes tweed-suited and respectable, as of old"
+    },
+    {
+      "initiator": "putting",
+      "mediator": "hands",
+      "receiver": "into",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Putting his hands into his pockets, he stretched out his legs in front of the fire and laughed heartily for some minutes"
+    },
+    {
+      "initiator": "cried",
+      "mediator": "then",
+      "receiver": "choked",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d he cried, and then he choked and laughed again until he was obliged to lie back, limp and helpless, in the chair"
+    },
+    {
+      "initiator": "quite",
+      "mediator": "quite",
+      "receiver": "funny",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cIt\u2019s quite too funny"
+    },
+    {
+      "initiator": "sure",
+      "mediator": "could",
+      "receiver": "never",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I am sure you could never guess how I employed my morning, or what I ended by doing"
+    },
+    {
+      "initiator": "suppose",
+      "mediator": "that",
+      "receiver": "have",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I suppose that you have been watching the habits, and perhaps the house, of Miss Irene Adler"
+    },
+    {
+      "initiator": "quite",
+      "mediator": "sequel",
+      "receiver": "rather",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cQuite so; but the sequel was rather unusual"
+    },
+    {
+      "initiator": "left",
+      "mediator": "house",
+      "receiver": "little",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I left the house a little after eight o\u2019clock this morning in the character of a groom out of work"
+    },
+    {
+      "initiator": "there",
+      "mediator": "wonderful",
+      "receiver": "sympathy",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "There is a wonderful sympathy and freemasonry among horsey men"
+    },
+    {
+      "initiator": "them",
+      "mediator": "will",
+      "receiver": "know",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Be one of them, and you will know all that there is to know"
+    },
+    {
+      "initiator": "_bijou_",
+      "mediator": "villa",
+      "receiver": "with",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "It is a _bijou_ villa, with a garden at the back, but built out in front right up to the road, two stories"
+    },
+    {
+      "initiator": "large",
+      "mediator": "sitting",
+      "receiver": "room",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Large sitting-room on the right side, well furnished, with long windows almost to the floor, and those preposterous English window fasteners which a child could open"
+    },
+    {
+      "initiator": "behind",
+      "mediator": "there",
+      "receiver": "nothing",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Behind there was nothing remarkable, save that the passage window could be reached from the top of the coach-house"
+    },
+    {
+      "initiator": "walked",
+      "mediator": "round",
+      "receiver": "examined",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I walked round it and examined it closely from every point of view, but without noting anything else of interest"
+    },
+    {
+      "initiator": "then",
+      "mediator": "lounged",
+      "receiver": "down",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cI then lounged down the street and found, as I expected, that there was a mews in a lane which runs down by one wall of the garden"
+    },
+    {
+      "initiator": "turned",
+      "mediator": "heads",
+      "receiver": "heads",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cOh, she has turned all the men\u2019s heads down in that part"
+    },
+    {
+      "initiator": "daintiest",
+      "mediator": "thing",
+      "receiver": "under",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "She is the daintiest thing under a bonnet on this planet"
+    },
+    {
+      "initiator": "serpentine",
+      "mediator": "serpentine",
+      "receiver": "mews",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "So say the Serpentine-mews, to a man"
+    },
+    {
+      "initiator": "lives",
+      "mediator": "sings",
+      "receiver": "concerts",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "She lives quietly, sings at concerts, drives out at five every day, and returns at seven sharp for dinner"
+    },
+    {
+      "initiator": "seldom",
+      "mediator": "goes",
+      "receiver": "other",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Seldom goes out at other times, except when she sings"
+    },
+    {
+      "initiator": "only",
+      "mediator": "male",
+      "receiver": "visitor",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Has only one male visitor, but a good deal of him"
+    },
+    {
+      "initiator": "dark",
+      "mediator": "handsome",
+      "receiver": "dashing",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "He is dark, handsome, and dashing, never calls less than once a day, and often twice"
+    },
+    {
+      "initiator": "godfrey",
+      "mediator": "godfrey",
+      "receiver": "norton",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "He is a Mr Godfrey Norton, of the Inner Temple"
+    },
+    {
+      "initiator": "advantages",
+      "mediator": "cabman",
+      "receiver": "confidant",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "See the advantages of a cabman as a confidant"
+    },
+    {
+      "initiator": "they",
+      "mediator": "driven",
+      "receiver": "home",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "They had driven him home a dozen times from Serpentine-mews, and knew all about him"
+    },
+    {
+      "initiator": "when",
+      "mediator": "listened",
+      "receiver": "they",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "When I had listened to all they had to tell, I began to walk up and down near Briony Lodge once more, and to think over my plan of campaign"
+    },
+    {
+      "initiator": "this",
+      "mediator": "godfrey",
+      "receiver": "norton",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cThis Godfrey Norton was evidently an important factor in the matter"
+    },
+    {
+      "initiator": "what",
+      "mediator": "relation",
+      "receiver": "between",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "What was the relation between them, and what the object of his repeated visits"
+    },
+    {
+      "initiator": "client",
+      "mediator": "client",
+      "receiver": "friend",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Was she his client, his friend, or his mistress"
+    },
+    {
+      "initiator": "former",
+      "mediator": "transferred",
+      "receiver": "photograph",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "If the former, she had probably transferred the photograph to his keeping"
+    },
+    {
+      "initiator": "latter",
+      "mediator": "latter",
+      "receiver": "less",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "If the latter, it was less likely"
+    },
+    {
+      "initiator": "issue",
+      "mediator": "this",
+      "receiver": "question",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "On the issue of this question depended whether I should continue my work at Briony Lodge, or turn my attention to the gentleman\u2019s chambers in the Temple"
+    },
+    {
+      "initiator": "delicate",
+      "mediator": "point",
+      "receiver": "widened",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "It was a delicate point, and it widened the field of my inquiry"
+    },
+    {
+      "initiator": "fear",
+      "mediator": "that",
+      "receiver": "bore",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I fear that I bore you with these details, but I have to let you see my little difficulties, if you are to understand the situation"
+    },
+    {
+      "initiator": "following",
+      "mediator": "following",
+      "receiver": "answered",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cI am following you closely,\u201d I answered"
+    },
+    {
+      "initiator": "still",
+      "mediator": "balancing",
+      "receiver": "matter",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cI was still balancing the matter in my mind when a hansom cab drove up to Briony Lodge, and a gentleman sprang out"
+    },
+    {
+      "initiator": "handsome",
+      "mediator": "dark",
+      "receiver": "aquiline",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "He was a remarkably handsome man, dark, aquiline, and moustached\u2014evidently the man of whom I had heard"
+    },
+    {
+      "initiator": "appeared",
+      "mediator": "great",
+      "receiver": "hurry",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "He appeared to be in a great hurry, shouted to the cabman to wait, and brushed past the maid who opened the door with the air of a man who was thoroughly at home"
+    },
+    {
+      "initiator": "house",
+      "mediator": "about",
+      "receiver": "half",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cHe was in the house about half an hour, and I could catch glimpses of him in the windows of the sitting-room, pacing up and down, talking excitedly, and waving his arms"
+    },
+    {
+      "initiator": "could",
+      "mediator": "could",
+      "receiver": "nothing",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Of her I could see nothing"
+    },
+    {
+      "initiator": "emerged",
+      "mediator": "looking",
+      "receiver": "even",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Presently he emerged, looking even more flurried than before"
+    },
+    {
+      "initiator": "stepped",
+      "mediator": "pulled",
+      "receiver": "gold",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "As he stepped up to the cab, he pulled a gold watch from his pocket and looked at it earnestly, \u2018Drive like the devil,\u2019 he shouted, \u2018first to Gross & Hankey\u2019s in Regent Street, and then to the Church of St Monica in the Edgeware Road"
+    },
+    {
+      "initiator": "hadn",
+      "mediator": "pulled",
+      "receiver": "before",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "It hadn\u2019t pulled up before she shot out of the hall door and into it"
+    },
+    {
+      "initiator": "only",
+      "mediator": "caught",
+      "receiver": "glimpse",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I only caught a glimpse of her at the moment, but she was a lovely woman, with a face that a man might die for"
+    },
+    {
+      "initiator": "church",
+      "mediator": "monica",
+      "receiver": "john",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201c\u2018The Church of St Monica, John,\u2019 she cried, \u2018and half a sovereign if you reach it in twenty minutes"
+    },
+    {
+      "initiator": "this",
+      "mediator": "quite",
+      "receiver": "good",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u2019 \u201cThis was quite too good to lose, Watson"
+    },
+    {
+      "initiator": "just",
+      "mediator": "balancing",
+      "receiver": "whether",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I was just balancing whether I should run for it, or whether I should perch behind her landau when a cab came through the street"
+    },
+    {
+      "initiator": "driver",
+      "mediator": "looked",
+      "receiver": "twice",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "The driver looked twice at such a shabby fare, but I jumped in before he could object"
+    },
+    {
+      "initiator": "church",
+      "mediator": "monica",
+      "receiver": "said",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u2018The Church of St Monica,\u2019 said I, \u2018and half a sovereign if you reach it in twenty minutes"
+    },
+    {
+      "initiator": "twenty",
+      "mediator": "five",
+      "receiver": "minutes",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u2019 It was twenty-five minutes to twelve, and of course it was clear enough what was in the wind"
+    },
+    {
+      "initiator": "think",
+      "mediator": "ever",
+      "receiver": "drove",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I don\u2019t think I ever drove faster, but the others were there before us"
+    },
+    {
+      "initiator": "landau",
+      "mediator": "with",
+      "receiver": "their",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "The cab and the landau with their steaming horses were in front of the door when I arrived"
+    },
+    {
+      "initiator": "paid",
+      "mediator": "hurried",
+      "receiver": "into",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I paid the man and hurried into the church"
+    },
+    {
+      "initiator": "there",
+      "mediator": "soul",
+      "receiver": "there",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "There was not a soul there save the two whom I had followed and a surpliced clergyman, who seemed to be expostulating with them"
+    },
+    {
+      "initiator": "they",
+      "mediator": "were",
+      "receiver": "three",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "They were all three standing in a knot in front of the altar"
+    },
+    {
+      "initiator": "lounged",
+      "mediator": "side",
+      "receiver": "aisle",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I lounged up the side aisle like any other idler who has dropped into a church"
+    },
+    {
+      "initiator": "surprise",
+      "mediator": "three",
+      "receiver": "altar",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Suddenly, to my surprise, the three at the altar faced round to me, and Godfrey Norton came running as hard as he could towards me"
+    },
+    {
+      "initiator": "done",
+      "mediator": "instant",
+      "receiver": "there",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "It was all done in an instant, and there was the gentleman thanking me on the one side and the lady on the other, while the clergyman beamed on me in front"
+    },
+    {
+      "initiator": "most",
+      "mediator": "preposterous",
+      "receiver": "position",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "It was the most preposterous position in which I ever found myself in my life, and it was the thought of it that started me laughing just now"
+    },
+    {
+      "initiator": "seems",
+      "mediator": "that",
+      "receiver": "there",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "It seems that there had been some informality about their license, that the clergyman absolutely refused to marry them without a witness of some sort, and that my lucky appearance saved the bridegroom from having to sally out into the streets in search of a best man"
+    },
+    {
+      "initiator": "bride",
+      "mediator": "gave",
+      "receiver": "sovereign",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "The bride gave me a sovereign, and I mean to wear it on my watch chain in memory of the occasion"
+    },
+    {
+      "initiator": "this",
+      "mediator": "very",
+      "receiver": "unexpected",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cThis is a very unexpected turn of affairs,\u201d said I; \u201cand what then"
+    },
+    {
+      "initiator": "well",
+      "mediator": "found",
+      "receiver": "plans",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cWell, I found my plans very seriously menaced"
+    },
+    {
+      "initiator": "looked",
+      "mediator": "pair",
+      "receiver": "might",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "It looked as if the pair might take an immediate departure, and so necessitate very prompt and energetic measures on my part"
+    },
+    {
+      "initiator": "church",
+      "mediator": "door",
+      "receiver": "however",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "At the church door, however, they separated, he driving back to the Temple, and she to her own house"
+    },
+    {
+      "initiator": "shall",
+      "mediator": "drive",
+      "receiver": "park",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u2018I shall drive out in the park at five as usual,\u2019 she said as she left him"
+    },
+    {
+      "initiator": "they",
+      "mediator": "drove",
+      "receiver": "away",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "They drove away in different directions, and I went off to make my own arrangements"
+    },
+    {
+      "initiator": "some",
+      "mediator": "cold",
+      "receiver": "beef",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cSome cold beef and a glass of beer,\u201d he answered, ringing the bell"
+    },
+    {
+      "initiator": "have",
+      "mediator": "been",
+      "receiver": "busy",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cI have been too busy to think of food, and I am likely to be busier still this evening"
+    },
+    {
+      "initiator": "said",
+      "mediator": "turned",
+      "receiver": "simple",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Now,\u201d he said as he turned hungrily on the simple fare that our landlady had provided, \u201cI must discuss it while I eat, for I have not much time"
+    },
+    {
+      "initiator": "hours",
+      "mediator": "must",
+      "receiver": "scene",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "In two hours we must be on the scene of action"
+    },
+    {
+      "initiator": "miss",
+      "mediator": "irene",
+      "receiver": "madame",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Miss Irene, or Madame, rather, returns from her drive at seven"
+    },
+    {
+      "initiator": "must",
+      "mediator": "briony",
+      "receiver": "lodge",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "We must be at Briony Lodge to meet her"
+    },
+    {
+      "initiator": "what",
+      "mediator": "what",
+      "receiver": "then",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cAnd what then"
+    },
+    {
+      "initiator": "must",
+      "mediator": "leave",
+      "receiver": "that",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cYou must leave that to me"
+    },
+    {
+      "initiator": "have",
+      "mediator": "already",
+      "receiver": "arranged",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I have already arranged what is to occur"
+    },
+    {
+      "initiator": "there",
+      "mediator": "only",
+      "receiver": "point",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "There is only one point on which I must insist"
+    },
+    {
+      "initiator": "must",
+      "mediator": "interfere",
+      "receiver": "come",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "You must not interfere, come what may"
+    },
+    {
+      "initiator": "nothing",
+      "mediator": "whatever",
+      "receiver": "nothing",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cTo do nothing whatever"
+    },
+    {
+      "initiator": "there",
+      "mediator": "will",
+      "receiver": "some",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "There will probably be some small unpleasantness"
+    },
+    {
+      "initiator": "will",
+      "mediator": "being",
+      "receiver": "conveyed",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "It will end in my being conveyed into the house"
+    },
+    {
+      "initiator": "four",
+      "mediator": "five",
+      "receiver": "minutes",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Four or five minutes afterwards the sitting-room window will open"
+    },
+    {
+      "initiator": "quite",
+      "mediator": "quite",
+      "receiver": "follow",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "You quite follow me"
+    },
+    {
+      "initiator": "nothing",
+      "mediator": "very",
+      "receiver": "formidable",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cIt is nothing very formidable,\u201d he said, taking a long cigar-shaped roll from his pocket"
+    },
+    {
+      "initiator": "ordinary",
+      "mediator": "plumber",
+      "receiver": "smoke",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cIt is an ordinary plumber\u2019s smoke-rocket, fitted with a cap at either end to make it self-lighting"
+    },
+    {
+      "initiator": "your",
+      "mediator": "task",
+      "receiver": "confined",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Your task is confined to that"
+    },
+    {
+      "initiator": "when",
+      "mediator": "raise",
+      "receiver": "your",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "When you raise your cry of fire, it will be taken up by quite a number of people"
+    },
+    {
+      "initiator": "then",
+      "mediator": "walk",
+      "receiver": "street",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "You may then walk to the end of the street, and I will rejoin you in ten minutes"
+    },
+    {
+      "initiator": "think",
+      "mediator": "perhaps",
+      "receiver": "almost",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I think, perhaps, it is almost time that I prepare for the new role I have to play"
+    },
+    {
+      "initiator": "disappeared",
+      "mediator": "into",
+      "receiver": "bedroom",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d He disappeared into his bedroom and returned in a few minutes in the character of an amiable and simple-minded Nonconformist clergyman"
+    },
+    {
+      "initiator": "broad",
+      "mediator": "black",
+      "receiver": "baggy",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "His broad black hat, his baggy trousers, his white tie, his sympathetic smile, and general look of peering and benevolent curiosity were such as Mr John Hare alone could have equalled"
+    },
+    {
+      "initiator": "that",
+      "mediator": "that",
+      "receiver": "holmes",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "It was not merely that Holmes changed his costume"
+    },
+    {
+      "initiator": "expression",
+      "mediator": "manner",
+      "receiver": "very",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "His expression, his manner, his very soul seemed to vary with every fresh part that he assumed"
+    },
+    {
+      "initiator": "stage",
+      "mediator": "lost",
+      "receiver": "fine",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "The stage lost a fine actor, even as science lost an acute reasoner, when he became a specialist in crime"
+    },
+    {
+      "initiator": "quarter",
+      "mediator": "past",
+      "receiver": "when",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "It was a quarter past six when we left Baker Street, and it still wanted ten minutes to the hour when we found ourselves in Serpentine Avenue"
+    },
+    {
+      "initiator": "already",
+      "mediator": "dusk",
+      "receiver": "lamps",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "It was already dusk, and the lamps were just being lighted as we paced up and down in front of Briony Lodge, waiting for the coming of its occupant"
+    },
+    {
+      "initiator": "house",
+      "mediator": "just",
+      "receiver": "such",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "The house was just such as I had pictured it from Sherlock Holmes\u2019 succinct description, but the locality appeared to be less private than I expected"
+    },
+    {
+      "initiator": "contrary",
+      "mediator": "small",
+      "receiver": "street",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "On the contrary, for a small street in a quiet neighbourhood, it was remarkably animated"
+    },
+    {
+      "initiator": "there",
+      "mediator": "group",
+      "receiver": "dressed",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "There was a group of shabbily dressed men smoking and laughing in a corner, a scissors-grinder with his wheel, two guardsmen who were flirting with a nurse-girl, and several well-dressed young men who were lounging up and down with cigars in their mouths"
+    },
+    {
+      "initiator": "remarked",
+      "mediator": "holmes",
+      "receiver": "paced",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cYou see,\u201d remarked Holmes, as we paced to and fro in front of the house, \u201cthis marriage rather simplifies matters"
+    },
+    {
+      "initiator": "photograph",
+      "mediator": "becomes",
+      "receiver": "double",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "The photograph becomes a double-edged weapon now"
+    },
+    {
+      "initiator": "chances",
+      "mediator": "that",
+      "receiver": "would",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "The chances are that she would be as averse to its being seen by Mr Godfrey Norton, as our client is to its coming to the eyes of his princess"
+    },
+    {
+      "initiator": "question",
+      "mediator": "where",
+      "receiver": "find",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Now the question is, Where are we to find the photograph"
+    },
+    {
+      "initiator": "where",
+      "mediator": "indeed",
+      "receiver": "indeed",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cWhere, indeed"
+    },
+    {
+      "initiator": "most",
+      "mediator": "that",
+      "receiver": "carries",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cIt is most unlikely that she carries it about with her"
+    },
+    {
+      "initiator": "large",
+      "mediator": "easy",
+      "receiver": "concealment",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Too large for easy concealment about a woman\u2019s dress"
+    },
+    {
+      "initiator": "knows",
+      "mediator": "that",
+      "receiver": "king",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "She knows that the King is capable of having her waylaid and searched"
+    },
+    {
+      "initiator": "attempts",
+      "mediator": "sort",
+      "receiver": "have",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Two attempts of the sort have already been made"
+    },
+    {
+      "initiator": "take",
+      "mediator": "then",
+      "receiver": "that",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "We may take it, then, that she does not carry it about with her"
+    },
+    {
+      "initiator": "where",
+      "mediator": "then",
+      "receiver": "then",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cWhere, then"
+    },
+    {
+      "initiator": "banker",
+      "mediator": "lawyer",
+      "receiver": "lawyer",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cHer banker or her lawyer"
+    },
+    {
+      "initiator": "inclined",
+      "mediator": "inclined",
+      "receiver": "think",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "But I am inclined to think neither"
+    },
+    {
+      "initiator": "women",
+      "mediator": "secretive",
+      "receiver": "they",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Women are naturally secretive, and they like to do their own secreting"
+    },
+    {
+      "initiator": "should",
+      "mediator": "hand",
+      "receiver": "over",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Why should she hand it over to anyone else"
+    },
+    {
+      "initiator": "could",
+      "mediator": "trust",
+      "receiver": "guardianship",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "She could trust her own guardianship, but she could not tell what indirect or political influence might be brought to bear upon a business man"
+    },
+    {
+      "initiator": "besides",
+      "mediator": "remember",
+      "receiver": "that",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Besides, remember that she had resolved to use it within a few days"
+    },
+    {
+      "initiator": "must",
+      "mediator": "where",
+      "receiver": "hands",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "It must be where she can lay her hands upon it"
+    },
+    {
+      "initiator": "must",
+      "mediator": "house",
+      "receiver": "house",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "It must be in her own house"
+    },
+    {
+      "initiator": "twice",
+      "mediator": "twice",
+      "receiver": "been",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cBut it has twice been burgled"
+    },
+    {
+      "initiator": "they",
+      "mediator": "know",
+      "receiver": "look",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "They did not know how to look"
+    },
+    {
+      "initiator": "will",
+      "mediator": "will",
+      "receiver": "look",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cBut how will you look"
+    },
+    {
+      "initiator": "will",
+      "mediator": "will",
+      "receiver": "look",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cI will not look"
+    },
+    {
+      "initiator": "what",
+      "mediator": "then",
+      "receiver": "then",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cWhat then"
+    },
+    {
+      "initiator": "will",
+      "mediator": "show",
+      "receiver": "show",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cI will get her to show me"
+    },
+    {
+      "initiator": "will",
+      "mediator": "refuse",
+      "receiver": "will",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cBut she will refuse"
+    },
+    {
+      "initiator": "will",
+      "mediator": "able",
+      "receiver": "able",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cShe will not be able to"
+    },
+    {
+      "initiator": "hear",
+      "mediator": "hear",
+      "receiver": "rumble",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "But I hear the rumble of wheels"
+    },
+    {
+      "initiator": "carry",
+      "mediator": "orders",
+      "receiver": "letter",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Now carry out my orders to the letter"
+    },
+    {
+      "initiator": "spoke",
+      "mediator": "gleam",
+      "receiver": "sidelights",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d As he spoke the gleam of the sidelights of a carriage came round the curve of the avenue"
+    },
+    {
+      "initiator": "smart",
+      "mediator": "little",
+      "receiver": "landau",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "It was a smart little landau which rattled up to the door of Briony Lodge"
+    },
+    {
+      "initiator": "pulled",
+      "mediator": "loafing",
+      "receiver": "corner",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "As it pulled up, one of the loafing men at the corner dashed forward to open the door in the hope of earning a copper, but was elbowed away by another loafer, who had rushed up with the same intention"
+    },
+    {
+      "initiator": "fierce",
+      "mediator": "quarrel",
+      "receiver": "broke",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "A fierce quarrel broke out, which was increased by the two guardsmen, who took sides with one of the loungers, and by the scissors-grinder, who was equally hot upon the other side"
+    },
+    {
+      "initiator": "blow",
+      "mediator": "struck",
+      "receiver": "instant",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "A blow was struck, and in an instant the lady, who had stepped from her carriage, was the centre of a little knot of flushed and struggling men, who struck savagely at each other with their fists and sticks"
+    },
+    {
+      "initiator": "holmes",
+      "mediator": "dashed",
+      "receiver": "into",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Holmes dashed into the crowd to protect the lady; but, just as he reached her, he gave a cry and dropped to the ground, with the blood running freely down his face"
+    },
+    {
+      "initiator": "fall",
+      "mediator": "guardsmen",
+      "receiver": "took",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "At his fall the guardsmen took to their heels in one direction and the loungers in the other, while a number of better dressed people, who had watched the scuffle without taking part in it, crowded in to help the lady and to attend to the injured man"
+    },
+    {
+      "initiator": "irene",
+      "mediator": "adler",
+      "receiver": "will",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Irene Adler, as I will still call her, had hurried up the steps; but she stood at the top with her superb figure outlined against the lights of the hall, looking back into the street"
+    },
+    {
+      "initiator": "poor",
+      "mediator": "poor",
+      "receiver": "gentleman",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cIs the poor gentleman much hurt"
+    },
+    {
+      "initiator": "dead",
+      "mediator": "dead",
+      "receiver": "cried",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cHe is dead,\u201d cried several voices"
+    },
+    {
+      "initiator": "there",
+      "mediator": "there",
+      "receiver": "life",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cNo, no, there\u2019s life in him"
+    },
+    {
+      "initiator": "shouted",
+      "mediator": "another",
+      "receiver": "another",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d shouted another"
+    },
+    {
+      "initiator": "gone",
+      "mediator": "gone",
+      "receiver": "before",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cBut he\u2019ll be gone before you can get him to hospital"
+    },
+    {
+      "initiator": "brave",
+      "mediator": "brave",
+      "receiver": "fellow",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cHe\u2019s a brave fellow,\u201d said a woman"
+    },
+    {
+      "initiator": "they",
+      "mediator": "would",
+      "receiver": "have",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cThey would have had the lady\u2019s purse and watch if it hadn\u2019t been for him"
+    },
+    {
+      "initiator": "they",
+      "mediator": "were",
+      "receiver": "gang",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "They were a gang, and a rough one, too"
+    },
+    {
+      "initiator": "bring",
+      "mediator": "bring",
+      "receiver": "marm",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "May we bring him in, marm"
+    },
+    {
+      "initiator": "this",
+      "mediator": "please",
+      "receiver": "please",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "This way, please"
+    },
+    {
+      "initiator": "borne",
+      "mediator": "into",
+      "receiver": "briony",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d Slowly and solemnly he was borne into Briony Lodge and laid out in the principal room, while I still observed the proceedings from my post by the window"
+    },
+    {
+      "initiator": "lamps",
+      "mediator": "been",
+      "receiver": "blinds",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "The lamps had been lit, but the blinds had not been drawn, so that I could see Holmes as he lay upon the couch"
+    },
+    {
+      "initiator": "would",
+      "mediator": "blackest",
+      "receiver": "treachery",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "And yet it would be the blackest treachery to Holmes to draw back now from the part which he had intrusted to me"
+    },
+    {
+      "initiator": "hardened",
+      "mediator": "heart",
+      "receiver": "took",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I hardened my heart, and took the smoke-rocket from under my ulster"
+    },
+    {
+      "initiator": "after",
+      "mediator": "thought",
+      "receiver": "injuring",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "After all, I thought, we are not injuring her"
+    },
+    {
+      "initiator": "preventing",
+      "mediator": "preventing",
+      "receiver": "from",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "We are but preventing her from injuring another"
+    },
+    {
+      "initiator": "holmes",
+      "mediator": "upon",
+      "receiver": "couch",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Holmes had sat up upon the couch, and I saw him motion like a man who is in need of air"
+    },
+    {
+      "initiator": "maid",
+      "mediator": "rushed",
+      "receiver": "across",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "A maid rushed across and threw open the window"
+    },
+    {
+      "initiator": "caught",
+      "mediator": "glimpse",
+      "receiver": "rushing",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I caught a glimpse of rushing figures, and a moment later the voice of Holmes from within assuring them that it was a false alarm"
+    },
+    {
+      "initiator": "slipping",
+      "mediator": "through",
+      "receiver": "shouting",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Slipping through the shouting crowd I made my way to the corner of the street, and in ten minutes was rejoiced to find my friend\u2019s arm in mine, and to get away from the scene of uproar"
+    },
+    {
+      "initiator": "walked",
+      "mediator": "silence",
+      "receiver": "some",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "He walked swiftly and in silence for some few minutes until we had turned down one of the quiet streets which lead towards the Edgeware Road"
+    },
+    {
+      "initiator": "very",
+      "mediator": "very",
+      "receiver": "doctor",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cYou did it very nicely, Doctor,\u201d he remarked"
+    },
+    {
+      "initiator": "have",
+      "mediator": "have",
+      "receiver": "photograph",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cYou have the photograph"
+    },
+    {
+      "initiator": "know",
+      "mediator": "where",
+      "receiver": null,
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cI know where it is"
+    },
+    {
+      "initiator": "showed",
+      "mediator": "told",
+      "receiver": "would",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cShe showed me, as I told you she would"
+    },
+    {
+      "initiator": "still",
+      "mediator": "still",
+      "receiver": "dark",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cI am still in the dark"
+    },
+    {
+      "initiator": "wish",
+      "mediator": "make",
+      "receiver": "mystery",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cI do not wish to make a mystery,\u201d said he, laughing"
+    },
+    {
+      "initiator": "course",
+      "mediator": "that",
+      "receiver": "everyone",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "You, of course, saw that everyone in the street was an accomplice"
+    },
+    {
+      "initiator": "they",
+      "mediator": "were",
+      "receiver": "engaged",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "They were all engaged for the evening"
+    },
+    {
+      "initiator": "guessed",
+      "mediator": "guessed",
+      "receiver": "much",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cI guessed as much"
+    },
+    {
+      "initiator": "then",
+      "mediator": "when",
+      "receiver": "broke",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cThen, when the row broke out, I had a little moist red paint in the palm of my hand"
+    },
+    {
+      "initiator": "rushed",
+      "mediator": "forward",
+      "receiver": "fell",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I rushed forward, fell down, clapped my hand to my face, and became a piteous spectacle"
+    },
+    {
+      "initiator": "that",
+      "mediator": "also",
+      "receiver": "could",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cThat also I could fathom"
+    },
+    {
+      "initiator": "then",
+      "mediator": "they",
+      "receiver": "carried",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cThen they carried me in"
+    },
+    {
+      "initiator": "bound",
+      "mediator": "bound",
+      "receiver": "have",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "She was bound to have me in"
+    },
+    {
+      "initiator": "into",
+      "mediator": "sitting",
+      "receiver": "room",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "And into her sitting-room, which was the very room which I suspected"
+    },
+    {
+      "initiator": "between",
+      "mediator": "that",
+      "receiver": "bedroom",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "It lay between that and her bedroom, and I was determined to see which"
+    },
+    {
+      "initiator": "they",
+      "mediator": "laid",
+      "receiver": "couch",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "They laid me on a couch, I motioned for air, they were compelled to open the window, and you had your chance"
+    },
+    {
+      "initiator": "that",
+      "mediator": "that",
+      "receiver": "help",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cHow did that help you"
+    },
+    {
+      "initiator": "when",
+      "mediator": "woman",
+      "receiver": "thinks",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "When a woman thinks that her house is on fire, her instinct is at once to rush to the thing which she values most"
+    },
+    {
+      "initiator": "overpowering",
+      "mediator": "impulse",
+      "receiver": "have",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "It is a perfectly overpowering impulse, and I have more than once taken advantage of it"
+    },
+    {
+      "initiator": "case",
+      "mediator": "darlington",
+      "receiver": "substitution",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "In the case of the Darlington Substitution Scandal it was of use to me, and also in the Arnsworth Castle business"
+    },
+    {
+      "initiator": "married",
+      "mediator": "woman",
+      "receiver": "grabs",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "A married woman grabs at her baby; an unmarried one reaches for her jewel-box"
+    },
+    {
+      "initiator": "clear",
+      "mediator": "that",
+      "receiver": "lady",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Now it was clear to me that our lady of to-day had nothing in the house more precious to her than what we are in quest of"
+    },
+    {
+      "initiator": "would",
+      "mediator": "rush",
+      "receiver": "secure",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "She would rush to secure it"
+    },
+    {
+      "initiator": "alarm",
+      "mediator": "fire",
+      "receiver": "done",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "The alarm of fire was admirably done"
+    },
+    {
+      "initiator": "smoke",
+      "mediator": "shouting",
+      "receiver": "were",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "The smoke and shouting were enough to shake nerves of steel"
+    },
+    {
+      "initiator": "photograph",
+      "mediator": "recess",
+      "receiver": "behind",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "The photograph is in a recess behind a sliding panel just above the right bell-pull"
+    },
+    {
+      "initiator": "there",
+      "mediator": "instant",
+      "receiver": "caught",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "She was there in an instant, and I caught a glimpse of it as she half drew it out"
+    },
+    {
+      "initiator": "when",
+      "mediator": "cried",
+      "receiver": "that",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "When I cried out that it was a false alarm, she replaced it, glanced at the rocket, rushed from the room, and I have not seen her since"
+    },
+    {
+      "initiator": "rose",
+      "mediator": "making",
+      "receiver": "excuses",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I rose, and, making my excuses, escaped from the house"
+    },
+    {
+      "initiator": "hesitated",
+      "mediator": "whether",
+      "receiver": "attempt",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I hesitated whether to attempt to secure the photograph at once; but the coachman had come in, and as he was watching me narrowly, it seemed safer to wait"
+    },
+    {
+      "initiator": "little",
+      "mediator": "over",
+      "receiver": "precipitance",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "A little over-precipitance may ruin all"
+    },
+    {
+      "initiator": "shall",
+      "mediator": "call",
+      "receiver": "with",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I shall call with the King to-morrow, and with you, if you care to come with us"
+    },
+    {
+      "initiator": "will",
+      "mediator": "shown",
+      "receiver": "into",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "We will be shown into the sitting-room to wait for the lady, but it is probable that when she comes she may find neither us nor the photograph"
+    },
+    {
+      "initiator": "might",
+      "mediator": "satisfaction",
+      "receiver": "majesty",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "It might be a satisfaction to his Majesty to regain it with his own hands"
+    },
+    {
+      "initiator": "when",
+      "mediator": "will",
+      "receiver": "call",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cAnd when will you call"
+    },
+    {
+      "initiator": "eight",
+      "mediator": "morning",
+      "receiver": "morning",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cAt eight in the morning"
+    },
+    {
+      "initiator": "will",
+      "mediator": "that",
+      "receiver": "shall",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "She will not be up, so that we shall have a clear field"
+    },
+    {
+      "initiator": "besides",
+      "mediator": "must",
+      "receiver": "prompt",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Besides, we must be prompt, for this marriage may mean a complete change in her life and habits"
+    },
+    {
+      "initiator": "must",
+      "mediator": "wire",
+      "receiver": "king",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I must wire to the King without delay"
+    },
+    {
+      "initiator": "reached",
+      "mediator": "baker",
+      "receiver": "street",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d We had reached Baker Street and had stopped at the door"
+    },
+    {
+      "initiator": "searching",
+      "mediator": "pockets",
+      "receiver": "when",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "He was searching his pockets for the key when someone passing said: \u201cGood-night, Mister Sherlock Holmes"
+    },
+    {
+      "initiator": "there",
+      "mediator": "were",
+      "receiver": "several",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d There were several people on the pavement at the time, but the greeting appeared to come from a slim youth in an ulster who had hurried by"
+    },
+    {
+      "initiator": "heard",
+      "mediator": "that",
+      "receiver": "voice",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cI\u2019ve heard that voice before,\u201d said Holmes, staring down the dimly lit street"
+    },
+    {
+      "initiator": "wonder",
+      "mediator": "deuce",
+      "receiver": "that",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cNow, I wonder who the deuce that could have been"
+    },
+    {
+      "initiator": "slept",
+      "mediator": "baker",
+      "receiver": "street",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I slept at Baker Street that night, and we were engaged upon our toast and coffee in the morning when the King of Bohemia rushed into the room"
+    },
+    {
+      "initiator": "cried",
+      "mediator": "grasping",
+      "receiver": "sherlock",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d he cried, grasping Sherlock Holmes by either shoulder and looking eagerly into his face"
+    },
+    {
+      "initiator": "have",
+      "mediator": "hopes",
+      "receiver": "have",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cBut you have hopes"
+    },
+    {
+      "initiator": "have",
+      "mediator": "have",
+      "receiver": "hopes",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cI have hopes"
+    },
+    {
+      "initiator": "then",
+      "mediator": "come",
+      "receiver": "come",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cThen, come"
+    },
+    {
+      "initiator": "impatience",
+      "mediator": "impatience",
+      "receiver": "gone",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I am all impatience to be gone"
+    },
+    {
+      "initiator": "must",
+      "mediator": "have",
+      "receiver": null,
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cWe must have a cab"
+    },
+    {
+      "initiator": "brougham",
+      "mediator": "brougham",
+      "receiver": "waiting",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cNo, my brougham is waiting"
+    },
+    {
+      "initiator": "then",
+      "mediator": "that",
+      "receiver": "will",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cThen that will simplify matters"
+    },
+    {
+      "initiator": "descended",
+      "mediator": "started",
+      "receiver": "once",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d We descended and started off once more for Briony Lodge"
+    },
+    {
+      "initiator": "irene",
+      "mediator": "adler",
+      "receiver": "married",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cIrene Adler is married,\u201d remarked Holmes"
+    },
+    {
+      "initiator": "english",
+      "mediator": "english",
+      "receiver": "lawyer",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cTo an English lawyer named Norton"
+    },
+    {
+      "initiator": "could",
+      "mediator": "could",
+      "receiver": "love",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cBut she could not love him"
+    },
+    {
+      "initiator": "hopes",
+      "mediator": "hopes",
+      "receiver": "that",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cI am in hopes that she does"
+    },
+    {
+      "initiator": "because",
+      "mediator": "would",
+      "receiver": "spare",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cBecause it would spare your Majesty all fear of future annoyance"
+    },
+    {
+      "initiator": "lady",
+      "mediator": "loves",
+      "receiver": "husband",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "If the lady loves her husband, she does not love your Majesty"
+    },
+    {
+      "initiator": "does",
+      "mediator": "love",
+      "receiver": "your",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "If she does not love your Majesty, there is no reason why she should interfere with your Majesty\u2019s plan"
+    },
+    {
+      "initiator": "wish",
+      "mediator": "been",
+      "receiver": "station",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I wish she had been of my own station"
+    },
+    {
+      "initiator": "what",
+      "mediator": "queen",
+      "receiver": "would",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "What a queen she would have made"
+    },
+    {
+      "initiator": "relapsed",
+      "mediator": "into",
+      "receiver": "moody",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d He relapsed into a moody silence, which was not broken until we drew up in Serpentine Avenue"
+    },
+    {
+      "initiator": "door",
+      "mediator": "briony",
+      "receiver": "lodge",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "The door of Briony Lodge was open, and an elderly woman stood upon the steps"
+    },
+    {
+      "initiator": "watched",
+      "mediator": "with",
+      "receiver": "sardonic",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "She watched us with a sardonic eye as we stepped from the brougham"
+    },
+    {
+      "initiator": "sherlock",
+      "mediator": "holmes",
+      "receiver": "believe",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cMr Sherlock Holmes, I believe"
+    },
+    {
+      "initiator": "holmes",
+      "mediator": "answered",
+      "receiver": "companion",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cI am Mr Holmes,\u201d answered my companion, looking at her with a questioning and rather startled gaze"
+    },
+    {
+      "initiator": "mistress",
+      "mediator": "told",
+      "receiver": "that",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "My mistress told me that you were likely to call"
+    },
+    {
+      "initiator": "left",
+      "mediator": "this",
+      "receiver": "morning",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "She left this morning with her husband by the 5:15 train from Charing Cross for the Continent"
+    },
+    {
+      "initiator": "sherlock",
+      "mediator": "holmes",
+      "receiver": "staggered",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d Sherlock Holmes staggered back, white with chagrin and surprise"
+    },
+    {
+      "initiator": "mean",
+      "mediator": "that",
+      "receiver": "left",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cDo you mean that she has left England"
+    },
+    {
+      "initiator": "never",
+      "mediator": "return",
+      "receiver": "return",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cNever to return"
+    },
+    {
+      "initiator": "asked",
+      "mediator": "king",
+      "receiver": "king",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d asked the King hoarsely"
+    },
+    {
+      "initiator": "pushed",
+      "mediator": "past",
+      "receiver": "servant",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d He pushed past the servant and rushed into the drawing-room, followed by the King and myself"
+    },
+    {
+      "initiator": "furniture",
+      "mediator": "scattered",
+      "receiver": "about",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "The furniture was scattered about in every direction, with dismantled shelves and open drawers, as if the lady had hurriedly ransacked them before her flight"
+    },
+    {
+      "initiator": "holmes",
+      "mediator": "rushed",
+      "receiver": "bell",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Holmes rushed at the bell-pull, tore back a small sliding shutter, and, plunging in his hand, pulled out a photograph and a letter"
+    },
+    {
+      "initiator": "photograph",
+      "mediator": "irene",
+      "receiver": "adler",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "The photograph was of Irene Adler herself in evening dress, the letter was superscribed to \u201cSherlock Holmes, Esq"
+    },
+    {
+      "initiator": "left",
+      "mediator": "left",
+      "receiver": "till",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "To be left till called for"
+    },
+    {
+      "initiator": "friend",
+      "mediator": "tore",
+      "receiver": "open",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d My friend tore it open, and we all three read it together"
+    },
+    {
+      "initiator": "dated",
+      "mediator": "midnight",
+      "receiver": "preceding",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "It was dated at midnight of the preceding night and ran in this way: \u201cMY DEAR MR"
+    },
+    {
+      "initiator": "sherlock",
+      "mediator": "holmes",
+      "receiver": "very",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "SHERLOCK HOLMES,\u2014You really did it very well"
+    },
+    {
+      "initiator": "until",
+      "mediator": "after",
+      "receiver": "alarm",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Until after the alarm of fire, I had not a suspicion"
+    },
+    {
+      "initiator": "then",
+      "mediator": "when",
+      "receiver": "found",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "But then, when I found how I had betrayed myself, I began to think"
+    },
+    {
+      "initiator": "been",
+      "mediator": "warned",
+      "receiver": "against",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I had been warned against you months ago"
+    },
+    {
+      "initiator": "been",
+      "mediator": "told",
+      "receiver": "that",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I had been told that, if the King employed an agent, it would certainly be you"
+    },
+    {
+      "initiator": "your",
+      "mediator": "address",
+      "receiver": "been",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "And your address had been given me"
+    },
+    {
+      "initiator": "with",
+      "mediator": "this",
+      "receiver": "made",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Yet, with all this, you made me reveal what you wanted to know"
+    },
+    {
+      "initiator": "even",
+      "mediator": "after",
+      "receiver": "became",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Even after I became suspicious, I found it hard to think evil of such a dear, kind old clergyman"
+    },
+    {
+      "initiator": "know",
+      "mediator": "have",
+      "receiver": "been",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "But, you know, I have been trained as an actress myself"
+    },
+    {
+      "initiator": "male",
+      "mediator": "costume",
+      "receiver": "nothing",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Male costume is nothing new to me"
+    },
+    {
+      "initiator": "often",
+      "mediator": "take",
+      "receiver": "advantage",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I often take advantage of the freedom which it gives"
+    },
+    {
+      "initiator": "sent",
+      "mediator": "john",
+      "receiver": "coachman",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I sent John, the coachman, to watch you, ran upstairs, got into my walking clothes, as I call them, and came down just as you departed"
+    },
+    {
+      "initiator": "well",
+      "mediator": "followed",
+      "receiver": "your",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cWell, I followed you to your door, and so made sure that I was really an object of interest to the celebrated Mr Sherlock Holmes"
+    },
+    {
+      "initiator": "then",
+      "mediator": "rather",
+      "receiver": "wished",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Then I, rather imprudently, wished you good-night, and started for the Temple to see my husband"
+    },
+    {
+      "initiator": "both",
+      "mediator": "thought",
+      "receiver": "best",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cWe both thought the best resource was flight, when pursued by so formidable an antagonist; so you will find the nest empty when you call to-morrow"
+    },
+    {
+      "initiator": "photograph",
+      "mediator": "photograph",
+      "receiver": "your",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "As to the photograph, your client may rest in peace"
+    },
+    {
+      "initiator": "love",
+      "mediator": "loved",
+      "receiver": "better",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I love and am loved by a better man than he"
+    },
+    {
+      "initiator": "king",
+      "mediator": "what",
+      "receiver": "will",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "The King may do what he will without hindrance from one whom he has cruelly wronged"
+    },
+    {
+      "initiator": "keep",
+      "mediator": "only",
+      "receiver": "safeguard",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I keep it only to safeguard myself, and to preserve a weapon which will always secure me from any steps which he might take in the future"
+    },
+    {
+      "initiator": "leave",
+      "mediator": "photograph",
+      "receiver": "which",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I leave a photograph which he might care to possess; and I remain, dear Mr Sherlock Holmes, \u201cVery truly yours, \u201cIRENE NORTON, _n\u00e9e_ ADLER"
+    },
+    {
+      "initiator": "what",
+      "mediator": "woman",
+      "receiver": "what",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cWhat a woman\u2014oh, what a woman"
+    },
+    {
+      "initiator": "cried",
+      "mediator": "king",
+      "receiver": "bohemia",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d cried the King of Bohemia, when we had all three read this epistle"
+    },
+    {
+      "initiator": "tell",
+      "mediator": "quick",
+      "receiver": "resolute",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cDid I not tell you how quick and resolute she was"
+    },
+    {
+      "initiator": "would",
+      "mediator": "have",
+      "receiver": "made",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Would she not have made an admirable queen"
+    },
+    {
+      "initiator": "pity",
+      "mediator": "pity",
+      "receiver": "that",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Is it not a pity that she was not on my level"
+    },
+    {
+      "initiator": "from",
+      "mediator": "what",
+      "receiver": "have",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cFrom what I have seen of the lady, she seems, indeed, to be on a very different level to your Majesty,\u201d said Holmes coldly"
+    },
+    {
+      "initiator": "sorry",
+      "mediator": "that",
+      "receiver": "have",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cI am sorry that I have not been able to bring your Majesty\u2019s business to a more successful conclusion"
+    },
+    {
+      "initiator": "contrary",
+      "mediator": "dear",
+      "receiver": "cried",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cOn the contrary, my dear sir,\u201d cried the King; \u201cnothing could be more successful"
+    },
+    {
+      "initiator": "know",
+      "mediator": "that",
+      "receiver": "word",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I know that her word is inviolate"
+    },
+    {
+      "initiator": "photograph",
+      "mediator": "safe",
+      "receiver": "were",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "The photograph is now as safe as if it were in the fire"
+    },
+    {
+      "initiator": "glad",
+      "mediator": "hear",
+      "receiver": "your",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cI am glad to hear your Majesty say so"
+    },
+    {
+      "initiator": "pray",
+      "mediator": "tell",
+      "receiver": "what",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Pray tell me in what way I can reward you"
+    },
+    {
+      "initiator": "this",
+      "mediator": "ring",
+      "receiver": "slipped",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "This ring\u2014\u201d He slipped an emerald snake ring from his finger and held it out upon the palm of his hand"
+    },
+    {
+      "initiator": "your",
+      "mediator": "majesty",
+      "receiver": "something",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cYour Majesty has something which I should value even more highly,\u201d said Holmes"
+    },
+    {
+      "initiator": "have",
+      "mediator": "name",
+      "receiver": "name",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cYou have but to name it"
+    },
+    {
+      "initiator": "this",
+      "mediator": "photograph",
+      "receiver": "photograph",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cThis photograph"
+    },
+    {
+      "initiator": "king",
+      "mediator": "stared",
+      "receiver": "amazement",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d The King stared at him in amazement"
+    },
+    {
+      "initiator": "thank",
+      "mediator": "thank",
+      "receiver": "your",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cI thank your Majesty"
+    },
+    {
+      "initiator": "then",
+      "mediator": "there",
+      "receiver": "more",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Then there is no more to be done in the matter"
+    },
+    {
+      "initiator": "have",
+      "mediator": "honour",
+      "receiver": "wish",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I have the honour to wish you a very good morning"
+    },
+    {
+      "initiator": "bowed",
+      "mediator": "turning",
+      "receiver": "away",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d He bowed, and, turning away without observing the hand which the King had stretched out to him, he set off in my company for his chambers"
+    },
+    {
+      "initiator": "that",
+      "mediator": "great",
+      "receiver": "scandal",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "And that was how a great scandal threatened to affect the kingdom of Bohemia, and how the best plans of Mr Sherlock Holmes were beaten by a woman\u2019s wit"
+    },
+    {
+      "initiator": "used",
+      "mediator": "make",
+      "receiver": "merry",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "He used to make merry over the cleverness of women, but I have not heard him do it of late"
+    },
+    {
+      "initiator": "when",
+      "mediator": "speaks",
+      "receiver": "irene",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "And when he speaks of Irene Adler, or when he refers to her photograph, it is always under the honourable title of _the_ woman"
+    },
+    {
+      "initiator": "headed",
+      "mediator": "league",
+      "receiver": "called",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "THE RED-HEADED LEAGUE I had called upon my friend, Mr Sherlock Holmes, one day in the autumn of last year and found him in deep conversation with a very stout, florid-faced, elderly gentleman with fiery red hair"
+    },
+    {
+      "initiator": "with",
+      "mediator": "apology",
+      "receiver": "intrusion",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "With an apology for my intrusion, I was about to withdraw when Holmes pulled me abruptly into the room and closed the door behind me"
+    },
+    {
+      "initiator": "could",
+      "mediator": "have",
+      "receiver": "come",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cYou could not possibly have come at a better time, my dear Watson,\u201d he said cordially"
+    },
+    {
+      "initiator": "afraid",
+      "mediator": "afraid",
+      "receiver": "that",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cI was afraid that you were engaged"
+    },
+    {
+      "initiator": "very",
+      "mediator": "much",
+      "receiver": null,
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Very much so"
+    },
+    {
+      "initiator": "then",
+      "mediator": "wait",
+      "receiver": "next",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cThen I can wait in the next room"
+    },
+    {
+      "initiator": "settee",
+      "mediator": "said",
+      "receiver": "holmes",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cTry the settee,\u201d said Holmes, relapsing into his armchair and putting his fingertips together, as was his custom when in judicial moods"
+    },
+    {
+      "initiator": "know",
+      "mediator": "dear",
+      "receiver": "watson",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cI know, my dear Watson, that you share my love of all that is bizarre and outside the conventions and humdrum routine of everyday life"
+    },
+    {
+      "initiator": "have",
+      "mediator": "shown",
+      "receiver": "your",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "You have shown your relish for it by the enthusiasm which has prompted you to chronicle, and, if you will excuse my saying so, somewhat to embellish so many of my own little adventures"
+    },
+    {
+      "initiator": "your",
+      "mediator": "cases",
+      "receiver": "have",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cYour cases have indeed been of the greatest interest to me,\u201d I observed"
+    },
+    {
+      "initiator": "jabez",
+      "mediator": "wilson",
+      "receiver": "here",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Now, Mr Jabez Wilson here has been good enough to call upon me this morning, and to begin a narrative which promises to be one of the most singular which I have listened to for some time"
+    },
+    {
+      "initiator": "have",
+      "mediator": "heard",
+      "receiver": "remark",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "You have heard me remark that the strangest and most unique things are very often connected not with the larger but with the smaller crimes, and occasionally, indeed, where there is room for doubt whether any positive crime has been committed"
+    },
+    {
+      "initiator": "have",
+      "mediator": "heard",
+      "receiver": "impossible",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "As far as I have heard, it is impossible for me to say whether the present case is an instance of crime or not, but the course of events is certainly among the most singular that I have ever listened to"
+    },
+    {
+      "initiator": "perhaps",
+      "mediator": "wilson",
+      "receiver": "would",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Perhaps, Mr Wilson, you would have the great kindness to recommence your narrative"
+    },
+    {
+      "initiator": "because",
+      "mediator": "friend",
+      "receiver": "watson",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I ask you not merely because my friend Dr Watson has not heard the opening part but also because the peculiar nature of the story makes me anxious to have every possible detail from your lips"
+    },
+    {
+      "initiator": "rule",
+      "mediator": "when",
+      "receiver": "have",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "As a rule, when I have heard some slight indication of the course of events, I am able to guide myself by the thousands of other similar cases which occur to my memory"
+    },
+    {
+      "initiator": "present",
+      "mediator": "instance",
+      "receiver": "forced",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "In the present instance I am forced to admit that the facts are, to the best of my belief, unique"
+    },
+    {
+      "initiator": "client",
+      "mediator": "puffed",
+      "receiver": "chest",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d The portly client puffed out his chest with an appearance of some little pride and pulled a dirty and wrinkled newspaper from the inside pocket of his greatcoat"
+    },
+    {
+      "initiator": "glanced",
+      "mediator": "down",
+      "receiver": "advertisement",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "As he glanced down the advertisement column, with his head thrust forward and the paper flattened out upon his knee, I took a good look at the man and endeavoured, after the fashion of my companion, to read the indications which might be presented by his dress or appearance"
+    },
+    {
+      "initiator": "gain",
+      "mediator": "gain",
+      "receiver": "very",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I did not gain very much, however, by my inspection"
+    },
+    {
+      "initiator": "visitor",
+      "mediator": "bore",
+      "receiver": "every",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Our visitor bore every mark of being an average commonplace British tradesman, obese, pompous, and slow"
+    },
+    {
+      "initiator": "wore",
+      "mediator": "rather",
+      "receiver": "baggy",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "He wore rather baggy grey shepherd\u2019s check trousers, a not over-clean black frock-coat, unbuttoned in the front, and a drab waistcoat with a heavy brassy Albert chain, and a square pierced bit of metal dangling down as an ornament"
+    },
+    {
+      "initiator": "frayed",
+      "mediator": "faded",
+      "receiver": "brown",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "A frayed top-hat and a faded brown overcoat with a wrinkled velvet collar lay upon a chair beside him"
+    },
+    {
+      "initiator": "altogether",
+      "mediator": "look",
+      "receiver": "would",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Altogether, look as I would, there was nothing remarkable about the man save his blazing red head, and the expression of extreme chagrin and discontent upon his features"
+    },
+    {
+      "initiator": "sherlock",
+      "mediator": "holmes",
+      "receiver": "quick",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Sherlock Holmes\u2019 quick eye took in my occupation, and he shook his head with a smile as he noticed my questioning glances"
+    },
+    {
+      "initiator": "name",
+      "mediator": "good",
+      "receiver": "fortune",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cHow, in the name of good-fortune, did you know all that, Mr Holmes"
+    },
+    {
+      "initiator": "know",
+      "mediator": "example",
+      "receiver": "that",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cHow did you know, for example, that I did manual labour"
+    },
+    {
+      "initiator": "true",
+      "mediator": "gospel",
+      "receiver": "began",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "It\u2019s as true as gospel, for I began as a ship\u2019s carpenter"
+    },
+    {
+      "initiator": "your",
+      "mediator": "hands",
+      "receiver": "dear",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cYour hands, my dear sir"
+    },
+    {
+      "initiator": "your",
+      "mediator": "right",
+      "receiver": "hand",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Your right hand is quite a size larger than your left"
+    },
+    {
+      "initiator": "have",
+      "mediator": "made",
+      "receiver": "small",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I have made a small study of tattoo marks and have even contributed to the literature of the subject"
+    },
+    {
+      "initiator": "that",
+      "mediator": "trick",
+      "receiver": "staining",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "That trick of staining the fishes\u2019 scales of a delicate pink is quite peculiar to China"
+    },
+    {
+      "initiator": "when",
+      "mediator": "addition",
+      "receiver": "chinese",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "When, in addition, I see a Chinese coin hanging from your watch-chain, the matter becomes even more simple"
+    },
+    {
+      "initiator": "jabez",
+      "mediator": "wilson",
+      "receiver": "laughed",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d Mr Jabez Wilson laughed heavily"
+    },
+    {
+      "initiator": "thought",
+      "mediator": "first",
+      "receiver": "that",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cI thought at first that you had done something clever, but I see that there was nothing in it after all"
+    },
+    {
+      "initiator": "begin",
+      "mediator": "think",
+      "receiver": "watson",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cI begin to think, Watson,\u201d said Holmes, \u201cthat I make a mistake in explaining"
+    },
+    {
+      "initiator": "_omne",
+      "mediator": "ignotum",
+      "receiver": "magnifico_",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u2018_Omne ignotum pro magnifico_,\u2019 you know, and my poor little reputation, such as it is, will suffer shipwreck if I am so candid"
+    },
+    {
+      "initiator": "find",
+      "mediator": "find",
+      "receiver": "advertisement",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Can you not find the advertisement, Mr Wilson"
+    },
+    {
+      "initiator": "have",
+      "mediator": "answered",
+      "receiver": "with",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cYes, I have got it now,\u201d he answered with his thick red finger planted halfway down the column"
+    },
+    {
+      "initiator": "this",
+      "mediator": "what",
+      "receiver": "began",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "This is what began it all"
+    },
+    {
+      "initiator": "headed",
+      "mediator": "sound",
+      "receiver": "body",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "All red-headed men who are sound in body and mind and above the age of twenty-one years, are eligible"
+    },
+    {
+      "initiator": "person",
+      "mediator": "monday",
+      "receiver": "eleven",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Apply in person on Monday, at eleven o\u2019clock, to Duncan Ross, at the offices of the League, 7 Pope\u2019s Court, Fleet Street"
+    },
+    {
+      "initiator": "what",
+      "mediator": "earth",
+      "receiver": "does",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cWhat on earth does this mean"
+    },
+    {
+      "initiator": "ejaculated",
+      "mediator": "after",
+      "receiver": "twice",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d I ejaculated after I had twice read over the extraordinary announcement"
+    },
+    {
+      "initiator": "holmes",
+      "mediator": "chuckled",
+      "receiver": "wriggled",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Holmes chuckled and wriggled in his chair, as was his habit when in high spirits"
+    },
+    {
+      "initiator": "little",
+      "mediator": "beaten",
+      "receiver": "track",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cIt is a little off the beaten track, isn\u2019t it"
+    },
+    {
+      "initiator": "wilson",
+      "mediator": "scratch",
+      "receiver": "tell",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cAnd now, Mr Wilson, off you go at scratch and tell us all about yourself, your household, and the effect which this advertisement had upon your fortunes"
+    },
+    {
+      "initiator": "will",
+      "mediator": "first",
+      "receiver": "make",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "You will first make a note, Doctor, of the paper and the date"
+    },
+    {
+      "initiator": "_the",
+      "mediator": "morning",
+      "receiver": "chronicle_",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cIt is _The Morning Chronicle_ of April 27, 1890"
+    },
+    {
+      "initiator": "just",
+      "mediator": "months",
+      "receiver": "months",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Just two months ago"
+    },
+    {
+      "initiator": "very",
+      "mediator": "good",
+      "receiver": "good",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cVery good"
+    },
+    {
+      "initiator": "well",
+      "mediator": "just",
+      "receiver": "have",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cWell, it is just as I have been telling you, Mr Sherlock Holmes,\u201d said Jabez Wilson, mopping his forehead; \u201cI have a small pawnbroker\u2019s business at Coburg Square, near the City"
+    },
+    {
+      "initiator": "very",
+      "mediator": "large",
+      "receiver": "affair",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "It\u2019s not a very large affair, and of late years it has not done more than just give me a living"
+    },
+    {
+      "initiator": "name",
+      "mediator": "vincent",
+      "receiver": "spaulding",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cHis name is Vincent Spaulding, and he\u2019s not such a youth, either"
+    },
+    {
+      "initiator": "should",
+      "mediator": "wish",
+      "receiver": "smarter",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I should not wish a smarter assistant, Mr Holmes; and I know very well that he could better himself and earn twice what I am able to give him"
+    },
+    {
+      "initiator": "after",
+      "mediator": "satisfied",
+      "receiver": "should",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "But, after all, if he is satisfied, why should I put ideas in his head"
+    },
+    {
+      "initiator": "seem",
+      "mediator": "most",
+      "receiver": "fortunate",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "You seem most fortunate in having an _employ\u00e9_ who comes under the full market price"
+    },
+    {
+      "initiator": "common",
+      "mediator": "common",
+      "receiver": "experience",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "It is not a common experience among employers in this age"
+    },
+    {
+      "initiator": "know",
+      "mediator": "that",
+      "receiver": "your",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I don\u2019t know that your assistant is not as remarkable as your advertisement"
+    },
+    {
+      "initiator": "faults",
+      "mediator": "faults",
+      "receiver": "said",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cOh, he has his faults, too,\u201d said Mr Wilson"
+    },
+    {
+      "initiator": "never",
+      "mediator": "such",
+      "receiver": "fellow",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cNever was such a fellow for photography"
+    },
+    {
+      "initiator": "snapping",
+      "mediator": "away",
+      "receiver": "with",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Snapping away with a camera when he ought to be improving his mind, and then diving down into the cellar like a rabbit into its hole to develop his pictures"
+    },
+    {
+      "initiator": "that",
+      "mediator": "main",
+      "receiver": "fault",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "That is his main fault, but on the whole he\u2019s a good worker"
+    },
+    {
+      "initiator": "there",
+      "mediator": "vice",
+      "receiver": null,
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "There\u2019s no vice in him"
+    },
+    {
+      "initiator": "still",
+      "mediator": "still",
+      "receiver": "with",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cHe is still with you, I presume"
+    },
+    {
+      "initiator": "girl",
+      "mediator": "fourteen",
+      "receiver": "does",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "He and a girl of fourteen, who does a bit of simple cooking and keeps the place clean\u2014that\u2019s all I have in the house, for I am a widower and never had any family"
+    },
+    {
+      "initiator": "live",
+      "mediator": "very",
+      "receiver": "three",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "We live very quietly, sir, the three of us; and we keep a roof over our heads and pay our debts, if we do nothing more"
+    },
+    {
+      "initiator": "first",
+      "mediator": "thing",
+      "receiver": "that",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cThe first thing that put us out was that advertisement"
+    },
+    {
+      "initiator": "spaulding",
+      "mediator": "came",
+      "receiver": "down",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Spaulding, he came down into the office just this day eight weeks, with this very paper in his hand, and he says: \u201c\u2018I wish to the Lord, Mr Wilson, that I was a red-headed man"
+    },
+    {
+      "initiator": "says",
+      "mediator": "here",
+      "receiver": "another",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201c\u2018Why,\u2019 says he, \u2018here\u2019s another vacancy on the League of the Red-headed Men"
+    },
+    {
+      "initiator": "worth",
+      "mediator": "quite",
+      "receiver": "little",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "It\u2019s worth quite a little fortune to any man who gets it, and I understand that there are more vacancies than there are men, so that the trustees are at their wits\u2019 end what to do with the money"
+    },
+    {
+      "initiator": "hair",
+      "mediator": "would",
+      "receiver": "only",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "If my hair would only change colour, here\u2019s a nice little crib all ready for me to step into"
+    },
+    {
+      "initiator": "what",
+      "mediator": "then",
+      "receiver": "then",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u2019 \u201c\u2018Why, what is it, then"
+    },
+    {
+      "initiator": "holmes",
+      "mediator": "very",
+      "receiver": "stay",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "You see, Mr Holmes, I am a very stay-at-home man, and as my business came to me instead of my having to go to it, I was often weeks on end without putting my foot over the door-mat"
+    },
+    {
+      "initiator": "that",
+      "mediator": "didn",
+      "receiver": "know",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "In that way I didn\u2019t know much of what was going on outside, and I was always glad of a bit of news"
+    },
+    {
+      "initiator": "have",
+      "mediator": "never",
+      "receiver": "heard",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201c\u2018Have you never heard of the League of the Red-headed Men"
+    },
+    {
+      "initiator": "asked",
+      "mediator": "with",
+      "receiver": "eyes",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u2019 he asked with his eyes open"
+    },
+    {
+      "initiator": "wonder",
+      "mediator": "that",
+      "receiver": "eligible",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u2019 \u201c\u2018Why, I wonder at that, for you are eligible yourself for one of the vacancies"
+    },
+    {
+      "initiator": "what",
+      "mediator": "they",
+      "receiver": "they",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u2019 \u201c\u2018And what are they worth"
+    },
+    {
+      "initiator": "tell",
+      "mediator": "about",
+      "receiver": "said",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201c\u2018Tell me all about it,\u2019 said I"
+    },
+    {
+      "initiator": "well",
+      "mediator": "said",
+      "receiver": "showing",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201c\u2018Well,\u2019 said he, showing me the advertisement, \u2018you can see for yourself that the League has a vacancy, and there is the address where you should apply for particulars"
+    },
+    {
+      "initiator": "make",
+      "mediator": "league",
+      "receiver": "founded",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "As far as I can make out, the League was founded by an American millionaire, Ezekiah Hopkins, who was very peculiar in his ways"
+    },
+    {
+      "initiator": "from",
+      "mediator": "hear",
+      "receiver": "splendid",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "From all I hear it is splendid pay and very little to do"
+    },
+    {
+      "initiator": "said",
+      "mediator": "there",
+      "receiver": "would",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u2019 \u201c\u2018But,\u2019 said I, \u2018there would be millions of red-headed men who would apply"
+    },
+    {
+      "initiator": "many",
+      "mediator": "might",
+      "receiver": "think",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u2019 \u201c\u2018Not so many as you might think,\u2019 he answered"
+    },
+    {
+      "initiator": "confined",
+      "mediator": "confined",
+      "receiver": "londoners",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u2018You see it is really confined to Londoners, and to grown men"
+    },
+    {
+      "initiator": "this",
+      "mediator": "american",
+      "receiver": "started",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "This American had started from London when he was young, and he wanted to do the old town a good turn"
+    },
+    {
+      "initiator": "then",
+      "mediator": "again",
+      "receiver": "have",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Then, again, I have heard it is no use your applying if your hair is light red, or dark red, or anything but real bright, blazing, fiery red"
+    },
+    {
+      "initiator": "vincent",
+      "mediator": "spaulding",
+      "receiver": "seemed",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Vincent Spaulding seemed to know so much about it that I thought he might prove useful, so I just ordered him to put up the shutters for the day and to come right away with me"
+    },
+    {
+      "initiator": "very",
+      "mediator": "willing",
+      "receiver": "have",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "He was very willing to have a holiday, so we shut the business up and started off for the address that was given us in the advertisement"
+    },
+    {
+      "initiator": "never",
+      "mediator": "hope",
+      "receiver": "such",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cI never hope to see such a sight as that again, Mr Holmes"
+    },
+    {
+      "initiator": "from",
+      "mediator": "north",
+      "receiver": "south",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "From north, south, east, and west every man who had a shade of red in his hair had tramped into the city to answer the advertisement"
+    },
+    {
+      "initiator": "fleet",
+      "mediator": "street",
+      "receiver": "choked",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Fleet Street was choked with red-headed folk, and Pope\u2019s Court looked like a coster\u2019s orange barrow"
+    },
+    {
+      "initiator": "should",
+      "mediator": "have",
+      "receiver": "thought",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I should not have thought there were so many in the whole country as were brought together by that single advertisement"
+    },
+    {
+      "initiator": "every",
+      "mediator": "shade",
+      "receiver": "colour",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Every shade of colour they were\u2014straw, lemon, orange, brick, Irish-setter, liver, clay; but, as Spaulding said, there were not many who had the real vivid flame-coloured tint"
+    },
+    {
+      "initiator": "when",
+      "mediator": "many",
+      "receiver": "were",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "When I saw how many were waiting, I would have given it up in despair; but Spaulding would not hear of it"
+    },
+    {
+      "initiator": "could",
+      "mediator": "imagine",
+      "receiver": "pushed",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "How he did it I could not imagine, but he pushed and pulled and butted until he got me through the crowd, and right up to the steps which led to the office"
+    },
+    {
+      "initiator": "pray",
+      "mediator": "continue",
+      "receiver": "your",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cPray continue your very interesting statement"
+    },
+    {
+      "initiator": "there",
+      "mediator": "nothing",
+      "receiver": "office",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201d \u201cThere was nothing in the office but a couple of wooden chairs and a deal table, behind which sat a small man with a head that was even redder than mine"
+    },
+    {
+      "initiator": "said",
+      "mediator": "words",
+      "receiver": "each",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "He said a few words to each candidate as he came up, and then he always managed to find some fault in them which would disqualify them"
+    },
+    {
+      "initiator": "getting",
+      "mediator": "vacancy",
+      "receiver": "seem",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Getting a vacancy did not seem to be such a very easy matter, after all"
+    },
+    {
+      "initiator": "however",
+      "mediator": "when",
+      "receiver": "turn",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "However, when our turn came the little man was much more favourable to me than to any of the others, and he closed the door as we entered, so that he might have a private word with us"
+    },
+    {
+      "initiator": "this",
+      "mediator": "jabez",
+      "receiver": "wilson",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201c\u2018This is Mr Jabez Wilson,\u2019 said my assistant, \u2018and he is willing to fill a vacancy in the League"
+    },
+    {
+      "initiator": "suited",
+      "mediator": "suited",
+      "receiver": "other",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u2019 \u201c\u2018And he is admirably suited for it,\u2019 the other answered"
+    },
+    {
+      "initiator": "cannot",
+      "mediator": "recall",
+      "receiver": "when",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I cannot recall when I have seen anything so fine"
+    },
+    {
+      "initiator": "took",
+      "mediator": "step",
+      "receiver": "backward",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u2019 He took a step backward, cocked his head on one side, and gazed at my hair until I felt quite bashful"
+    },
+    {
+      "initiator": "then",
+      "mediator": "plunged",
+      "receiver": "forward",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Then suddenly he plunged forward, wrung my hand, and congratulated me warmly on my success"
+    },
+    {
+      "initiator": "would",
+      "mediator": "injustice",
+      "receiver": "hesitate",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201c\u2018It would be injustice to hesitate,\u2019 said he"
+    },
+    {
+      "initiator": "will",
+      "mediator": "however",
+      "receiver": "sure",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u2018You will, however, I am sure, excuse me for taking an obvious precaution"
+    },
+    {
+      "initiator": "with",
+      "mediator": "that",
+      "receiver": "seized",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u2019 With that he seized my hair in both his hands, and tugged until I yelled with the pain"
+    },
+    {
+      "initiator": "there",
+      "mediator": "water",
+      "receiver": "your",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u2018There is water in your eyes,\u2019 said he as he released me"
+    },
+    {
+      "initiator": "perceive",
+      "mediator": "that",
+      "receiver": "should",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u2018I perceive that all is as it should be"
+    },
+    {
+      "initiator": "have",
+      "mediator": "careful",
+      "receiver": "have",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "But we have to be careful, for we have twice been deceived by wigs and once by paint"
+    },
+    {
+      "initiator": "could",
+      "mediator": "tell",
+      "receiver": "tales",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I could tell you tales of cobbler\u2019s wax which would disgust you with human nature"
+    },
+    {
+      "initiator": "stepped",
+      "mediator": "over",
+      "receiver": "window",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u2019 He stepped over to the window and shouted through it at the top of his voice that the vacancy was filled"
+    },
+    {
+      "initiator": "groan",
+      "mediator": "disappointment",
+      "receiver": "came",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "A groan of disappointment came up from below, and the folk all trooped away in different directions until there was not a red-head to be seen except my own and that of the manager"
+    },
+    {
+      "initiator": "name",
+      "mediator": "said",
+      "receiver": "duncan",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201c\u2018My name,\u2019 said he, \u2018is Mr Duncan Ross, and I am myself one of the pensioners upon the fund left by our noble benefactor"
+    },
+    {
+      "initiator": "married",
+      "mediator": "married",
+      "receiver": "wilson",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Are you a married man, Mr Wilson"
+    },
+    {
+      "initiator": "answered",
+      "mediator": "that",
+      "receiver": null,
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u2019 \u201cI answered that I had not"
+    },
+    {
+      "initiator": "said",
+      "mediator": "that",
+      "receiver": "very",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u2019 he said gravely, \u2018that is very serious indeed"
+    },
+    {
+      "initiator": "sorry",
+      "mediator": "hear",
+      "receiver": "that",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "I am sorry to hear you say that"
+    },
+    {
+      "initiator": "fund",
+      "mediator": "course",
+      "receiver": "propagation",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "The fund was, of course, for the propagation and spread of the red-heads as well as for their maintenance"
+    },
+    {
+      "initiator": "unfortunate",
+      "mediator": "unfortunate",
+      "receiver": "that",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "It is exceedingly unfortunate that you should be a bachelor"
+    },
+    {
+      "initiator": "face",
+      "mediator": "lengthened",
+      "receiver": "this",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u2019 \u201cMy face lengthened at this, Mr Holmes, for I thought that I was not to have the vacancy after all; but after thinking it over for a few minutes he said that it would be all right"
+    },
+    {
+      "initiator": "case",
+      "mediator": "another",
+      "receiver": "said",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201c\u2018In the case of another,\u2019 said he, \u2018the objection might be fatal, but we must stretch a point in favour of a man with such a head of hair as yours"
+    },
+    {
+      "initiator": "when",
+      "mediator": "shall",
+      "receiver": "able",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "When shall you be able to enter upon your new duties"
+    },
+    {
+      "initiator": "well",
+      "mediator": "little",
+      "receiver": "awkward",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u2019 \u201c\u2018Well, it is a little awkward, for I have a business already,\u2019 said I"
+    },
+    {
+      "initiator": "never",
+      "mediator": "mind",
+      "receiver": "about",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201c\u2018Oh, never mind about that, Mr Wilson"
+    },
+    {
+      "initiator": "said",
+      "mediator": "vincent",
+      "receiver": "spaulding",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u2019 said Vincent Spaulding"
+    },
+    {
+      "initiator": "should",
+      "mediator": "able",
+      "receiver": "look",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u2018I should be able to look after that for you"
+    },
+    {
+      "initiator": "what",
+      "mediator": "would",
+      "receiver": "hours",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u2019 \u201c\u2018What would be the hours"
+    },
+    {
+      "initiator": "pawnbroker",
+      "mediator": "business",
+      "receiver": "done",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u2019 \u201cNow a pawnbroker\u2019s business is mostly done of an evening, Mr Holmes, especially Thursday and Friday evening, which is just before pay-day; so it would suit me very well to earn a little in the mornings"
+    },
+    {
+      "initiator": "besides",
+      "mediator": "knew",
+      "receiver": "that",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Besides, I knew that my assistant was a good man, and that he would see to anything that turned up"
+    },
+    {
+      "initiator": "that",
+      "mediator": "would",
+      "receiver": "suit",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201c\u2018That would suit me very well,\u2019 said I"
+    },
+    {
+      "initiator": "what",
+      "mediator": "call",
+      "receiver": "nominal",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u2019 \u201c\u2018What do you call purely nominal"
+    },
+    {
+      "initiator": "well",
+      "mediator": "have",
+      "receiver": "office",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u2019 \u201c\u2018Well, you have to be in the office, or at least in the building, the whole time"
+    },
+    {
+      "initiator": "leave",
+      "mediator": "forfeit",
+      "receiver": "your",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "If you leave, you forfeit your whole position forever"
+    },
+    {
+      "initiator": "will",
+      "mediator": "very",
+      "receiver": "clear",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "The will is very clear upon that point"
+    },
+    {
+      "initiator": "with",
+      "mediator": "conditions",
+      "receiver": "budge",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "You don\u2019t comply with the conditions if you budge from the office during that time"
+    },
+    {
+      "initiator": "only",
+      "mediator": "four",
+      "receiver": "hours",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u2019 \u201c\u2018It\u2019s only four hours a day, and I should not think of leaving,\u2019 said I"
+    },
+    {
+      "initiator": "excuse",
+      "mediator": "will",
+      "receiver": "avail",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201c\u2018No excuse will avail,\u2019 said Mr Duncan Ross; \u2018neither sickness nor business nor anything else"
+    },
+    {
+      "initiator": "there",
+      "mediator": "must",
+      "receiver": "stay",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "There you must stay, or you lose your billet"
+    },
+    {
+      "initiator": "copy",
+      "mediator": "copy",
+      "receiver": "_encyclop\u00e6dia",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u2019 \u201c\u2018Is to copy out the _Encyclop\u00e6dia Britannica_"
+    },
+    {
+      "initiator": "there",
+      "mediator": "first",
+      "receiver": "volume",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "There is the first volume of it in that press"
+    },
+    {
+      "initiator": "must",
+      "mediator": "find",
+      "receiver": "your",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "You must find your own ink, pens, and blotting-paper, but we provide this table and chair"
+    },
+    {
+      "initiator": "will",
+      "mediator": "ready",
+      "receiver": "morrow",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "Will you be ready to-morrow"
+    },
+    {
+      "initiator": "well",
+      "mediator": "thought",
+      "receiver": "over",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "\u201cWell, I thought over the matter all day, and by evening I was in low spirits again; for I had quite persuaded myself that the whole affair must be some great hoax or fraud, though what its object might be I could not imagine"
+    },
+    {
+      "initiator": "seemed",
+      "mediator": "altogether",
+      "receiver": "past",
+      "source": "The Adventures of Sherlock Holmes",
+      "text": "It seemed altogether past belief that anyone could make such a will, or that they would pay such a sum for doing anything so simple as copying out the _Encyclop\u00e6dia Britannica_"
+    }
+  ],
+  "metadata": {
+    "total_sentences": 729,
+    "total_concepts": 2116,
+    "morphology_clusters": 109
+  }
+}

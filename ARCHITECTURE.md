@@ -2,401 +2,296 @@
 
 ## Overview
 
-TruthSpace LCM is a **Geometric Language Model** that performs all semantic operations as geometric operations in concept space. No neural networks, no training, no hard-coded linguistic rules - just geometry.
+TruthSpace LCM is a **Geometric Language Model** with a modular **Gear Chain** architecture. It performs all semantic operations as geometric transformations - no neural networks, no training, just composable gears and quaternion geometry.
 
-**Version**: 1.0.0
+**Version**: 2.0.0
 
 ## Core Principles
 
-> **All semantic operations are geometric operations in concept space.**
-> **ENCODE = DECODE - they are the same operation in opposite directions, like φ and 1/φ.**
-> **Two quaternions: one for meaning, one for expression.**
+> **Each gear is a dimension - swap in/out at runtime.**
+> **Corpus is knowledge, gears are reasoning - separate what from how.**
+> **Same architecture works for NLP, data pipelines, and more.**
 
-### The Unified System
+### The Gear Chain System
 
 | Component | Purpose | Key Innovation |
 |-----------|---------|----------------|
-| **GeometricKnowledge** | Frame extraction | Position-based roles, no parsing |
-| **HolographicTemplates** | Response generation | Interference patterns |
-| **SemanticQuaternion** | Concept encoding | 100% analogy accuracy |
-| **φ-Dial** | Output styling | 4D quaternion control |
+| **Gear** | Transformation unit | Composable, swappable at runtime |
+| **GearState** | Data flowing through chain | Domain-agnostic state object |
+| **GearChain** | Composes gears | Sequential processing with quaternion accumulation |
+| **Quaternion** | 4D rotation encoding | Parameters and semantic features |
 
 ---
 
 ## Architecture Diagram
 
+### Gear Chain Architecture
+
 ```
-INPUT: "Who is Holmes?"
+INPUT: GearState(entity="Holmes", role="character", actions=["investigates"])
         │
         ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│                    GeometricKnowledge                           │
-│  ┌─────────────────────────────────────────────────────────┐   │
-│  │ Position-Based Frame Extraction                          │   │
-│  │   [0, 0.33) → INITIATOR (subject)                       │   │
-│  │   [0.33, 0.66) → MEDIATOR (verb)                        │   │
-│  │   [0.66, 1.0] → RECEIVER (object)                       │   │
-│  └─────────────────────────────────────────────────────────┘   │
-│                                                                 │
-│  ┌─────────────────┐  ┌─────────────────┐  ┌───────────────┐   │
-│  │ GeometricConcept│  │GeometricMorpho- │  │ GeometricConj-│   │
-│  │ - φ-direction   │  │logy             │  │ ugation       │   │
-│  │ - role counts   │  │ - equivalence   │  │ - verb forms  │   │
-│  │ - mean position │  │ - 109 clusters  │  │ - phase-based │   │
-│  └─────────────────┘  └─────────────────┘  └───────────────┘   │
-└─────────────────────────────────────────────────────────────────┘
-        │
-        ├──────────────────────┬──────────────────────┐
-        │                      │                      │
-        ▼                      ▼                      ▼
-┌───────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│  Holographic  │    │    Semantic     │    │     φ-Dial      │
-│   Templates   │    │   Quaternion    │    │  (Output Style) │
-│               │    │                 │    │                 │
-│ Project from  │    │ q = w+xi+yj+zk  │    │ q = w+xi+yj+zk  │
-│ Q&A pairs via │    │                 │    │                 │
-│ interference  │    │ x: Gender       │    │ x: Style        │
-│               │    │ y: Age          │    │ y: Perspective  │
-│ Slots emerge  │    │ z: Agency (φ!)  │    │ z: Depth        │
-│ from content  │    │ w: Animacy      │    │ w: Certainty    │
-│ word phases   │    │                 │    │                 │
-│               │    │ 100% analogy    │    │ Controls output │
-└───────────────┘    └─────────────────┘    └─────────────────┘
-        │                      │                      │
-        └──────────────────────┼──────────────────────┘
-                               │
-                               ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                   HolographicGeometricQA                        │
-│                                                                 │
-│  ask(query) → Holographic template + slot filling               │
-│  complete_analogy(a, b, c) → Quaternion arithmetic              │
-│  semantic_similarity(w1, w2) → Quaternion cosine                │
-│  find_similar_relations(a, b) → Same rotation pairs             │
+│                        GEAR CHAIN                                │
+│                                                                  │
+│  ┌──────────┐   ┌──────────┐   ┌──────────┐   ┌──────────┐     │
+│  │ RoleGear │ → │ActionGear│ → │TenseGear │ → │OutputGear│     │
+│  │          │   │          │   │          │   │          │     │
+│  │ Classify │   │ Gerunds  │   │ Tense    │   │ Assemble │     │
+│  │ roles    │   │ convert  │   │ transform│   │ text     │     │
+│  └────┬─────┘   └────┬─────┘   └────┬─────┘   └────┬─────┘     │
+│       │              │              │              │            │
+│       └──────────────┴──────────────┴──────────────┘            │
+│                              │                                   │
+│                    Quaternion accumulates                        │
+│                    through each gear                             │
 └─────────────────────────────────────────────────────────────────┘
         │
         ▼
-OUTPUT: "Holmes is a notable detective who examines, deduces, and observes"
+OUTPUT: "Holmes is a character who investigating, particularly crimes."
+```
+
+### Data Pipeline Architecture
+
+```
+INPUT: DataState(records=[{name: "John", age: "25"}, ...])
+        │
+        ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                      DATA PIPELINE                               │
+│                                                                  │
+│  ┌───────────┐  ┌────────────┐  ┌──────────┐  ┌──────────┐     │
+│  │Validation │→ │Normalizat- │→ │Enrichment│→ │ Format   │     │
+│  │Gear       │  │ionGear     │  │Gear      │  │ Gear     │     │
+│  │           │  │            │  │          │  │          │     │
+│  │ Required  │  │ Trim, case │  │ Computed │  │ JSON/CSV │     │
+│  │ Type/Range│  │ Date parse │  │ Lookups  │  │ output   │     │
+│  └───────────┘  └────────────┘  └──────────┘  └──────────┘     │
+└─────────────────────────────────────────────────────────────────┘
+        │
+        ▼
+OUTPUT: [{"name": "John", "age": 25, "age_group": "young"}, ...]
 ```
 
 ---
 
 ## Core Components
 
-### GeometricKnowledge (`core/geometric.py`)
+### Gear (`gears/core/base.py`)
 
-Position-based frame extraction and storage.
+The fundamental transformation unit.
 
 ```python
-class GeometricKnowledge:
-    concepts: Dict[str, GeometricConcept]  # Word statistics
-    frames: List[Frame]                     # Extracted frames
-    morphology: GeometricMorphology         # Verb equivalence
-    conjugation: GeometricConjugation       # Verb forms
+class Gear(ABC):
+    name: str
+    ratio: float  # 0.0 to 1.0, controls transformation strength
+    enabled: bool
+    q: Quaternion  # Gear's quaternion parameters
     
-    def learn(text: str, source: str):
-        """Extract frame from sentence using position bands."""
-        # 1. Tokenize sentence
-        # 2. Record position statistics for each word
-        # 3. Extract frame:
-        #    [0, 0.33) → Initiator
-        #    [0.33, 0.66) → Mediator
-        #    [0.66, 1] → Receiver
-        # 4. Update role counts and φ-direction
+    @abstractmethod
+    def forward(self, state: GearState) -> GearState:
+        """Transform the state. Must be implemented by subclasses."""
+        pass
+    
+    def set_ratio(self, ratio: float) -> 'Gear'
+    def enable(self) / disable(self)
 ```
 
-### GeometricConcept
+### GearState (`gears/core/base.py`)
 
-Word with geometric properties.
+Data object flowing through the chain.
 
 ```python
-class GeometricConcept:
-    word: str
-    positions: List[float]      # All positions [0, 1]
-    initiator_count: int        # Times as subject
-    mediator_count: int         # Times as verb
-    receiver_count: int         # Times as object
-    
-    @property
-    def phi_direction(self) -> float:
-        """(initiator - receiver) / total. Range [-1, 1]."""
-        # Positive = initiator (subject)
-        # Negative = receiver (object)
-        # Near zero = mediator (verb)
-    
-    @property
-    def is_geometric_stop_word(self) -> bool:
-        """No semantic role OR short+frequent."""
-        # Emerges from data, not hard-coded
+@dataclass
+class GearState:
+    entity: str = ""           # Main entity being described
+    role: str = ""             # Role (character, concept, field, etc.)
+    actions: List[str]         # Verbs/actions
+    targets: List[str]         # Objects/targets
+    connector: str = "that"    # Connecting word
+    accumulated_q: Quaternion  # Accumulated quaternion through chain
+    metadata: Dict[str, Any]   # Additional data
 ```
 
-### GeometricMorphology
+### GearChain (`gears/core/base.py`)
 
-Verb equivalence learned from parallel structures.
+Composes gears into a pipeline.
 
 ```python
-class GeometricMorphology:
-    equivalence_classes: Dict[str, Set[str]]  # canonical → variants
+class GearChain:
+    name: str
+    gears: List[Gear]
     
-    def bootstrap(text: str):
-        """Learn from parallel structures like 'I love. He loves. I loved.'"""
-        # Process sentences in groups of 3
-        # → love ≡ loves ≡ loved
-    
-    def are_equivalent(word1: str, word2: str) -> bool
-    def get_canonical(word: str) -> str
+    def add(self, gear: Gear, position: int = None) -> 'GearChain'
+    def remove(self, name: str) -> 'GearChain'
+    def get(self, name: str) -> Optional[Gear]
+    def process(self, state: GearState) -> Any
+    def set_ratio(self, gear_name: str, ratio: float)
+    def disable(self, gear_name: str)
 ```
 
-### GeometricConjugation
+### Quaternion (`gears/core/base.py`)
 
-Output generation using learned verb forms.
+4D rotation encoding.
 
 ```python
-class GeometricConjugation:
-    clusters: Dict[str, VerbCluster]  # canonical → forms
+@dataclass
+class Quaternion:
+    w: float = 1.0  # Scalar (formality/quality)
+    x: float = 0.0  # Style/Gender
+    y: float = 0.0  # Perspective/Age
+    z: float = 0.0  # Depth/Agency
     
-    def conjugate(word: str, phase: int) -> str:
-        """
-        Phase 0 = base (love)
-        Phase 1 = 3rd singular (loves)
-        Phase 2 = past (loved)
-        """
+    def __mul__(self, other) -> 'Quaternion'  # Quaternion multiplication
+    def normalize(self) -> 'Quaternion'
+    def magnitude(self) -> float
 ```
 
 ---
 
-## Holographic Templates (`core/holographic_templates.py`)
+## NLP Gears (`gears/practical_applications/nlp/`)
 
-### HolographicTemplateProjector
+### RoleGear
 
-Dynamic templates via interference patterns.
+Transforms roles based on concept type.
 
 ```python
-class HolographicTemplateProjector:
-    """
-    GEOMETRIC ENCODING (not hash-based):
-    - Phase = φ-direction × π (semantic role)
-    - Magnitude = role_strength (how strongly typed)
-    - Structure words: phase = 0 (always align)
-    - Content words: phase from geometric knowledge
-    """
-    
-    def project_template(query: str) -> ProjectedTemplate:
-        """
-        1. Find similar Q&A pairs
-        2. Compute interference on responses
-        3. Structure words reinforce → keep literal
-        4. Content words cancel → become slots
-        """
-    
-    def generate(query: str, slot_values: Dict) -> str:
-        """Fill template slots with query-specific content."""
+class RoleGear(Gear):
+    def forward(self, state: GearState) -> GearState:
+        # Detect if entity is person, abstract, plural
+        # Transform role accordingly (character → concept)
 ```
 
-### HolographicResponseSynthesizer
+### ActionGear
 
-Multi-source response synthesis.
+Converts verbs to gerunds.
 
 ```python
-class HolographicResponseSynthesizer:
-    def synthesize(query: str, sources: List[str]) -> str:
-        """
-        Combine multiple responses via interference.
-        Common words reinforce, unique words cancel.
-        """
+class ActionGear(Gear):
+    def forward(self, state: GearState) -> GearState:
+        # When ratio > 0.5, convert verbs to gerunds
+        # "investigates" → "investigating"
+```
+
+### TenseGear
+
+Transforms verb tenses.
+
+```python
+class TenseGear(Gear):
+    tense: str  # 'present', 'past', 'future', 'perfect'
+    
+    def set_tense(self, tense: str)
+    def forward(self, state: GearState) -> GearState:
+        # Transform actions to specified tense
+```
+
+### OutputGear
+
+Assembles final text output.
+
+```python
+class OutputGear(Gear):
+    def forward(self, state: GearState) -> str:
+        # Assemble: "{entity} is a {role} {connector} {actions}, {targets}"
 ```
 
 ---
 
-## Semantic Quaternions (`core/semantic_quaternion.py`)
+## Data Gears (`gears/practical_applications/data/`)
 
-### SemanticQuaternion
+### ValidationGear
 
-4D encoding for concepts.
+Validates data records.
 
 ```python
-class SemanticQuaternion:
-    x: float  # Gender/Polarity (-1 male, +1 female)
-    y: float  # Age/Maturity (-1 adult, +1 young)
-    z: float  # Agency (-1 receiver, +1 initiator) ← FROM φ-DIRECTION!
-    w: float  # Animacy (-1 place, +1 human)
-    
-    def __add__(self, other): ...  # Quaternion addition
-    def __sub__(self, other): ...  # Quaternion subtraction
-    def dot(self, other) -> float: ...  # Cosine similarity
+class ValidationGear(Gear):
+    def add_required(self, field: str) -> 'ValidationGear'
+    def add_type(self, field: str, expected_type: str) -> 'ValidationGear'
+    def add_range(self, field: str, min_val, max_val) -> 'ValidationGear'
+    def add_pattern(self, field: str, pattern: str) -> 'ValidationGear'
 ```
 
-### SemanticQuaternionNavigator
+### NormalizationGear
 
-Analogy completion with 100% accuracy.
+Standardizes data formats.
 
 ```python
-class SemanticQuaternionNavigator:
-    concepts: Dict[str, SemanticQuaternion]
-    
-    def complete_analogy(a: str, b: str, c: str, k: int = 5):
-        """
-        A : B :: C : ?
-        
-        ? = C + (B - A)  # Quaternion arithmetic
-        
-        Example: king:queen::man:? → woman
-        """
-    
-    def similarity(w1: str, w2: str) -> float:
-        """Quaternion cosine similarity."""
-    
-    def find_similar_relations(a: str, b: str, k: int = 5):
-        """Find pairs with same rotation as A→B."""
+class NormalizationGear(Gear):
+    def trim(self, field: str) -> 'NormalizationGear'
+    def lowercase(self, field: str) -> 'NormalizationGear'
+    def to_int(self, field: str) -> 'NormalizationGear'
+    def to_date(self, field: str) -> 'NormalizationGear'
 ```
 
-### SemanticFeatureLearner
+### EnrichmentGear
 
-Learn x,y axes from parallel structures.
+Adds derived fields.
 
 ```python
-class SemanticFeatureLearner:
-    def learn_from_parallel(sentences: List[str]):
-        """
-        "The king rules" + "The queen rules" → king/queen differ in x
-        "The man works" + "The boy plays" → man/boy differ in y
-        """
+class EnrichmentGear(Gear):
+    def add_computed(self, field: str, fn: Callable) -> 'EnrichmentGear'
+    def add_lookup(self, target: str, source: str, table: str) -> 'EnrichmentGear'
+```
+
+### FormatGear
+
+Outputs in various formats.
+
+```python
+class FormatGear(Gear):
+    format: str  # 'dict', 'json', 'csv', 'summary'
+    
+    def forward(self, state: GearState) -> Any:
+        # Format records according to specified format
 ```
 
 ---
 
-## HolographicGeometricQA (`core/geometric.py`)
+## Corpus Tools (`gears/tools/`)
 
-The unified Q&A system combining all components.
+### CorpusPruner
+
+Removes bad data from corpus.
 
 ```python
-class HolographicGeometricQA:
-    knowledge: GeometricKnowledge
-    template_projector: HolographicTemplateProjector
-    semantic_navigator: SemanticQuaternionNavigator
-    
-    def ask(query: str) -> str:
-        """Answer using holographic templates."""
-    
-    def ask_detailed(query: str) -> Dict:
-        """Answer with full analysis."""
-    
-    def complete_analogy(a: str, b: str, c: str, k: int = 5):
-        """A:B::C:? using semantic quaternions."""
-    
-    def semantic_similarity(w1: str, w2: str) -> float:
-        """Quaternion cosine similarity."""
-    
-    def find_similar_relations(a: str, b: str, k: int = 5):
-        """Find pairs with same rotation."""
-    
-    def add_semantic_concept(word: str, x: float, y: float, w: float):
-        """Add concept with semantic features (z from φ-direction)."""
+class CorpusPruner:
+    def set_min_length(self, length: int)
+    def set_max_duplicates(self, count: int)
+    def prune(self, corpus: Dict) -> Tuple[Dict, PruneResult]
+```
+
+### CorpusCorrector
+
+Applies corrections to corpus.
+
+```python
+class CorpusCorrector:
+    def add_spelling(self, wrong: str, correct: str)
+    def add_role_correction(self, concept: str, role: str)
+    def correct(self, corpus: Dict) -> Tuple[Dict, CorrectResult]
+```
+
+### CorpusReinforcer
+
+Additive learning by adding frames.
+
+```python
+class CorpusReinforcer:
+    def reinforce(self, concept: str, role: str, actions: List[str], strength: int)
+    def apply(self, corpus: Dict) -> Tuple[Dict, ReinforceResult]
 ```
 
 ---
 
-## Supporting Components
+## Legacy Components
 
-### ConversationMemory (`core/conversation_memory.py`)
+The original geometric system is still available in `truthspace_lcm/core/`:
 
-Multi-turn dialogue with pronoun resolution.
-
-```python
-class ConversationMemory:
-    turns: List[ConversationTurn]
-    max_turns: int = 10
-    
-    def add_turn(query: str, response: str, entities: List[str])
-    def resolve_pronouns(query: str) -> str
-    def get_context() -> str
-```
-
-### ReasoningEngine (`core/reasoning_engine.py`)
-
-Multi-hop reasoning for WHY/HOW questions.
-
-```python
-class ReasoningEngine:
-    def reason(query: str) -> ReasoningPath:
-        """Graph traversal for causal chains."""
-```
-
-### CodeGenerator (`core/code_generator.py`)
-
-Python code from natural language.
-
-```python
-class CodeGenerator:
-    def generate(request: str) -> CodeFrame:
-        """Generate Python code from NL request."""
-```
-
-### Planner (`core/planner.py`)
-
-Task decomposition and execution.
-
-```python
-class Planner:
-    def plan(task: str) -> ExecutionPlan
-    def execute(plan: ExecutionPlan) -> str
-```
-
----
-
-## API Architecture
-
-### OpenAI-Compatible API (`api/server.py`)
-
-```python
-# Endpoints
-POST /v1/chat/completions  # Chat with streaming
-GET  /v1/models            # List models
-GET  /health               # Health check
-```
-
-Uses `HolographicGeometricQA` for all requests.
-
----
-
-## Key Formulas
-
-### Geometric Encoding
-
-```
-Position: p(w) = normalized position in sentence [0, 1]
-φ-direction: (initiator_count - receiver_count) / total_roles
-Phase: φ-direction × π (geometric, not hash)
-Magnitude: role_strength (how strongly typed)
-```
-
-### Semantic Quaternion Analogy
-
-```
-Given: A : B :: C : ?
-
-Compute rotation: R = B - A
-Apply to C: ? = C + R
-
-Example:
-  king = (x=-1, y=-1, z=1, w=1)   # male, adult, initiator, human
-  queen = (x=1, y=-1, z=1, w=1)   # female, adult, initiator, human
-  R = queen - king = (2, 0, 0, 0) # gender flip
-  
-  man = (x=-1, y=-1, z=0, w=1)    # male, adult, neutral, human
-  ? = man + R = (1, -1, 0, 1)     # female, adult, neutral, human
-  → woman ✓
-```
-
-### Holographic Interference
-
-```
-Template projection:
-  1. Encode each word: z = magnitude × e^(i·phase)
-  2. Sum across responses: Σ z / N
-  3. High magnitude → keep (structure word)
-  4. Low magnitude → slot (content word)
-```
+- **GeometricKnowledge** - Position-based frame extraction
+- **HolographicTemplateProjector** - Dynamic templates via interference
+- **SemanticQuaternionNavigator** - 100% analogy accuracy
+- **HolographicGeometricQA** - Unified Q&A system
 
 ---
 
@@ -404,38 +299,50 @@ Template projection:
 
 ```
 truthspace_lcm/
-├── __init__.py                   # Package exports (v1.0.0)
-├── chat.py                       # Interactive chat
-├── core/
-│   ├── __init__.py               # Core exports
-│   ├── geometric.py              # GeometricQA, HolographicGeometricQA
-│   ├── holographic_templates.py  # Template projection
-│   ├── semantic_quaternion.py    # 4D quaternion encoding
-│   ├── conversation_memory.py    # Multi-turn dialogue
-│   ├── reasoning_engine.py       # Multi-hop reasoning
-│   ├── code_generator.py         # Python generation
-│   └── planner.py                # Task planning
-
-api/
-├── server.py                     # FastAPI server
-└── models.py                     # Pydantic models
-
-run.py                            # Main entry point
-run_api.py                        # API server entry
-ROADMAP.md                        # Development roadmap
+├── gears/                           # Modular Gear Chain System
+│   ├── core/                        # Domain-agnostic base classes
+│   │   ├── base.py                  # Gear, GearState, GearChain, Quaternion
+│   │   └── error_correction.py      # ErrorCorrectionGear
+│   │
+│   ├── practical_applications/      # Domain-specific implementations
+│   │   ├── nlp/                     # NLP gears + chat/API
+│   │   │   ├── role.py, action.py, tense.py, output.py
+│   │   │   ├── chat.py              # Interactive chat
+│   │   │   └── api_server.py        # OpenAI-compatible API
+│   │   │
+│   │   └── data/                    # Data transformation gears
+│   │       ├── validation.py, normalization.py
+│   │       └── format.py
+│   │
+│   ├── corpus/                      # Knowledge corpuses (45K+ frames)
+│   ├── tools/                       # Pruner, Corrector, Reinforcer
+│   ├── run.py                       # Chat entry point
+│   └── run_api.py                   # API server entry point
+│
+├── core/                            # Original geometric system
+│   ├── geometric.py                 # GeometricQA, HolographicGeometricQA
+│   └── semantic_quaternion.py       # 4D quaternion encoding
+│
+├── api/                             # Original API server
+└── experiments/                     # Research experiments
 ```
 
 ---
 
 ## The Vision
 
-**"Two quaternions: one for meaning, one for expression. Together they span the space of language."**
+**"Each gear is a dimension. Corpus is knowledge, gears are reasoning."**
 
-- **Semantic Quaternion**: Encodes WHAT concepts mean
-- **φ-Dial Quaternion**: Controls HOW we express responses
+| Neural Networks | Gear Chain |
+|-----------------|------------|
+| Knowledge + reasoning entangled | Knowledge (corpus) separate from reasoning (gears) |
+| Opaque weights | Every transformation explicit |
+| Retrain to change | Swap gears at runtime |
+| Fixed architecture | Infinite composability |
+| Domain-specific | Same architecture, any domain |
 
-The key insight: **ENCODE = DECODE**. They are the same operation in opposite directions, like φ and 1/φ.
+The key insight: The same gear chain architecture that powers NLP chat also powers data transformation pipelines. **Structure is the new training.**
 
 ---
 
-*"Structure is the new training. Geometry is the new statistics."*
+*"Each gear is a dimension - swap in/out at runtime."*

@@ -155,10 +155,11 @@ def main():
     print("Commands:")
     print("  /debug      - Toggle debug mode")
     print("  /concept X  - Show geometric info about concept X")
+    print("  /lens X     - View concept X through all perspective lenses")
     print("  /stats      - Show corpus statistics")
     print("  /style X    - Set style dial (-1=formal, +1=casual)")
     print("  /perspective Y - Set perspective dial (-1=subjective, +1=meta)")
-    print("  /analogy A B C - Complete analogy A:B::C:?")
+    print("  /analogy A B C [lens] - Complete analogy (lenses: intrinsic, behavioral, relational, weighted)")
     print("  /similar A B - Find pairs with similar relation to A:B")
     print("  /memory     - Show conversation memory")
     print("  /clear      - Clear conversation memory")
@@ -250,6 +251,57 @@ def main():
                 print()
                 continue
             
+            elif cmd.startswith('/lens'):
+                parts = user_input.split()
+                if len(parts) < 2:
+                    print("Usage: /lens <word>")
+                    continue
+                word = parts[1].lower()
+                
+                print(f"\n=== PERSPECTIVE LENSES: {word.upper()} ===")
+                
+                # BEHAVIORAL lens (from corpus)
+                if word in qa.knowledge.concepts:
+                    c = qa.knowledge.concepts[word]
+                    phi_desc = "initiator" if c.phi_direction > 0.3 else "receiver" if c.phi_direction < -0.3 else "neutral"
+                    actions = list(c.actions.keys())[:3] if c.actions else []
+                    print(f"\nBEHAVIORAL (how it acts):")
+                    print(f"  φ-direction: {c.phi_direction:.2f} ({phi_desc})")
+                    print(f"  Actions: {', '.join(actions) if actions else '(none)'}")
+                else:
+                    print(f"\nBEHAVIORAL: (not in corpus)")
+                
+                # RELATIONAL lens (from corpus)
+                if word in qa.knowledge.concepts:
+                    c = qa.knowledge.concepts[word]
+                    targets = [t for t, _ in list(c.targets.most_common(5))] if c.targets else []
+                    print(f"\nRELATIONAL (how it connects):")
+                    print(f"  Primary targets: {', '.join(targets) if targets else '(none)'}")
+                else:
+                    print(f"\nRELATIONAL: (not in corpus)")
+                
+                # INTRINSIC lens (from semantic quaternion)
+                from .core.semantic_quaternion import DEFAULT_SEMANTIC_FEATURES
+                if word in DEFAULT_SEMANTIC_FEATURES:
+                    sq = DEFAULT_SEMANTIC_FEATURES[word]
+                    props = []
+                    if sq.x > 0.5: props.append("male")
+                    elif sq.x < -0.5: props.append("female")
+                    if sq.y > 0.5: props.append("adult")
+                    elif sq.y < -0.5: props.append("young")
+                    if sq.z > 0.5: props.append("high-agency")
+                    elif sq.z < -0.5: props.append("low-agency")
+                    if sq.w > 0.5: props.append("human")
+                    elif sq.w < -0.5: props.append("abstract")
+                    print(f"\nINTRINSIC (what it IS):")
+                    print(f"  Properties: {', '.join(props) if props else 'neutral'}")
+                    print(f"  Quaternion: x={sq.x:.1f}, y={sq.y:.1f}, z={sq.z:.1f}, w={sq.w:.1f}")
+                else:
+                    print(f"\nINTRINSIC: (not defined)")
+                
+                print()
+                continue
+            
             elif cmd.startswith('/style'):
                 parts = user_input.split()
                 if len(parts) < 2:
@@ -281,12 +333,29 @@ def main():
             elif cmd.startswith('/analogy'):
                 parts = user_input.split()
                 if len(parts) < 4:
-                    print("Usage: /analogy A B C  (A:B::C:?)")
+                    print("Usage: /analogy A B C [lens]  (A:B::C:?)")
+                    print("  Lenses: intrinsic, behavioral, relational, weighted, intrinsic_priority (default)")
                     continue
                 a, b, c = parts[1].lower(), parts[2].lower(), parts[3].lower()
-                results = qa.complete_analogy(a, b, c, k=5)
-                print(f"\n{a} : {b} :: {c} : ?")
-                print(f"Top answers: {[r[0] for r in results[:5]]}")
+                lens = parts[4].lower() if len(parts) > 4 else "intrinsic_priority"
+                
+                print(f"\n{a} : {b} :: {c} : ?  (lens: {lens})")
+                
+                # Show results from specified lens
+                results = qa.complete_analogy(a, b, c, k=5, lens=lens)
+                if results:
+                    print(f"Top answers: {[f'{r[0]}({r[1]:.2f})' for r in results[:5]]}")
+                else:
+                    print("No results found")
+                
+                # If not already showing all, offer comparison
+                if lens != "all":
+                    print("\nComparison across lenses:")
+                    for l in ["intrinsic", "behavioral", "relational", "weighted"]:
+                        r = qa.complete_analogy(a, b, c, k=1, lens=l)
+                        ans = r[0][0] if r else "(none)"
+                        score = r[0][1] if r else 0
+                        print(f"  {l:18} → {ans} ({score:.2f})")
                 print()
                 continue
             

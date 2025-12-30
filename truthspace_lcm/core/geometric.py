@@ -437,15 +437,90 @@ class GeometricConjugation:
     def get_canonical(self, word: str) -> str:
         return self.word_to_canonical.get(word.lower(), word.lower())
     
+    # Irregular verb forms
+    IRREGULAR_CONJUGATIONS = {
+        # be forms
+        'be': ('be', 'is', 'was'),
+        'is': ('be', 'is', 'was'),
+        'are': ('be', 'is', 'was'),
+        'was': ('be', 'is', 'was'),
+        'were': ('be', 'is', 'was'),
+        'been': ('be', 'is', 'was'),
+        # have forms
+        'have': ('have', 'has', 'had'),
+        'has': ('have', 'has', 'had'),
+        'had': ('have', 'has', 'had'),
+        # do forms
+        'do': ('do', 'does', 'did'),
+        'does': ('do', 'does', 'did'),
+        'did': ('do', 'does', 'did'),
+        # go forms
+        'go': ('go', 'goes', 'went'),
+        'goes': ('go', 'goes', 'went'),
+        'went': ('go', 'goes', 'went'),
+    }
+    
     def conjugate(self, word: str, phase: int) -> str:
         """
         Conjugate word to given phase.
         Phase 0 = base, Phase 1 = 3rd singular, Phase 2 = past
         """
-        canonical = self.get_canonical(word.lower())
+        w = word.lower()
+        
+        # Handle irregular verbs first
+        if w in self.IRREGULAR_CONJUGATIONS:
+            return self.IRREGULAR_CONJUGATIONS[w][phase]
+        
+        canonical = self.get_canonical(w)
         if canonical in self.clusters:
             return self.clusters[canonical].get_form(phase)
-        return word
+        
+        # Repair truncated verbs (from bad extraction)
+        base = self._repair_truncated_verb(w)
+        
+        # Apply conjugation rules
+        if phase == 1:  # 3rd person singular
+            if base.endswith('y') and len(base) > 1 and base[-2] not in 'aeiou':
+                return base[:-1] + 'ies'
+            elif base.endswith(('s', 'sh', 'ch', 'x', 'z', 'o')):
+                return base + 'es'
+            else:
+                return base + 's'
+        elif phase == 2:  # Past tense
+            if base.endswith('e'):
+                return base + 'd'
+            elif base.endswith('y') and len(base) > 1 and base[-2] not in 'aeiou':
+                return base[:-1] + 'ied'
+            else:
+                return base + 'ed'
+        
+        return base
+    
+    def _repair_truncated_verb(self, verb: str) -> str:
+        """
+        Repair truncated verbs that are missing their final 'e'.
+        
+        Common patterns from bad extraction:
+        - emerg -> emerge
+        - includ -> include
+        - stat -> state
+        """
+        # Known truncated patterns that need 'e' added
+        truncated_patterns = (
+            'emerg', 'includ', 'provid', 'relat', 'creat', 'stat', 'debat',
+            'locat', 'migrat', 'vibrat', 'generat', 'separ', 'demonstrat',
+            'investigat', 'examin', 'observ', 'deduc', 'describ', 'explor',
+            'produc', 'reduc', 'introduc', 'dominat', 'analyz', 'organiz',
+            'recogniz', 'realiz', 'defin', 'combin', 'determin', 'imagin',
+            'achiev', 'believ', 'receiv', 'perceiv', 'caus', 'paus', 'abus',
+            'excus', 'diverg', 'converg', 'merg', 'purg', 'urg', 'surg',
+            'involv', 'resolv', 'evolv', 'revolv', 'dissolv',
+        )
+        
+        if verb.endswith(truncated_patterns):
+            return verb + 'e'
+        
+        return verb
 
 
 # =============================================================================
@@ -486,9 +561,21 @@ class GeometricKnowledge:
     def _tokenize(self, text: str) -> List[str]:
         return re.findall(r'\b\w+\b', text.lower())
     
-    def learn(self, text: str, source: str = ""):
-        """Learn from text using geometric principles."""
+    def learn(self, text: str, source: str = "", use_attention: bool = True):
+        """
+        Learn from text using geometric principles.
+        
+        Args:
+            text: Text to learn from
+            source: Source identifier
+            use_attention: If True, use attention-based frame extraction (better for complex sentences)
+        """
         sentences = re.split(r'[.!?]+', text)
+        
+        # Lazy-load attention extractor
+        if use_attention and not hasattr(self, '_attention_extractor'):
+            from .attention_extractor import AttentionExtractor
+            self._attention_extractor = AttentionExtractor(self)
         
         for sentence in sentences:
             sentence = sentence.strip()
@@ -515,36 +602,46 @@ class GeometricKnowledge:
                     c.sentence_count += 1
                     seen_in_sentence.add(word)
             
-            # GEOMETRIC FRAME EXTRACTION
-            content_with_pos = []
-            for i, w in enumerate(tokens):
-                if len(w) <= 3:
-                    continue
-                if w.endswith('ly') and len(w) > 4:
-                    continue
-                pos = i / max(len(tokens) - 1, 1)
-                content_with_pos.append((w, pos))
-            
-            if len(content_with_pos) < 2:
-                continue
-            
-            # Assign slots by position bands
+            # FRAME EXTRACTION
             initiator = None
             mediator = None
             receiver = None
             
-            for word, pos in content_with_pos:
-                if pos < 0.33 and initiator is None:
-                    initiator = word
-                elif pos < 0.66 and mediator is None:
-                    mediator = word
-                elif receiver is None:
-                    receiver = word
+            if use_attention:
+                # Use attention-based extraction (better for complex sentences)
+                frame_result = self._attention_extractor.extract_frame(sentence)
+                if frame_result and frame_result.confidence > 0.3:
+                    initiator = frame_result.initiator
+                    mediator = frame_result.mediator
+                    receiver = frame_result.receiver if frame_result.receiver else None
             
-            if initiator is None and content_with_pos:
-                initiator = content_with_pos[0][0]
-            if mediator is None and len(content_with_pos) > 1:
-                mediator = content_with_pos[1][0]
+            # Fallback to position-based if attention fails or disabled
+            if not initiator or not mediator:
+                content_with_pos = []
+                for i, w in enumerate(tokens):
+                    if len(w) <= 3:
+                        continue
+                    if w.endswith('ly') and len(w) > 4:
+                        continue
+                    pos = i / max(len(tokens) - 1, 1)
+                    content_with_pos.append((w, pos))
+                
+                if len(content_with_pos) < 2:
+                    continue
+                
+                # Assign slots by position bands
+                for word, pos in content_with_pos:
+                    if pos < 0.33 and initiator is None:
+                        initiator = word
+                    elif pos < 0.66 and mediator is None:
+                        mediator = word
+                    elif receiver is None:
+                        receiver = word
+                
+                if initiator is None and content_with_pos:
+                    initiator = content_with_pos[0][0]
+                if mediator is None and len(content_with_pos) > 1:
+                    mediator = content_with_pos[1][0]
             
             if not initiator or not mediator:
                 continue
@@ -671,23 +768,32 @@ class GeometricQA:
         
         # Handle different corpus formats
         if isinstance(data, dict) and 'frames' in data:
-            # Format: {"frames": [{"agent": ..., "text": ..., "source": ...}, ...]}
+            # Format: {"frames": [{"agent": ..., "text": ..., "source": ..., "count": N}, ...]}
             for item in data['frames']:
                 if isinstance(item, dict):
                     text = item.get('text', '')
                     source = item.get('source', '')
+                    # Support count field for deduplicated corpus
+                    frame_count = item.get('count', 1)
                     if text:
-                        self.knowledge.learn(text, source)
-                        count += 1
+                        for _ in range(frame_count):
+                            self.knowledge.learn(text, source)
+                        count += frame_count
         elif isinstance(data, list):
-            # Format: [{"text": ..., "source": ...}, ...]
+            # Format: [{"text": ..., "source": ..., "count": N}, ...]
             for item in data:
                 if isinstance(item, dict):
                     text = item.get('text', '')
                     source = item.get('source', '')
+                    frame_count = item.get('count', 1)
                     if text:
-                        self.knowledge.learn(text, source)
-                        count += 1
+                        for _ in range(frame_count):
+                            self.knowledge.learn(text, source)
+                        count += frame_count
+        
+        # Generate Q&A pairs from loaded knowledge (templates emerge!)
+        if hasattr(self, 'template_projector'):
+            self._generate_qa_from_frames()
         
         return count
     
@@ -703,11 +809,37 @@ class GeometricQA:
     def set_certainty(self, w: float):
         self.certainty_w = max(-1, min(1, w))
     
+    def set_output_lens(self, lens_name: str = "natural"):
+        """
+        Set the output lens for more natural language output.
+        
+        Available lenses: natural, formal, casual, literary, scientific
+        Set to None to disable the lens.
+        """
+        if lens_name is None:
+            self._output_lens = None
+        else:
+            from .output_lens import OutputProjector, LENSES
+            if lens_name not in LENSES:
+                raise ValueError(f"Unknown lens: {lens_name}. Available: {list(LENSES.keys())}")
+            self._output_lens = OutputProjector(LENSES[lens_name])
+    
     def ask(self, query: str) -> str:
         """Answer a question."""
         result = self.ask_detailed(query)
         if result['answers']:
-            return result['answers'][0]['answer']
+            raw_answer = result['answers'][0]['answer']
+            # Apply output lens if set
+            if hasattr(self, '_output_lens') and self._output_lens:
+                answer_type = result.get('axis', 'describe').lower()
+                if answer_type == 'who':
+                    answer_type = 'who'
+                elif answer_type == 'what':
+                    answer_type = 'what'
+                else:
+                    answer_type = 'describe'
+                return self._output_lens.project(raw_answer, answer_type)
+            return raw_answer
         return "I don't have information about that."
     
     def ask_detailed(self, query: str) -> Dict:
@@ -899,38 +1031,71 @@ class GeometricQA:
         
         c = self.knowledge.concepts[entity]
         
-        # Role based on φ-direction
-        if c.phi_direction > 0.3:
-            role = "protagonist"
-        elif c.phi_direction < -0.3:
-            role = "action"
-        else:
-            role = "concept"
+        # Role: first check targets for category words (from "X is a Y" frames)
+        # Only use if count >= 3 to avoid incidental mentions
+        category_words = {'detective', 'doctor', 'scientist', 'teacher', 'writer',
+                         'philosopher', 'artist', 'leader', 'hero', 'villain',
+                         'science', 'field', 'discipline', 'study', 'branch',
+                         'person', 'character', 'figure', 'companion', 'assistant'}
+        
+        role = None
+        if c.targets:
+            for target, count in c.targets.most_common(10):
+                if target in category_words and count >= 3:  # Require multiple attestations
+                    role = target
+                    break
+        
+        # Fallback to φ-direction based role
+        if not role:
+            if c.phi_direction > 0.3:
+                role = "protagonist"
+            elif c.phi_direction < -0.3:
+                role = "concept"
+            else:
+                role = "entity"
         
         # Actions using geometric conjugation
         if c.actions:
             top_actions = c.actions.most_common(3)
             verbs = []
             for a, _ in top_actions:
-                canonical = self.knowledge.conjugation.get_canonical(a)
-                verb = self.knowledge.conjugation.conjugate(canonical, 1)
-                verbs.append(verb)
+                # Skip non-verb words that might appear as actions
+                if a in {'is', 'doctor', 'detective', 'science', 'field', 'cases', 'case', 
+                         'holmes', 'watson', 'matter', 'energy', 'crimes', 'mysteries'}:
+                    continue
+                # If already ends in 's' (3rd person), use as-is to avoid double conjugation
+                if a.endswith('s') and not a.endswith('ss'):
+                    verbs.append(a)
+                else:
+                    canonical = self.knowledge.conjugation.get_canonical(a)
+                    verb = self.knowledge.conjugation.conjugate(canonical, 1)
+                    verbs.append(verb)
+                # Limit to 3 verbs
+                if len(verbs) >= 3:
+                    break
             
-            if len(verbs) == 1:
+            if len(verbs) == 0:
+                response = f"{entity.title()} is a {role}"
+            elif len(verbs) == 1:
                 action_desc = verbs[0]
+                response = f"{entity.title()} is a {role} who {action_desc}"
             elif len(verbs) == 2:
                 action_desc = f"{verbs[0]} and {verbs[1]}"
+                response = f"{entity.title()} is a {role} who {action_desc}"
             else:
                 action_desc = f"{', '.join(verbs[:-1])}, and {verbs[-1]}"
-            
-            response = f"{entity.title()} is a {role} who {action_desc}"
+                response = f"{entity.title()} is a {role} who {action_desc}"
         else:
             response = f"{entity.title()} is a {role}"
         
-        # Targets
+        # Targets (use most common, not insertion order)
         if c.targets:
-            good_targets = [t for t in c.targets.keys() 
-                          if t in self.knowledge.concepts and self.knowledge.concepts[t].is_content_word][:2]
+            good_targets = []
+            for t, _ in c.targets.most_common(10):
+                if t in self.knowledge.concepts and self.knowledge.concepts[t].is_content_word:
+                    good_targets.append(t)
+                    if len(good_targets) >= 2:
+                        break
             if good_targets:
                 response += f", often involving {' and '.join(good_targets)}"
         
@@ -1009,6 +1174,93 @@ class HolographicGeometricQA(GeometricQA):
         ]
         
         self.template_projector.add_qa_pairs_from_corpus(default_qa)
+        
+        # Note: Q&A pairs from frames are generated after load_corpus() is called
+        # via refresh_templates() - templates emerge from knowledge!
+    
+    def _generate_qa_from_frames(self, max_pairs: int = 50):
+        """
+        Generate Q&A pairs from frames to feed the template projector.
+        
+        This is how templates EMERGE from knowledge:
+        - Frames encode relationships (initiator -> mediator -> receiver)
+        - We generate natural Q&A pairs from these relationships
+        - The holographic projector learns patterns via interference
+        - Templates emerge as structure words align and content words become slots
+        """
+        # Skip function words and short words
+        skip_words = {'the', 'a', 'an', 'this', 'that', 'these', 'those', 'it', 'he', 'she',
+                      'they', 'we', 'you', 'i', 'is', 'are', 'was', 'were', 'be', 'been',
+                      'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'could',
+                      'should', 'may', 'might', 'must', 'can', 'and', 'or', 'but', 'if',
+                      'then', 'so', 'because', 'while', 'although', 'however', 'therefore',
+                      'further', 'unlike', 'such', 'each', 'every', 'some', 'any', 'all',
+                      's', 't', 'd', 'm', 're', 've', 'll'}
+        
+        # Find high-agency entities (good subjects for WHO questions)
+        entities = []
+        for name, concept in self.knowledge.concepts.items():
+            # Skip function words and short words
+            if name in skip_words or len(name) < 4:
+                continue
+            # Need some initiator activity and actions
+            if concept.initiator_count >= 2 and len(concept.actions) > 0:
+                entities.append((name, concept))
+        
+        # Sort by initiator count (most active first)
+        entities.sort(key=lambda x: x[1].initiator_count, reverse=True)
+        
+        qa_pairs = []
+        
+        for name, concept in entities[:max_pairs // 3]:
+            # WHO IS pattern
+            actions = list(concept.actions.keys())[:2]
+            targets = list(concept.targets.keys())[:1]
+            
+            if actions:
+                action_str = actions[0]
+                if len(actions) > 1:
+                    action_str = f"{actions[0]} and {actions[1]}"
+                
+                # Infer role from phi-direction
+                if concept.phi_direction > 0.5:
+                    role = "protagonist"
+                elif concept.phi_direction > 0.2:
+                    role = "character"
+                else:
+                    role = "figure"
+                
+                answer = f"{name.title()} is a {role} who {action_str}"
+                if targets:
+                    answer += f" {targets[0]}"
+                answer += "."
+                
+                qa_pairs.append((f"Who is {name.title()}?", answer))
+            
+            # WHAT DOES pattern
+            if actions and targets:
+                qa_pairs.append(
+                    (f"What does {name.title()} do?", 
+                     f"{name.title()} {actions[0]} {targets[0]}.")
+                )
+        
+        # Add the generated pairs
+        for q, a in qa_pairs:
+            self.template_projector.add_qa_pair(q, a)
+    
+    def refresh_templates(self):
+        """
+        Refresh templates from current knowledge.
+        
+        Call this after adding significant new knowledge to
+        regenerate Q&A pairs and allow new templates to emerge.
+        """
+        # Clear existing generated pairs (keep default seeds)
+        self.template_projector.qa_pairs = self.template_projector.qa_pairs[:14]  # Keep seeds
+        self.template_projector.template_cache.clear()
+        
+        # Regenerate from frames
+        self._generate_qa_from_frames()
     
     def add_qa_example(self, question: str, answer: str):
         """Add a Q&A example for template learning."""
@@ -1047,7 +1299,8 @@ class HolographicGeometricQA(GeometricQA):
             if word not in self.knowledge.concepts:
                 continue
             c = self.knowledge.concepts[word]
-            if c.phi_direction > 0.3:
+            # Entity detection: positive phi_direction OR high initiator count
+            if c.phi_direction > 0.1 or c.initiator_count >= 5:
                 entity = word
             elif c.mediator_count > 0:
                 action = word
@@ -1120,8 +1373,25 @@ class HolographicGeometricQA(GeometricQA):
         if entity and entity in self.knowledge.concepts:
             c = self.knowledge.concepts[entity]
             
-            # Role based on φ-direction
-            if c.phi_direction > 0.5:
+            # Role: first check if concept has a category from "X is a Y" frames
+            # These show up as targets when mediator is 'be' or 'is'
+            # Only use if count >= 3 to avoid incidental mentions
+            category_words = {'detective', 'doctor', 'scientist', 'teacher', 'writer',
+                             'philosopher', 'artist', 'leader', 'hero', 'villain',
+                             'science', 'field', 'discipline', 'study', 'branch',
+                             'person', 'character', 'figure', 'companion', 'assistant'}
+            
+            # Look for category in top targets
+            role_from_target = None
+            if c.targets:
+                for target, count in c.targets.most_common(10):
+                    if target in category_words and count >= 3:  # Require multiple attestations
+                        role_from_target = target
+                        break
+            
+            if role_from_target:
+                values['role'] = role_from_target
+            elif c.phi_direction > 0.5:
                 values['role'] = 'protagonist'
             elif c.phi_direction > 0.3:
                 values['role'] = 'character'
@@ -1183,20 +1453,135 @@ class HolographicGeometricQA(GeometricQA):
         return self.response_synthesizer.synthesize_with_structure(query, sources)
     
     # =========================================================================
-    # SEMANTIC QUATERNION METHODS
+    # SEMANTIC QUATERNION METHODS (with Lens Support)
     # =========================================================================
     
-    def complete_analogy(self, a: str, b: str, c: str, k: int = 5) -> List[Tuple[str, float]]:
+    def complete_analogy(self, a: str, b: str, c: str, k: int = 5, 
+                         lens: str = "intrinsic_priority") -> List[Tuple[str, float]]:
         """
         Complete analogy: A is to B as C is to ?
         
-        Uses semantic quaternion arithmetic: ? = C + (B - A)
-        The relation (B - A) is a "rotation" in 4D semantic space.
+        Uses lens-aware analogy solving:
+        - "intrinsic": Semantic quaternion arithmetic (gender, age, agency, animacy)
+        - "behavioral": φ-direction based matching
+        - "relational": Connection/target based matching
+        - "intrinsic_priority": Prefer intrinsic if high confidence, else weighted
+        - "weighted": Combine all lenses with weights
         
         Example:
-            complete_analogy("king", "queen", "man") -> [("woman", 0.0), ...]
+            complete_analogy("king", "queen", "man") -> [("woman", 1.0), ...]
         """
+        # Try lens-aware approach first
+        if lens in ("intrinsic_priority", "weighted", "behavioral", "relational"):
+            result = self._lens_analogy(a, b, c, k, lens)
+            if result:
+                return result
+        
+        # Fallback to pure semantic quaternion
         return self.semantic_navigator.complete_analogy(a, b, c, k)
+    
+    def _lens_analogy(self, a: str, b: str, c: str, k: int, lens: str) -> List[Tuple[str, float]]:
+        """
+        Lens-aware analogy solving.
+        
+        Different lenses reveal different aspects of the analogy:
+        - INTRINSIC: What has C's properties shifted by A→B delta?
+        - BEHAVIORAL: What acts like C at the expected φ?
+        - RELATIONAL: What connects to C like B connects to A?
+        """
+        from .semantic_quaternion import SemanticQuaternion, DEFAULT_SEMANTIC_FEATURES
+        
+        results = []
+        
+        # INTRINSIC lens: semantic quaternion arithmetic
+        sq_a = DEFAULT_SEMANTIC_FEATURES.get(a.lower())
+        sq_b = DEFAULT_SEMANTIC_FEATURES.get(b.lower())
+        sq_c = DEFAULT_SEMANTIC_FEATURES.get(c.lower())
+        
+        intrinsic_results = []
+        if sq_a and sq_b and sq_c:
+            delta = sq_b - sq_a
+            expected = sq_c + delta
+            
+            for word, sq in DEFAULT_SEMANTIC_FEATURES.items():
+                if word in {a.lower(), b.lower(), c.lower()}:
+                    continue
+                distance = expected.distance(sq)
+                if distance < 2.0:
+                    similarity = 1.0 / (1.0 + distance)
+                    intrinsic_results.append((word, similarity, "intrinsic"))
+            
+            intrinsic_results.sort(key=lambda x: -x[1])
+        
+        # If intrinsic_priority and we have high-confidence intrinsic match, use it
+        if lens == "intrinsic_priority" and intrinsic_results:
+            if intrinsic_results[0][1] >= 0.9:
+                return [(w, s) for w, s, _ in intrinsic_results[:k]]
+        
+        # BEHAVIORAL lens: φ-direction matching
+        behavioral_results = []
+        concept_a = self.knowledge.concepts.get(a.lower())
+        concept_b = self.knowledge.concepts.get(b.lower())
+        concept_c = self.knowledge.concepts.get(c.lower())
+        
+        if concept_a and concept_b and concept_c:
+            phi_delta = concept_b.phi_direction - concept_a.phi_direction
+            expected_phi = concept_c.phi_direction + phi_delta
+            expected_phi = max(-1, min(1, expected_phi))
+            
+            for word, concept in self.knowledge.concepts.items():
+                if word in {a.lower(), b.lower(), c.lower()}:
+                    continue
+                if not concept.is_content_word:
+                    continue
+                
+                phi_diff = abs(concept.phi_direction - expected_phi)
+                if phi_diff < 0.5:
+                    score = 1.0 - phi_diff
+                    behavioral_results.append((word, score, "behavioral"))
+            
+            behavioral_results.sort(key=lambda x: -x[1])
+        
+        # RELATIONAL lens: target/connection matching
+        relational_results = []
+        if concept_c and concept_c.targets:
+            for target, count in concept_c.targets.most_common(10):
+                if target in {a.lower(), b.lower(), c.lower()}:
+                    continue
+                if target in self.knowledge.concepts:
+                    score = min(1.0, count / 3)
+                    relational_results.append((target, score, "relational"))
+        
+        # Combine based on lens strategy
+        if lens == "behavioral":
+            return [(w, s) for w, s, _ in behavioral_results[:k]]
+        elif lens == "relational":
+            return [(w, s) for w, s, _ in relational_results[:k]]
+        elif lens in ("weighted", "intrinsic_priority"):
+            # Weighted combination
+            combined = {}
+            weights = {"intrinsic": 1.5, "behavioral": 0.8, "relational": 0.7}
+            
+            for word, score, source in intrinsic_results[:k*2]:
+                if word not in combined:
+                    combined[word] = 0
+                combined[word] += score * weights[source]
+            
+            for word, score, source in behavioral_results[:k*2]:
+                if word not in combined:
+                    combined[word] = 0
+                combined[word] += score * weights[source]
+            
+            for word, score, source in relational_results[:k*2]:
+                if word not in combined:
+                    combined[word] = 0
+                combined[word] += score * weights[source]
+            
+            sorted_combined = sorted(combined.items(), key=lambda x: -x[1])
+            return sorted_combined[:k]
+        
+        # Default: intrinsic only
+        return [(w, s) for w, s, _ in intrinsic_results[:k]]
     
     def semantic_similarity(self, word1: str, word2: str) -> float:
         """
@@ -1238,6 +1623,93 @@ class HolographicGeometricQA(GeometricQA):
         
         q = SemanticQuaternion(x=gender, y=age, z=agency, w=animacy)
         self.semantic_navigator.add_concept(word, q)
+    
+    # =========================================================================
+    # GEODESIC GENERATION METHODS
+    # =========================================================================
+    
+    def generate_about(self, concept: str, num_sentences: int = 3, style: str = None) -> str:
+        """
+        Generate free-form text about a concept using geodesic navigation.
+        
+        Instead of template-based generation, this navigates through
+        concept space along geodesic paths, generating sentences at
+        each waypoint.
+        
+        Args:
+            concept: The concept to describe
+            num_sentences: Number of sentences to generate
+            style: Optional style preset ('hemingway', 'academic', 'journalistic', etc.)
+        
+        Returns:
+            Free-form text about the concept
+        """
+        from .geodesic_generator import GeodesicGenerator
+        
+        if not hasattr(self, '_geodesic_generator'):
+            self._geodesic_generator = GeodesicGenerator(self.knowledge)
+        
+        raw_text = self._geodesic_generator.generate_about(concept, num_sentences)
+        
+        # Apply style projection if requested
+        if style:
+            from .style_projector import StyleProjector
+            if not hasattr(self, '_style_projector'):
+                self._style_projector = StyleProjector(self.knowledge)
+            self._style_projector.set_style(style)
+            return self._style_projector.project(raw_text, concept)
+        
+        return raw_text
+    
+    def generate_story(self, concepts: List[str], max_sentences: int = 5, style: str = None) -> str:
+        """
+        Generate a short narrative connecting multiple concepts.
+        
+        Finds geodesic paths between concepts and generates
+        sentences along the way.
+        
+        Args:
+            concepts: List of concepts to connect
+            max_sentences: Maximum sentences to generate
+            style: Optional style preset ('hemingway', 'academic', 'journalistic', etc.)
+        
+        Returns:
+            A coherent narrative connecting the concepts
+        """
+        from .geodesic_generator import GeodesicGenerator
+        
+        if not hasattr(self, '_geodesic_generator'):
+            self._geodesic_generator = GeodesicGenerator(self.knowledge)
+        
+        raw_text = self._geodesic_generator.generate_story(concepts, max_sentences)
+        
+        # Apply style projection if requested
+        if style:
+            from .style_projector import StyleProjector
+            if not hasattr(self, '_style_projector'):
+                self._style_projector = StyleProjector(self.knowledge)
+            self._style_projector.set_style(style)
+            return self._style_projector.project(raw_text, concepts[0] if concepts else None)
+        
+        return raw_text
+    
+    def generate_comparison(self, concept_a: str, concept_b: str) -> str:
+        """
+        Generate text comparing two concepts.
+        
+        Args:
+            concept_a: First concept
+            concept_b: Second concept
+        
+        Returns:
+            Comparison text
+        """
+        from .geodesic_generator import GeodesicGenerator
+        
+        if not hasattr(self, '_geodesic_generator'):
+            self._geodesic_generator = GeodesicGenerator(self.knowledge)
+        
+        return self._geodesic_generator.generate_comparison(concept_a, concept_b)
 
 
 # =============================================================================

@@ -1,0 +1,1823 @@
+[
+  {
+    "concept": "explore",
+    "original_output": "Explore is a concept that involves exploring and investigating.",
+    "score": 8.0,
+    "feedback": "The sentence is grammatically correct and appropriately describes \"explore,\" but could be slightly more natural by omitting the second verb (\"and\") to say, \"Explore involves exploring and investigating.\"",
+    "corrected_output": null,
+    "corrections": [],
+    "saved": false
+  },
+  {
+    "concept": "first",
+    "original_output": "First is a concept that involves confirming, articulating, and presenting, relating to hypothese and theory.",
+    "score": 7.0,
+    "feedback": "The sentence is grammatically correct and appropriately uses vocabulary related to the concept of \"first.\" However, it could be slightly more natural in phrasing by refining the structure for better flow.",
+    "corrected_output": "First is a concept that involves confirming, articulating, and presenting hypotheses and theories.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "confirms",
+          "articulates",
+          "presents"
+        ],
+        "new": [
+          "confirms",
+          "articulates",
+          "presenting hypotheses",
+          "theories"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "sustained",
+    "original_output": "Sustained is a concept that involves observing and monitoring, relating to observe and within.",
+    "score": 4.0,
+    "feedback": "The sentence is somewhat grammatically correct but lacks clarity and natural phrasing, making it slightly confusing. It might be better understood by someone familiar with the context in which \"sustained\" is used, but to a general reader, it could be challenging to interpret accurately.",
+    "corrected_output": "Sustained is a concept that involves observing and monitoring over time, relating to ongoing observation within its context.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "observes",
+          "monitores"
+        ],
+        "new": [
+          "observes",
+          "monitoring over time"
+        ]
+      },
+      {
+        "field": "targets",
+        "old": [
+          "observe",
+          "within"
+        ],
+        "new": [
+          "ongoing observation within its context"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "heavy",
+    "original_output": "Heavy is a concept that involves collisioning, relating to gravity and force.",
+    "score": 5.0,
+    "feedback": "The sentence is grammatically correct and appropriately uses vocabulary related to the concept of \"heavy,\" but it could be more natural by simplifying the language or focusing on a single aspect of heaviness (e.g., gravitational force or collision dynamics) rather than combining them.",
+    "corrected_output": "Heavy is a concept that focuses on gravity and collision dynamics in relation to force.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "collisions"
+        ],
+        "new": [
+          "focuses on gravity",
+          "collision dynamics in relation to force"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "emphasize",
+    "original_output": "Emphasize is an entity that involves focuing.",
+    "score": 5.0,
+    "feedback": "The statement is mostly correct and natural, but could be more precise in defining what \"emphasize\" entails. It correctly identifies focus as a component of the concept but might benefit from specifying that it involves highlighting or giving special importance to certain aspects of information or actions.",
+    "corrected_output": "Emphasize is a concept that involves highlighting or giving special importance to certain aspects of information or actions by focusing on them.",
+    "corrections": [
+      {
+        "field": "role",
+        "old": "entity",
+        "new": "concept"
+      },
+      {
+        "field": "actions",
+        "old": [
+          "focus"
+        ],
+        "new": [
+          "highlighting or giving special importance to certain aspects of information or actions by focusing on them"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "tacitus",
+    "original_output": "Tacitus is an entity that involves veiling.",
+    "score": 5.0,
+    "feedback": "The sentence is mostly grammatically correct and uses natural phrasing, but it's a bit vague about whether \"tacitus\" refers to an individual person or an abstract concept. Additionally, the meaning of \"veiling\" needs clarification in this context.",
+    "corrected_output": "Tacitus is a concept that involves the practice of concealment.",
+    "corrections": [
+      {
+        "field": "role",
+        "old": "entity",
+        "new": "concept"
+      },
+      {
+        "field": "actions",
+        "old": [
+          "veiles"
+        ],
+        "new": [
+          "the practice of concealment"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "whether",
+    "original_output": "Whether is a concept that involves knowing.",
+    "score": 7.0,
+    "feedback": "The sentence is grammatically correct and uses natural phrasing, but it might be a bit simplistic in defining \"whether.\" It could imply that understanding or knowledge of certain aspects is involved when dealing with \"whether\" decisions.",
+    "corrected_output": "Understanding involves knowing certain aspects when dealing with concept decisions.",
+    "corrections": [],
+    "saved": false
+  },
+  {
+    "concept": "analysis",
+    "original_output": "Analysis is an entity that involves involving, rigorizing, and formalizing, relating to involve and intricate.",
+    "score": 5.0,
+    "feedback": "The sentence is grammatically correct and appropriate in terms of defining analysis, but it could be rephrased more naturally to improve clarity.",
+    "corrected_output": "Analysis is a concept that involves deepening, formalizing, and structuring ideas related to complex and intricate issues.",
+    "corrections": [
+      {
+        "field": "role",
+        "old": "entity",
+        "new": "concept"
+      },
+      {
+        "field": "actions",
+        "old": [
+          "involves",
+          "rigorizes",
+          "formalizes"
+        ],
+        "new": [
+          "deepens",
+          "formalizes",
+          "structuring ideas related to complex",
+          "intricate issues"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "enabl",
+    "original_output": "Enabl is an entity that involves empowering.",
+    "score": 8.0,
+    "feedback": "The sentence is grammatically correct, has a natural phrasing, and appropriately uses \"enabl\" in the context of empowerment. However, it could be slightly more specific or contextually rich.",
+    "corrected_output": null,
+    "corrections": [],
+    "saved": false
+  },
+  {
+    "concept": "influenced",
+    "original_output": "Influenced is a concept that involves pressuring, marking, and micheling, relating to darwin and deeper.",
+    "score": 4.0,
+    "feedback": "The sentence is mostly grammatically correct and natural, but it lacks clarity in defining what \"Influenced\" means specifically. It could benefit from more precise language to better convey the concept of influence.",
+    "corrected_output": "Influenced is a concept involving pressures, markings, and modifications related to Darwin's theory and deeper philosophical considerations.",
+    "corrections": [],
+    "saved": false
+  },
+  {
+    "concept": "nicholas",
+    "original_output": "Nicholas is an entity that involves following.",
+    "score": 7.0,
+    "feedback": "The sentence is grammatically correct and natural, but it could be more specific about what Nicholas is involved in by following.",
+    "corrected_output": "Nicholas is a concept that involves adhering to principles or doctrines.",
+    "corrections": [
+      {
+        "field": "role",
+        "old": "entity",
+        "new": "concept"
+      },
+      {
+        "field": "actions",
+        "old": [
+          "follows"
+        ],
+        "new": [
+          "adhering to principles or doctrines"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "austin",
+    "original_output": "Austin is a concept that involves stating.",
+    "score": 4.0,
+    "feedback": "The sentence is mostly grammatically correct and uses natural phrasing, but it lacks specificity about what exactly \"Austin\" refers to in this context.",
+    "corrected_output": null,
+    "corrections": [],
+    "saved": false
+  },
+  {
+    "concept": "exemplifies",
+    "original_output": "Exemplifies is an entity that involves signaling.",
+    "score": 4.0,
+    "feedback": "The sentence is grammatically correct and appropriately uses \"exemplifies,\" but it's not very natural-sounding. It might be clearer to say, \"Exemplifying involves signaling.\"",
+    "corrected_output": "Exemplifying involves signaling.",
+    "corrections": [],
+    "saved": false
+  },
+  {
+    "concept": "neutrons",
+    "original_output": "Neutrons is a concept that involves processing, seconding, and causing, relating to processe and energy.",
+    "score": 2.0,
+    "feedback": "The sentence is poorly constructed and uses inappropriate terminology, making it unclear and difficult to understand.",
+    "corrected_output": "Neutrons is a concept that involves facilitating and influencing processes, relating to energy and matter.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "processes",
+          "seconds",
+          "causes"
+        ],
+        "new": [
+          "facilitats",
+          "influencing processes"
+        ]
+      },
+      {
+        "field": "targets",
+        "old": [
+          "processe",
+          "energy"
+        ],
+        "new": [
+          "energy",
+          "matter"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "spectrum",
+    "original_output": "Spectrum is a concept that involves elementing.",
+    "score": 2.0,
+    "feedback": "The sentence is grammatically incorrect and doesn't naturally describe what a spectrum involves. It might be confused about using \"elementing\" which could imply combining or integrating elements, neither of which are typical actions associated with the concept of a spectrum.",
+    "corrected_output": "Spectrum is a concept that involves the arrangement of elements.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "elements"
+        ],
+        "new": [
+          "the arrangement of elements"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "quark",
+    "original_output": "Quark is an entity that involves modeling.",
+    "score": 7.0,
+    "feedback": "The sentence is grammatically correct and naturally phrases, but it doesn't fully capture the scientific meaning of a quark as it relates to physics.",
+    "corrected_output": "Quark is a concept that involves modeling in physics.",
+    "corrections": [
+      {
+        "field": "role",
+        "old": "entity",
+        "new": "concept"
+      },
+      {
+        "field": "actions",
+        "old": [
+          "models"
+        ],
+        "new": [
+          "modeling in physics"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "anderson",
+    "original_output": "Anderson is an entity that involves simulating.",
+    "score": 6.0,
+    "feedback": "The sentence is grammatically correct and appropriately describes the concept of Anderson, but it could be more naturally phrased by specifying which aspect or type of entity \"Anderson\" refers to.",
+    "corrected_output": "Anderson is a concept that involves simulation.",
+    "corrections": [
+      {
+        "field": "role",
+        "old": "entity",
+        "new": "concept"
+      },
+      {
+        "field": "actions",
+        "old": [
+          "simulates"
+        ],
+        "new": [
+          "simulation"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "avalanche",
+    "original_output": "Avalanche is a concept that involves landing, relating to gravity and nature.",
+    "score": 6.0,
+    "feedback": "The sentence is mostly correct and natural, but it could be more concise and clearer in conveying the concept of an avalanche.",
+    "corrected_output": "Avalanche is a natural concept involving gravity that describes land sliding.",
+    "corrections": [
+      {
+        "field": "role",
+        "old": "character",
+        "new": "natural"
+      },
+      {
+        "field": "actions",
+        "old": [
+          "lands"
+        ],
+        "new": [
+          "describes land slids"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "crossings",
+    "original_output": "Crossings is an entity that involves enabling.",
+    "score": 8.0,
+    "feedback": "The sentence is grammatically correct, phrases naturally, and appropriately categorizes \"crossings\" as an entity that facilitates or enables.",
+    "corrected_output": null,
+    "corrections": [],
+    "saved": false
+  },
+  {
+    "concept": "geneva",
+    "original_output": "Geneva is an entity that involves scheming.",
+    "score": 3.0,
+    "feedback": "The statement is not grammatically incorrect, but it's quite unconventional and doesn't naturally convey a specific meaning when describing Geneva as an entity. Geneva typically refers to the city in Switzerland and isn't usually characterized with human traits like scheming.",
+    "corrected_output": "Geneva is a concept that involves strategic planning.",
+    "corrections": [
+      {
+        "field": "role",
+        "old": "entity",
+        "new": "concept"
+      },
+      {
+        "field": "actions",
+        "old": [
+          "schems"
+        ],
+        "new": [
+          "strategic planns"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "1600s",
+    "original_output": "1600S is a concept that involves pening.",
+    "score": 2.0,
+    "feedback": "The sentence is grammatically incorrect and lacks natural phrasing. It doesn't provide a clear or appropriate description of what \"1600s\" might be referring to in the context of history or any other field.",
+    "corrected_output": "The 1600s is a concept that involves events and developments during that decade of history.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "pens"
+        ],
+        "new": [
+          "events",
+          "developments during that decade of history"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "priori",
+    "original_output": "Priori is an entity that involves reasoning.",
+    "score": 7.0,
+    "feedback": "The sentence is mostly correct and natural, but it could be more specific about what type of reasoning is involved. It's generally understood to mean deductive reasoning, but it would benefit from specifying that.",
+    "corrected_output": "Priori is a concept that involves deductive reasoning.",
+    "corrections": [
+      {
+        "field": "role",
+        "old": "entity",
+        "new": "concept"
+      },
+      {
+        "field": "actions",
+        "old": [
+          "reasones"
+        ],
+        "new": [
+          "deductive reasons"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "humanities",
+    "original_output": "Humanities is an entity that involves distinguishing.",
+    "score": 5.0,
+    "feedback": "The sentence is grammatically correct and provides a simple idea of what humanities involves, but it could be more descriptive or explanatory to better convey the essence of the concept.",
+    "corrected_output": "Humanities is a concept that involves distinguishing.",
+    "corrections": [
+      {
+        "field": "role",
+        "old": "entity",
+        "new": "concept"
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "nomenclature",
+    "original_output": "Nomenclature is a concept that involves formalizing, steming, and emphasizing, relating to lavoisier and oxidation.",
+    "score": 6.0,
+    "feedback": "The sentence is mostly correct and natural, but it could be simplified for clarity. Mentioning \"steming\" might not be standard in nomenclature discussions without further context, and the role of Lavoisier is slightly unclear.",
+    "corrected_output": "Nomenclature is a concept that involves formalization and emphasis, particularly in relation to Lavoisier's contributions on oxidation.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "formalizes",
+          "stems",
+          "emphasizes"
+        ],
+        "new": [
+          "formalization",
+          "emphasis"
+        ]
+      },
+      {
+        "field": "targets",
+        "old": [
+          "lavoisier",
+          "oxidation"
+        ],
+        "new": [
+          "in relation to lavoisier's contributions on oxidation"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "comparable",
+    "original_output": "Comparable is a concept that involves suggesting.",
+    "score": 5.0,
+    "feedback": "The sentence is grammatically correct and appropriately introduces the concept of \"comparable\" though it could be considered slightly unnatural in its phrasing.",
+    "corrected_output": "Comparable is a concept that involves comparison.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "suggests"
+        ],
+        "new": [
+          "comparison"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "paramount",
+    "original_output": "Paramount is a concept that involves handling.",
+    "score": 7.0,
+    "feedback": "The sentence is grammatically correct and appropriately uses \"paramount\" in a context that suggests its general meaning of being the most important or primary. However, it could be more natural if it specified what exactly is paramount (e.g., \"handling should always be prioritized\").",
+    "corrected_output": "Handling is paramount when considering this concept.",
+    "corrections": [],
+    "saved": false
+  },
+  {
+    "concept": "1374",
+    "original_output": "1374 is a concept that involves lambasting.",
+    "score": 3.0,
+    "feedback": "The sentence is not grammatically incorrect, but it lacks naturalness and clarity. Its meaning is unclear due to the inappropriate term 'lambasting', which suggests criticism or scolding rather than describing a concept associated with the number 1374.",
+    "corrected_output": null,
+    "corrections": [],
+    "saved": false
+  },
+  {
+    "concept": "1472",
+    "original_output": "1472 is a concept that involves formalizing.",
+    "score": 6.0,
+    "feedback": "The sentence is grammatically correct and natural, but it lacks specificity about what exactly is being formalized in \"1472.\" Also, while the concept fits into discussions of formalization, the context would make its appropriateness clearer.",
+    "corrected_output": null,
+    "corrections": [],
+    "saved": false
+  },
+  {
+    "concept": "angiosperms",
+    "original_output": "Angiosperms is a concept that involves evolving.",
+    "score": 5.0,
+    "feedback": "The sentence is somewhat correct in terms of grammar but lacks natural phrasing and fully captures the appropriate role or category of angiosperms. Angiosperms are known for their ability to evolve, but describing \"angiosperms\" as the concept that involves evolving can be confusing, since it might imply that evolution itself is the concept being discussed rather than the organism classifying under this concept.",
+    "corrected_output": "Angiosperms are a concept that involves organisms known for their ability to evolve.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "evolves"
+        ],
+        "new": [
+          "organisms known for their ability to evolve"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "compound",
+    "original_output": "Compound is an entity that involves boiling.",
+    "score": 3.0,
+    "feedback": "The sentence is grammatically correct and appropriately refers to a process, but it lacks clarity and naturalness since \"compound\" typically refers to a substance composed of two or more elements chemically bonded together, not a process like boiling.",
+    "corrected_output": "A compound is a concept that involves chemical bonding of elements.",
+    "corrections": [
+      {
+        "field": "role",
+        "old": "entity",
+        "new": "concept"
+      },
+      {
+        "field": "actions",
+        "old": [
+          "boils"
+        ],
+        "new": [
+          "chemical bonding of elements"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "dirichlet",
+    "original_output": "Dirichlet is an entity that involves using.",
+    "score": 4.0,
+    "feedback": "The sentence is grammatically correct and appropriately uses \"Dirichlet\" as an entity, but it lacks clarity on what specific aspect of Dirichlet is being referred to. A more natural phrasing could specify which application or usage context is being described.",
+    "corrected_output": "Dirichlet is a concept that involves using specific mathematical principles in various applications.",
+    "corrections": [
+      {
+        "field": "role",
+        "old": "entity",
+        "new": "concept"
+      },
+      {
+        "field": "actions",
+        "old": [
+          "uses"
+        ],
+        "new": [
+          "using specific mathematical principles in various applications"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "lebesgue",
+    "original_output": "Lebesgue is an entity that involves integrating.",
+    "score": 7.0,
+    "feedback": "The sentence is grammatically correct and appropriately describes the concept of Lebesgue in relation to integration, although it might benefit from more specific language by specifying \"Lebesgue integral\" for clarity.",
+    "corrected_output": "Lebesgue is a concept that involves integrating.",
+    "corrections": [
+      {
+        "field": "role",
+        "old": "entity",
+        "new": "concept"
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "louis",
+    "original_output": "Louis is an entity that involves missouriing.",
+    "score": 2.0,
+    "feedback": "The sentence is poorly constructed and doesn't convey a clear meaning, making it hard to rate grammatically or in terms of natural phrasing. Its structure also fails to appropriately categorize the concept of \"Louis\".",
+    "corrected_output": "Louis is a concept that involves Missouriing.",
+    "corrections": [
+      {
+        "field": "role",
+        "old": "entity",
+        "new": "concept"
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "violent",
+    "original_output": "Violent is an entity that involves presuming.",
+    "score": 3.0,
+    "feedback": "The sentence is grammatically correct but doesn't naturally convey what \"violent\" means. It might be better suited for a more specialized context rather than a general description of the concept.",
+    "corrected_output": "A violent concept involves presuming.",
+    "corrections": [],
+    "saved": false
+  },
+  {
+    "concept": "somatic",
+    "original_output": "Somatic is an entity that involves editing.",
+    "score": 5.0,
+    "feedback": "The sentence is grammatically correct and appropriately uses \"somatic,\" but it lacks clarity on what exactly is being edited, making the phrasing somewhat unnatural.",
+    "corrected_output": "Somatic involves editing concepts related to physical and behavioral processes.",
+    "corrections": [],
+    "saved": false
+  },
+  {
+    "concept": "biochemistry",
+    "original_output": "Biochemistry is a concept that involves investigating, processing, and overlaping, relating to investigate and processe.",
+    "score": 3.0,
+    "feedback": "The sentence is somewhat grammatically correct but lacks clarity and natural flow, making it difficult to understand the concept of biochemistry.",
+    "corrected_output": "Biochemistry is a concept that involves investigating and processing substances that are related to living organisms, encompassing their chemical processes and interactions.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "investigates",
+          "processes",
+          "overlaps"
+        ],
+        "new": [
+          "investigates",
+          "processing substances that are related to living organisms",
+          "encompassing their chemical processes",
+          "interactions"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "metallic",
+    "original_output": "Metallic is a concept that involves manufacturing.",
+    "score": 5.0,
+    "feedback": "The sentence is grammatically correct and appropriately uses \"metallic\" in relation to manufacturing, but it lacks natural phrasing as it sounds slightly formal or technical for casual conversation.",
+    "corrected_output": "Metallic manufacturing is a concept that involves the production of items from metal materials.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "manufactures"
+        ],
+        "new": [
+          "the production of items from metal materials"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "gibbs",
+    "original_output": "Gibbs is an entity that involves allowing.",
+    "score": 4.0,
+    "feedback": "The sentence is grammatically correct and appropriately uses \"allowing\" to describe Gibbs, but it lacks context to convey whether Gibbs enables passive or active participation. Also, the natural phrasing could be improved for clarity.",
+    "corrected_output": "Gibbs is a concept that involves enabling both passive and active participation.",
+    "corrections": [
+      {
+        "field": "role",
+        "old": "entity",
+        "new": "concept"
+      },
+      {
+        "field": "actions",
+        "old": [
+          "allows"
+        ],
+        "new": [
+          "enabling both passive",
+          "active participation"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "programmable",
+    "original_output": "Programmable is a concept that involves building.",
+    "score": 4.0,
+    "feedback": "The statement is somewhat correct but lacks context. Programmability generally refers to the ability of a system or component to be programmed, not necessarily building it as an action. A more accurate description might involve software or hardware that can be programmed rather than built.",
+    "corrected_output": "Programmability is a concept that involves the ability to build systems through coding and configuration.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "builds"
+        ],
+        "new": [
+          "the ability to build systems through cods",
+          "configuration"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "darpa",
+    "original_output": "Darpa is a concept that involves sponsoring.",
+    "score": 5.0,
+    "feedback": "The sentence is mostly correct and natural, but it could be more specific about what aspect of DARPA it's referring to (e.g., projects, research, innovation).",
+    "corrected_output": "Darpa is a concept that involves sponsoring innovative research and development projects.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "sponsores"
+        ],
+        "new": [
+          "sponsoring innovative research",
+          "development projects"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "percentage",
+    "original_output": "Percentage is a concept that involves pointing.",
+    "score": 3.0,
+    "feedback": "The statement is partially correct in a literal sense, as percentages are often represented by numbers or \"points\" (as in points out of 100), but it lacks clarity and precision to be considered accurate.",
+    "corrected_output": "Percentage is a concept that involves expressing a ratio as parts per hundred.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "points"
+        ],
+        "new": [
+          "expressing a ratio as parts per hundred"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "anthropic",
+    "original_output": "Anthropic is a concept that involves processing, involving, and formalizing, relating to emergent and processe.",
+    "score": 5.0,
+    "feedback": "The sentence shows a clear attempt to describe \"anthropic\" but lacks clarity and precision, leading to some confusion in meaning. It is grammatically correct but the natural phrasing could be improved for better understanding.",
+    "corrected_output": "Anthropic is a concept that involves processing, engaging with, and formalizing emergent phenomena and processes.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "processes",
+          "involves",
+          "formalizes"
+        ],
+        "new": [
+          "processes",
+          "engaging with",
+          "formalizing emergent phenomena",
+          "processes"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "lasso",
+    "original_output": "Lasso is a concept that involves becoming.",
+    "score": 4.0,
+    "feedback": "The sentence is somewhat correct in describing lasso as a concept that involves becoming, but it could be more precise and natural.",
+    "corrected_output": "Lasso is a concept that involves becoming part of something.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "becomes"
+        ],
+        "new": [
+          "becoming part of someths"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "antibiotic",
+    "original_output": "Antibiotic is a concept that involves providing.",
+    "score": 5.0,
+    "feedback": "The sentence is somewhat grammatically correct and natural, but it lacks clarity about what exactly \"antibiotic\" involves. A more precise description could be clearer and provide better understanding of the concept.",
+    "corrected_output": "Antibiotic is a concept that involves the use of substances to combat bacterial infections.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "provides"
+        ],
+        "new": [
+          "the use of substances to combat bacterial infections"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "transcriptional",
+    "original_output": "Transcriptional is an entity that involves controling.",
+    "score": 6.0,
+    "feedback": "The sentence is grammatically correct and appropriately relates to the concept of transcriptional control. However, it could be more naturally phrased by specifying what aspect of transcriptional control is being referred to, such as \"Transcriptional processes involve controlling gene expression levels.\"",
+    "corrected_output": "Transcriptional processes involve controlling gene expression levels.",
+    "corrections": [],
+    "saved": false
+  },
+  {
+    "concept": "mirnas",
+    "original_output": "Mirnas is a concept that involves iing.",
+    "score": 3.0,
+    "feedback": "The sentence is not very clear or natural, and it seems to lack proper context. It could be improved by specifying what aspect of miRNAs (molecular biology concept) the sentence intends to convey.",
+    "corrected_output": null,
+    "corrections": [],
+    "saved": false
+  },
+  {
+    "concept": "famous",
+    "original_output": "Famous is a concept.",
+    "score": 7.0,
+    "feedback": "The sentence is grammatically correct and naturally phrases well, but it may not be specific enough regarding what \"famous\" fundamentally represents or entails.",
+    "corrected_output": null,
+    "corrections": [],
+    "saved": false
+  },
+  {
+    "concept": "freshwater",
+    "original_output": "Freshwater is a concept that involves including.",
+    "score": 3.0,
+    "feedback": "The sentence is somewhat clear but lacks precision. It could be better structured to clearly convey the meaning intended regarding freshwater as a resource or system that includes various types of water bodies.",
+    "corrected_output": "Freshwater is a concept that encompasses various types of water bodies.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "includes"
+        ],
+        "new": [
+          "encompasses various types of water bodies"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "nielsen",
+    "original_output": "Nielsen is an entity that involves staring.",
+    "score": 2.0,
+    "feedback": "The sentence is not very clear or natural, and it does not accurately describe what Nielsen is as an entity.",
+    "corrected_output": "Nielsen is a concept that involves measuring and analyzing audience behavior.",
+    "corrections": [
+      {
+        "field": "role",
+        "old": "entity",
+        "new": "concept"
+      },
+      {
+        "field": "actions",
+        "old": [
+          "stars"
+        ],
+        "new": [
+          "measurs",
+          "analyzing audience behavior"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "halogen",
+    "original_output": "Halogen is a concept that involves iing.",
+    "score": 3.0,
+    "feedback": "The sentence is partially correct grammatically and in terms of natural phrasing, but it lacks clarity about what specifically \"halogen\" involves. It could be improved for better understanding.",
+    "corrected_output": "Halogen is a concept that involves elements.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "is"
+        ],
+        "new": [
+          "elements"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "ingold",
+    "original_output": "Ingold is a concept that involves detailing.",
+    "score": 7.0,
+    "feedback": "The sentence is grammatically correct and natural, but it could be more specific about what aspect of Ingold involves detailing.",
+    "corrected_output": "Ingold is a concept that focuses on detailed elaboration.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "detailes"
+        ],
+        "new": [
+          "focuses on detailed elaboration"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "economists",
+    "original_output": "Economists is an entity that involves using.",
+    "score": 5.0,
+    "feedback": "The sentence is grammatically correct and appropriately describes the general activity of economists, but it lacks natural phrasing due to the use of \"is\" in combination with \"that involves.\" A more natural phrasing could be \"Economists involve using methods.\"",
+    "corrected_output": "Economists involve using methods.",
+    "corrections": [],
+    "saved": false
+  },
+  {
+    "concept": "planet",
+    "original_output": "Planet is a concept that involves involving, relating to gravity and force.",
+    "score": 4.0,
+    "feedback": "The sentence is mostly grammatically correct and appropriately describes the concept of a planet, but it could be more concise and naturally phrased.",
+    "corrected_output": "A planet is a concept that involves gravity and force.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "involves"
+        ],
+        "new": [
+          "gravity",
+          "force"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "eruptions",
+    "original_output": "Eruptions is a concept that involves describing and ejecting.",
+    "score": 5.0,
+    "feedback": "The sentence is grammatically correct and appropriately describes the concept, but it could be more natural in phrasing.",
+    "corrected_output": "Eruptions is a concept that involves describing and forcefully expelling materials.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "describes",
+          "ejects"
+        ],
+        "new": [
+          "describs",
+          "forcefully expelling materials"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "southeast",
+    "original_output": "Southeast is a concept that involves overing.",
+    "score": 3.0,
+    "feedback": "The sentence is grammatically correct and somewhat natural, but it lacks clarity about what \"overing\" refers to in relation to the concept of southeast. It could be improved by specifying further details or context.",
+    "corrected_output": "Southeast is a concept that involves direction and geographical location.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "overs"
+        ],
+        "new": [
+          "direction",
+          "geographical location"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "mammal",
+    "original_output": "Mammal is a concept that involves including.",
+    "score": 7.0,
+    "feedback": "The sentence is grammatically correct and uses natural phrasing. However, it could be more specific about which aspect of the mammal concept it refers to.",
+    "corrected_output": "Mammal is a concept that involves including characteristics specific to this biological classification.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "includes"
+        ],
+        "new": [
+          "including characteristics specific to this biological classification"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "resins",
+    "original_output": "Resins is an entity that involves producing.",
+    "score": 6.0,
+    "feedback": "The sentence is grammatically correct and appropriately describes resins as a producing entity, but it could be more naturally phrased by specifying what is produced. For example, \"Resins are materials that involve the production of organic polymers.\"",
+    "corrected_output": "Resins are concepts that involve the production of organic polymers.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "produces"
+        ],
+        "new": [
+          "involve the production of organic polymers"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "partially",
+    "original_output": "Partially is an entity that involves compliing.",
+    "score": 6.0,
+    "feedback": "The sentence is grammatically correct but uses a confusing and non-natural phrasing. It would be more appropriate if it clearly defined \"partially\" in relation to the context provided.",
+    "corrected_output": "Partially is a concept that involves compliance.",
+    "corrections": [
+      {
+        "field": "role",
+        "old": "entity",
+        "new": "concept"
+      },
+      {
+        "field": "actions",
+        "old": [
+          "complies"
+        ],
+        "new": [
+          "compliance"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "sunday",
+    "original_output": "Sunday is an entity that involves trading.",
+    "score": 3.0,
+    "feedback": "The sentence is grammatically correct but lacks natural phrasing and context, making it slightly confusing as to what \"entity\" exactly involves trading on Sundays.",
+    "corrected_output": null,
+    "corrections": [],
+    "saved": false
+  },
+  {
+    "concept": "binaries",
+    "original_output": "Binaries is a concept that involves providing.",
+    "score": 7.0,
+    "feedback": "The sentence is grammatically correct and natural, but it lacks clarity about what specifically \"Binaries\" refers to in this context.",
+    "corrected_output": "Binaries is a concept that involves providing dual components or elements.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "provides"
+        ],
+        "new": [
+          "providing dual components or elements"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "ranked",
+    "original_output": "Ranked is a concept that involves thirding.",
+    "score": 3.0,
+    "feedback": "The sentence is not grammatically incorrect, but it's confusing and doesn't convey a clear meaning. It seems to suggest that ranking involves dividing things into thirds, which isn't accurate.",
+    "corrected_output": "Ranked is a concept that involves ordering entities in a sequence based on their attributes.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "thirds"
+        ],
+        "new": [
+          "ordering entities in a sequence based on their attributes"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "liquefaction",
+    "original_output": "Liquefaction is an entity that involves representing.",
+    "score": 3.0,
+    "feedback": "The sentence is not entirely clear, but it attempts to describe liquefaction. A better explanation could provide more context or clarify what aspect of liquefaction the sentence is referring to.",
+    "corrected_output": "Liquefaction is a concept that involves the transformation of a solid into a liquid.",
+    "corrections": [
+      {
+        "field": "role",
+        "old": "entity",
+        "new": "concept"
+      },
+      {
+        "field": "actions",
+        "old": [
+          "represents"
+        ],
+        "new": [
+          "the transformation of a solid into a liquid"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "colors",
+    "original_output": "Colors is a concept that involves iing.",
+    "score": 3.0,
+    "feedback": "The sentence is partially grammatically correct and uses a non-standard phrasing, making it slightly awkward to understand.",
+    "corrected_output": "Colors is a concept that involves perception and representation of various hues.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "is"
+        ],
+        "new": [
+          "perception",
+          "representation of various hues"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "jpg",
+    "original_output": "Jpg is a concept that involves hosting.",
+    "score": 3.0,
+    "feedback": "The sentence is not particularly clear or correct. It suggests that jpg involves hosting, which could apply to various contexts like web hosting services but does not accurately describe what a JPG file format actually is. A better description would clarify that it's an image file format rather than implying it involves hosting in its core definition.",
+    "corrected_output": "Jpg is a concept that involves image hosting.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "hosts"
+        ],
+        "new": [
+          "image hosts"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "temperate",
+    "original_output": "Temperate is an entity that involves foresting.",
+    "score": 6.0,
+    "feedback": "The sentence is grammatically correct and appropriately uses \"temperate\" as a descriptor, but it could be more natural by specifying what aspect of temperate involves foresting or providing additional context.",
+    "corrected_output": "Temperate climates involve extensive forestation.",
+    "corrections": [],
+    "saved": false
+  },
+  {
+    "concept": "delay",
+    "original_output": "Delay is an entity that involves providing.",
+    "score": 4.0,
+    "feedback": "The sentence is grammatically correct and appropriately uses \"delay\" as an entity, but it could be more natural by saying something like \"Delay involves providing information or action that has been delayed.\"",
+    "corrected_output": "Delay is a concept that involves providing information or action that has been delayed.",
+    "corrections": [
+      {
+        "field": "role",
+        "old": "entity",
+        "new": "concept"
+      },
+      {
+        "field": "actions",
+        "old": [
+          "provides"
+        ],
+        "new": [
+          "providing information or action that has been delayed"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "podcasts",
+    "original_output": "Podcasts is a concept that involves symbolizing.",
+    "score": 3.0,
+    "feedback": "The sentence is grammatically correct but lacks clarity and natural phrasing, making it somewhat confusing. It seems to be trying to convey an idea that podcasts involve some form of representation or portrayal through symbols, which might not resonate with the general understanding of what podcasts are.",
+    "corrected_output": "Podcasts is a concept that involves the representation of content through audio and often visual elements.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "symbolizes"
+        ],
+        "new": [
+          "the representation of content through audio",
+          "often visual elements"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "aces",
+    "original_output": "Aces is a concept that involves including.",
+    "score": 6.0,
+    "feedback": "The sentence is mostly correct but could be more specific about what \"aces\" refers to, as its meaning can vary depending on context. It's grammatically sound and uses natural phrasing, though it might lack clarity without additional context.",
+    "corrected_output": "Aces is a concept that involves inclusivity.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "includes"
+        ],
+        "new": [
+          "inclusivity"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "summers",
+    "original_output": "Summers is a concept that involves iing.",
+    "score": 3.0,
+    "feedback": "The sentence is grammatically incorrect and lacks natural phrasing, making it unclear what specific aspect of summers it's trying to describe.",
+    "corrected_output": "Summers is a concept that involves experiencing warmer weather and longer days.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "is"
+        ],
+        "new": [
+          "experiencing warmer weather",
+          "longer days"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "brazilian",
+    "original_output": "Brazilian is a concept that involves following.",
+    "score": 5.0,
+    "feedback": "The sentence is grammatically correct and natural, but it doesn't fully capture the complex and diverse nature of what \"Brazilian\" can represent. It could be improved to provide more context or specificity regarding which aspect of Brazilian culture or identity is being referred to.",
+    "corrected_output": "Brazilian is a concept that encompasses following cultural traditions and practices.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "follows"
+        ],
+        "new": [
+          "encompasses following cultural traditions",
+          "practices"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "massie",
+    "original_output": "Massie is a concept that involves noting.",
+    "score": 4.0,
+    "feedback": "The sentence is mostly grammatically correct and natural, but it lacks context to properly define what Massie as a concept entails. A better explanation would provide more detail about the nature of this concept.",
+    "corrected_output": null,
+    "corrections": [],
+    "saved": false
+  },
+  {
+    "concept": "hades",
+    "original_output": "Hades is a concept that involves launching.",
+    "score": 3.0,
+    "feedback": "The sentence is not very clear or accurate, as \"Hades\" typically refers to the Greek god of the underworld and does not commonly involve the concept of \"launching.\"",
+    "corrected_output": "Hades is a concept that involves the idea of launching entities into the underworld.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "launches"
+        ],
+        "new": [
+          "the idea of launching entities into the underworld"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "nthi",
+    "original_output": "Nthi is a concept that involves iing.",
+    "score": 3.0,
+    "feedback": "The sentence is somewhat clear but lacks context and precision. \"Nthi\" seems to be a concept, which suggests abstract thinking or a principle, but the term \"ing\" is unclear without further explanation; it might refer to actions, processes, or perhaps a part of a language system. Improving grammatical correctness slightly by specifying what kind of \"ing\" would enhance clarity significantly.",
+    "corrected_output": "Nthi is a concept that involves actions or processes.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "is"
+        ],
+        "new": [
+          "actions or processes"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "positively",
+    "original_output": "Positively is an entity that involves correlating.",
+    "score": 6.0,
+    "feedback": "The sentence is grammatically correct and appropriately uses \"positively\" to suggest a positive correlation, but it could be more natural by specifying what is being correlated or suggesting a context.",
+    "corrected_output": "A positive correlation is a relationship between two variables where both move in the same direction.",
+    "corrections": [
+      {
+        "field": "role",
+        "old": "entity",
+        "new": "relationship"
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "starlink",
+    "original_output": "Starlink is a concept that involves designing.",
+    "score": 3.0,
+    "feedback": "The sentence is partially correct grammatically but lacks clarity and context, making it somewhat unnatural. It suggests Starlink is merely a design concept without specifying its full scope or nature.",
+    "corrected_output": "Starlink is a concept that involves designing satellite communication systems.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "designs"
+        ],
+        "new": [
+          "designing satellite communication systems"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "hooke",
+    "original_output": "Hooke is a concept that involves concerning.",
+    "score": 3.0,
+    "feedback": "The sentence is partially grammatically correct but lacks clarity and natural phrasing. It could be improved to better convey the concept accurately and succinctly.",
+    "corrected_output": "Hooke is a concept that involves concern.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "concerns"
+        ],
+        "new": [
+          "concern"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "pentaquarks",
+    "original_output": "Pentaquarks is a concept that involves consisting, gluoning, and haing.",
+    "score": 3.0,
+    "feedback": "The grammatical structure is somewhat correct, but it lacks clarity and natural flow, making it slightly difficult to understand.",
+    "corrected_output": "Pentaquarks is a concept that involves entities consisting of gluons and having specific properties.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "consists",
+          "gluons",
+          "has"
+        ],
+        "new": [
+          "entities consisting of gluons",
+          "having specific properties"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "deconfinement",
+    "original_output": "Deconfinement is a concept that involves complicating.",
+    "score": 3.0,
+    "feedback": "The sentence is not very clear and it uses the word \"complicating\" in a way that doesn't naturally fit with the concept of deconfinement. A better rephrased version might focus on simplifying restrictions or opening up limitations instead.",
+    "corrected_output": "Deconfinement is a concept that involves simplifying restrictions and opening up limitations.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "complicates"
+        ],
+        "new": [
+          "simplifying restrictions",
+          "opening up limitations"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "completely",
+    "original_output": "Completely is a concept that involves releasing.",
+    "score": 5.0,
+    "feedback": "The sentence is grammatically correct and appropriately uses \"completely\" as a concept, but it could be more natural by specifying what aspect or action is involved in releasing.",
+    "corrected_output": "Completely involves the concept of fullness in the act of releasing.",
+    "corrections": [],
+    "saved": false
+  },
+  {
+    "concept": "starburst",
+    "original_output": "Starburst is a concept that involves phasing.",
+    "score": 6.0,
+    "feedback": "The sentence is partially correct in terms of grammatical structure but lacks clarity and context, making it somewhat unnatural. It suggests that \"starburst\" involves the concept of phasing, which could be true for certain phenomena or systems where starbursts appear\u9636\u6bb5\u6027, such as in astronomy or optics. However, it's not clear if this is meant to describe a process, a pattern, or something else without additional context.",
+    "corrected_output": "Starburst is a concept that involves phased phenomena.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "phases"
+        ],
+        "new": [
+          "phased phenomena"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "mullis",
+    "original_output": "Mullis is a concept that involves sharing.",
+    "score": 5.0,
+    "feedback": "The sentence is generally understandable but could be more precise. It's grammatically correct and has a natural phrasing, though it doesn't specify what exactly the concept of \"mullis\" involves sharing (ideas, information, etc.). In terms of appropriate role or category for the concept, it would need more context to fully determine if that fits correctly in every scenario.",
+    "corrected_output": "Mullis is a concept that involves the sharing of ideas.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "shares"
+        ],
+        "new": [
+          "the sharing of ideas"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "artisanal",
+    "original_output": "Artisanal is a concept that involves mining.",
+    "score": 3.0,
+    "feedback": "The sentence is half correct in terms of grammar, but it doesn't accurately convey what artisanal means. Artisanal typically refers to goods made by hand or traditional methods using skilled labor, not the act of mining.",
+    "corrected_output": "Artisanal is a concept that involves the creation of goods by hand using traditional methods and skilled labor, rather than through mass production processes.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "mines"
+        ],
+        "new": [
+          "the creation of goods by hand using traditional methods",
+          "skilled labor",
+          "rather than through mass production processes"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "watts",
+    "original_output": "Watts is a concept that involves forming.",
+    "score": 5.0,
+    "feedback": "The sentence is grammatically correct and appropriately uses \"watts\" as a measure of power, but it lacks clarity on what exactly is being formed. It would be more natural if it specified what is being formed with respect to watts.",
+    "corrected_output": "Watts is a concept that involves the measurement of power in forming various applications.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "forms"
+        ],
+        "new": [
+          "the measurement of power in forming various applications"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "centaurs",
+    "original_output": "Centaurs is a concept that involves iing.",
+    "score": 3.0,
+    "feedback": "The sentence is unclear and lacks context, making it difficult to understand. It seems to be missing key details about what \"centaurs\" are being described as or including.",
+    "corrected_output": "Centaurs is a concept that involves beings with the body of a horse and the upper torso of a human.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "is"
+        ],
+        "new": [
+          "beings with the body of a horse",
+          "the upper torso of a human"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "wormholes",
+    "original_output": "Wormholes is a concept that involves stabilizing and using, relating to exotic and interstellar.",
+    "score": 6.0,
+    "feedback": "The sentence is reasonably grammatically correct and uses natural phrasing, but could be more concise. It adequately categorizes wormholes within a conceptual framework involving stabilization and interstellar travel.",
+    "corrected_output": "Wormholes is a concept that involves stabilizing and utilizing them in relation to exotic physics and interstellar travel.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "stabilizes",
+          "uses"
+        ],
+        "new": [
+          "stabilizs",
+          "utilizing them in relation to exotic physics",
+          "interstellar travel"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "thrusters",
+    "original_output": "Thrusters is a concept that involves offering.",
+    "score": 6.0,
+    "feedback": "The sentence is mostly clear and grammatically correct, but it lacks context. It might be better to specify what exactly thrusters are being offered or provide more information about the concept.",
+    "corrected_output": "Thrusters is a concept that involves offering propulsion systems.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "offeres"
+        ],
+        "new": [
+          "offering propulsion systems"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "stints",
+    "original_output": "Stints is a concept that involves specializing.",
+    "score": 7.0,
+    "feedback": "The sentence is mostly correct and natural, but it could be more specific about what \"stints\" refers to. It assumes knowledge of the context which might not be available to everyone.",
+    "corrected_output": "Stints is a concept that involves specializing in particular tasks or roles on a temporary basis.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "specializes"
+        ],
+        "new": [
+          "specializing in particular tasks or roles on a temporary basis"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "kandel",
+    "original_output": "Kandel is an entity that involves processing, completing, and contrasting, relating to process and internship.",
+    "score": 5.0,
+    "feedback": "The sentence is mostly clear and correctly structured, but it could be simplified for better natural phrasing. It also adequately describes the role or category of \"kandel\" in the context provided.",
+    "corrected_output": "Kandel is a concept that involves processing, completing, and contrasting in relation to processes and internships.",
+    "corrections": [
+      {
+        "field": "role",
+        "old": "entity",
+        "new": "concept"
+      },
+      {
+        "field": "actions",
+        "old": [
+          "processes",
+          "complets",
+          "contrasts"
+        ],
+        "new": [
+          "processes",
+          "complets",
+          "contrasting in relation to processes",
+          "internships"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "lim_",
+    "original_output": "Lim_ is an entity that involves fracing.",
+    "score": 5.0,
+    "feedback": "The sentence is somewhat grammatically correct but lacks clarity and natural phrasing. It also misuses \"lim_\" as a variable, which typically doesn't have an entity associated with it in standard mathematical contexts.",
+    "corrected_output": "Lim_ is a concept involving fracking.",
+    "corrections": [
+      {
+        "field": "role",
+        "old": "entity",
+        "new": "concept"
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "belarus",
+    "original_output": "Belarus is a concept that involves armeniaing.",
+    "score": 2.0,
+    "feedback": "The sentence is not grammatically correct and its meaning is unclear, making it difficult to assess whether it's a natural phrasing or appropriate in terms of the concept.",
+    "corrected_output": "Belarus is a concept involving Armeniaization.",
+    "corrections": [],
+    "saved": false
+  },
+  {
+    "concept": "urey",
+    "original_output": "Urey is a concept that involves prizing.",
+    "score": 6.0,
+    "feedback": "The sentence is grammatically correct and natural, but it could be more specific about what \"prizing\" entails in relation to urey.",
+    "corrected_output": "Urey is a concept that involves valuing and appreciating.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "prizes"
+        ],
+        "new": [
+          "valus",
+          "appreciats"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "aberdeen",
+    "original_output": "Aberdeen is an entity that involves serving.",
+    "score": 7.0,
+    "feedback": "The sentence is grammatically correct and naturally phrased, but it doesn't specify what entity or context \"Aberdeen\" refers to, which limits its clarity.",
+    "corrected_output": "Aberdeen is a concept that involves serving.",
+    "corrections": [
+      {
+        "field": "role",
+        "old": "entity",
+        "new": "concept"
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "zuo",
+    "original_output": "Zuo is a concept that involves exemplifiing.",
+    "score": 6.0,
+    "feedback": "The sentence is grammatically correct and appropriately uses natural phrasing, but it could be more precise in defining \"zuo.\" It would benefit from further clarification on what exemplifying entails within the context of \"zuo.\"",
+    "corrected_output": "Zuo is a concept that involves exemplification in its application or interpretation.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "exemplifies"
+        ],
+        "new": [
+          "exemplification in its application or interpretation"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "movie",
+    "original_output": "Movie is a concept that involves achieving.",
+    "score": 5.0,
+    "feedback": "The sentence is generally clear, but it could be more precise and descriptive to better convey what aspect of movies it intends to highlight.",
+    "corrected_output": "Movie is a concept that involves the creation and achievement of narrative experiences through visual storytelling.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "achieves"
+        ],
+        "new": [
+          "the creation",
+          "achievement of narrative experiences through visual storytells"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "rabbitt",
+    "original_output": "Rabbitt is an entity that involves providing.",
+    "score": 3.0,
+    "feedback": "The grammar is slightly off, and using \"Rabbitt\" instead of \"rabbit\" makes it seem incorrect. Also, it's not a natural way to phrase something about rabbits. However, the concept seems appropriate.",
+    "corrected_output": "Concept rabbit involves providing.",
+    "corrections": [],
+    "saved": false
+  },
+  {
+    "concept": "taub",
+    "original_output": "Taub is a concept that involves earning.",
+    "score": 6.0,
+    "feedback": "The sentence is grammatically correct and appropriately describes \"taub\" as a concept, but it could be more naturally phrased by specifying what kind of earning is meant.",
+    "corrected_output": "Taub is a concept that involves earning through intellectual property.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "earns"
+        ],
+        "new": [
+          "earning through intellectual property"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "lapointe",
+    "original_output": "Lapointe is a concept that involves earning.",
+    "score": 6.0,
+    "feedback": "The statement is grammatically correct and appropriately categorizes \"lapointe\" as a concept related to earning, though it lacks specificity about what exactly \"earning\" entails within the context of lapointe.",
+    "corrected_output": "Lapointe is a concept that involves the process of earning.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "earns"
+        ],
+        "new": [
+          "the process of earns"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "nafs",
+    "original_output": "Nafs is a concept that involves meanwhiling.",
+    "score": 3.0,
+    "feedback": "The sentence is partially correct in conveying the idea of nafs involving meanwhiling, but \"meanwhile\" doesn't seem to fit properly within this context. A better description might be that nafs involves self-contemplation or self-examination.",
+    "corrected_output": "Nafs is a concept that involves self-contemplation.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "meanwhiles"
+        ],
+        "new": [
+          "self-contemplation"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "plaintiffs",
+    "original_output": "Plaintiffs is a concept that involves alleging.",
+    "score": 7.0,
+    "feedback": "The sentence is mostly correct and natural, but it could be more precise. A better formulation might specify \"plaintiffs\" as the subjects making allegations in a legal context.",
+    "corrected_output": "Plaintiffs are individuals who allege in a legal context.",
+    "corrections": [
+      {
+        "field": "actions",
+        "old": [
+          "allegs"
+        ],
+        "new": [
+          "allege in a legal context"
+        ]
+      }
+    ],
+    "saved": true
+  },
+  {
+    "concept": "institutionally",
+    "original_output": "Institutionally is a concept that involves studying.",
+    "score": 7.0,
+    "feedback": "The sentence is grammatically correct and natural, but it might be more appropriate to specify what is being studied institutionally for clarity.",
+    "corrected_output": "Institutional studies involve a concept that involves studying.",
+    "corrections": [],
+    "saved": false
+  }
+]

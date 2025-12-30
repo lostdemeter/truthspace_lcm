@@ -106,10 +106,11 @@ class ReasoningEngine:
         self.entity_graph: Dict[str, List[Tuple[str, str, str]]] = {}
         
         for frame in self.knowledge.frames:
-            agent = frame.get('agent', '').lower()
-            patient = frame.get('patient', '').lower()
-            action = frame.get('action', 'RELATE')
-            text = frame.get('text', '')[:100]
+            # Frame is a dataclass with initiator, mediator, receiver, source, text
+            agent = frame.initiator.lower() if frame.initiator else ''
+            patient = frame.receiver.lower() if frame.receiver else ''
+            action = frame.mediator if frame.mediator else 'RELATE'
+            text = frame.text[:100] if frame.text else ''
             
             if agent and patient and agent != patient:
                 if agent not in self.entity_graph:
