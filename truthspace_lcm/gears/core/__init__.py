@@ -41,6 +41,12 @@ from .emergent_chain import EmergentDimensionChain, DimensionInfo, DataItem
 from .semantic_chain import SemanticChain
 from .linguistic_chain import LinguisticChain
 from .conversational_chain import ConversationalChain, KnowledgeItem, ConversationTurn
+from .gear_message import (
+    GearMessage, GearProtocol, MessageIntent, MessageAwareGear,
+    EmergentIntentSpace, get_intent_space,
+    normalize_input, normalize_output,
+    adapt_to_gear_state, adapt_from_gear_state,
+)
 
 __all__ = [
     # Base classes
@@ -49,6 +55,17 @@ __all__ = [
     'GearChain',
     'Quaternion',
     'ErrorCorrectionGear',
+    # Gear message protocol
+    'GearMessage',
+    'GearProtocol',
+    'MessageAwareGear',  # Alias for GearProtocol
+    'MessageIntent',
+    'EmergentIntentSpace',
+    'get_intent_space',
+    'normalize_input',
+    'normalize_output',
+    'adapt_to_gear_state',
+    'adapt_from_gear_state',
     # Emergent dimension chains
     'EmergentDimensionChain',
     'DimensionInfo',

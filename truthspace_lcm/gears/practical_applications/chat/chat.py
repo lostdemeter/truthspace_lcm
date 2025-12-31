@@ -4,6 +4,10 @@ Interactive Chat Application for Emergent Conversational Chain
 A conversational interface using truly emergent response generation.
 LLM is used ONLY for corpus building, NEVER for response generation.
 
+Now with gear-based routing:
+- Knowledge queries → ConversationalChain (emergent)
+- Tool calls → GearOrchestrator (plans + commands)
+
 Author: Lesley Gushurst
 License: GPLv3
 """
@@ -15,6 +19,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent.parent))
 
 from truthspace_lcm.gears.core import ConversationalChain
+from truthspace_lcm.gears.core.intent_detector import IntentDetectorGear, SmartChatGear, Intent
+from truthspace_lcm.gears.core.gear_orchestrator import GearOrchestrator
 
 
 # Default LLM configuration
@@ -40,20 +46,43 @@ class EmergentChat:
     - Corpus building from LLM as knowledge resource
     - Topic exploration and learning
     - Debug mode to see emergent patterns
+    - Gear-based routing for tool calls
     """
     
     def __init__(self, 
                  llm_url: str = DEFAULT_LLM_URL,
                  llm_model: str = DEFAULT_LLM_MODEL,
-                 debug: bool = False):
+                 debug: bool = False,
+                 enable_tools: bool = True):
         self.debug = debug
+        self.enable_tools = enable_tools
+        self.llm_url = llm_url
+        self.llm_model = llm_model
         
         # Create conversational chain
         self.chain = ConversationalChain()
         self.chain.configure_llm(llm_url, llm_model)
         
+        # Intent detector for routing
+        self.intent_detector = IntentDetectorGear()
+        
+        # Gear orchestrator for tool calls
+        self.orchestrator: Optional[GearOrchestrator] = None
+        if enable_tools:
+            self.orchestrator = GearOrchestrator()
+            self.orchestrator.configure_llm(llm_url, llm_model)
+        
+        # Smart chat that combines both
+        self.smart_chat = SmartChatGear()
+        self.smart_chat.set_chain(self.chain)
+        if self.orchestrator:
+            self.smart_chat.set_orchestrator(self.orchestrator)
+        
         # Command history
         self.history: List[str] = []
+        
+        # Pending commands awaiting confirmation
+        self.pending_commands: List[str] = []
     
     def build_knowledge(self, seed_topics: List[str] = None, expand: bool = True):
         """Build knowledge corpus from seed topics."""
@@ -86,19 +115,87 @@ class EmergentChat:
         print(f"Saved corpus to {path}")
     
     def query(self, question: str) -> str:
-        """Process a query through the emergent chain."""
+        """Process a query through smart routing (knowledge or tools)."""
+        # Detect intent
+        intent_result = self.intent_detector.detect(question)
+        
         if self.debug:
             print(f"\n[DEBUG] Input: {question}")
-            topics = self.chain._extract_topics(question)
-            print(f"[DEBUG] Extracted topics: {topics}")
+            print(f"[DEBUG] Intent: {intent_result.intent.name} (conf={intent_result.confidence:.2f})")
+            print(f"[DEBUG] Reason: {intent_result.reason}")
         
-        response = self.chain.chat(question)
+        # Route based on intent
+        if intent_result.intent == Intent.CHAT:
+            # Knowledge query - use emergent chain
+            if self.debug:
+                topics = self.chain._extract_topics(question)
+                print(f"[DEBUG] Extracted topics: {topics}")
+            
+            response = self.chain.chat(question)
+            
+            if self.debug:
+                stats = self.chain.get_stats()
+                print(f"[DEBUG] Conversation LLM calls: {stats['conversation_calls']} (should be 0)")
+            
+            return response
         
-        if self.debug:
-            stats = self.chain.get_stats()
-            print(f"[DEBUG] Conversation LLM calls: {stats['conversation_calls']} (should be 0)")
+        elif intent_result.intent in (Intent.TOOL_CALL, Intent.ORCHESTRATOR):
+            # Tool call - use orchestrator
+            if not self.orchestrator:
+                return "Tool calls are disabled. Start with --tools to enable."
+            
+            result = self.orchestrator.execute(question, dry_run=True)
+            
+            if self.debug:
+                print(f"[DEBUG] Plan: {result['plan']}")
+                print(f"[DEBUG] Commands: {result['commands']}")
+            
+            # Store pending commands for confirmation
+            self.pending_commands = result['commands']
+            
+            # Build response asking for confirmation
+            if result['commands']:
+                cmd_list = '\n'.join([f"  $ {cmd}" for cmd in result['commands']])
+                return (
+                    f"I'll need to run these commands:\n{cmd_list}\n\n"
+                    f"Type 'yes' or 'y' to execute, or anything else to cancel."
+                )
+            else:
+                return "I couldn't figure out what commands to run for that request."
         
-        return response
+        else:
+            return "I'm not sure how to help with that. Try asking a question or requesting an action."
+    
+    def execute_pending(self) -> str:
+        """Execute pending commands after user confirmation."""
+        if not self.pending_commands:
+            return "No pending commands to execute."
+        
+        if not self.orchestrator:
+            return "Orchestrator not available."
+        
+        import subprocess
+        results = []
+        
+        for cmd in self.pending_commands:
+            try:
+                output = subprocess.run(
+                    cmd, shell=True, capture_output=True, text=True, timeout=30
+                )
+                if output.returncode == 0:
+                    results.append(f"✓ {cmd}")
+                    if output.stdout.strip():
+                        results.append(f"  {output.stdout.strip()[:100]}")
+                else:
+                    results.append(f"✗ {cmd}")
+                    if output.stderr.strip():
+                        results.append(f"  Error: {output.stderr.strip()[:100]}")
+            except Exception as e:
+                results.append(f"✗ {cmd}")
+                results.append(f"  Error: {str(e)}")
+        
+        self.pending_commands = []
+        return "Executed:\n" + '\n'.join(results)
     
     def handle_command(self, cmd: str) -> Optional[str]:
         """Handle special commands."""
@@ -173,7 +270,8 @@ class EmergentChat:
         return f"Unknown command: {cmd}\nType /help for available commands."
     
     def _help_text(self) -> str:
-        return """
+        tools_status = "enabled" if self.enable_tools else "disabled"
+        return f"""
 Emergent Chat - Commands:
 
   /help, /h       Show this help
@@ -189,12 +287,16 @@ Emergent Chat - Commands:
   /quit, /q       Exit
 
 Ask questions like:
-  What is artificial intelligence?
-  How does machine learning work?
+  Who is Captain Ahab?
   Tell me about Queequeg
 
-Note: All responses are EMERGENT - no LLM is used during conversation.
-The LLM is only used as a knowledge resource during corpus building.
+Request actions like (tools {tools_status}):
+  Create a directory called test
+  Make a file and write hello to it
+  Set up a new project folder
+
+Note: Knowledge responses are EMERGENT - no LLM during conversation.
+Tool calls use the GearOrchestrator to plan and execute commands.
 """
     
     def run(self):
@@ -202,13 +304,14 @@ The LLM is only used as a knowledge resource during corpus building.
         print()
         print("═" * 60)
         print("  Emergent Conversational Chat")
-        print("  Truly emergent responses - no LLM during conversation")
+        print("  Gear-based routing: knowledge queries + tool calls")
         print("═" * 60)
         print()
         
         stats = self.chain.get_stats()
+        tools_status = "✓ enabled" if self.enable_tools else "✗ disabled"
         print(f"  Knowledge: {stats['topics']} topics, {stats['corpus_items']} facts")
-        print(f"  LLM calls during chat: {stats['conversation_calls']} (always 0)")
+        print(f"  Tools: {tools_status}")
         print("  Type /help for commands, /quit to exit")
         print()
         
@@ -230,7 +333,18 @@ The LLM is only used as a knowledge resource during corpus building.
                     print(f"\n{response}\n")
                     continue
                 
-                # Process query (emergent response)
+                # Handle confirmation for pending commands
+                if self.pending_commands and user_input.lower() in ('yes', 'y'):
+                    response = self.execute_pending()
+                    print(f"\nBot: {response}\n")
+                    continue
+                elif self.pending_commands:
+                    # User didn't confirm - cancel
+                    self.pending_commands = []
+                    print("\nBot: Cancelled.\n")
+                    continue
+                
+                # Process query (smart routing: knowledge or tools)
                 response = self.query(user_input)
                 print(f"\nBot: {response}\n")
                 
