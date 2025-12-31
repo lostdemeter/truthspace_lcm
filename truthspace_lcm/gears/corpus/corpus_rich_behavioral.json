@@ -1,0 +1,2149 @@
+{
+  "frames": [
+    {
+      "text": "Alice escapes from the angry card soldiers",
+      "source": "rich_behavioral",
+      "agent": "alice",
+      "properties": {
+        "gender": 1,
+        "age": -0.7,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Darcy overcomes his prejudice through reflection",
+      "source": "rich_behavioral",
+      "agent": "darcy",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The princess obeys her father's commands reluctantly",
+      "source": "rich_behavioral",
+      "agent": "princess",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Darcy admits his faults with humility",
+      "source": "rich_behavioral",
+      "agent": "darcy",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Watson serves as Holmes's trusted companion",
+      "source": "rich_behavioral",
+      "agent": "watson",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Holmes pursues the suspect through the foggy streets",
+      "source": "rich_behavioral",
+      "agent": "holmes",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The child dreams of becoming a grown-up",
+      "source": "rich_behavioral",
+      "agent": "child",
+      "properties": {
+        "gender": 0,
+        "age": -1,
+        "agency": 0.2,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The storm demonstrates nature's raw power",
+      "source": "rich_behavioral",
+      "agent": "storm",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.8,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "The storm leaves destruction in its wake",
+      "source": "rich_behavioral",
+      "agent": "storm",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.8,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "Watson waits patiently while Holmes thinks",
+      "source": "rich_behavioral",
+      "agent": "watson",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Darcy broods over his feelings in solitude",
+      "source": "rich_behavioral",
+      "agent": "darcy",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The Queen leads the croquet game by her rules",
+      "source": "rich_behavioral",
+      "agent": "queen",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Irene decides her own fate on her terms",
+      "source": "rich_behavioral",
+      "agent": "irene",
+      "properties": {
+        "gender": 1,
+        "age": 0,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The child grows a little taller each year",
+      "source": "rich_behavioral",
+      "agent": "child",
+      "properties": {
+        "gender": 0,
+        "age": -1,
+        "agency": 0.2,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The storm threatens the coastal villages",
+      "source": "rich_behavioral",
+      "agent": "storm",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.8,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "Holmes commands Watson to fetch his magnifying glass",
+      "source": "rich_behavioral",
+      "agent": "holmes",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The Queen rules Wonderland with an iron fist",
+      "source": "rich_behavioral",
+      "agent": "queen",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The robot operates continuously without rest",
+      "source": "rich_behavioral",
+      "agent": "robot",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0
+      }
+    },
+    {
+      "text": "The Queen intimidates the entire kingdom",
+      "source": "rich_behavioral",
+      "agent": "queen",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The elder preserves the family history",
+      "source": "rich_behavioral",
+      "agent": "elder",
+      "properties": {
+        "gender": 0,
+        "age": 1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Elizabeth questions society's rigid expectations",
+      "source": "rich_behavioral",
+      "agent": "elizabeth",
+      "properties": {
+        "gender": 1,
+        "age": -0.2,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The King builds monuments to his glory",
+      "source": "rich_behavioral",
+      "agent": "king",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Watson supports his friend during the difficult case",
+      "source": "rich_behavioral",
+      "agent": "watson",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The Queen shouts at anyone who displeases her",
+      "source": "rich_behavioral",
+      "agent": "queen",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The robot adapts to new instructions quickly",
+      "source": "rich_behavioral",
+      "agent": "robot",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0
+      }
+    },
+    {
+      "text": "Irene orchestrates her own rescue brilliantly",
+      "source": "rich_behavioral",
+      "agent": "irene",
+      "properties": {
+        "gender": 1,
+        "age": 0,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The storm uproots ancient trees effortlessly",
+      "source": "rich_behavioral",
+      "agent": "storm",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.8,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "Irene discovers the plot against her",
+      "source": "rich_behavioral",
+      "agent": "irene",
+      "properties": {
+        "gender": 1,
+        "age": 0,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The King conquers neighboring territories",
+      "source": "rich_behavioral",
+      "agent": "king",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Irene challenges the detective at his own game",
+      "source": "rich_behavioral",
+      "agent": "irene",
+      "properties": {
+        "gender": 1,
+        "age": 0,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The King demands tribute from vassal states",
+      "source": "rich_behavioral",
+      "agent": "king",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Watson chronicles their adventures for posterity",
+      "source": "rich_behavioral",
+      "agent": "watson",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Watson records Holmes's brilliant deductions",
+      "source": "rich_behavioral",
+      "agent": "watson",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The princess dances at the royal ball gracefully",
+      "source": "rich_behavioral",
+      "agent": "princess",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The princess hopes for a different life",
+      "source": "rich_behavioral",
+      "agent": "princess",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The Queen governs through fear and anger",
+      "source": "rich_behavioral",
+      "agent": "queen",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The King governs with iron determination",
+      "source": "rich_behavioral",
+      "agent": "king",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The King decrees new laws for the realm",
+      "source": "rich_behavioral",
+      "agent": "king",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The robot calculates probabilities instantly",
+      "source": "rich_behavioral",
+      "agent": "robot",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0
+      }
+    },
+    {
+      "text": "Holmes outwits Moriarty at every turn",
+      "source": "rich_behavioral",
+      "agent": "holmes",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The child waits for permission to go outside",
+      "source": "rich_behavioral",
+      "agent": "child",
+      "properties": {
+        "gender": 0,
+        "age": -1,
+        "agency": 0.2,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Holmes confronts the villain in his own lair",
+      "source": "rich_behavioral",
+      "agent": "holmes",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The robot computes solutions to complex problems",
+      "source": "rich_behavioral",
+      "agent": "robot",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0
+      }
+    },
+    {
+      "text": "Irene outwits Holmes with her clever disguise",
+      "source": "rich_behavioral",
+      "agent": "irene",
+      "properties": {
+        "gender": 1,
+        "age": 0,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Alice wonders about the meaning of it all",
+      "source": "rich_behavioral",
+      "agent": "alice",
+      "properties": {
+        "gender": 1,
+        "age": -0.7,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Irene controls the narrative from the beginning",
+      "source": "rich_behavioral",
+      "agent": "irene",
+      "properties": {
+        "gender": 1,
+        "age": 0,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Darcy loves Elizabeth despite class differences",
+      "source": "rich_behavioral",
+      "agent": "darcy",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Watson documents the case in his journal",
+      "source": "rich_behavioral",
+      "agent": "watson",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The child imagines fantastic adventures",
+      "source": "rich_behavioral",
+      "agent": "child",
+      "properties": {
+        "gender": 0,
+        "age": -1,
+        "agency": 0.2,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The King commands his armies to march",
+      "source": "rich_behavioral",
+      "agent": "king",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The princess learns the arts of court etiquette",
+      "source": "rich_behavioral",
+      "agent": "princess",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The robot obeys the three laws of robotics",
+      "source": "rich_behavioral",
+      "agent": "robot",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0
+      }
+    },
+    {
+      "text": "Holmes deduces the criminal's identity from a single footprint",
+      "source": "rich_behavioral",
+      "agent": "holmes",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The child watches the adults with wide eyes",
+      "source": "rich_behavioral",
+      "agent": "child",
+      "properties": {
+        "gender": 0,
+        "age": -1,
+        "agency": 0.2,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Alice questions the bizarre rules of this world",
+      "source": "rich_behavioral",
+      "agent": "alice",
+      "properties": {
+        "gender": 1,
+        "age": -0.7,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Holmes deciphers the coded message with ease",
+      "source": "rich_behavioral",
+      "agent": "holmes",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Watson assists Holmes with the investigation",
+      "source": "rich_behavioral",
+      "agent": "watson",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The princess discovers a secret passage",
+      "source": "rich_behavioral",
+      "agent": "princess",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Elizabeth defends her family's honor fiercely",
+      "source": "rich_behavioral",
+      "agent": "elizabeth",
+      "properties": {
+        "gender": 1,
+        "age": -0.2,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Alice shrinks to a tiny size unexpectedly",
+      "source": "rich_behavioral",
+      "agent": "alice",
+      "properties": {
+        "gender": 1,
+        "age": -0.7,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Irene leads her pursuers on a merry chase",
+      "source": "rich_behavioral",
+      "agent": "irene",
+      "properties": {
+        "gender": 1,
+        "age": 0,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Elizabeth debates with wit and intelligence",
+      "source": "rich_behavioral",
+      "agent": "elizabeth",
+      "properties": {
+        "gender": 1,
+        "age": -0.2,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Holmes investigates the mysterious disappearance with keen interest",
+      "source": "rich_behavioral",
+      "agent": "holmes",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The Queen commands everyone to bow before her",
+      "source": "rich_behavioral",
+      "agent": "queen",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Holmes discovers the hidden passage behind the bookcase",
+      "source": "rich_behavioral",
+      "agent": "holmes",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The King controls the treasury and resources",
+      "source": "rich_behavioral",
+      "agent": "king",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The Queen punishes those who dare to defy her",
+      "source": "rich_behavioral",
+      "agent": "queen",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The child trusts the adults to keep them safe",
+      "source": "rich_behavioral",
+      "agent": "child",
+      "properties": {
+        "gender": 0,
+        "age": -1,
+        "agency": 0.2,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Holmes leads the investigation with brilliant insight",
+      "source": "rich_behavioral",
+      "agent": "holmes",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The Queen threatens Alice with dire consequences",
+      "source": "rich_behavioral",
+      "agent": "queen",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The Queen judges the trial with arbitrary fury",
+      "source": "rich_behavioral",
+      "agent": "queen",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Irene manipulates the situation to her advantage",
+      "source": "rich_behavioral",
+      "agent": "irene",
+      "properties": {
+        "gender": 1,
+        "age": 0,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Alice awakens from her strange adventure",
+      "source": "rich_behavioral",
+      "agent": "alice",
+      "properties": {
+        "gender": 1,
+        "age": -0.7,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Alice discovers new rooms in the strange house",
+      "source": "rich_behavioral",
+      "agent": "alice",
+      "properties": {
+        "gender": 1,
+        "age": -0.7,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Watson follows Holmes through the dark alley",
+      "source": "rich_behavioral",
+      "agent": "watson",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The child plays with toys in the nursery",
+      "source": "rich_behavioral",
+      "agent": "child",
+      "properties": {
+        "gender": 0,
+        "age": -1,
+        "agency": 0.2,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Darcy struggles with his conflicting emotions",
+      "source": "rich_behavioral",
+      "agent": "darcy",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Watson watches as Holmes examines the clue",
+      "source": "rich_behavioral",
+      "agent": "watson",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Irene escapes before anyone can stop her",
+      "source": "rich_behavioral",
+      "agent": "irene",
+      "properties": {
+        "gender": 1,
+        "age": 0,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Alice explores the strange wonderland with curiosity",
+      "source": "rich_behavioral",
+      "agent": "alice",
+      "properties": {
+        "gender": 1,
+        "age": -0.7,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The robot executes its programmed instructions",
+      "source": "rich_behavioral",
+      "agent": "robot",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0
+      }
+    },
+    {
+      "text": "Elizabeth discovers the truth about Wickham",
+      "source": "rich_behavioral",
+      "agent": "elizabeth",
+      "properties": {
+        "gender": 1,
+        "age": -0.2,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The elder observes the changing world quietly",
+      "source": "rich_behavioral",
+      "agent": "elder",
+      "properties": {
+        "gender": 0,
+        "age": 1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The elder waits patiently for visitors",
+      "source": "rich_behavioral",
+      "agent": "elder",
+      "properties": {
+        "gender": 0,
+        "age": 1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The Queen demands absolute obedience from all",
+      "source": "rich_behavioral",
+      "agent": "queen",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The King dominates the royal court",
+      "source": "rich_behavioral",
+      "agent": "king",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The robot monitors systems around the clock",
+      "source": "rich_behavioral",
+      "agent": "robot",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0
+      }
+    },
+    {
+      "text": "Irene proves herself the equal of any man",
+      "source": "rich_behavioral",
+      "agent": "irene",
+      "properties": {
+        "gender": 1,
+        "age": 0,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The storm darkens the sky for miles",
+      "source": "rich_behavioral",
+      "agent": "storm",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.8,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "The princess dreams of adventure beyond the castle",
+      "source": "rich_behavioral",
+      "agent": "princess",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The robot follows commands without question",
+      "source": "rich_behavioral",
+      "agent": "robot",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0
+      }
+    },
+    {
+      "text": "The robot functions according to its design",
+      "source": "rich_behavioral",
+      "agent": "robot",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0
+      }
+    },
+    {
+      "text": "Holmes questions the witness with surgical precision",
+      "source": "rich_behavioral",
+      "agent": "holmes",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Alice dreams of a world beyond the looking glass",
+      "source": "rich_behavioral",
+      "agent": "alice",
+      "properties": {
+        "gender": 1,
+        "age": -0.7,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The princess follows the rules of the court",
+      "source": "rich_behavioral",
+      "agent": "princess",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The storm rages across the open sea",
+      "source": "rich_behavioral",
+      "agent": "storm",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.8,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "The storm transforms the landscape completely",
+      "source": "rich_behavioral",
+      "agent": "storm",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.8,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "The child depends on others for care",
+      "source": "rich_behavioral",
+      "agent": "child",
+      "properties": {
+        "gender": 0,
+        "age": -1,
+        "agency": 0.2,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The storm batters the ships against the rocks",
+      "source": "rich_behavioral",
+      "agent": "storm",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.8,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "The princess escapes from the tower at midnight",
+      "source": "rich_behavioral",
+      "agent": "princess",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The child receives lessons from the tutor",
+      "source": "rich_behavioral",
+      "agent": "child",
+      "properties": {
+        "gender": 0,
+        "age": -1,
+        "agency": 0.2,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Watson helps Holmes by fetching medical supplies",
+      "source": "rich_behavioral",
+      "agent": "watson",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Darcy changes his behavior after Elizabeth's rebuke",
+      "source": "rich_behavioral",
+      "agent": "darcy",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Elizabeth leads conversations with clever remarks",
+      "source": "rich_behavioral",
+      "agent": "elizabeth",
+      "properties": {
+        "gender": 1,
+        "age": -0.2,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The child explores the garden with wonder",
+      "source": "rich_behavioral",
+      "agent": "child",
+      "properties": {
+        "gender": 0,
+        "age": -1,
+        "agency": 0.2,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Watson provides medical expertise when needed",
+      "source": "rich_behavioral",
+      "agent": "watson",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The elder advises the young with wisdom",
+      "source": "rich_behavioral",
+      "agent": "elder",
+      "properties": {
+        "gender": 0,
+        "age": 1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The robot responds to voice commands precisely",
+      "source": "rich_behavioral",
+      "agent": "robot",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0
+      }
+    },
+    {
+      "text": "Elizabeth chooses love over mere convenience",
+      "source": "rich_behavioral",
+      "agent": "elizabeth",
+      "properties": {
+        "gender": 1,
+        "age": -0.2,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The Queen orders the execution of the gardeners",
+      "source": "rich_behavioral",
+      "agent": "queen",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Watson accompanies Holmes to the crime scene",
+      "source": "rich_behavioral",
+      "agent": "watson",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The princess questions her predetermined fate",
+      "source": "rich_behavioral",
+      "agent": "princess",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Darcy transforms from proud to humble",
+      "source": "rich_behavioral",
+      "agent": "darcy",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Darcy observes the assembly with quiet disdain",
+      "source": "rich_behavioral",
+      "agent": "darcy",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Alice asks the Caterpillar for directions",
+      "source": "rich_behavioral",
+      "agent": "alice",
+      "properties": {
+        "gender": 1,
+        "age": -0.7,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Darcy rescues Lydia from disgrace secretly",
+      "source": "rich_behavioral",
+      "agent": "darcy",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The robot processes data with perfect accuracy",
+      "source": "rich_behavioral",
+      "agent": "robot",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0
+      }
+    },
+    {
+      "text": "Darcy writes a letter explaining his actions",
+      "source": "rich_behavioral",
+      "agent": "darcy",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Elizabeth confronts Lady Catherine without fear",
+      "source": "rich_behavioral",
+      "agent": "elizabeth",
+      "properties": {
+        "gender": 1,
+        "age": -0.2,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Alice adapts to the changing circumstances",
+      "source": "rich_behavioral",
+      "agent": "alice",
+      "properties": {
+        "gender": 1,
+        "age": -0.7,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The storm strikes without warning or mercy",
+      "source": "rich_behavioral",
+      "agent": "storm",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.8,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "Elizabeth refuses his first proposal with dignity",
+      "source": "rich_behavioral",
+      "agent": "elizabeth",
+      "properties": {
+        "gender": 1,
+        "age": -0.2,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The King rules the kingdom with absolute power",
+      "source": "rich_behavioral",
+      "agent": "king",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The elder shares stories of the past",
+      "source": "rich_behavioral",
+      "agent": "elder",
+      "properties": {
+        "gender": 0,
+        "age": 1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The elder reflects on a life well lived",
+      "source": "rich_behavioral",
+      "agent": "elder",
+      "properties": {
+        "gender": 0,
+        "age": 1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The King punishes traitors without mercy",
+      "source": "rich_behavioral",
+      "agent": "king",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The storm destroys everything in its path",
+      "source": "rich_behavioral",
+      "agent": "storm",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.8,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "The robot serves the humans without complaint",
+      "source": "rich_behavioral",
+      "agent": "robot",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0
+      }
+    },
+    {
+      "text": "Irene defeats the king's schemes with intelligence",
+      "source": "rich_behavioral",
+      "agent": "irene",
+      "properties": {
+        "gender": 1,
+        "age": 0,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The princess watches the knights from her window",
+      "source": "rich_behavioral",
+      "agent": "princess",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Holmes observes details that others completely miss",
+      "source": "rich_behavioral",
+      "agent": "holmes",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The elder watches the grandchildren play",
+      "source": "rich_behavioral",
+      "agent": "elder",
+      "properties": {
+        "gender": 0,
+        "age": 1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The Queen controls every aspect of the court",
+      "source": "rich_behavioral",
+      "agent": "queen",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The child listens to bedtime stories eagerly",
+      "source": "rich_behavioral",
+      "agent": "child",
+      "properties": {
+        "gender": 0,
+        "age": -1,
+        "agency": 0.2,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The storm floods the lowland farms",
+      "source": "rich_behavioral",
+      "agent": "storm",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.8,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "The princess imagines a world of freedom",
+      "source": "rich_behavioral",
+      "agent": "princess",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Elizabeth challenges Darcy's arrogant assumptions",
+      "source": "rich_behavioral",
+      "agent": "elizabeth",
+      "properties": {
+        "gender": 1,
+        "age": -0.2,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The princess studies languages and music",
+      "source": "rich_behavioral",
+      "agent": "princess",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Elizabeth reads voraciously and thinks deeply",
+      "source": "rich_behavioral",
+      "agent": "elizabeth",
+      "properties": {
+        "gender": 1,
+        "age": -0.2,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Irene outsmarts everyone who underestimates her",
+      "source": "rich_behavioral",
+      "agent": "irene",
+      "properties": {
+        "gender": 1,
+        "age": 0,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The storm howls through the night relentlessly",
+      "source": "rich_behavioral",
+      "agent": "storm",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.8,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "The elder rests in the comfortable chair",
+      "source": "rich_behavioral",
+      "agent": "elder",
+      "properties": {
+        "gender": 0,
+        "age": 1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The Queen enforces her will without mercy",
+      "source": "rich_behavioral",
+      "agent": "queen",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The elder accepts the passage of time gracefully",
+      "source": "rich_behavioral",
+      "agent": "elder",
+      "properties": {
+        "gender": 0,
+        "age": 1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The elder passes down ancient knowledge",
+      "source": "rich_behavioral",
+      "agent": "elder",
+      "properties": {
+        "gender": 0,
+        "age": 1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Elizabeth judges character with keen perception",
+      "source": "rich_behavioral",
+      "agent": "elizabeth",
+      "properties": {
+        "gender": 1,
+        "age": -0.2,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Holmes analyzes the poison and identifies its origin",
+      "source": "rich_behavioral",
+      "agent": "holmes",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Watson observes the proceedings with quiet attention",
+      "source": "rich_behavioral",
+      "agent": "watson",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The child learns to read from picture books",
+      "source": "rich_behavioral",
+      "agent": "child",
+      "properties": {
+        "gender": 0,
+        "age": -1,
+        "agency": 0.2,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Darcy protects his sister from scandal",
+      "source": "rich_behavioral",
+      "agent": "darcy",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Alice follows the White Rabbit down the hole",
+      "source": "rich_behavioral",
+      "agent": "alice",
+      "properties": {
+        "gender": 1,
+        "age": -0.7,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The child obeys the instructions given by parents",
+      "source": "rich_behavioral",
+      "agent": "child",
+      "properties": {
+        "gender": 0,
+        "age": -1,
+        "agency": 0.2,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The Queen decides who lives and who dies",
+      "source": "rich_behavioral",
+      "agent": "queen",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Elizabeth changes her mind when presented with evidence",
+      "source": "rich_behavioral",
+      "agent": "elizabeth",
+      "properties": {
+        "gender": 1,
+        "age": -0.2,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Alice learns that nothing is as it seems",
+      "source": "rich_behavioral",
+      "agent": "alice",
+      "properties": {
+        "gender": 1,
+        "age": -0.7,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The child asks endless questions about everything",
+      "source": "rich_behavioral",
+      "agent": "child",
+      "properties": {
+        "gender": 0,
+        "age": -1,
+        "agency": 0.2,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The elder sits by the fire in contemplation",
+      "source": "rich_behavioral",
+      "agent": "elder",
+      "properties": {
+        "gender": 0,
+        "age": 1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Irene triumphs over those who sought to harm her",
+      "source": "rich_behavioral",
+      "agent": "irene",
+      "properties": {
+        "gender": 1,
+        "age": 0,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The princess grows into a young woman",
+      "source": "rich_behavioral",
+      "agent": "princess",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Elizabeth walks three miles through muddy fields",
+      "source": "rich_behavioral",
+      "agent": "elizabeth",
+      "properties": {
+        "gender": 1,
+        "age": -0.2,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Holmes solves the case before Scotland Yard arrives",
+      "source": "rich_behavioral",
+      "agent": "holmes",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The elder blesses the young couple's union",
+      "source": "rich_behavioral",
+      "agent": "elder",
+      "properties": {
+        "gender": 0,
+        "age": 1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The elder guides others with gentle counsel",
+      "source": "rich_behavioral",
+      "agent": "elder",
+      "properties": {
+        "gender": 0,
+        "age": 1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The Queen dominates every conversation",
+      "source": "rich_behavioral",
+      "agent": "queen",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The princess waits for her prince to arrive",
+      "source": "rich_behavioral",
+      "agent": "princess",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Elizabeth speaks her mind regardless of consequence",
+      "source": "rich_behavioral",
+      "agent": "elizabeth",
+      "properties": {
+        "gender": 1,
+        "age": -0.2,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Watson stands by Holmes in moments of danger",
+      "source": "rich_behavioral",
+      "agent": "watson",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The King leads his people through crisis",
+      "source": "rich_behavioral",
+      "agent": "king",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Darcy earns Elizabeth's respect and love",
+      "source": "rich_behavioral",
+      "agent": "darcy",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The King decides matters of war and peace",
+      "source": "rich_behavioral",
+      "agent": "king",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The King rewards loyal subjects generously",
+      "source": "rich_behavioral",
+      "agent": "king",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The elder remembers the old days fondly",
+      "source": "rich_behavioral",
+      "agent": "elder",
+      "properties": {
+        "gender": 0,
+        "age": 1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Watson listens carefully to Holmes's explanation",
+      "source": "rich_behavioral",
+      "agent": "watson",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The robot assists with dangerous operations",
+      "source": "rich_behavioral",
+      "agent": "robot",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0
+      }
+    },
+    {
+      "text": "The robot maintains the facility automatically",
+      "source": "rich_behavioral",
+      "agent": "robot",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0
+      }
+    },
+    {
+      "text": "The storm dominates the entire region",
+      "source": "rich_behavioral",
+      "agent": "storm",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.8,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "Alice plays croquet with the Queen reluctantly",
+      "source": "rich_behavioral",
+      "agent": "alice",
+      "properties": {
+        "gender": 1,
+        "age": -0.7,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Alice grows taller after drinking the potion",
+      "source": "rich_behavioral",
+      "agent": "alice",
+      "properties": {
+        "gender": 1,
+        "age": -0.7,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Holmes examines the evidence meticulously and draws conclusions",
+      "source": "rich_behavioral",
+      "agent": "holmes",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Darcy provides for Wickham to protect Elizabeth",
+      "source": "rich_behavioral",
+      "agent": "darcy",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The princess receives suitors in the great hall",
+      "source": "rich_behavioral",
+      "agent": "princess",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The child follows the adults around the house",
+      "source": "rich_behavioral",
+      "agent": "child",
+      "properties": {
+        "gender": 0,
+        "age": -1,
+        "agency": 0.2,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The elder teaches the traditions to the young",
+      "source": "rich_behavioral",
+      "agent": "elder",
+      "properties": {
+        "gender": 0,
+        "age": 1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Irene commands attention when she enters the room",
+      "source": "rich_behavioral",
+      "agent": "irene",
+      "properties": {
+        "gender": 1,
+        "age": 0,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The storm overwhelms all human defenses",
+      "source": "rich_behavioral",
+      "agent": "storm",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.8,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "Holmes exposes the conspiracy to the authorities",
+      "source": "rich_behavioral",
+      "agent": "holmes",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Irene confronts her enemies without fear",
+      "source": "rich_behavioral",
+      "agent": "irene",
+      "properties": {
+        "gender": 1,
+        "age": 0,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Darcy proves his worth through noble actions",
+      "source": "rich_behavioral",
+      "agent": "darcy",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The robot performs repetitive tasks efficiently",
+      "source": "rich_behavioral",
+      "agent": "robot",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0
+      }
+    },
+    {
+      "text": "The King enforces his will across the land",
+      "source": "rich_behavioral",
+      "agent": "king",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The storm passes after hours of fury",
+      "source": "rich_behavioral",
+      "agent": "storm",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.8,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "Elizabeth decides her own path in life",
+      "source": "rich_behavioral",
+      "agent": "elizabeth",
+      "properties": {
+        "gender": 1,
+        "age": -0.2,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Darcy proposes to Elizabeth despite his pride",
+      "source": "rich_behavioral",
+      "agent": "darcy",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Alice challenges the Queen's unfair rules",
+      "source": "rich_behavioral",
+      "agent": "alice",
+      "properties": {
+        "gender": 1,
+        "age": -0.7,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The King judges disputes between nobles",
+      "source": "rich_behavioral",
+      "agent": "king",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    }
+  ]
+}

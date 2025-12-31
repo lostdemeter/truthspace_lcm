@@ -1,0 +1,6604 @@
+{
+  "frames": [
+    {
+      "text": "As a king, King decrees",
+      "source": "dimensional_seeds",
+      "agent": "king",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Moriarty threatens the organization",
+      "source": "dimensional_seeds",
+      "agent": "moriarty",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Boy explores carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "boy",
+      "properties": {
+        "gender": -1,
+        "age": -0.8,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The sister Elizabeth reads with skill",
+      "source": "dimensional_seeds",
+      "agent": "elizabeth",
+      "properties": {
+        "gender": 1,
+        "age": -0.2,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a doctor, Watson documents",
+      "source": "dimensional_seeds",
+      "agent": "watson",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Holmes investigates carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "holmes",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Hatter hosts the time",
+      "source": "dimensional_seeds",
+      "agent": "hatter",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Watson records with determination",
+      "source": "dimensional_seeds",
+      "agent": "watson",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The prince trains kingdom",
+      "source": "dimensional_seeds",
+      "agent": "prince",
+      "properties": {
+        "gender": -1,
+        "age": -0.5,
+        "agency": 0.7,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Bingley is a gentleman who smiles",
+      "source": "dimensional_seeds",
+      "agent": "bingley",
+      "properties": {
+        "gender": -1,
+        "age": -0.1,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Boy is a son who grows",
+      "source": "dimensional_seeds",
+      "agent": "boy",
+      "properties": {
+        "gender": -1,
+        "age": -0.8,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a woman, Woman works",
+      "source": "dimensional_seeds",
+      "agent": "woman",
+      "properties": {
+        "gender": 1,
+        "age": 0.3,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "King commands carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "king",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Darcy rescues with determination",
+      "source": "dimensional_seeds",
+      "agent": "darcy",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.7,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The inspector questions suspect",
+      "source": "dimensional_seeds",
+      "agent": "lestrade",
+      "properties": {
+        "gender": -1,
+        "age": 0.3,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The worker Man fights with skill",
+      "source": "dimensional_seeds",
+      "agent": "man",
+      "properties": {
+        "gender": -1,
+        "age": 0.3,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The machine Robot follows with skill",
+      "source": "dimensional_seeds",
+      "agent": "robot",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0
+      }
+    },
+    {
+      "text": "Jane is a lady who smiles",
+      "source": "dimensional_seeds",
+      "agent": "jane",
+      "properties": {
+        "gender": 1,
+        "age": -0.1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Woman is a worker who leads",
+      "source": "dimensional_seeds",
+      "agent": "woman",
+      "properties": {
+        "gender": 1,
+        "age": 0.3,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Watson supports the holmes",
+      "source": "dimensional_seeds",
+      "agent": "watson",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Wickham is a scoundrel who charms",
+      "source": "dimensional_seeds",
+      "agent": "wickham",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Alice questions carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "alice",
+      "properties": {
+        "gender": 1,
+        "age": -0.7,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The worker Woman creates with skill",
+      "source": "dimensional_seeds",
+      "agent": "woman",
+      "properties": {
+        "gender": 1,
+        "age": 0.3,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Irene is a singer who escapes",
+      "source": "dimensional_seeds",
+      "agent": "irene",
+      "properties": {
+        "gender": 1,
+        "age": 0,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "King decrees carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "king",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a guide, Cheshire grins",
+      "source": "dimensional_seeds",
+      "agent": "cheshire",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0.8
+      }
+    },
+    {
+      "text": "As a queen, Queen demands",
+      "source": "dimensional_seeds",
+      "agent": "queen",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The detective Holmes observes with skill",
+      "source": "dimensional_seeds",
+      "agent": "holmes",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The girl shrinks mystery",
+      "source": "dimensional_seeds",
+      "agent": "alice",
+      "properties": {
+        "gender": 1,
+        "age": -0.7,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The mother Woman works with skill",
+      "source": "dimensional_seeds",
+      "agent": "woman",
+      "properties": {
+        "gender": 1,
+        "age": 0.3,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Queen_Generic advises the subjects",
+      "source": "dimensional_seeds",
+      "agent": "queen_generic",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Princess waits carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "princess",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Watson assists carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "watson",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Queen_Generic hosts the kingdom",
+      "source": "dimensional_seeds",
+      "agent": "queen_generic",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Queen threatens carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "queen",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a heir, Prince learns",
+      "source": "dimensional_seeds",
+      "agent": "prince",
+      "properties": {
+        "gender": -1,
+        "age": -0.5,
+        "agency": 0.7,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "River winds with determination",
+      "source": "dimensional_seeds",
+      "agent": "river",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "Jane is a lady who loves",
+      "source": "dimensional_seeds",
+      "agent": "jane",
+      "properties": {
+        "gender": 1,
+        "age": -0.1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The gentleman observes elizabeth",
+      "source": "dimensional_seeds",
+      "agent": "darcy",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.7,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The man fights family",
+      "source": "dimensional_seeds",
+      "agent": "man",
+      "properties": {
+        "gender": -1,
+        "age": 0.3,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Boy is a child who explores",
+      "source": "dimensional_seeds",
+      "agent": "boy",
+      "properties": {
+        "gender": -1,
+        "age": -0.8,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a river, River floods",
+      "source": "dimensional_seeds",
+      "agent": "river",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "Jane is a bride who forgives",
+      "source": "dimensional_seeds",
+      "agent": "jane",
+      "properties": {
+        "gender": 1,
+        "age": -0.1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Queen_Generic commands carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "queen_generic",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a queen, Queen shouts",
+      "source": "dimensional_seeds",
+      "agent": "queen",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Alice wonders carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "alice",
+      "properties": {
+        "gender": 1,
+        "age": -0.7,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Elder reflects the past",
+      "source": "dimensional_seeds",
+      "agent": "elder",
+      "properties": {
+        "gender": 0,
+        "age": 1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Darcy broods carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "darcy",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.7,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The officer gambles women",
+      "source": "dimensional_seeds",
+      "agent": "wickham",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The child grows parent",
+      "source": "dimensional_seeds",
+      "agent": "child",
+      "properties": {
+        "gender": 0,
+        "age": -1,
+        "agency": 0.2,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Child is a child who asks",
+      "source": "dimensional_seeds",
+      "agent": "child",
+      "properties": {
+        "gender": 0,
+        "age": -1,
+        "agency": 0.2,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Irene disguises with determination",
+      "source": "dimensional_seeds",
+      "agent": "irene",
+      "properties": {
+        "gender": 1,
+        "age": 0,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "River nourishes the sea",
+      "source": "dimensional_seeds",
+      "agent": "river",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "Holmes investigates carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "holmes",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Prince is a prince who learns",
+      "source": "dimensional_seeds",
+      "agent": "prince",
+      "properties": {
+        "gender": -1,
+        "age": -0.5,
+        "agency": 0.7,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The elder Elder remembers with skill",
+      "source": "dimensional_seeds",
+      "agent": "elder",
+      "properties": {
+        "gender": 0,
+        "age": 1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a corporation, Corporation employs",
+      "source": "dimensional_seeds",
+      "agent": "corporation",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.8,
+        "animacy": -0.3
+      }
+    },
+    {
+      "text": "The concept Idea changes with skill",
+      "source": "dimensional_seeds",
+      "agent": "idea",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.4,
+        "animacy": -1
+      }
+    },
+    {
+      "text": "The princess escapes tower",
+      "source": "dimensional_seeds",
+      "agent": "princess",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The guide Cheshire confuses with skill",
+      "source": "dimensional_seeds",
+      "agent": "cheshire",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0.8
+      }
+    },
+    {
+      "text": "Irene challenges carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "irene",
+      "properties": {
+        "gender": 1,
+        "age": 0,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The man fights home",
+      "source": "dimensional_seeds",
+      "agent": "man",
+      "properties": {
+        "gender": -1,
+        "age": 0.3,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Idea persists the people",
+      "source": "dimensional_seeds",
+      "agent": "idea",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.4,
+        "animacy": -1
+      }
+    },
+    {
+      "text": "The girl learns game",
+      "source": "dimensional_seeds",
+      "agent": "girl",
+      "properties": {
+        "gender": 1,
+        "age": -0.8,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Storm passes carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "storm",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.7,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "Robot executes carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "robot",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0
+      }
+    },
+    {
+      "text": "As a singer, Irene challenges",
+      "source": "dimensional_seeds",
+      "agent": "irene",
+      "properties": {
+        "gender": 1,
+        "age": 0,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Cheshire grins with determination",
+      "source": "dimensional_seeds",
+      "agent": "cheshire",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0.8
+      }
+    },
+    {
+      "text": "Man is a worker who fights",
+      "source": "dimensional_seeds",
+      "agent": "man",
+      "properties": {
+        "gender": -1,
+        "age": 0.3,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Lestrade consults with determination",
+      "source": "dimensional_seeds",
+      "agent": "lestrade",
+      "properties": {
+        "gender": -1,
+        "age": 0.3,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Alice questions the queen",
+      "source": "dimensional_seeds",
+      "agent": "alice",
+      "properties": {
+        "gender": 1,
+        "age": -0.7,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The boy runs game",
+      "source": "dimensional_seeds",
+      "agent": "boy",
+      "properties": {
+        "gender": -1,
+        "age": -0.8,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The princess waits kingdom",
+      "source": "dimensional_seeds",
+      "agent": "princess",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The idea persists mind",
+      "source": "dimensional_seeds",
+      "agent": "idea",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.4,
+        "animacy": -1
+      }
+    },
+    {
+      "text": "The prince inherits kingdom",
+      "source": "dimensional_seeds",
+      "agent": "prince",
+      "properties": {
+        "gender": -1,
+        "age": -0.5,
+        "agency": 0.7,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Man builds the home",
+      "source": "dimensional_seeds",
+      "agent": "man",
+      "properties": {
+        "gender": -1,
+        "age": 0.3,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The girl gossips wickham",
+      "source": "dimensional_seeds",
+      "agent": "lydia",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The cat advises direction",
+      "source": "dimensional_seeds",
+      "agent": "cheshire",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0.8
+      }
+    },
+    {
+      "text": "Idea is a idea who persists",
+      "source": "dimensional_seeds",
+      "agent": "idea",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.4,
+        "animacy": -1
+      }
+    },
+    {
+      "text": "Boy learns the adventure",
+      "source": "dimensional_seeds",
+      "agent": "boy",
+      "properties": {
+        "gender": -1,
+        "age": -0.8,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Lydia is a sister who flirts",
+      "source": "dimensional_seeds",
+      "agent": "lydia",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The sage Elder remembers with skill",
+      "source": "dimensional_seeds",
+      "agent": "elder",
+      "properties": {
+        "gender": 0,
+        "age": 1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a host, Hatter confuses",
+      "source": "dimensional_seeds",
+      "agent": "hatter",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The girl grows doll",
+      "source": "dimensional_seeds",
+      "agent": "girl",
+      "properties": {
+        "gender": 1,
+        "age": -0.8,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The girl Alice shrinks with skill",
+      "source": "dimensional_seeds",
+      "agent": "alice",
+      "properties": {
+        "gender": 1,
+        "age": -0.7,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Alice explores with determination",
+      "source": "dimensional_seeds",
+      "agent": "alice",
+      "properties": {
+        "gender": 1,
+        "age": -0.7,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Woman creates the child",
+      "source": "dimensional_seeds",
+      "agent": "woman",
+      "properties": {
+        "gender": 1,
+        "age": 0.3,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Darcy is a landowner who changes",
+      "source": "dimensional_seeds",
+      "agent": "darcy",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.7,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The detective examines mystery",
+      "source": "dimensional_seeds",
+      "agent": "holmes",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The professor manipulates crime",
+      "source": "dimensional_seeds",
+      "agent": "moriarty",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a child, Boy learns",
+      "source": "dimensional_seeds",
+      "agent": "boy",
+      "properties": {
+        "gender": -1,
+        "age": -0.8,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Irene outwits with determination",
+      "source": "dimensional_seeds",
+      "agent": "irene",
+      "properties": {
+        "gender": 1,
+        "age": 0,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "River winds with determination",
+      "source": "dimensional_seeds",
+      "agent": "river",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "The girl laughs officers",
+      "source": "dimensional_seeds",
+      "agent": "lydia",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Corporation is a corporation who employs",
+      "source": "dimensional_seeds",
+      "agent": "corporation",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.8,
+        "animacy": -0.3
+      }
+    },
+    {
+      "text": "The officer Wickham elopes with skill",
+      "source": "dimensional_seeds",
+      "agent": "wickham",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "King leads the subjects",
+      "source": "dimensional_seeds",
+      "agent": "king",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The hatter laughs alice",
+      "source": "dimensional_seeds",
+      "agent": "hatter",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Child plays the toy",
+      "source": "dimensional_seeds",
+      "agent": "child",
+      "properties": {
+        "gender": 0,
+        "age": -1,
+        "agency": 0.2,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a doctor, Watson documents",
+      "source": "dimensional_seeds",
+      "agent": "watson",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The princess learns tower",
+      "source": "dimensional_seeds",
+      "agent": "princess",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The princess learns prince",
+      "source": "dimensional_seeds",
+      "agent": "princess",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Princess is a princess who escapes",
+      "source": "dimensional_seeds",
+      "agent": "princess",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Corporation acquires with determination",
+      "source": "dimensional_seeds",
+      "agent": "corporation",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.8,
+        "animacy": -0.3
+      }
+    },
+    {
+      "text": "Queen_Generic leads carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "queen_generic",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The king King judges with skill",
+      "source": "dimensional_seeds",
+      "agent": "king",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The doctor watches adventure",
+      "source": "dimensional_seeds",
+      "agent": "watson",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The child asks toy",
+      "source": "dimensional_seeds",
+      "agent": "child",
+      "properties": {
+        "gender": 0,
+        "age": -1,
+        "agency": 0.2,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The boy grows game",
+      "source": "dimensional_seeds",
+      "agent": "boy",
+      "properties": {
+        "gender": -1,
+        "age": -0.8,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Idea persists carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "idea",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.4,
+        "animacy": -1
+      }
+    },
+    {
+      "text": "The officer charms lydia",
+      "source": "dimensional_seeds",
+      "agent": "wickham",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Boy runs with determination",
+      "source": "dimensional_seeds",
+      "agent": "boy",
+      "properties": {
+        "gender": -1,
+        "age": -0.8,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Corporation employs the market",
+      "source": "dimensional_seeds",
+      "agent": "corporation",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.8,
+        "animacy": -0.3
+      }
+    },
+    {
+      "text": "Lydia gossips carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "lydia",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The child learns parent",
+      "source": "dimensional_seeds",
+      "agent": "child",
+      "properties": {
+        "gender": 0,
+        "age": -1,
+        "agency": 0.2,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Prince learns with determination",
+      "source": "dimensional_seeds",
+      "agent": "prince",
+      "properties": {
+        "gender": -1,
+        "age": -0.5,
+        "agency": 0.7,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The professor schemes organization",
+      "source": "dimensional_seeds",
+      "agent": "moriarty",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Prince courts with determination",
+      "source": "dimensional_seeds",
+      "agent": "prince",
+      "properties": {
+        "gender": -1,
+        "age": -0.5,
+        "agency": 0.7,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Storm rages carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "storm",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.7,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "The business Corporation grows with skill",
+      "source": "dimensional_seeds",
+      "agent": "corporation",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.8,
+        "animacy": -0.3
+      }
+    },
+    {
+      "text": "The elder rests youth",
+      "source": "dimensional_seeds",
+      "agent": "elder",
+      "properties": {
+        "gender": 0,
+        "age": 1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The robot serves human",
+      "source": "dimensional_seeds",
+      "agent": "robot",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0
+      }
+    },
+    {
+      "text": "Robot is a machine who serves",
+      "source": "dimensional_seeds",
+      "agent": "robot",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0
+      }
+    },
+    {
+      "text": "Wickham deceives carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "wickham",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The inspector investigates holmes",
+      "source": "dimensional_seeds",
+      "agent": "lestrade",
+      "properties": {
+        "gender": -1,
+        "age": 0.3,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a detective, Lestrade follows",
+      "source": "dimensional_seeds",
+      "agent": "lestrade",
+      "properties": {
+        "gender": -1,
+        "age": 0.3,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The cat appears direction",
+      "source": "dimensional_seeds",
+      "agent": "cheshire",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0.8
+      }
+    },
+    {
+      "text": "The corporation Corporation grows with skill",
+      "source": "dimensional_seeds",
+      "agent": "corporation",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.8,
+        "animacy": -0.3
+      }
+    },
+    {
+      "text": "As a singer, Irene challenges",
+      "source": "dimensional_seeds",
+      "agent": "irene",
+      "properties": {
+        "gender": 1,
+        "age": 0,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a companion, Watson records",
+      "source": "dimensional_seeds",
+      "agent": "watson",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Cheshire grins the alice",
+      "source": "dimensional_seeds",
+      "agent": "cheshire",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0.8
+      }
+    },
+    {
+      "text": "Girl grows with determination",
+      "source": "dimensional_seeds",
+      "agent": "girl",
+      "properties": {
+        "gender": 1,
+        "age": -0.8,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Lydia is a girl who flirts",
+      "source": "dimensional_seeds",
+      "agent": "lydia",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The child Child asks with skill",
+      "source": "dimensional_seeds",
+      "agent": "child",
+      "properties": {
+        "gender": 0,
+        "age": -1,
+        "agency": 0.2,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a adventuress, Irene escapes",
+      "source": "dimensional_seeds",
+      "agent": "irene",
+      "properties": {
+        "gender": 1,
+        "age": 0,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Man fights with determination",
+      "source": "dimensional_seeds",
+      "agent": "man",
+      "properties": {
+        "gender": -1,
+        "age": 0.3,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The guide Cheshire vanishes with skill",
+      "source": "dimensional_seeds",
+      "agent": "cheshire",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0.8
+      }
+    },
+    {
+      "text": "Prince trains the kingdom",
+      "source": "dimensional_seeds",
+      "agent": "prince",
+      "properties": {
+        "gender": -1,
+        "age": -0.5,
+        "agency": 0.7,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The mastermind Moriarty threatens with skill",
+      "source": "dimensional_seeds",
+      "agent": "moriarty",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Jane hopes the bingley",
+      "source": "dimensional_seeds",
+      "agent": "jane",
+      "properties": {
+        "gender": 1,
+        "age": -0.1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The elder reflects youth",
+      "source": "dimensional_seeds",
+      "agent": "elder",
+      "properties": {
+        "gender": 0,
+        "age": 1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Storm is a storm who passes",
+      "source": "dimensional_seeds",
+      "agent": "storm",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.7,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "As a investigator, Holmes investigates",
+      "source": "dimensional_seeds",
+      "agent": "holmes",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The princess dreams kingdom",
+      "source": "dimensional_seeds",
+      "agent": "princess",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a heir, Prince courts",
+      "source": "dimensional_seeds",
+      "agent": "prince",
+      "properties": {
+        "gender": -1,
+        "age": -0.5,
+        "agency": 0.7,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Man is a worker who fights",
+      "source": "dimensional_seeds",
+      "agent": "man",
+      "properties": {
+        "gender": -1,
+        "age": 0.3,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Storm is a force who howls",
+      "source": "dimensional_seeds",
+      "agent": "storm",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.7,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "Storm is a storm who destroys",
+      "source": "dimensional_seeds",
+      "agent": "storm",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.7,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "Princess waits with determination",
+      "source": "dimensional_seeds",
+      "agent": "princess",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Queen shouts carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "queen",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a bride, Jane hopes",
+      "source": "dimensional_seeds",
+      "agent": "jane",
+      "properties": {
+        "gender": 1,
+        "age": -0.1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Moriarty manipulates carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "moriarty",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The host Hatter confuses with skill",
+      "source": "dimensional_seeds",
+      "agent": "hatter",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The child Child plays with skill",
+      "source": "dimensional_seeds",
+      "agent": "child",
+      "properties": {
+        "gender": 0,
+        "age": -1,
+        "agency": 0.2,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The corporation produces product",
+      "source": "dimensional_seeds",
+      "agent": "corporation",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.8,
+        "animacy": -0.3
+      }
+    },
+    {
+      "text": "The lady judges society",
+      "source": "dimensional_seeds",
+      "agent": "elizabeth",
+      "properties": {
+        "gender": 1,
+        "age": -0.2,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Woman leads carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "woman",
+      "properties": {
+        "gender": 1,
+        "age": 0.3,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The boy grows friend",
+      "source": "dimensional_seeds",
+      "agent": "boy",
+      "properties": {
+        "gender": -1,
+        "age": -0.8,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The girl Alice questions with skill",
+      "source": "dimensional_seeds",
+      "agent": "alice",
+      "properties": {
+        "gender": 1,
+        "age": -0.7,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The officer Wickham deceives with skill",
+      "source": "dimensional_seeds",
+      "agent": "wickham",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Bingley leaves the jane",
+      "source": "dimensional_seeds",
+      "agent": "bingley",
+      "properties": {
+        "gender": -1,
+        "age": -0.1,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "King commands carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "king",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Alice grows carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "alice",
+      "properties": {
+        "gender": 1,
+        "age": -0.7,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a grandparent, Elder teaches",
+      "source": "dimensional_seeds",
+      "agent": "elder",
+      "properties": {
+        "gender": 0,
+        "age": 1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Hatter laughs carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "hatter",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Woman creates carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "woman",
+      "properties": {
+        "gender": 1,
+        "age": 0.3,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Girl learns with determination",
+      "source": "dimensional_seeds",
+      "agent": "girl",
+      "properties": {
+        "gender": 1,
+        "age": -0.8,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Cheshire is a guide who advises",
+      "source": "dimensional_seeds",
+      "agent": "cheshire",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0.8
+      }
+    },
+    {
+      "text": "The inspector Lestrade arrests with skill",
+      "source": "dimensional_seeds",
+      "agent": "lestrade",
+      "properties": {
+        "gender": -1,
+        "age": 0.3,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Bingley is a suitor who loves",
+      "source": "dimensional_seeds",
+      "agent": "bingley",
+      "properties": {
+        "gender": -1,
+        "age": -0.1,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Man is a man who provides",
+      "source": "dimensional_seeds",
+      "agent": "man",
+      "properties": {
+        "gender": -1,
+        "age": 0.3,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Cheshire advises carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "cheshire",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0.8
+      }
+    },
+    {
+      "text": "The worker Man provides with skill",
+      "source": "dimensional_seeds",
+      "agent": "man",
+      "properties": {
+        "gender": -1,
+        "age": 0.3,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The daughter Elizabeth reads with skill",
+      "source": "dimensional_seeds",
+      "agent": "elizabeth",
+      "properties": {
+        "gender": 1,
+        "age": -0.2,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Princess is a princess who waits",
+      "source": "dimensional_seeds",
+      "agent": "princess",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Hatter laughs carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "hatter",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The girl Alice questions with skill",
+      "source": "dimensional_seeds",
+      "agent": "alice",
+      "properties": {
+        "gender": 1,
+        "age": -0.7,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a monarch, King commands",
+      "source": "dimensional_seeds",
+      "agent": "king",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The girl elopes balls",
+      "source": "dimensional_seeds",
+      "agent": "lydia",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Cheshire confuses with determination",
+      "source": "dimensional_seeds",
+      "agent": "cheshire",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0.8
+      }
+    },
+    {
+      "text": "The hatter Hatter chatters with skill",
+      "source": "dimensional_seeds",
+      "agent": "hatter",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The singer Irene defeats with skill",
+      "source": "dimensional_seeds",
+      "agent": "irene",
+      "properties": {
+        "gender": 1,
+        "age": 0,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "King rules with determination",
+      "source": "dimensional_seeds",
+      "agent": "king",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The professor schemes holmes",
+      "source": "dimensional_seeds",
+      "agent": "moriarty",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Irene disguises carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "irene",
+      "properties": {
+        "gender": 1,
+        "age": 0,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a assistant, Robot processes",
+      "source": "dimensional_seeds",
+      "agent": "robot",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0
+      }
+    },
+    {
+      "text": "As a ruler, King leads",
+      "source": "dimensional_seeds",
+      "agent": "king",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Alice grows carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "alice",
+      "properties": {
+        "gender": 1,
+        "age": -0.7,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Queen_Generic advises with determination",
+      "source": "dimensional_seeds",
+      "agent": "queen_generic",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Lydia is a sister who dances",
+      "source": "dimensional_seeds",
+      "agent": "lydia",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Idea evolves the world",
+      "source": "dimensional_seeds",
+      "agent": "idea",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.4,
+        "animacy": -1
+      }
+    },
+    {
+      "text": "As a doctor, Watson supports",
+      "source": "dimensional_seeds",
+      "agent": "watson",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The man provides goal",
+      "source": "dimensional_seeds",
+      "agent": "man",
+      "properties": {
+        "gender": -1,
+        "age": 0.3,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Bingley is a suitor who returns",
+      "source": "dimensional_seeds",
+      "agent": "bingley",
+      "properties": {
+        "gender": -1,
+        "age": -0.1,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a mother, Woman works",
+      "source": "dimensional_seeds",
+      "agent": "woman",
+      "properties": {
+        "gender": 1,
+        "age": 0.3,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The gentleman smiles jane",
+      "source": "dimensional_seeds",
+      "agent": "bingley",
+      "properties": {
+        "gender": -1,
+        "age": -0.1,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "River nourishes carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "river",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "Cheshire appears carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "cheshire",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0.8
+      }
+    },
+    {
+      "text": "The suitor Darcy changes with skill",
+      "source": "dimensional_seeds",
+      "agent": "darcy",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.7,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The monarch King commands with skill",
+      "source": "dimensional_seeds",
+      "agent": "king",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Wickham gambles carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "wickham",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Bingley dances carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "bingley",
+      "properties": {
+        "gender": -1,
+        "age": -0.1,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Darcy is a landowner who rescues",
+      "source": "dimensional_seeds",
+      "agent": "darcy",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.7,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a ruler, King commands",
+      "source": "dimensional_seeds",
+      "agent": "king",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Lestrade arrests the holmes",
+      "source": "dimensional_seeds",
+      "agent": "lestrade",
+      "properties": {
+        "gender": -1,
+        "age": 0.3,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The hatter hosts tea",
+      "source": "dimensional_seeds",
+      "agent": "hatter",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Queen orders with determination",
+      "source": "dimensional_seeds",
+      "agent": "queen",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Elder is a grandparent who advises",
+      "source": "dimensional_seeds",
+      "agent": "elder",
+      "properties": {
+        "gender": 0,
+        "age": 1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The lady walks book",
+      "source": "dimensional_seeds",
+      "agent": "elizabeth",
+      "properties": {
+        "gender": 1,
+        "age": -0.2,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The gentleman Bingley loves with skill",
+      "source": "dimensional_seeds",
+      "agent": "bingley",
+      "properties": {
+        "gender": -1,
+        "age": -0.1,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a explorer, Alice questions",
+      "source": "dimensional_seeds",
+      "agent": "alice",
+      "properties": {
+        "gender": 1,
+        "age": -0.7,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a adventuress, Irene defeats",
+      "source": "dimensional_seeds",
+      "agent": "irene",
+      "properties": {
+        "gender": 1,
+        "age": 0,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Man works carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "man",
+      "properties": {
+        "gender": -1,
+        "age": 0.3,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Corporation employs with determination",
+      "source": "dimensional_seeds",
+      "agent": "corporation",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.8,
+        "animacy": -0.3
+      }
+    },
+    {
+      "text": "The mastermind Moriarty schemes with skill",
+      "source": "dimensional_seeds",
+      "agent": "moriarty",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a gentleman, Bingley dances",
+      "source": "dimensional_seeds",
+      "agent": "bingley",
+      "properties": {
+        "gender": -1,
+        "age": -0.1,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Robot executes with determination",
+      "source": "dimensional_seeds",
+      "agent": "robot",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0
+      }
+    },
+    {
+      "text": "Darcy is a suitor who broods",
+      "source": "dimensional_seeds",
+      "agent": "darcy",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.7,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The man works job",
+      "source": "dimensional_seeds",
+      "agent": "man",
+      "properties": {
+        "gender": -1,
+        "age": 0.3,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a idea, Idea spreads",
+      "source": "dimensional_seeds",
+      "agent": "idea",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.4,
+        "animacy": -1
+      }
+    },
+    {
+      "text": "Holmes discovers with determination",
+      "source": "dimensional_seeds",
+      "agent": "holmes",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The girl grows mystery",
+      "source": "dimensional_seeds",
+      "agent": "alice",
+      "properties": {
+        "gender": 1,
+        "age": -0.7,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a heir, Princess dreams",
+      "source": "dimensional_seeds",
+      "agent": "princess",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Alice wonders with determination",
+      "source": "dimensional_seeds",
+      "agent": "alice",
+      "properties": {
+        "gender": 1,
+        "age": -0.7,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The force Storm passes with skill",
+      "source": "dimensional_seeds",
+      "agent": "storm",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.7,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "The queen orders alice",
+      "source": "dimensional_seeds",
+      "agent": "queen",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The sister Jane forgives with skill",
+      "source": "dimensional_seeds",
+      "agent": "jane",
+      "properties": {
+        "gender": 1,
+        "age": -0.1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The investigator Holmes examines with skill",
+      "source": "dimensional_seeds",
+      "agent": "holmes",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The doctor assists case",
+      "source": "dimensional_seeds",
+      "agent": "watson",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Cheshire is a guide who advises",
+      "source": "dimensional_seeds",
+      "agent": "cheshire",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0.8
+      }
+    },
+    {
+      "text": "River floods carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "river",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "Queen_Generic is a monarch who hosts",
+      "source": "dimensional_seeds",
+      "agent": "queen_generic",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The queen Queen rules with skill",
+      "source": "dimensional_seeds",
+      "agent": "queen",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The officer Wickham deceives with skill",
+      "source": "dimensional_seeds",
+      "agent": "wickham",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The landowner Darcy rescues with skill",
+      "source": "dimensional_seeds",
+      "agent": "darcy",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.7,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Corporation is a company who competes",
+      "source": "dimensional_seeds",
+      "agent": "corporation",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.8,
+        "animacy": -0.3
+      }
+    },
+    {
+      "text": "Queen demands carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "queen",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Irene outwits with determination",
+      "source": "dimensional_seeds",
+      "agent": "irene",
+      "properties": {
+        "gender": 1,
+        "age": 0,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Woman creates carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "woman",
+      "properties": {
+        "gender": 1,
+        "age": 0.3,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Moriarty schemes with determination",
+      "source": "dimensional_seeds",
+      "agent": "moriarty",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The monarch Queen_Generic hosts with skill",
+      "source": "dimensional_seeds",
+      "agent": "queen_generic",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The lady debates prejudice",
+      "source": "dimensional_seeds",
+      "agent": "elizabeth",
+      "properties": {
+        "gender": 1,
+        "age": -0.2,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a monarch, King leads",
+      "source": "dimensional_seeds",
+      "agent": "king",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Corporation grows the profit",
+      "source": "dimensional_seeds",
+      "agent": "corporation",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.8,
+        "animacy": -0.3
+      }
+    },
+    {
+      "text": "The inspector follows criminal",
+      "source": "dimensional_seeds",
+      "agent": "lestrade",
+      "properties": {
+        "gender": -1,
+        "age": 0.3,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Corporation is a corporation who employs",
+      "source": "dimensional_seeds",
+      "agent": "corporation",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.8,
+        "animacy": -0.3
+      }
+    },
+    {
+      "text": "As a sister, Lydia laughs",
+      "source": "dimensional_seeds",
+      "agent": "lydia",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Jane smiles carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "jane",
+      "properties": {
+        "gender": 1,
+        "age": -0.1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The princess Princess escapes with skill",
+      "source": "dimensional_seeds",
+      "agent": "princess",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The hatter hosts time",
+      "source": "dimensional_seeds",
+      "agent": "hatter",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The queen advises subjects",
+      "source": "dimensional_seeds",
+      "agent": "queen_generic",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a child, Girl dreams",
+      "source": "dimensional_seeds",
+      "agent": "girl",
+      "properties": {
+        "gender": 1,
+        "age": -0.8,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Woman is a mother who creates",
+      "source": "dimensional_seeds",
+      "agent": "woman",
+      "properties": {
+        "gender": 1,
+        "age": 0.3,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Elder advises carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "elder",
+      "properties": {
+        "gender": 0,
+        "age": 1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The daughter Girl dreams with skill",
+      "source": "dimensional_seeds",
+      "agent": "girl",
+      "properties": {
+        "gender": 1,
+        "age": -0.8,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The sage Elder rests with skill",
+      "source": "dimensional_seeds",
+      "agent": "elder",
+      "properties": {
+        "gender": 0,
+        "age": 1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Lydia laughs with determination",
+      "source": "dimensional_seeds",
+      "agent": "lydia",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Holmes is a detective who examines",
+      "source": "dimensional_seeds",
+      "agent": "holmes",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Robot is a machine who follows",
+      "source": "dimensional_seeds",
+      "agent": "robot",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0
+      }
+    },
+    {
+      "text": "As a sister, Lydia flirts",
+      "source": "dimensional_seeds",
+      "agent": "lydia",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a waterway, River flows",
+      "source": "dimensional_seeds",
+      "agent": "river",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "The corporation acquires worker",
+      "source": "dimensional_seeds",
+      "agent": "corporation",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.8,
+        "animacy": -0.3
+      }
+    },
+    {
+      "text": "The river flows valley",
+      "source": "dimensional_seeds",
+      "agent": "river",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "Hatter is a host who riddles",
+      "source": "dimensional_seeds",
+      "agent": "hatter",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Elizabeth is a daughter who challenges",
+      "source": "dimensional_seeds",
+      "agent": "elizabeth",
+      "properties": {
+        "gender": 1,
+        "age": -0.2,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a officer, Wickham lies",
+      "source": "dimensional_seeds",
+      "agent": "wickham",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The river River flows with skill",
+      "source": "dimensional_seeds",
+      "agent": "river",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "Man is a father who fights",
+      "source": "dimensional_seeds",
+      "agent": "man",
+      "properties": {
+        "gender": -1,
+        "age": 0.3,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Bingley dances the estate",
+      "source": "dimensional_seeds",
+      "agent": "bingley",
+      "properties": {
+        "gender": -1,
+        "age": -0.1,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a explorer, Alice grows",
+      "source": "dimensional_seeds",
+      "agent": "alice",
+      "properties": {
+        "gender": 1,
+        "age": -0.7,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Lestrade is a inspector who consults",
+      "source": "dimensional_seeds",
+      "agent": "lestrade",
+      "properties": {
+        "gender": -1,
+        "age": 0.3,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The lady challenges prejudice",
+      "source": "dimensional_seeds",
+      "agent": "elizabeth",
+      "properties": {
+        "gender": 1,
+        "age": -0.2,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Watson records the case",
+      "source": "dimensional_seeds",
+      "agent": "watson",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The investigator Holmes observes with skill",
+      "source": "dimensional_seeds",
+      "agent": "holmes",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The girl discovers wonderland",
+      "source": "dimensional_seeds",
+      "agent": "alice",
+      "properties": {
+        "gender": 1,
+        "age": -0.7,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a cat, Cheshire appears",
+      "source": "dimensional_seeds",
+      "agent": "cheshire",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0.8
+      }
+    },
+    {
+      "text": "As a child, Boy learns",
+      "source": "dimensional_seeds",
+      "agent": "boy",
+      "properties": {
+        "gender": -1,
+        "age": -0.8,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Lestrade is a inspector who investigates",
+      "source": "dimensional_seeds",
+      "agent": "lestrade",
+      "properties": {
+        "gender": -1,
+        "age": 0.3,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The concept Idea changes with skill",
+      "source": "dimensional_seeds",
+      "agent": "idea",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.4,
+        "animacy": -1
+      }
+    },
+    {
+      "text": "The river River carries with skill",
+      "source": "dimensional_seeds",
+      "agent": "river",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "As a lady, Jane forgives",
+      "source": "dimensional_seeds",
+      "agent": "jane",
+      "properties": {
+        "gender": 1,
+        "age": -0.1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Corporation acquires the profit",
+      "source": "dimensional_seeds",
+      "agent": "corporation",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.8,
+        "animacy": -0.3
+      }
+    },
+    {
+      "text": "The girl Alice questions with skill",
+      "source": "dimensional_seeds",
+      "agent": "alice",
+      "properties": {
+        "gender": 1,
+        "age": -0.7,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Corporation grows carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "corporation",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.8,
+        "animacy": -0.3
+      }
+    },
+    {
+      "text": "Queen_Generic commands the court",
+      "source": "dimensional_seeds",
+      "agent": "queen_generic",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The queen commands subjects",
+      "source": "dimensional_seeds",
+      "agent": "queen_generic",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Boy explores with determination",
+      "source": "dimensional_seeds",
+      "agent": "boy",
+      "properties": {
+        "gender": -1,
+        "age": -0.8,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The king rules kingdom",
+      "source": "dimensional_seeds",
+      "agent": "king",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The girl learns school",
+      "source": "dimensional_seeds",
+      "agent": "girl",
+      "properties": {
+        "gender": 1,
+        "age": -0.8,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Bingley leaves carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "bingley",
+      "properties": {
+        "gender": -1,
+        "age": -0.1,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Elder rests the past",
+      "source": "dimensional_seeds",
+      "agent": "elder",
+      "properties": {
+        "gender": 0,
+        "age": 1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The prince inherits throne",
+      "source": "dimensional_seeds",
+      "agent": "prince",
+      "properties": {
+        "gender": -1,
+        "age": -0.5,
+        "agency": 0.7,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "King is a king who decrees",
+      "source": "dimensional_seeds",
+      "agent": "king",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The robot Robot serves with skill",
+      "source": "dimensional_seeds",
+      "agent": "robot",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0
+      }
+    },
+    {
+      "text": "As a storm, Storm threatens",
+      "source": "dimensional_seeds",
+      "agent": "storm",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.7,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "Elder is a grandparent who rests",
+      "source": "dimensional_seeds",
+      "agent": "elder",
+      "properties": {
+        "gender": 0,
+        "age": 1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The boy learns school",
+      "source": "dimensional_seeds",
+      "agent": "boy",
+      "properties": {
+        "gender": -1,
+        "age": -0.8,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The gentleman returns estate",
+      "source": "dimensional_seeds",
+      "agent": "bingley",
+      "properties": {
+        "gender": -1,
+        "age": -0.1,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Idea inspires the society",
+      "source": "dimensional_seeds",
+      "agent": "idea",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.4,
+        "animacy": -1
+      }
+    },
+    {
+      "text": "Darcy changes the wickham",
+      "source": "dimensional_seeds",
+      "agent": "darcy",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.7,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Robot is a machine who computes",
+      "source": "dimensional_seeds",
+      "agent": "robot",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0
+      }
+    },
+    {
+      "text": "Elder is a grandparent who remembers",
+      "source": "dimensional_seeds",
+      "agent": "elder",
+      "properties": {
+        "gender": 0,
+        "age": 1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The investigator Holmes deduces with skill",
+      "source": "dimensional_seeds",
+      "agent": "holmes",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "King decrees carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "king",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Moriarty threatens with determination",
+      "source": "dimensional_seeds",
+      "agent": "moriarty",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Elizabeth challenges with determination",
+      "source": "dimensional_seeds",
+      "agent": "elizabeth",
+      "properties": {
+        "gender": 1,
+        "age": -0.2,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The girl Girl grows with skill",
+      "source": "dimensional_seeds",
+      "agent": "girl",
+      "properties": {
+        "gender": 1,
+        "age": -0.8,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Queen commands with determination",
+      "source": "dimensional_seeds",
+      "agent": "queen",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Alice is a explorer who discovers",
+      "source": "dimensional_seeds",
+      "agent": "alice",
+      "properties": {
+        "gender": 1,
+        "age": -0.7,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a robot, Robot computes",
+      "source": "dimensional_seeds",
+      "agent": "robot",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0
+      }
+    },
+    {
+      "text": "Princess is a heir who learns",
+      "source": "dimensional_seeds",
+      "agent": "princess",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The adventuress escapes photograph",
+      "source": "dimensional_seeds",
+      "agent": "irene",
+      "properties": {
+        "gender": 1,
+        "age": 0,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Irene is a adventuress who disguises",
+      "source": "dimensional_seeds",
+      "agent": "irene",
+      "properties": {
+        "gender": 1,
+        "age": 0,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Moriarty schemes carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "moriarty",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Boy is a son who plays",
+      "source": "dimensional_seeds",
+      "agent": "boy",
+      "properties": {
+        "gender": -1,
+        "age": -0.8,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Bingley is a gentleman who loves",
+      "source": "dimensional_seeds",
+      "agent": "bingley",
+      "properties": {
+        "gender": -1,
+        "age": -0.1,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Alice is a explorer who shrinks",
+      "source": "dimensional_seeds",
+      "agent": "alice",
+      "properties": {
+        "gender": 1,
+        "age": -0.7,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Holmes discovers carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "holmes",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Man is a father who leads",
+      "source": "dimensional_seeds",
+      "agent": "man",
+      "properties": {
+        "gender": -1,
+        "age": 0.3,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Moriarty is a criminal who controls",
+      "source": "dimensional_seeds",
+      "agent": "moriarty",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Elizabeth is a daughter who judges",
+      "source": "dimensional_seeds",
+      "agent": "elizabeth",
+      "properties": {
+        "gender": 1,
+        "age": -0.2,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The inspector Lestrade questions with skill",
+      "source": "dimensional_seeds",
+      "agent": "lestrade",
+      "properties": {
+        "gender": -1,
+        "age": 0.3,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a queen, Queen commands",
+      "source": "dimensional_seeds",
+      "agent": "queen",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a worker, Woman leads",
+      "source": "dimensional_seeds",
+      "agent": "woman",
+      "properties": {
+        "gender": 1,
+        "age": 0.3,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The girl grows friend",
+      "source": "dimensional_seeds",
+      "agent": "girl",
+      "properties": {
+        "gender": 1,
+        "age": -0.8,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The girl Girl plays with skill",
+      "source": "dimensional_seeds",
+      "agent": "girl",
+      "properties": {
+        "gender": 1,
+        "age": -0.8,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The company Corporation acquires with skill",
+      "source": "dimensional_seeds",
+      "agent": "corporation",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.8,
+        "animacy": -0.3
+      }
+    },
+    {
+      "text": "Lestrade follows carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "lestrade",
+      "properties": {
+        "gender": -1,
+        "age": 0.3,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a ruler, Queen threatens",
+      "source": "dimensional_seeds",
+      "agent": "queen",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Watson watches with determination",
+      "source": "dimensional_seeds",
+      "agent": "watson",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Elder rests carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "elder",
+      "properties": {
+        "gender": 0,
+        "age": 1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The lady hopes bingley",
+      "source": "dimensional_seeds",
+      "agent": "jane",
+      "properties": {
+        "gender": 1,
+        "age": -0.1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a singer, Irene escapes",
+      "source": "dimensional_seeds",
+      "agent": "irene",
+      "properties": {
+        "gender": 1,
+        "age": 0,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "River carries with determination",
+      "source": "dimensional_seeds",
+      "agent": "river",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "Queen is a tyrant who demands",
+      "source": "dimensional_seeds",
+      "agent": "queen",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Man builds with determination",
+      "source": "dimensional_seeds",
+      "agent": "man",
+      "properties": {
+        "gender": -1,
+        "age": 0.3,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Wickham deceives carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "wickham",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The idea changes mind",
+      "source": "dimensional_seeds",
+      "agent": "idea",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.4,
+        "animacy": -1
+      }
+    },
+    {
+      "text": "Cheshire is a guide who appears",
+      "source": "dimensional_seeds",
+      "agent": "cheshire",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0.8
+      }
+    },
+    {
+      "text": "Wickham elopes carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "wickham",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a storm, Storm threatens",
+      "source": "dimensional_seeds",
+      "agent": "storm",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.7,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "The inspector questions criminal",
+      "source": "dimensional_seeds",
+      "agent": "lestrade",
+      "properties": {
+        "gender": -1,
+        "age": 0.3,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The adventuress escapes king",
+      "source": "dimensional_seeds",
+      "agent": "irene",
+      "properties": {
+        "gender": 1,
+        "age": 0,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Storm threatens with determination",
+      "source": "dimensional_seeds",
+      "agent": "storm",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.7,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "Lestrade arrests the holmes",
+      "source": "dimensional_seeds",
+      "agent": "lestrade",
+      "properties": {
+        "gender": -1,
+        "age": 0.3,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "River is a waterway who nourishes",
+      "source": "dimensional_seeds",
+      "agent": "river",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "Queen_Generic is a ruler who advises",
+      "source": "dimensional_seeds",
+      "agent": "queen_generic",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The river floods sea",
+      "source": "dimensional_seeds",
+      "agent": "river",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "Darcy broods the wickham",
+      "source": "dimensional_seeds",
+      "agent": "darcy",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.7,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a daughter, Elizabeth walks",
+      "source": "dimensional_seeds",
+      "agent": "elizabeth",
+      "properties": {
+        "gender": 1,
+        "age": -0.2,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The sage Elder reflects with skill",
+      "source": "dimensional_seeds",
+      "agent": "elder",
+      "properties": {
+        "gender": 0,
+        "age": 1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a detective, Holmes investigates",
+      "source": "dimensional_seeds",
+      "agent": "holmes",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The officer lies money",
+      "source": "dimensional_seeds",
+      "agent": "wickham",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Jane forgives carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "jane",
+      "properties": {
+        "gender": 1,
+        "age": -0.1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Elizabeth challenges carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "elizabeth",
+      "properties": {
+        "gender": 1,
+        "age": -0.2,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "River floods the boat",
+      "source": "dimensional_seeds",
+      "agent": "river",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "As a elder, Elder remembers",
+      "source": "dimensional_seeds",
+      "agent": "elder",
+      "properties": {
+        "gender": 0,
+        "age": 1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Girl dreams carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "girl",
+      "properties": {
+        "gender": 1,
+        "age": -0.8,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a host, Hatter chatters",
+      "source": "dimensional_seeds",
+      "agent": "hatter",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Jane forgives the bingley",
+      "source": "dimensional_seeds",
+      "agent": "jane",
+      "properties": {
+        "gender": 1,
+        "age": -0.1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Bingley is a suitor who leaves",
+      "source": "dimensional_seeds",
+      "agent": "bingley",
+      "properties": {
+        "gender": -1,
+        "age": -0.1,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The worker Man works with skill",
+      "source": "dimensional_seeds",
+      "agent": "man",
+      "properties": {
+        "gender": -1,
+        "age": 0.3,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Bingley loves with determination",
+      "source": "dimensional_seeds",
+      "agent": "bingley",
+      "properties": {
+        "gender": -1,
+        "age": -0.1,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Bingley smiles the estate",
+      "source": "dimensional_seeds",
+      "agent": "bingley",
+      "properties": {
+        "gender": -1,
+        "age": -0.1,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "King leads carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "king",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a host, Hatter confuses",
+      "source": "dimensional_seeds",
+      "agent": "hatter",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Queen_Generic is a monarch who hosts",
+      "source": "dimensional_seeds",
+      "agent": "queen_generic",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Queen_Generic is a ruler who leads",
+      "source": "dimensional_seeds",
+      "agent": "queen_generic",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "River nourishes carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "river",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "Watson documents the adventure",
+      "source": "dimensional_seeds",
+      "agent": "watson",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a guide, Cheshire vanishes",
+      "source": "dimensional_seeds",
+      "agent": "cheshire",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0.8
+      }
+    },
+    {
+      "text": "Corporation is a corporation who employs",
+      "source": "dimensional_seeds",
+      "agent": "corporation",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.8,
+        "animacy": -0.3
+      }
+    },
+    {
+      "text": "Moriarty threatens with determination",
+      "source": "dimensional_seeds",
+      "agent": "moriarty",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a officer, Wickham charms",
+      "source": "dimensional_seeds",
+      "agent": "wickham",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a storm, Storm passes",
+      "source": "dimensional_seeds",
+      "agent": "storm",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.7,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "As a guide, Cheshire appears",
+      "source": "dimensional_seeds",
+      "agent": "cheshire",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0.8
+      }
+    },
+    {
+      "text": "Princess dances the tower",
+      "source": "dimensional_seeds",
+      "agent": "princess",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Moriarty is a criminal who threatens",
+      "source": "dimensional_seeds",
+      "agent": "moriarty",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Hatter hosts with determination",
+      "source": "dimensional_seeds",
+      "agent": "hatter",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a waterway, River winds",
+      "source": "dimensional_seeds",
+      "agent": "river",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "As a corporation, Corporation produces",
+      "source": "dimensional_seeds",
+      "agent": "corporation",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.8,
+        "animacy": -0.3
+      }
+    },
+    {
+      "text": "Jane hopes with determination",
+      "source": "dimensional_seeds",
+      "agent": "jane",
+      "properties": {
+        "gender": 1,
+        "age": -0.1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The singer Irene outwits with skill",
+      "source": "dimensional_seeds",
+      "agent": "irene",
+      "properties": {
+        "gender": 1,
+        "age": 0,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a dreamer, Alice questions",
+      "source": "dimensional_seeds",
+      "agent": "alice",
+      "properties": {
+        "gender": 1,
+        "age": -0.7,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The detective Lestrade questions with skill",
+      "source": "dimensional_seeds",
+      "agent": "lestrade",
+      "properties": {
+        "gender": -1,
+        "age": 0.3,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a student, Child asks",
+      "source": "dimensional_seeds",
+      "agent": "child",
+      "properties": {
+        "gender": 0,
+        "age": -1,
+        "agency": 0.2,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Corporation competes with determination",
+      "source": "dimensional_seeds",
+      "agent": "corporation",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.8,
+        "animacy": -0.3
+      }
+    },
+    {
+      "text": "Cheshire confuses carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "cheshire",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0.8
+      }
+    },
+    {
+      "text": "Prince learns carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "prince",
+      "properties": {
+        "gender": -1,
+        "age": -0.5,
+        "agency": 0.7,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Cheshire grins with determination",
+      "source": "dimensional_seeds",
+      "agent": "cheshire",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0.8
+      }
+    },
+    {
+      "text": "Elder remembers with determination",
+      "source": "dimensional_seeds",
+      "agent": "elder",
+      "properties": {
+        "gender": 0,
+        "age": 1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a detective, Holmes solves",
+      "source": "dimensional_seeds",
+      "agent": "holmes",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a daughter, Girl dances",
+      "source": "dimensional_seeds",
+      "agent": "girl",
+      "properties": {
+        "gender": 1,
+        "age": -0.8,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Storm threatens carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "storm",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.7,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "Lydia gossips with determination",
+      "source": "dimensional_seeds",
+      "agent": "lydia",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The doctor Watson supports with skill",
+      "source": "dimensional_seeds",
+      "agent": "watson",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a idea, Idea evolves",
+      "source": "dimensional_seeds",
+      "agent": "idea",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.4,
+        "animacy": -1
+      }
+    },
+    {
+      "text": "Woman is a worker who creates",
+      "source": "dimensional_seeds",
+      "agent": "woman",
+      "properties": {
+        "gender": 1,
+        "age": 0.3,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The queen Queen threatens with skill",
+      "source": "dimensional_seeds",
+      "agent": "queen",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The girl learns doll",
+      "source": "dimensional_seeds",
+      "agent": "girl",
+      "properties": {
+        "gender": 1,
+        "age": -0.8,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Queen threatens with determination",
+      "source": "dimensional_seeds",
+      "agent": "queen",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The hatter Hatter riddles with skill",
+      "source": "dimensional_seeds",
+      "agent": "hatter",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Queen shouts carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "queen",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Boy plays with determination",
+      "source": "dimensional_seeds",
+      "agent": "boy",
+      "properties": {
+        "gender": -1,
+        "age": -0.8,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Storm rages the ship",
+      "source": "dimensional_seeds",
+      "agent": "storm",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.7,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "The boy Boy plays with skill",
+      "source": "dimensional_seeds",
+      "agent": "boy",
+      "properties": {
+        "gender": -1,
+        "age": -0.8,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The child Boy explores with skill",
+      "source": "dimensional_seeds",
+      "agent": "boy",
+      "properties": {
+        "gender": -1,
+        "age": -0.8,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The lady Elizabeth reads with skill",
+      "source": "dimensional_seeds",
+      "agent": "elizabeth",
+      "properties": {
+        "gender": 1,
+        "age": -0.2,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a landowner, Darcy observes",
+      "source": "dimensional_seeds",
+      "agent": "darcy",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.7,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Woman leads carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "woman",
+      "properties": {
+        "gender": 1,
+        "age": 0.3,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Queen is a queen who orders",
+      "source": "dimensional_seeds",
+      "agent": "queen",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a river, River nourishes",
+      "source": "dimensional_seeds",
+      "agent": "river",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "The inspector follows holmes",
+      "source": "dimensional_seeds",
+      "agent": "lestrade",
+      "properties": {
+        "gender": -1,
+        "age": 0.3,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Watson assists the patient",
+      "source": "dimensional_seeds",
+      "agent": "watson",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The adventuress outwits holmes",
+      "source": "dimensional_seeds",
+      "agent": "irene",
+      "properties": {
+        "gender": 1,
+        "age": 0,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The criminal Moriarty schemes with skill",
+      "source": "dimensional_seeds",
+      "agent": "moriarty",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Holmes examines carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "holmes",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Princess dances the prince",
+      "source": "dimensional_seeds",
+      "agent": "princess",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The robot Robot serves with skill",
+      "source": "dimensional_seeds",
+      "agent": "robot",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0
+      }
+    },
+    {
+      "text": "Queen_Generic is a monarch who leads",
+      "source": "dimensional_seeds",
+      "agent": "queen_generic",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Watson is a companion who supports",
+      "source": "dimensional_seeds",
+      "agent": "watson",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Holmes deduces carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "holmes",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The professor threatens holmes",
+      "source": "dimensional_seeds",
+      "agent": "moriarty",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The lady Elizabeth judges with skill",
+      "source": "dimensional_seeds",
+      "agent": "elizabeth",
+      "properties": {
+        "gender": 1,
+        "age": -0.2,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The mother Woman creates with skill",
+      "source": "dimensional_seeds",
+      "agent": "woman",
+      "properties": {
+        "gender": 1,
+        "age": 0.3,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a detective, Lestrade follows",
+      "source": "dimensional_seeds",
+      "agent": "lestrade",
+      "properties": {
+        "gender": -1,
+        "age": 0.3,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a inspector, Lestrade follows",
+      "source": "dimensional_seeds",
+      "agent": "lestrade",
+      "properties": {
+        "gender": -1,
+        "age": 0.3,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Darcy rescues with determination",
+      "source": "dimensional_seeds",
+      "agent": "darcy",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.7,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The student Child grows with skill",
+      "source": "dimensional_seeds",
+      "agent": "child",
+      "properties": {
+        "gender": 0,
+        "age": -1,
+        "agency": 0.2,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The lady Jane hopes with skill",
+      "source": "dimensional_seeds",
+      "agent": "jane",
+      "properties": {
+        "gender": 1,
+        "age": -0.1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Hatter confuses with determination",
+      "source": "dimensional_seeds",
+      "agent": "hatter",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Corporation is a business who acquires",
+      "source": "dimensional_seeds",
+      "agent": "corporation",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.8,
+        "animacy": -0.3
+      }
+    },
+    {
+      "text": "Storm rages carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "storm",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.7,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "Robot executes with determination",
+      "source": "dimensional_seeds",
+      "agent": "robot",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0
+      }
+    },
+    {
+      "text": "Prince is a heir who fights",
+      "source": "dimensional_seeds",
+      "agent": "prince",
+      "properties": {
+        "gender": -1,
+        "age": -0.5,
+        "agency": 0.7,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Girl is a girl who learns",
+      "source": "dimensional_seeds",
+      "agent": "girl",
+      "properties": {
+        "gender": 1,
+        "age": -0.8,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The ruler King commands with skill",
+      "source": "dimensional_seeds",
+      "agent": "king",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The mastermind Moriarty plots with skill",
+      "source": "dimensional_seeds",
+      "agent": "moriarty",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The child learns parent",
+      "source": "dimensional_seeds",
+      "agent": "child",
+      "properties": {
+        "gender": 0,
+        "age": -1,
+        "agency": 0.2,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The gentleman proposes wickham",
+      "source": "dimensional_seeds",
+      "agent": "darcy",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.7,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a concept, Idea persists",
+      "source": "dimensional_seeds",
+      "agent": "idea",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.4,
+        "animacy": -1
+      }
+    },
+    {
+      "text": "Hatter is a host who chatters",
+      "source": "dimensional_seeds",
+      "agent": "hatter",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Lestrade is a detective who follows",
+      "source": "dimensional_seeds",
+      "agent": "lestrade",
+      "properties": {
+        "gender": -1,
+        "age": 0.3,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Lydia gossips with determination",
+      "source": "dimensional_seeds",
+      "agent": "lydia",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Elizabeth is a daughter who debates",
+      "source": "dimensional_seeds",
+      "agent": "elizabeth",
+      "properties": {
+        "gender": 1,
+        "age": -0.2,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Lestrade investigates carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "lestrade",
+      "properties": {
+        "gender": -1,
+        "age": 0.3,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a student, Child plays",
+      "source": "dimensional_seeds",
+      "agent": "child",
+      "properties": {
+        "gender": 0,
+        "age": -1,
+        "agency": 0.2,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Robot follows with determination",
+      "source": "dimensional_seeds",
+      "agent": "robot",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0
+      }
+    },
+    {
+      "text": "Child learns the toy",
+      "source": "dimensional_seeds",
+      "agent": "child",
+      "properties": {
+        "gender": 0,
+        "age": -1,
+        "agency": 0.2,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a professor, Moriarty controls",
+      "source": "dimensional_seeds",
+      "agent": "moriarty",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Irene escapes the king",
+      "source": "dimensional_seeds",
+      "agent": "irene",
+      "properties": {
+        "gender": 1,
+        "age": 0,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Watson is a chronicler who supports",
+      "source": "dimensional_seeds",
+      "agent": "watson",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a prince, Prince fights",
+      "source": "dimensional_seeds",
+      "agent": "prince",
+      "properties": {
+        "gender": -1,
+        "age": -0.5,
+        "agency": 0.7,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "King leads with determination",
+      "source": "dimensional_seeds",
+      "agent": "king",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a explorer, Alice explores",
+      "source": "dimensional_seeds",
+      "agent": "alice",
+      "properties": {
+        "gender": 1,
+        "age": -0.7,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Storm howls with determination",
+      "source": "dimensional_seeds",
+      "agent": "storm",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.7,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "Prince is a heir who inherits",
+      "source": "dimensional_seeds",
+      "agent": "prince",
+      "properties": {
+        "gender": -1,
+        "age": -0.5,
+        "agency": 0.7,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Watson records the adventure",
+      "source": "dimensional_seeds",
+      "agent": "watson",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a suitor, Bingley returns",
+      "source": "dimensional_seeds",
+      "agent": "bingley",
+      "properties": {
+        "gender": -1,
+        "age": -0.1,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Queen rules with determination",
+      "source": "dimensional_seeds",
+      "agent": "queen",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a waterway, River nourishes",
+      "source": "dimensional_seeds",
+      "agent": "river",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "Storm threatens carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "storm",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.7,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "Lydia is a girl who dances",
+      "source": "dimensional_seeds",
+      "agent": "lydia",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "King is a monarch who commands",
+      "source": "dimensional_seeds",
+      "agent": "king",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Princess is a heir who learns",
+      "source": "dimensional_seeds",
+      "agent": "princess",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The lady challenges book",
+      "source": "dimensional_seeds",
+      "agent": "elizabeth",
+      "properties": {
+        "gender": 1,
+        "age": -0.2,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Elizabeth judges with determination",
+      "source": "dimensional_seeds",
+      "agent": "elizabeth",
+      "properties": {
+        "gender": 1,
+        "age": -0.2,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a girl, Lydia flirts",
+      "source": "dimensional_seeds",
+      "agent": "lydia",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The prince trains throne",
+      "source": "dimensional_seeds",
+      "agent": "prince",
+      "properties": {
+        "gender": -1,
+        "age": -0.5,
+        "agency": 0.7,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The gentleman Darcy changes with skill",
+      "source": "dimensional_seeds",
+      "agent": "darcy",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.7,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Robot serves the task",
+      "source": "dimensional_seeds",
+      "agent": "robot",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0
+      }
+    },
+    {
+      "text": "Lydia is a sister who dances",
+      "source": "dimensional_seeds",
+      "agent": "lydia",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Irene challenges carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "irene",
+      "properties": {
+        "gender": 1,
+        "age": 0,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Darcy is a gentleman who observes",
+      "source": "dimensional_seeds",
+      "agent": "darcy",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.7,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a bride, Jane loves",
+      "source": "dimensional_seeds",
+      "agent": "jane",
+      "properties": {
+        "gender": 1,
+        "age": -0.1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The gentleman proposes wickham",
+      "source": "dimensional_seeds",
+      "agent": "darcy",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.7,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a tyrant, Queen commands",
+      "source": "dimensional_seeds",
+      "agent": "queen",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Watson is a companion who documents",
+      "source": "dimensional_seeds",
+      "agent": "watson",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Elder teaches with determination",
+      "source": "dimensional_seeds",
+      "agent": "elder",
+      "properties": {
+        "gender": 0,
+        "age": 1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The singer Irene escapes with skill",
+      "source": "dimensional_seeds",
+      "agent": "irene",
+      "properties": {
+        "gender": 1,
+        "age": 0,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a notion, Idea inspires",
+      "source": "dimensional_seeds",
+      "agent": "idea",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.4,
+        "animacy": -1
+      }
+    },
+    {
+      "text": "The daughter Girl plays with skill",
+      "source": "dimensional_seeds",
+      "agent": "girl",
+      "properties": {
+        "gender": 1,
+        "age": -0.8,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Queen_Generic commands the court",
+      "source": "dimensional_seeds",
+      "agent": "queen_generic",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Queen is a queen who commands",
+      "source": "dimensional_seeds",
+      "agent": "queen",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Lydia is a girl who dances",
+      "source": "dimensional_seeds",
+      "agent": "lydia",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a prince, Prince fights",
+      "source": "dimensional_seeds",
+      "agent": "prince",
+      "properties": {
+        "gender": -1,
+        "age": -0.5,
+        "agency": 0.7,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The gentleman broods wickham",
+      "source": "dimensional_seeds",
+      "agent": "darcy",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.7,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Queen_Generic is a queen who rules",
+      "source": "dimensional_seeds",
+      "agent": "queen_generic",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The child Child asks with skill",
+      "source": "dimensional_seeds",
+      "agent": "child",
+      "properties": {
+        "gender": 0,
+        "age": -1,
+        "agency": 0.2,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Woman leads the home",
+      "source": "dimensional_seeds",
+      "agent": "woman",
+      "properties": {
+        "gender": 1,
+        "age": 0.3,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Prince is a prince who learns",
+      "source": "dimensional_seeds",
+      "agent": "prince",
+      "properties": {
+        "gender": -1,
+        "age": -0.5,
+        "agency": 0.7,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The host Hatter hosts with skill",
+      "source": "dimensional_seeds",
+      "agent": "hatter",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Lestrade is a inspector who questions",
+      "source": "dimensional_seeds",
+      "agent": "lestrade",
+      "properties": {
+        "gender": -1,
+        "age": 0.3,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Jane waits with determination",
+      "source": "dimensional_seeds",
+      "agent": "jane",
+      "properties": {
+        "gender": 1,
+        "age": -0.1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Woman leads the family",
+      "source": "dimensional_seeds",
+      "agent": "woman",
+      "properties": {
+        "gender": 1,
+        "age": 0.3,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The woman leads goal",
+      "source": "dimensional_seeds",
+      "agent": "woman",
+      "properties": {
+        "gender": 1,
+        "age": 0.3,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Elder rests carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "elder",
+      "properties": {
+        "gender": 0,
+        "age": 1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Woman creates the goal",
+      "source": "dimensional_seeds",
+      "agent": "woman",
+      "properties": {
+        "gender": 1,
+        "age": 0.3,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Elizabeth walks the society",
+      "source": "dimensional_seeds",
+      "agent": "elizabeth",
+      "properties": {
+        "gender": 1,
+        "age": -0.2,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Jane smiles carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "jane",
+      "properties": {
+        "gender": 1,
+        "age": -0.1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Wickham elopes with determination",
+      "source": "dimensional_seeds",
+      "agent": "wickham",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a child, Child imagines",
+      "source": "dimensional_seeds",
+      "agent": "child",
+      "properties": {
+        "gender": 0,
+        "age": -1,
+        "agency": 0.2,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Watson is a chronicler who supports",
+      "source": "dimensional_seeds",
+      "agent": "watson",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Hatter riddles the time",
+      "source": "dimensional_seeds",
+      "agent": "hatter",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Wickham elopes carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "wickham",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Girl is a girl who learns",
+      "source": "dimensional_seeds",
+      "agent": "girl",
+      "properties": {
+        "gender": 1,
+        "age": -0.8,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The lady smiles sister",
+      "source": "dimensional_seeds",
+      "agent": "jane",
+      "properties": {
+        "gender": 1,
+        "age": -0.1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a heir, Princess dreams",
+      "source": "dimensional_seeds",
+      "agent": "princess",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Boy explores the adventure",
+      "source": "dimensional_seeds",
+      "agent": "boy",
+      "properties": {
+        "gender": -1,
+        "age": -0.8,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The girl Lydia dances with skill",
+      "source": "dimensional_seeds",
+      "agent": "lydia",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The gentleman Darcy rescues with skill",
+      "source": "dimensional_seeds",
+      "agent": "darcy",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.7,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Storm is a storm who passes",
+      "source": "dimensional_seeds",
+      "agent": "storm",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.7,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "As a boy, Boy runs",
+      "source": "dimensional_seeds",
+      "agent": "boy",
+      "properties": {
+        "gender": -1,
+        "age": -0.8,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The princess waits prince",
+      "source": "dimensional_seeds",
+      "agent": "princess",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Child imagines with determination",
+      "source": "dimensional_seeds",
+      "agent": "child",
+      "properties": {
+        "gender": 0,
+        "age": -1,
+        "agency": 0.2,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Storm howls carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "storm",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.7,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "The mother Woman nurtures with skill",
+      "source": "dimensional_seeds",
+      "agent": "woman",
+      "properties": {
+        "gender": 1,
+        "age": 0.3,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The force Storm threatens with skill",
+      "source": "dimensional_seeds",
+      "agent": "storm",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.7,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "Robot serves the task",
+      "source": "dimensional_seeds",
+      "agent": "robot",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0
+      }
+    },
+    {
+      "text": "Girl dreams the game",
+      "source": "dimensional_seeds",
+      "agent": "girl",
+      "properties": {
+        "gender": 1,
+        "age": -0.8,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a elder, Elder rests",
+      "source": "dimensional_seeds",
+      "agent": "elder",
+      "properties": {
+        "gender": 0,
+        "age": 1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The father Man provides with skill",
+      "source": "dimensional_seeds",
+      "agent": "man",
+      "properties": {
+        "gender": -1,
+        "age": 0.3,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The detective investigates case",
+      "source": "dimensional_seeds",
+      "agent": "holmes",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The heir Princess escapes with skill",
+      "source": "dimensional_seeds",
+      "agent": "princess",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Child plays with determination",
+      "source": "dimensional_seeds",
+      "agent": "child",
+      "properties": {
+        "gender": 0,
+        "age": -1,
+        "agency": 0.2,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The robot Robot executes with skill",
+      "source": "dimensional_seeds",
+      "agent": "robot",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0
+      }
+    },
+    {
+      "text": "Prince inherits the princess",
+      "source": "dimensional_seeds",
+      "agent": "prince",
+      "properties": {
+        "gender": -1,
+        "age": -0.5,
+        "agency": 0.7,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Queen_Generic is a queen who rules",
+      "source": "dimensional_seeds",
+      "agent": "queen_generic",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Moriarty is a mastermind who manipulates",
+      "source": "dimensional_seeds",
+      "agent": "moriarty",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a girl, Girl plays",
+      "source": "dimensional_seeds",
+      "agent": "girl",
+      "properties": {
+        "gender": 1,
+        "age": -0.8,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The robot computes task",
+      "source": "dimensional_seeds",
+      "agent": "robot",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0
+      }
+    },
+    {
+      "text": "As a prince, Prince courts",
+      "source": "dimensional_seeds",
+      "agent": "prince",
+      "properties": {
+        "gender": -1,
+        "age": -0.5,
+        "agency": 0.7,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a detective, Holmes observes",
+      "source": "dimensional_seeds",
+      "agent": "holmes",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a storm, Storm destroys",
+      "source": "dimensional_seeds",
+      "agent": "storm",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.7,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "Idea inspires the world",
+      "source": "dimensional_seeds",
+      "agent": "idea",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.4,
+        "animacy": -1
+      }
+    },
+    {
+      "text": "The gentleman leaves ball",
+      "source": "dimensional_seeds",
+      "agent": "bingley",
+      "properties": {
+        "gender": -1,
+        "age": -0.1,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Woman works the goal",
+      "source": "dimensional_seeds",
+      "agent": "woman",
+      "properties": {
+        "gender": 1,
+        "age": 0.3,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The student Child plays with skill",
+      "source": "dimensional_seeds",
+      "agent": "child",
+      "properties": {
+        "gender": 0,
+        "age": -1,
+        "agency": 0.2,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Storm destroys the town",
+      "source": "dimensional_seeds",
+      "agent": "storm",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.7,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "Bingley leaves carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "bingley",
+      "properties": {
+        "gender": -1,
+        "age": -0.1,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a bride, Jane hopes",
+      "source": "dimensional_seeds",
+      "agent": "jane",
+      "properties": {
+        "gender": 1,
+        "age": -0.1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Jane is a sister who forgives",
+      "source": "dimensional_seeds",
+      "agent": "jane",
+      "properties": {
+        "gender": 1,
+        "age": -0.1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Wickham elopes with determination",
+      "source": "dimensional_seeds",
+      "agent": "wickham",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a concept, Idea spreads",
+      "source": "dimensional_seeds",
+      "agent": "idea",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.4,
+        "animacy": -1
+      }
+    },
+    {
+      "text": "Bingley is a gentleman who returns",
+      "source": "dimensional_seeds",
+      "agent": "bingley",
+      "properties": {
+        "gender": -1,
+        "age": -0.1,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Girl dreams the doll",
+      "source": "dimensional_seeds",
+      "agent": "girl",
+      "properties": {
+        "gender": 1,
+        "age": -0.8,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Lydia laughs with determination",
+      "source": "dimensional_seeds",
+      "agent": "lydia",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Cheshire vanishes with determination",
+      "source": "dimensional_seeds",
+      "agent": "cheshire",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0.8
+      }
+    },
+    {
+      "text": "The river River flows with skill",
+      "source": "dimensional_seeds",
+      "agent": "river",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "The daughter Elizabeth reads with skill",
+      "source": "dimensional_seeds",
+      "agent": "elizabeth",
+      "properties": {
+        "gender": 1,
+        "age": -0.2,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Hatter is a hatter who riddles",
+      "source": "dimensional_seeds",
+      "agent": "hatter",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Man works with determination",
+      "source": "dimensional_seeds",
+      "agent": "man",
+      "properties": {
+        "gender": -1,
+        "age": 0.3,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Corporation acquires carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "corporation",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.8,
+        "animacy": -0.3
+      }
+    },
+    {
+      "text": "As a heir, Prince courts",
+      "source": "dimensional_seeds",
+      "agent": "prince",
+      "properties": {
+        "gender": -1,
+        "age": -0.5,
+        "agency": 0.7,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The robot executes task",
+      "source": "dimensional_seeds",
+      "agent": "robot",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0
+      }
+    },
+    {
+      "text": "As a heir, Princess learns",
+      "source": "dimensional_seeds",
+      "agent": "princess",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Child asks with determination",
+      "source": "dimensional_seeds",
+      "agent": "child",
+      "properties": {
+        "gender": 0,
+        "age": -1,
+        "agency": 0.2,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a worker, Man provides",
+      "source": "dimensional_seeds",
+      "agent": "man",
+      "properties": {
+        "gender": -1,
+        "age": 0.3,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Child is a child who grows",
+      "source": "dimensional_seeds",
+      "agent": "child",
+      "properties": {
+        "gender": 0,
+        "age": -1,
+        "agency": 0.2,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a suitor, Bingley leaves",
+      "source": "dimensional_seeds",
+      "agent": "bingley",
+      "properties": {
+        "gender": -1,
+        "age": -0.1,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The criminal Moriarty schemes with skill",
+      "source": "dimensional_seeds",
+      "agent": "moriarty",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Queen rules carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "queen",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Darcy is a gentleman who rescues",
+      "source": "dimensional_seeds",
+      "agent": "darcy",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.7,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Idea changes carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "idea",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.4,
+        "animacy": -1
+      }
+    },
+    {
+      "text": "Holmes solves with determination",
+      "source": "dimensional_seeds",
+      "agent": "holmes",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The elder advises youth",
+      "source": "dimensional_seeds",
+      "agent": "elder",
+      "properties": {
+        "gender": 0,
+        "age": 1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a doctor, Watson watches",
+      "source": "dimensional_seeds",
+      "agent": "watson",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Princess is a heir who escapes",
+      "source": "dimensional_seeds",
+      "agent": "princess",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Boy is a child who explores",
+      "source": "dimensional_seeds",
+      "agent": "boy",
+      "properties": {
+        "gender": -1,
+        "age": -0.8,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Lydia gossips the balls",
+      "source": "dimensional_seeds",
+      "agent": "lydia",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "King rules carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "king",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The sister Elizabeth reads with skill",
+      "source": "dimensional_seeds",
+      "agent": "elizabeth",
+      "properties": {
+        "gender": 1,
+        "age": -0.2,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Queen_Generic is a monarch who commands",
+      "source": "dimensional_seeds",
+      "agent": "queen_generic",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The prince learns kingdom",
+      "source": "dimensional_seeds",
+      "agent": "prince",
+      "properties": {
+        "gender": -1,
+        "age": -0.5,
+        "agency": 0.7,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Child imagines with determination",
+      "source": "dimensional_seeds",
+      "agent": "child",
+      "properties": {
+        "gender": 0,
+        "age": -1,
+        "agency": 0.2,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a detective, Holmes solves",
+      "source": "dimensional_seeds",
+      "agent": "holmes",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a scoundrel, Wickham deceives",
+      "source": "dimensional_seeds",
+      "agent": "wickham",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a machine, Robot computes",
+      "source": "dimensional_seeds",
+      "agent": "robot",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0
+      }
+    },
+    {
+      "text": "The professor Moriarty schemes with skill",
+      "source": "dimensional_seeds",
+      "agent": "moriarty",
+      "properties": {
+        "gender": -1,
+        "age": 0.5,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Idea persists the people",
+      "source": "dimensional_seeds",
+      "agent": "idea",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.4,
+        "animacy": -1
+      }
+    },
+    {
+      "text": "Cheshire is a cat who appears",
+      "source": "dimensional_seeds",
+      "agent": "cheshire",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0.8
+      }
+    },
+    {
+      "text": "Boy is a boy who explores",
+      "source": "dimensional_seeds",
+      "agent": "boy",
+      "properties": {
+        "gender": -1,
+        "age": -0.8,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a officer, Wickham charms",
+      "source": "dimensional_seeds",
+      "agent": "wickham",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The lady forgives happiness",
+      "source": "dimensional_seeds",
+      "agent": "jane",
+      "properties": {
+        "gender": 1,
+        "age": -0.1,
+        "agency": 0.3,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a officer, Wickham gambles",
+      "source": "dimensional_seeds",
+      "agent": "wickham",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Darcy observes carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "darcy",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.7,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Man builds the family",
+      "source": "dimensional_seeds",
+      "agent": "man",
+      "properties": {
+        "gender": -1,
+        "age": 0.3,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Idea is a concept who evolves",
+      "source": "dimensional_seeds",
+      "agent": "idea",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.4,
+        "animacy": -1
+      }
+    },
+    {
+      "text": "Girl is a child who grows",
+      "source": "dimensional_seeds",
+      "agent": "girl",
+      "properties": {
+        "gender": 1,
+        "age": -0.8,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "The monarch Queen_Generic commands with skill",
+      "source": "dimensional_seeds",
+      "agent": "queen_generic",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Elizabeth refuses with determination",
+      "source": "dimensional_seeds",
+      "agent": "elizabeth",
+      "properties": {
+        "gender": 1,
+        "age": -0.2,
+        "agency": 0.8,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Idea persists carefully and methodically",
+      "source": "dimensional_seeds",
+      "agent": "idea",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.4,
+        "animacy": -1
+      }
+    },
+    {
+      "text": "The girl flirts officers",
+      "source": "dimensional_seeds",
+      "agent": "lydia",
+      "properties": {
+        "gender": 1,
+        "age": -0.5,
+        "agency": 0.5,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Holmes investigates with determination",
+      "source": "dimensional_seeds",
+      "agent": "holmes",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 1,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Robot serves the human",
+      "source": "dimensional_seeds",
+      "agent": "robot",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.5,
+        "animacy": 0
+      }
+    },
+    {
+      "text": "The river River carries with skill",
+      "source": "dimensional_seeds",
+      "agent": "river",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.3,
+        "animacy": -0.5
+      }
+    },
+    {
+      "text": "As a scoundrel, Wickham deceives",
+      "source": "dimensional_seeds",
+      "agent": "wickham",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.6,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Queen_Generic leads with determination",
+      "source": "dimensional_seeds",
+      "agent": "queen_generic",
+      "properties": {
+        "gender": 1,
+        "age": 0.5,
+        "agency": 0.9,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "Hatter hosts the alice",
+      "source": "dimensional_seeds",
+      "agent": "hatter",
+      "properties": {
+        "gender": -1,
+        "age": 0,
+        "agency": 0.4,
+        "animacy": 1
+      }
+    },
+    {
+      "text": "As a idea, Idea persists",
+      "source": "dimensional_seeds",
+      "agent": "idea",
+      "properties": {
+        "gender": 0,
+        "age": 0,
+        "agency": 0.4,
+        "animacy": -1
+      }
+    }
+  ]
+}

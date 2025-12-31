@@ -1,0 +1,82 @@
+{
+  "cycles_completed": 5,
+  "total_items_generated": 110,
+  "best_score": 0.5315257789454649,
+  "benchmark_history": [
+    {
+      "cycle": 1,
+      "timestamp": "2025-12-30T13:46:48.792544",
+      "metrics": {
+        "similar_accuracy": 0.5,
+        "opposite_accuracy": 0.0,
+        "cluster_coherence": 0.68858052639707,
+        "dimension_quality": 0.5271394781305401,
+        "coverage": 1.0,
+        "composite": 0.5262160533188485
+      },
+      "dimension_count": 15,
+      "item_count": 767,
+      "group_count": 53
+    },
+    {
+      "cycle": 2,
+      "timestamp": "2025-12-30T13:46:52.177742",
+      "metrics": {
+        "similar_accuracy": 0.5,
+        "opposite_accuracy": 0.0,
+        "cluster_coherence": 0.6961038047132931,
+        "dimension_quality": 0.5312865980670549,
+        "coverage": 1.0,
+        "composite": 0.5287189408883816
+      },
+      "dimension_count": 15,
+      "item_count": 785,
+      "group_count": 53
+    },
+    {
+      "cycle": 3,
+      "timestamp": "2025-12-30T13:46:55.594221",
+      "metrics": {
+        "similar_accuracy": 0.5,
+        "opposite_accuracy": 0.0,
+        "cluster_coherence": 0.7003146170044414,
+        "dimension_quality": 0.5333215856681844,
+        "coverage": 1.0,
+        "composite": 0.530076892101338
+      },
+      "dimension_count": 15,
+      "item_count": 803,
+      "group_count": 53
+    },
+    {
+      "cycle": 4,
+      "timestamp": "2025-12-30T13:46:58.975936",
+      "metrics": {
+        "similar_accuracy": 0.5,
+        "opposite_accuracy": 0.0,
+        "cluster_coherence": 0.7029867026296069,
+        "dimension_quality": 0.5337408419462916,
+        "coverage": 1.0,
+        "composite": 0.5308078019493455
+      },
+      "dimension_count": 15,
+      "item_count": 821,
+      "group_count": 53
+    },
+    {
+      "cycle": 5,
+      "timestamp": "2025-12-30T13:47:02.245397",
+      "metrics": {
+        "similar_accuracy": 0.5,
+        "opposite_accuracy": 0.0,
+        "cluster_coherence": 0.7058226688930208,
+        "dimension_quality": 0.5338007448147317,
+        "coverage": 1.0,
+        "composite": 0.5315257789454649
+      },
+      "dimension_count": 15,
+      "item_count": 839,
+      "group_count": 53
+    }
+  ]
+}

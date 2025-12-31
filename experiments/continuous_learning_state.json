@@ -1,0 +1,1141 @@
+{
+  "learning_cycles": 8,
+  "total_frames": 729,
+  "variance_explained_history": [
+    1.0,
+    1.0,
+    0.8957898432140535,
+    0.7556459532505677,
+    0.6559944345951052,
+    0.5826901559511811,
+    0.5162322171152496,
+    0.47969653390582656
+  ],
+  "dimensions": [
+    {
+      "name": "Dim1",
+      "variance": 0.06286300671726477,
+      "negative_pole": "holmes",
+      "positive_pole": "hearts",
+      "negative_features": [
+        "holmes",
+        "his",
+        "king",
+        "practices",
+        "arranges"
+      ],
+      "positive_features": [
+        "designs",
+        "conducts",
+        "across",
+        "its",
+        "hearts"
+      ],
+      "history_updates": [
+        {
+          "time": "2025-12-30T12:44:35.210507",
+          "variance": 0.31817914941734665,
+          "poles": [
+            "holmes",
+            "hearts"
+          ],
+          "n_samples": 100
+        },
+        {
+          "time": "2025-12-30T12:44:35.213391",
+          "variance": 0.16322286322817178,
+          "poles": [
+            "holmes",
+            "hearts"
+          ],
+          "n_samples": 200
+        },
+        {
+          "time": "2025-12-30T12:44:35.239271",
+          "variance": 0.21144330945700954,
+          "poles": [
+            "holmes",
+            "sage"
+          ],
+          "n_samples": 300
+        },
+        {
+          "time": "2025-12-30T12:44:35.253013",
+          "variance": 0.10205556161194533,
+          "poles": [
+            "hearts",
+            "holmes"
+          ],
+          "n_samples": 400
+        },
+        {
+          "time": "2025-12-30T12:44:35.261626",
+          "variance": 0.08361997883948323,
+          "poles": [
+            "hearts",
+            "holmes"
+          ],
+          "n_samples": 500
+        },
+        {
+          "time": "2025-12-30T12:44:35.276371",
+          "variance": 0.0768157560051045,
+          "poles": [
+            "holmes",
+            "bride"
+          ],
+          "n_samples": 600
+        },
+        {
+          "time": "2025-12-30T12:44:35.297030",
+          "variance": 0.06459023676956366,
+          "poles": [
+            "holmes",
+            "hearts"
+          ],
+          "n_samples": 700
+        },
+        {
+          "time": "2025-12-30T12:44:35.310028",
+          "variance": 0.06286300671726477,
+          "poles": [
+            "holmes",
+            "hearts"
+          ],
+          "n_samples": 729
+        }
+      ]
+    },
+    {
+      "name": "Dim2",
+      "variance": 0.055448851778213966,
+      "negative_pole": "angel",
+      "positive_pole": "hearts",
+      "negative_features": [
+        "across",
+        "reads",
+        "its",
+        "whispers",
+        "dances"
+      ],
+      "positive_features": [
+        "orchestrates",
+        "questions",
+        "scrutinizes",
+        "holmes",
+        "hearts"
+      ],
+      "history_updates": [
+        {
+          "time": "2025-12-30T12:44:35.210528",
+          "variance": 0.25082721107129446,
+          "poles": [
+            "adler",
+            "holmes"
+          ],
+          "n_samples": 100
+        },
+        {
+          "time": "2025-12-30T12:44:35.213414",
+          "variance": 0.14716395955938152,
+          "poles": [
+            "king",
+            "holmes"
+          ],
+          "n_samples": 200
+        },
+        {
+          "time": "2025-12-30T12:44:35.239303",
+          "variance": 0.10308717707027898,
+          "poles": [
+            "hearts",
+            "holmes"
+          ],
+          "n_samples": 300
+        },
+        {
+          "time": "2025-12-30T12:44:35.253048",
+          "variance": 0.09260493388963284,
+          "poles": [
+            "hearts",
+            "king"
+          ],
+          "n_samples": 400
+        },
+        {
+          "time": "2025-12-30T12:44:35.261667",
+          "variance": 0.0759597401819574,
+          "poles": [
+            "hearts",
+            "angel"
+          ],
+          "n_samples": 500
+        },
+        {
+          "time": "2025-12-30T12:44:35.276415",
+          "variance": 0.06682921886593662,
+          "poles": [
+            "hearts",
+            "holmes"
+          ],
+          "n_samples": 600
+        },
+        {
+          "time": "2025-12-30T12:44:35.297082",
+          "variance": 0.05767317362975502,
+          "poles": [
+            "angel",
+            "hearts"
+          ],
+          "n_samples": 700
+        },
+        {
+          "time": "2025-12-30T12:44:35.310082",
+          "variance": 0.055448851778213966,
+          "poles": [
+            "angel",
+            "hearts"
+          ],
+          "n_samples": 729
+        }
+      ]
+    },
+    {
+      "name": "Dim3",
+      "variance": 0.051080211564123124,
+      "negative_pole": "holmes",
+      "positive_pole": "king",
+      "negative_features": [
+        "holmes",
+        "its",
+        "across",
+        "analyzes",
+        "deciphers"
+      ],
+      "positive_features": [
+        "listens",
+        "lands",
+        "practices",
+        "his",
+        "king"
+      ],
+      "history_updates": [
+        {
+          "time": "2025-12-30T12:44:35.210551",
+          "variance": 0.15854796353322073,
+          "poles": [
+            "bennet",
+            "adler"
+          ],
+          "n_samples": 100
+        },
+        {
+          "time": "2025-12-30T12:44:35.213432",
+          "variance": 0.12284213941739623,
+          "poles": [
+            "king",
+            "queen"
+          ],
+          "n_samples": 200
+        },
+        {
+          "time": "2025-12-30T12:44:35.239326",
+          "variance": 0.09183439237448357,
+          "poles": [
+            "hearts",
+            "king"
+          ],
+          "n_samples": 300
+        },
+        {
+          "time": "2025-12-30T12:44:35.253079",
+          "variance": 0.0797841087155524,
+          "poles": [
+            "king",
+            "adler"
+          ],
+          "n_samples": 400
+        },
+        {
+          "time": "2025-12-30T12:44:35.261702",
+          "variance": 0.0674445425121659,
+          "poles": [
+            "king",
+            "holmes"
+          ],
+          "n_samples": 500
+        },
+        {
+          "time": "2025-12-30T12:44:35.276455",
+          "variance": 0.060960796072779724,
+          "poles": [
+            "hearts",
+            "angel"
+          ],
+          "n_samples": 600
+        },
+        {
+          "time": "2025-12-30T12:44:35.297131",
+          "variance": 0.05248314904618164,
+          "poles": [
+            "holmes",
+            "king"
+          ],
+          "n_samples": 700
+        },
+        {
+          "time": "2025-12-30T12:44:35.310131",
+          "variance": 0.051080211564123124,
+          "poles": [
+            "holmes",
+            "king"
+          ],
+          "n_samples": 729
+        }
+      ]
+    },
+    {
+      "name": "Dim4",
+      "variance": 0.042708994291648573,
+      "negative_pole": "hamlet",
+      "positive_pole": "king",
+      "negative_features": [
+        "his",
+        "practices",
+        "hearts",
+        "morning",
+        "duncans"
+      ],
+      "positive_features": [
+        "secrets",
+        "scholars",
+        "its",
+        "holmes",
+        "king"
+      ],
+      "history_updates": [
+        {
+          "time": "2025-12-30T12:44:35.210566",
+          "variance": 0.10963247434519284,
+          "poles": [
+            "alice",
+            "bennet"
+          ],
+          "n_samples": 100
+        },
+        {
+          "time": "2025-12-30T12:44:35.213452",
+          "variance": 0.10771546298147128,
+          "poles": [
+            "hamlet",
+            "queen"
+          ],
+          "n_samples": 200
+        },
+        {
+          "time": "2025-12-30T12:44:35.239351",
+          "variance": 0.07804127773457803,
+          "poles": [
+            "adler",
+            "king"
+          ],
+          "n_samples": 300
+        },
+        {
+          "time": "2025-12-30T12:44:35.253107",
+          "variance": 0.06731180589736059,
+          "poles": [
+            "king",
+            "hamlet"
+          ],
+          "n_samples": 400
+        },
+        {
+          "time": "2025-12-30T12:44:35.261743",
+          "variance": 0.055745736570658865,
+          "poles": [
+            "king",
+            "hamlet"
+          ],
+          "n_samples": 500
+        },
+        {
+          "time": "2025-12-30T12:44:35.276499",
+          "variance": 0.054829384948162856,
+          "poles": [
+            "king",
+            "holmes"
+          ],
+          "n_samples": 600
+        },
+        {
+          "time": "2025-12-30T12:44:35.297178",
+          "variance": 0.043287387278832246,
+          "poles": [
+            "hamlet",
+            "king"
+          ],
+          "n_samples": 700
+        },
+        {
+          "time": "2025-12-30T12:44:35.310180",
+          "variance": 0.042708994291648573,
+          "poles": [
+            "hamlet",
+            "king"
+          ],
+          "n_samples": 729
+        }
+      ]
+    },
+    {
+      "name": "Dim5",
+      "variance": 0.03944877109276241,
+      "negative_pole": "adler",
+      "positive_pole": "dog",
+      "negative_features": [
+        "conducts",
+        "daring",
+        "plants",
+        "solves",
+        "designs"
+      ],
+      "positive_features": [
+        "fetches",
+        "dances",
+        "morning",
+        "across",
+        "its"
+      ],
+      "history_updates": [
+        {
+          "time": "2025-12-30T12:44:35.210583",
+          "variance": 0.1018271100708891,
+          "poles": [
+            "moriarty",
+            "alice"
+          ],
+          "n_samples": 100
+        },
+        {
+          "time": "2025-12-30T12:44:35.213471",
+          "variance": 0.0931953275546972,
+          "poles": [
+            "adler",
+            "queen"
+          ],
+          "n_samples": 200
+        },
+        {
+          "time": "2025-12-30T12:44:35.239376",
+          "variance": 0.06389084586165426,
+          "poles": [
+            "adler",
+            "darcy"
+          ],
+          "n_samples": 300
+        },
+        {
+          "time": "2025-12-30T12:44:35.253139",
+          "variance": 0.0531972378760738,
+          "poles": [
+            "adler",
+            "angel"
+          ],
+          "n_samples": 400
+        },
+        {
+          "time": "2025-12-30T12:44:35.261776",
+          "variance": 0.04659063799494768,
+          "poles": [
+            "adler",
+            "angel"
+          ],
+          "n_samples": 500
+        },
+        {
+          "time": "2025-12-30T12:44:35.276542",
+          "variance": 0.04521966233325622,
+          "poles": [
+            "king",
+            "hamlet"
+          ],
+          "n_samples": 600
+        },
+        {
+          "time": "2025-12-30T12:44:35.297229",
+          "variance": 0.04079686576657723,
+          "poles": [
+            "dog",
+            "adler"
+          ],
+          "n_samples": 700
+        },
+        {
+          "time": "2025-12-30T12:44:35.310226",
+          "variance": 0.03944877109276241,
+          "poles": [
+            "adler",
+            "dog"
+          ],
+          "n_samples": 729
+        }
+      ]
+    },
+    {
+      "name": "Dim6",
+      "variance": 0.03569348759142441,
+      "negative_pole": "fox",
+      "positive_pole": "angel",
+      "negative_features": [
+        "its",
+        "tricks",
+        "sniffs",
+        "shadows",
+        "negotiates"
+      ],
+      "positive_features": [
+        "secrets",
+        "dances",
+        "across",
+        "debates",
+        "reads"
+      ],
+      "history_updates": [
+        {
+          "time": "2025-12-30T12:44:35.210599",
+          "variance": 0.06098609156205626,
+          "poles": [
+            "watson",
+            "holmes"
+          ],
+          "n_samples": 100
+        },
+        {
+          "time": "2025-12-30T12:44:35.213490",
+          "variance": 0.06564484655490468,
+          "poles": [
+            "bennet",
+            "macbeth"
+          ],
+          "n_samples": 200
+        },
+        {
+          "time": "2025-12-30T12:44:35.239402",
+          "variance": 0.04958155909662994,
+          "poles": [
+            "teenager",
+            "adler"
+          ],
+          "n_samples": 300
+        },
+        {
+          "time": "2025-12-30T12:44:35.253172",
+          "variance": 0.049535691772778646,
+          "poles": [
+            "adler",
+            "judge"
+          ],
+          "n_samples": 400
+        },
+        {
+          "time": "2025-12-30T12:44:35.261809",
+          "variance": 0.041558219589893336,
+          "poles": [
+            "adler",
+            "judge"
+          ],
+          "n_samples": 500
+        },
+        {
+          "time": "2025-12-30T12:44:35.276584",
+          "variance": 0.04211877396992192,
+          "poles": [
+            "dog",
+            "adler"
+          ],
+          "n_samples": 600
+        },
+        {
+          "time": "2025-12-30T12:44:35.297275",
+          "variance": 0.03657997667499246,
+          "poles": [
+            "fox",
+            "angel"
+          ],
+          "n_samples": 700
+        },
+        {
+          "time": "2025-12-30T12:44:35.310274",
+          "variance": 0.03569348759142441,
+          "poles": [
+            "fox",
+            "angel"
+          ],
+          "n_samples": 729
+        }
+      ]
+    },
+    {
+      "name": "Dim7",
+      "variance": 0.031239021062468647,
+      "negative_pole": "angel",
+      "positive_pole": "servant",
+      "negative_features": [
+        "across",
+        "his",
+        "debates",
+        "constructs",
+        "daring"
+      ],
+      "positive_features": [
+        "supplies",
+        "prepares",
+        "during",
+        "searches",
+        "listens"
+      ],
+      "history_updates": [
+        {
+          "time": "2025-12-30T12:44:35.213513",
+          "variance": 0.05854794736483904,
+          "poles": [
+            "macbeth",
+            "darcy"
+          ],
+          "n_samples": 200
+        },
+        {
+          "time": "2025-12-30T12:44:35.239422",
+          "variance": 0.044355266629501254,
+          "poles": [
+            "teenager",
+            "servant"
+          ],
+          "n_samples": 300
+        },
+        {
+          "time": "2025-12-30T12:44:35.253201",
+          "variance": 0.04490573189020658,
+          "poles": [
+            "servant",
+            "teenager"
+          ],
+          "n_samples": 400
+        },
+        {
+          "time": "2025-12-30T12:44:35.261844",
+          "variance": 0.0388168950705283,
+          "poles": [
+            "queen",
+            "teenager"
+          ],
+          "n_samples": 500
+        },
+        {
+          "time": "2025-12-30T12:44:35.276627",
+          "variance": 0.037778722726732834,
+          "poles": [
+            "angel",
+            "fox"
+          ],
+          "n_samples": 600
+        },
+        {
+          "time": "2025-12-30T12:44:35.297320",
+          "variance": 0.031939680445554626,
+          "poles": [
+            "fire",
+            "servant"
+          ],
+          "n_samples": 700
+        },
+        {
+          "time": "2025-12-30T12:44:35.310328",
+          "variance": 0.031239021062468647,
+          "poles": [
+            "angel",
+            "servant"
+          ],
+          "n_samples": 729
+        }
+      ]
+    },
+    {
+      "name": "Dim8",
+      "variance": 0.029976568905557794,
+      "negative_pole": "fire",
+      "positive_pole": "adler",
+      "negative_features": [
+        "orders",
+        "weaves",
+        "engulfs",
+        "illuminates",
+        "dances"
+      ],
+      "positive_features": [
+        "whispers",
+        "daring",
+        "plants",
+        "reads",
+        "its"
+      ],
+      "history_updates": [
+        {
+          "time": "2025-12-30T12:44:35.213536",
+          "variance": 0.04889150037528446,
+          "poles": [
+            "alice",
+            "bennet"
+          ],
+          "n_samples": 200
+        },
+        {
+          "time": "2025-12-30T12:44:35.239447",
+          "variance": 0.04136176751953364,
+          "poles": [
+            "macbeth",
+            "darcy"
+          ],
+          "n_samples": 300
+        },
+        {
+          "time": "2025-12-30T12:44:35.253234",
+          "variance": 0.03974845969196669,
+          "poles": [
+            "macbeth",
+            "villain"
+          ],
+          "n_samples": 400
+        },
+        {
+          "time": "2025-12-30T12:44:35.261878",
+          "variance": 0.0351933220087047,
+          "poles": [
+            "storm",
+            "robot"
+          ],
+          "n_samples": 500
+        },
+        {
+          "time": "2025-12-30T12:44:35.276670",
+          "variance": 0.033354621140949364,
+          "poles": [
+            "servant",
+            "fire"
+          ],
+          "n_samples": 600
+        },
+        {
+          "time": "2025-12-30T12:44:35.297370",
+          "variance": 0.031023603643183996,
+          "poles": [
+            "bride",
+            "adler"
+          ],
+          "n_samples": 700
+        },
+        {
+          "time": "2025-12-30T12:44:35.310374",
+          "variance": 0.029976568905557794,
+          "poles": [
+            "fire",
+            "adler"
+          ],
+          "n_samples": 729
+        }
+      ]
+    },
+    {
+      "name": "Dim9",
+      "variance": 0.02868901159777135,
+      "negative_pole": "fire",
+      "positive_pole": "teenager",
+      "negative_features": [
+        "plants",
+        "negotiates",
+        "dances",
+        "gathers",
+        "daring"
+      ],
+      "positive_features": [
+        "paints",
+        "writes",
+        "designs",
+        "experiments",
+        "debates"
+      ],
+      "history_updates": [
+        {
+          "time": "2025-12-30T12:44:35.213557",
+          "variance": 0.04707007267685952,
+          "poles": [
+            "moriarty",
+            "hamlet"
+          ],
+          "n_samples": 200
+        },
+        {
+          "time": "2025-12-30T12:44:35.239473",
+          "variance": 0.035956553467549786,
+          "poles": [
+            "moriarty",
+            "servant"
+          ],
+          "n_samples": 300
+        },
+        {
+          "time": "2025-12-30T12:44:35.253265",
+          "variance": 0.038495534247195665,
+          "poles": [
+            "villain",
+            "priest"
+          ],
+          "n_samples": 400
+        },
+        {
+          "time": "2025-12-30T12:44:35.261913",
+          "variance": 0.0346004758945998,
+          "poles": [
+            "teenager",
+            "robot"
+          ],
+          "n_samples": 500
+        },
+        {
+          "time": "2025-12-30T12:44:35.276710",
+          "variance": 0.03147487810711847,
+          "poles": [
+            "adler",
+            "judge"
+          ],
+          "n_samples": 600
+        },
+        {
+          "time": "2025-12-30T12:44:35.297429",
+          "variance": 0.02911804928812504,
+          "poles": [
+            "adler",
+            "teenager"
+          ],
+          "n_samples": 700
+        },
+        {
+          "time": "2025-12-30T12:44:35.310422",
+          "variance": 0.02868901159777135,
+          "poles": [
+            "fire",
+            "teenager"
+          ],
+          "n_samples": 729
+        }
+      ]
+    },
+    {
+      "name": "Dim10",
+      "variance": 0.02722726400895536,
+      "negative_pole": "bride",
+      "positive_pole": "victim",
+      "negative_features": [
+        "during",
+        "dances",
+        "morning",
+        "conducts",
+        "debates"
+      ],
+      "positive_features": [
+        "navigates",
+        "carries",
+        "secrets",
+        "searches",
+        "whispers"
+      ],
+      "history_updates": [
+        {
+          "time": "2025-12-30T12:44:35.213576",
+          "variance": 0.04672385561578272,
+          "poles": [
+            "moriarty",
+            "darcy"
+          ],
+          "n_samples": 200
+        },
+        {
+          "time": "2025-12-30T12:44:35.239496",
+          "variance": 0.03362376059774972,
+          "poles": [
+            "bennet",
+            "servant"
+          ],
+          "n_samples": 300
+        },
+        {
+          "time": "2025-12-30T12:44:35.253296",
+          "variance": 0.03533598869808056,
+          "poles": [
+            "servant",
+            "angel"
+          ],
+          "n_samples": 400
+        },
+        {
+          "time": "2025-12-30T12:44:35.261945",
+          "variance": 0.03350665130405762,
+          "poles": [
+            "priest",
+            "macbeth"
+          ],
+          "n_samples": 500
+        },
+        {
+          "time": "2025-12-30T12:44:35.276755",
+          "variance": 0.028996847993655907,
+          "poles": [
+            "moriarty",
+            "teenager"
+          ],
+          "n_samples": 600
+        },
+        {
+          "time": "2025-12-30T12:44:35.297483",
+          "variance": 0.02761551405678165,
+          "poles": [
+            "bride",
+            "victim"
+          ],
+          "n_samples": 700
+        },
+        {
+          "time": "2025-12-30T12:44:35.310472",
+          "variance": 0.02722726400895536,
+          "poles": [
+            "bride",
+            "victim"
+          ],
+          "n_samples": 729
+        }
+      ]
+    },
+    {
+      "name": "Dim11",
+      "variance": 0.025958867328000984,
+      "negative_pole": "craftsman",
+      "positive_pole": "robot",
+      "negative_features": [
+        "designs",
+        "weaves",
+        "plants",
+        "paints",
+        "meticulous"
+      ],
+      "positive_features": [
+        "conducts",
+        "repairs",
+        "analyzes",
+        "navigates",
+        "composes"
+      ],
+      "history_updates": [
+        {
+          "time": "2025-12-30T12:44:35.213596",
+          "variance": 0.03827926316482201,
+          "poles": [
+            "panza",
+            "darcy"
+          ],
+          "n_samples": 200
+        },
+        {
+          "time": "2025-12-30T12:44:35.239520",
+          "variance": 0.031247212876941582,
+          "poles": [
+            "alice",
+            "servant"
+          ],
+          "n_samples": 300
+        },
+        {
+          "time": "2025-12-30T12:44:35.253324",
+          "variance": 0.0330424641820581,
+          "poles": [
+            "parent",
+            "sage"
+          ],
+          "n_samples": 400
+        },
+        {
+          "time": "2025-12-30T12:44:35.262012",
+          "variance": 0.03244587988190494,
+          "poles": [
+            "macbeth",
+            "villain"
+          ],
+          "n_samples": 500
+        },
+        {
+          "time": "2025-12-30T12:44:35.276796",
+          "variance": 0.02769829250195753,
+          "poles": [
+            "robot",
+            "teenager"
+          ],
+          "n_samples": 600
+        },
+        {
+          "time": "2025-12-30T12:44:35.297530",
+          "variance": 0.02654604741986377,
+          "poles": [
+            "craftsman",
+            "robot"
+          ],
+          "n_samples": 700
+        },
+        {
+          "time": "2025-12-30T12:44:35.310518",
+          "variance": 0.025958867328000984,
+          "poles": [
+            "craftsman",
+            "robot"
+          ],
+          "n_samples": 729
+        }
+      ]
+    },
+    {
+      "name": "Dim12",
+      "variance": 0.02502123431311136,
+      "negative_pole": "macbeth",
+      "positive_pole": "bride",
+      "negative_features": [
+        "duncans",
+        "questions",
+        "orders",
+        "receives",
+        "practices"
+      ],
+      "positive_features": [
+        "shares",
+        "wedding",
+        "prepares",
+        "using",
+        "weaves"
+      ],
+      "history_updates": [
+        {
+          "time": "2025-12-30T12:44:35.213616",
+          "variance": 0.03365183116757451,
+          "poles": [
+            "darcy",
+            "quixote"
+          ],
+          "n_samples": 200
+        },
+        {
+          "time": "2025-12-30T12:44:35.239543",
+          "variance": 0.0300449198449596,
+          "poles": [
+            "moriarty",
+            "hamlet"
+          ],
+          "n_samples": 300
+        },
+        {
+          "time": "2025-12-30T12:44:35.253353",
+          "variance": 0.0319779943877951,
+          "poles": [
+            "leader",
+            "parent"
+          ],
+          "n_samples": 400
+        },
+        {
+          "time": "2025-12-30T12:44:35.262056",
+          "variance": 0.029818308613378915,
+          "poles": [
+            "idea",
+            "robot"
+          ],
+          "n_samples": 500
+        },
+        {
+          "time": "2025-12-30T12:44:35.276834",
+          "variance": 0.027208575207986956,
+          "poles": [
+            "villain",
+            "priest"
+          ],
+          "n_samples": 600
+        },
+        {
+          "time": "2025-12-30T12:44:35.297574",
+          "variance": 0.02593574356871542,
+          "poles": [
+            "teenager",
+            "robot"
+          ],
+          "n_samples": 700
+        },
+        {
+          "time": "2025-12-30T12:44:35.310568",
+          "variance": 0.02502123431311136,
+          "poles": [
+            "macbeth",
+            "bride"
+          ],
+          "n_samples": 729
+        }
+      ]
+    }
+  ],
+  "agents": [
+    "holmes",
+    "watson",
+    "moriarty",
+    "adler",
+    "alice",
+    "hearts",
+    "bennet",
+    "darcy",
+    "hamlet",
+    "macbeth",
+    "quixote",
+    "panza",
+    "king",
+    "queen",
+    "servant",
+    "leader",
+    "politician",
+    "judge",
+    "child",
+    "teenager",
+    "sage",
+    "parent",
+    "villain",
+    "hero",
+    "angel",
+    "criminal",
+    "priest",
+    "general",
+    "victim",
+    "explorer",
+    "healer",
+    "robot",
+    "storm",
+    "idea",
+    "dog",
+    "fox",
+    "river",
+    "tree",
+    "fire",
+    "widow",
+    "bride",
+    "mob",
+    "refugee",
+    "stranger",
+    "craftsman",
+    "merchant",
+    "scholar",
+    "spy",
+    "soldier"
+  ]
+}
