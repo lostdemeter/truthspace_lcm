@@ -47,6 +47,14 @@ from .gear_message import (
     normalize_input, normalize_output,
     adapt_to_gear_state, adapt_from_gear_state,
 )
+from .folding_deficiency import (
+    FoldingStructure, FoldingDeficiencyDetector,
+    ShapeDeficiency, ShapeDeficiencyType,
+)
+from .gear_improvement_loop import (
+    GearImprovementLoop, GearTestHarness, ShapeBasedTestHarness,
+    DeficiencyType, Deficiency, TestCase, TestResult,
+)
 
 __all__ = [
     # Base classes
@@ -76,4 +84,17 @@ __all__ = [
     'ConversationalChain',
     'KnowledgeItem',
     'ConversationTurn',
+    # Folding deficiency detection (shape-based)
+    'FoldingStructure',
+    'FoldingDeficiencyDetector',
+    'ShapeDeficiency',
+    'ShapeDeficiencyType',
+    # Improvement loop
+    'GearImprovementLoop',
+    'GearTestHarness',
+    'ShapeBasedTestHarness',
+    'DeficiencyType',
+    'Deficiency',
+    'TestCase',
+    'TestResult',
 ]

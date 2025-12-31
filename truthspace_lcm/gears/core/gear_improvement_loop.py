@@ -14,13 +14,17 @@ License: GPLv3
 """
 
 from dataclasses import dataclass, field
-from typing import List, Dict, Any, Optional, Callable, Tuple
+from typing import List, Dict, Any, Optional, Callable, Tuple, Union
 from enum import Enum
 import re
 import json
 from pathlib import Path
 
 from .base import Gear, GearState
+from .folding_deficiency import (
+    FoldingDeficiencyDetector, FoldingStructure,
+    ShapeDeficiency, ShapeDeficiencyType
+)
 
 
 class DeficiencyType(Enum):
@@ -450,6 +454,130 @@ class GearTestHarness:
         return {'error': 'No test cases provided'}
 
 
+class ShapeBasedTestHarness:
+    """
+    Test harness using shape-based (folding) deficiency detection.
+    
+    This is the geometric replacement for GearTestHarness.
+    Uses fold patterns instead of pattern matching.
+    """
+    
+    def __init__(self):
+        self.name = "ShapeBasedTestHarness"
+        self.deficiency_detector = FoldingDeficiencyDetector()
+        self.test_history: List[TestResult] = []
+    
+    def run_test(self, gear: Gear, test_case: TestCase) -> TestResult:
+        """Run a single test case against a gear using shape-based detection."""
+        import time
+        
+        start = time.time()
+        
+        # Run the gear
+        try:
+            if hasattr(gear, 'chat'):
+                output = gear.chat(test_case.input)
+            elif hasattr(gear, 'process'):
+                result = gear.process({'input': test_case.input})
+                output = result.get('output', str(result))
+            else:
+                output = str(gear(test_case.input))
+        except Exception as e:
+            output = f"Error: {str(e)}"
+        
+        execution_time = time.time() - start
+        
+        # Detect deficiency using shape-based method
+        # Use the input as the expected structure template
+        shape_deficiency = self.deficiency_detector.detect(test_case.input, output)
+        
+        # Convert ShapeDeficiency to legacy Deficiency format for compatibility
+        deficiencies = self._convert_shape_deficiency(shape_deficiency)
+        
+        # Calculate score based on shape similarity
+        score = self._calculate_score(shape_deficiency)
+        
+        # Determine pass/fail
+        passed = score >= 0.7 and shape_deficiency.severity < 0.5
+        
+        result = TestResult(
+            test_case=test_case,
+            output=output,
+            passed=passed,
+            score=score,
+            deficiencies=deficiencies,
+            execution_time=execution_time
+        )
+        
+        self.test_history.append(result)
+        return result
+    
+    def _convert_shape_deficiency(self, shape_def: ShapeDeficiency) -> List[Deficiency]:
+        """Convert ShapeDeficiency to legacy Deficiency format."""
+        if shape_def.type == ShapeDeficiencyType.NONE:
+            return []
+        
+        # Map shape types to legacy types
+        type_map = {
+            ShapeDeficiencyType.INCOMPLETE: DeficiencyType.INCOMPLETE,
+            ShapeDeficiencyType.MISSING_STRUCTURE: DeficiencyType.MISSING_CONTENT,
+            ShapeDeficiencyType.WRONG_STRUCTURE: DeficiencyType.WRONG_FORMAT,
+            ShapeDeficiencyType.PARTIAL: DeficiencyType.INCOMPLETE,
+        }
+        
+        legacy_type = type_map.get(shape_def.type, DeficiencyType.INCOMPLETE)
+        
+        return [Deficiency(
+            type=legacy_type,
+            description=shape_def.description,
+            severity=shape_def.severity,
+            suggested_fix=shape_def.suggested_fix,
+            evidence=f"Shape similarity: {shape_def.shape_similarity:.3f}, Fold ratio: {shape_def.fold_ratio:.2f}"
+        )]
+    
+    def _calculate_score(self, shape_def: ShapeDeficiency) -> float:
+        """Calculate quality score from shape deficiency."""
+        # Score is primarily based on shape similarity
+        base_score = shape_def.shape_similarity
+        
+        # Adjust for fold ratio
+        if shape_def.fold_ratio < 0.5:
+            base_score *= 0.8
+        
+        # Penalize for severity
+        base_score -= shape_def.severity * 0.3
+        
+        return max(0.0, min(1.0, base_score))
+    
+    def run_suite(self, gear: Gear, test_cases: List[TestCase]) -> Dict[str, Any]:
+        """Run a suite of test cases."""
+        results = [self.run_test(gear, tc) for tc in test_cases]
+        
+        passed = sum(1 for r in results if r.passed)
+        total = len(results)
+        avg_score = sum(r.score for r in results) / total if total > 0 else 0
+        
+        all_deficiencies = []
+        for r in results:
+            all_deficiencies.extend(r.deficiencies)
+        
+        by_type = {}
+        for d in all_deficiencies:
+            if d.type not in by_type:
+                by_type[d.type] = []
+            by_type[d.type].append(d)
+        
+        return {
+            'passed': passed,
+            'total': total,
+            'pass_rate': passed / total if total > 0 else 0,
+            'avg_score': avg_score,
+            'results': results,
+            'deficiencies_by_type': by_type,
+            'most_common_deficiency': max(by_type.keys(), key=lambda k: len(by_type[k])) if by_type else None
+        }
+
+
 class GearImprovementLoop:
     """
     The main improvement loop that orchestrates:
@@ -462,11 +590,19 @@ class GearImprovementLoop:
     This is the self-improving meta-gear.
     """
     
-    def __init__(self):
+    def __init__(self, use_shape_based: bool = True):
         self.name = "GearImprovementLoop"
-        self.test_harness = GearTestHarness()
+        
+        # Use shape-based (folding) detection by default
+        self.use_shape_based = use_shape_based
+        if use_shape_based:
+            self.test_harness = ShapeBasedTestHarness()
+            self.shape_detector = FoldingDeficiencyDetector()
+        else:
+            self.test_harness = GearTestHarness()
+        
         self.chain_builder = GearChainBuilder()
-        self.deficiency_detector = DeficiencyDetectorGear()
+        self.deficiency_detector = DeficiencyDetectorGear()  # Keep for backward compatibility
         
         # Fix gear templates (patterns for creating fix gears)
         self.fix_templates: Dict[DeficiencyType, Callable] = {}
