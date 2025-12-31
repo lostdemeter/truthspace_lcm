@@ -2,30 +2,54 @@
 OpenAI-Compatible API Server for Emergent Conversational Chain
 
 Provides a REST API compatible with OpenAI's chat completions endpoint,
-allowing the emergent chat to be used with tools like Open WebUI.
+allowing the emergent chat to be used with tools like Open WebUI or Goose.
 
 Key feature: All responses are EMERGENT - no LLM during conversation.
 The LLM is only used as a knowledge resource during corpus building.
 
 Run with:
     cd /home/thorin/truthspace-lcm
-    uvicorn truthspace_lcm.gears.practical_applications.chat.api_server:app --reload --port 8000
+    python -m truthspace_lcm.gears.practical_applications.chat.api_server --port 8001
+    
+    # Or with uvicorn for auto-reload during development:
+    uvicorn truthspace_lcm.gears.practical_applications.chat.api_server:app --reload --port 8001
 
-Load a book (starts with empty corpus):
-    curl -X POST http://localhost:8000/load_book -H "Content-Type: application/json" -d '{"book_name": "moby_dick"}'
+API Endpoints:
+    GET  /health          - Health check
+    GET  /stats           - Engine statistics
+    GET  /topics          - List known topics
+    GET  /corpus          - Corpus information
+    GET  /books           - List available books
+    POST /learn           - Learn a new topic: {"topic": "George Washington"}
+    POST /save            - Save corpus: {"path": "data/corpus.json"}
+    POST /reload          - Reload corpus: {"path": "data/corpus.json"}
+    POST /build           - Run one corpus build iteration
+    POST /load_book       - Load a book: {"book_name": "moby_dick"}
+    POST /v1/chat/completions - OpenAI-compatible chat endpoint
 
-Chat (knowledge query):
-    curl -X POST http://localhost:8000/v1/chat/completions -H "Content-Type: application/json" -d '{
+Chat Commands (via chat interface):
+    /learn <topic>  - Learn about a topic (e.g., "/learn George Washington")
+    /save [path]    - Save corpus to file
+    /reload [path]  - Reload corpus from file
+    /topics         - List known topics
+    /stats          - Show statistics
+    /help           - Show help
+
+Example workflow with curl:
+    # Learn a topic
+    curl -X POST http://localhost:8001/learn -H "Content-Type: application/json" -d '{"topic": "George Washington"}'
+    
+    # Save the corpus
+    curl -X POST http://localhost:8001/save -H "Content-Type: application/json" -d '{"path": "data/chat_corpus.json"}'
+    
+    # Ask about the topic
+    curl -X POST http://localhost:8001/v1/chat/completions -H "Content-Type: application/json" -d '{
         "model": "emergent-chat",
-        "messages": [{"role": "user", "content": "Who is Captain Ahab?"}]
+        "messages": [{"role": "user", "content": "Who was George Washington?"}]
     }'
-
-Tool call (creates files/directories):
-    curl -X POST http://localhost:8000/v1/chat/completions -H "Content-Type: application/json" -d '{
-        "model": "emergent-chat",
-        "messages": [{"role": "user", "content": "Create a directory called test with a file in it"}]
-    }'
-    # Then send "yes" to confirm execution
+    
+    # Reload after restart
+    curl -X POST http://localhost:8001/reload -H "Content-Type: application/json" -d '{"path": "data/chat_corpus.json"}'
 
 Author: Lesley Gushurst
 License: GPLv3
@@ -196,11 +220,74 @@ class EmergentChatEngine:
             return "Cancelled."
         
         # Handle special commands
-        if user_message.lower().startswith("learn about"):
-            topic = user_message[11:].strip()
+        if user_message.lower().startswith("/learn "):
+            topic = user_message[7:].strip()
             if self.chain.learn_topic(topic):
-                return f"I've learned about {topic}. You can now ask me questions about it."
-            return f"I couldn't learn about {topic}. Please try again."
+                stats = self.chain.get_stats()
+                return f"I've learned about {topic}. I now know {stats['topics']} topics with {stats['corpus_items']} facts. You can ask me questions about {topic}."
+            return f"I couldn't learn about {topic}. Make sure the LLM is running."
+        
+        if user_message.lower().startswith("learn about "):
+            topic = user_message[12:].strip()
+            if self.chain.learn_topic(topic):
+                stats = self.chain.get_stats()
+                return f"I've learned about {topic}. I now know {stats['topics']} topics with {stats['corpus_items']} facts. You can ask me questions about {topic}."
+            return f"I couldn't learn about {topic}. Make sure the LLM is running."
+        
+        if user_message.lower() == "/save":
+            path = "data/chat_corpus.json"
+            full_path = str(Path(__file__).parent.parent.parent.parent.parent / path)
+            Path(full_path).parent.mkdir(parents=True, exist_ok=True)
+            self.chain.save_corpus(full_path)
+            stats = self.chain.get_stats()
+            return f"Saved corpus to {path}. {stats['topics']} topics, {stats['corpus_items']} items."
+        
+        if user_message.lower().startswith("/save "):
+            path = user_message[6:].strip()
+            if not Path(path).is_absolute():
+                path = str(Path(__file__).parent.parent.parent.parent.parent / path)
+            Path(path).parent.mkdir(parents=True, exist_ok=True)
+            self.chain.save_corpus(path)
+            stats = self.chain.get_stats()
+            return f"Saved corpus. {stats['topics']} topics, {stats['corpus_items']} items."
+        
+        if user_message.lower() == "/reload":
+            path = "data/chat_corpus.json"
+            full_path = str(Path(__file__).parent.parent.parent.parent.parent / path)
+            if Path(full_path).exists():
+                self.chain.load_corpus(full_path)
+                stats = self.chain.get_stats()
+                return f"Reloaded corpus from {path}. {stats['topics']} topics, {stats['corpus_items']} items."
+            return f"No corpus file found at {path}. Use /save first."
+        
+        if user_message.lower().startswith("/reload "):
+            path = user_message[8:].strip()
+            if not Path(path).is_absolute():
+                path = str(Path(__file__).parent.parent.parent.parent.parent / path)
+            if Path(path).exists():
+                self.chain.load_corpus(path)
+                stats = self.chain.get_stats()
+                return f"Reloaded corpus. {stats['topics']} topics, {stats['corpus_items']} items."
+            return f"No corpus file found at {path}."
+        
+        if user_message.lower() == "/topics":
+            topics = self.chain.list_topics()[:30]
+            if topics:
+                return f"I know about ({len(self.chain.topics)} total): {', '.join(topics)}"
+            return "I don't know any topics yet. Use /learn <topic> to teach me."
+        
+        if user_message.lower() == "/stats":
+            stats = self.chain.get_stats()
+            return f"Topics: {stats['topics']}, Facts: {stats['corpus_items']}, Definitions: {stats['definitions']}, LLM calls during chat: {stats['conversation_calls']} (should be 0)"
+        
+        if user_message.lower() == "/help":
+            return """Available commands:
+/learn <topic> - Learn about a new topic (uses LLM)
+/save [path]   - Save corpus (default: data/chat_corpus.json)
+/reload [path] - Reload corpus from file
+/topics        - List known topics
+/stats         - Show statistics
+/help          - Show this help"""
         
         if user_message.lower() == "what topics do you know?":
             topics = self.chain.list_topics()[:20]
@@ -342,16 +429,116 @@ def create_app(
     
     @app.post("/learn")
     async def learn_topic(request: Request):
-        """Learn about a new topic."""
+        """Learn about a new topic using LLM as knowledge resource."""
         data = await request.json()
         topic = data.get("topic", "")
         if not topic:
             raise HTTPException(status_code=400, detail="Topic required")
         
+        logger.info(f"Learning about topic: {topic}")
         success = engine.chain.learn_topic(topic)
         if success:
-            return {"status": "success", "topic": topic}
+            stats = engine.chain.get_stats()
+            return {
+                "status": "success", 
+                "topic": topic,
+                "topics": stats['topics'],
+                "corpus_items": stats['corpus_items'],
+            }
         raise HTTPException(status_code=500, detail="Failed to learn topic")
+    
+    @app.post("/save")
+    async def save_corpus(request: Request):
+        """Save the current corpus to a file."""
+        data = await request.json()
+        path = data.get("path", "data/chat_corpus.json")
+        
+        # Resolve relative paths
+        if not Path(path).is_absolute():
+            path = str(Path(__file__).parent.parent.parent.parent.parent / path)
+        
+        # Ensure directory exists
+        Path(path).parent.mkdir(parents=True, exist_ok=True)
+        
+        logger.info(f"Saving corpus to: {path}")
+        engine.chain.save_corpus(path)
+        
+        stats = engine.chain.get_stats()
+        default_items = len(engine.chain.default_corpus.all_items) if engine.chain.default_corpus else 0
+        
+        return {
+            "status": "success",
+            "path": path,
+            "topics": stats['topics'],
+            "corpus_items": stats['corpus_items'],
+            "default_corpus_items": default_items,
+        }
+    
+    @app.post("/reload")
+    async def reload_corpus(request: Request):
+        """Reload the corpus from a file."""
+        data = await request.json()
+        path = data.get("path", "data/chat_corpus.json")
+        
+        # Resolve relative paths
+        if not Path(path).is_absolute():
+            path = str(Path(__file__).parent.parent.parent.parent.parent / path)
+        
+        if not Path(path).exists():
+            raise HTTPException(status_code=404, detail=f"Corpus file not found: {path}")
+        
+        logger.info(f"Reloading corpus from: {path}")
+        engine.chain.load_corpus(path)
+        
+        stats = engine.chain.get_stats()
+        default_items = len(engine.chain.default_corpus.all_items) if engine.chain.default_corpus else 0
+        
+        return {
+            "status": "success",
+            "path": path,
+            "topics": stats['topics'],
+            "corpus_items": stats['corpus_items'],
+            "default_corpus_items": default_items,
+        }
+    
+    @app.get("/corpus")
+    async def get_corpus_info():
+        """Get information about the current corpus."""
+        stats = engine.chain.get_stats()
+        
+        result = {
+            "topics": stats['topics'],
+            "corpus_items": stats['corpus_items'],
+            "definitions": stats['definitions'],
+            "dimensions": stats['dimensions'],
+            "conversation_calls": stats['conversation_calls'],
+        }
+        
+        if engine.chain.default_corpus:
+            dc_stats = engine.chain.default_corpus.get_stats()
+            result['default_corpus'] = {
+                "total_items": dc_stats['total_items'],
+                "categories": dc_stats['categories'],
+                "build_iterations": dc_stats['build_stats']['iterations'],
+            }
+        
+        return result
+    
+    @app.post("/build")
+    async def build_corpus():
+        """Run one iteration of corpus self-building."""
+        if not engine.chain.default_corpus:
+            raise HTTPException(status_code=400, detail="Default corpus not available")
+        
+        result = engine.chain.default_corpus.build_iteration()
+        
+        return {
+            "status": "success",
+            "iteration": result['iteration'],
+            "items_added": result['items_added'],
+            "items_refined": result['items_refined'],
+            "total_items": len(engine.chain.default_corpus.all_items),
+        }
     
     @app.get("/books")
     async def list_books():

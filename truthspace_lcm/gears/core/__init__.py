@@ -55,6 +55,12 @@ from .gear_improvement_loop import (
     GearImprovementLoop, GearTestHarness, ShapeBasedTestHarness,
     DeficiencyType, Deficiency, TestCase, TestResult,
 )
+from .chat_improvement import (
+    ChatImprovementGear, ResponseTemplate, ImprovementResult,
+)
+from .corpus_builder import (
+    SelfBuildingCorpusGear, CorpusItem, CorpusCategory,
+)
 
 __all__ = [
     # Base classes
@@ -97,4 +103,12 @@ __all__ = [
     'Deficiency',
     'TestCase',
     'TestResult',
+    # Chat improvement
+    'ChatImprovementGear',
+    'ResponseTemplate',
+    'ImprovementResult',
+    # Self-building corpus
+    'SelfBuildingCorpusGear',
+    'CorpusItem',
+    'CorpusCategory',
 ]

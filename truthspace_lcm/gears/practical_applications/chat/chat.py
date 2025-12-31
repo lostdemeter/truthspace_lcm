@@ -13,6 +13,8 @@ License: GPLv3
 """
 
 import sys
+import threading
+import time
 from typing import Optional, List
 from pathlib import Path
 
@@ -83,6 +85,12 @@ class EmergentChat:
         
         # Pending commands awaiting confirmation
         self.pending_commands: List[str] = []
+        
+        # Background corpus building
+        self._corpus_build_thread = None
+        self._stop_building = False
+        self.auto_build = False
+        self.build_interval = 60  # seconds
     
     def build_knowledge(self, seed_topics: List[str] = None, expand: bool = True):
         """Build knowledge corpus from seed topics."""
@@ -113,6 +121,44 @@ class EmergentChat:
         """Save corpus to file for later use."""
         self.chain.save_corpus(path)
         print(f"Saved corpus to {path}")
+    
+    def start_auto_build(self):
+        """Start background corpus building."""
+        if self._corpus_build_thread and self._corpus_build_thread.is_alive():
+            return False
+        
+        self._stop_building = False
+        self.auto_build = True
+        self._corpus_build_thread = threading.Thread(
+            target=self._background_build_loop, 
+            daemon=True
+        )
+        self._corpus_build_thread.start()
+        return True
+    
+    def stop_auto_build(self):
+        """Stop background corpus building."""
+        self._stop_building = True
+        self.auto_build = False
+        if self._corpus_build_thread:
+            self._corpus_build_thread.join(timeout=2)
+    
+    def _background_build_loop(self):
+        """Background loop for corpus building."""
+        while not self._stop_building and self.chain.default_corpus:
+            try:
+                result = self.chain.default_corpus.build_iteration()
+                if self.debug and (result['items_added'] > 0 or result['items_refined'] > 0):
+                    print(f"\n[BUILD] +{result['items_added']} items, {result['items_refined']} refined")
+            except Exception as e:
+                if self.debug:
+                    print(f"\n[BUILD ERROR] {e}")
+            
+            # Wait for next iteration
+            for _ in range(self.build_interval):
+                if self._stop_building:
+                    break
+                time.sleep(1)
     
     def query(self, question: str) -> str:
         """Process a query through smart routing (knowledge or tools)."""
@@ -245,12 +291,56 @@ class EmergentChat:
         if cmd.startswith('/save '):
             path = cmd[6:].strip()
             self.save_corpus(path)
-            return f"Saved corpus to: {path}"
+            default_items = len(self.chain.default_corpus.all_items) if self.chain.default_corpus else 0
+            return f"Saved corpus to: {path}\n  Knowledge items: {len(self.chain.corpus)}\n  Default corpus items: {default_items}"
         
         if cmd.startswith('/load '):
             path = cmd[6:].strip()
             self.load_corpus(path)
-            return f"Loaded corpus from: {path}"
+            default_items = len(self.chain.default_corpus.all_items) if self.chain.default_corpus else 0
+            return f"Loaded corpus from: {path}\n  Knowledge items: {len(self.chain.corpus)}\n  Default corpus items: {default_items}"
+        
+        if cmd == '/build':
+            # Run one iteration of corpus building
+            if self.chain.default_corpus:
+                result = self.chain.default_corpus.build_iteration()
+                return f"Build iteration {result['iteration']}:\n  Items added: {result['items_added']}\n  Items refined: {result['items_refined']}\n  Total items: {len(self.chain.default_corpus.all_items)}"
+            return "Default corpus not available"
+        
+        if cmd == '/corpus':
+            # Show default corpus stats
+            if self.chain.default_corpus:
+                stats = self.chain.default_corpus.get_stats()
+                result = f"Default Corpus Statistics:\n"
+                result += f"  Total items: {stats['total_items']}\n"
+                result += f"  Categories: {stats['categories']}\n"
+                result += f"  Build iterations: {stats['build_stats']['iterations']}\n"
+                result += f"  Items added: {stats['build_stats']['items_added']}\n"
+                result += f"  Auto-build: {'ON' if self.auto_build else 'OFF'}\n"
+                result += f"\nCategory breakdown:\n"
+                for name, cat_stats in sorted(stats['category_stats'].items()):
+                    result += f"  {name}: {cat_stats['items']} items\n"
+                return result.strip()
+            return "Default corpus not available"
+        
+        if cmd == '/autobuild':
+            # Toggle auto-build
+            if self.auto_build:
+                self.stop_auto_build()
+                return "Auto-build: OFF"
+            else:
+                if self.start_auto_build():
+                    return f"Auto-build: ON (every {self.build_interval}s)"
+                return "Failed to start auto-build"
+        
+        if cmd.startswith('/autobuild '):
+            # Set auto-build interval
+            try:
+                interval = int(cmd[11:].strip())
+                self.build_interval = max(10, interval)  # Minimum 10 seconds
+                return f"Auto-build interval set to {self.build_interval}s"
+            except ValueError:
+                return "Usage: /autobuild <seconds>"
         
         if cmd == '/books':
             books = self.chain.get_available_books()
@@ -280,8 +370,12 @@ Emergent Chat - Commands:
   /debug          Toggle debug mode
   /learn <topic>  Learn about a new topic
   /info <topic>   Show info about a topic
-  /save <path>    Save corpus to file
-  /load <path>    Load corpus from file
+  /save <path>    Save corpus to file (includes default corpus)
+  /load <path>    Load corpus from file (resumes where you left off)
+  /corpus         Show default corpus statistics
+  /build          Run one iteration of corpus self-building
+  /autobuild      Toggle background auto-building ON/OFF
+  /autobuild <N>  Set auto-build interval to N seconds
   /books          List available literary works
   /book <name>    Load a literary work (e.g., /book moby_dick)
   /quit, /q       Exit
@@ -328,6 +422,9 @@ Tool calls use the GearOrchestrator to plan and execute commands.
                 if user_input.startswith('/'):
                     response = self.handle_command(user_input)
                     if response is None:
+                        # Stop auto-build before exiting
+                        if self.auto_build:
+                            self.stop_auto_build()
                         print("\nGoodbye!")
                         break
                     print(f"\n{response}\n")

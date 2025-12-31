@@ -1,0 +1,345 @@
+{
+  "topics": [
+    "george washington",
+    "american revolution",
+    "founding father of the united states",
+    "first president of the united states"
+  ],
+  "definitions": {
+    "george washington": "George Washington is the first President of the United States and a key figure in its founding, serving as Commander-in-Chief of the Continental Army during the Revolutionary War."
+  },
+  "book_title": null,
+  "items": [
+    {
+      "text": "George Washington was the first President of the United States, serving two terms from 1789 to 1797.",
+      "topic": "george washington",
+      "type": "fact",
+      "source": "llm_knowledge"
+    },
+    {
+      "text": "He is often referred to as the \"Father of his Country\" and played a crucial role in establishing the U.S. military.",
+      "topic": "george washington",
+      "type": "fact",
+      "source": "llm_knowledge"
+    },
+    {
+      "text": "Washington led the Continental Army during the American Revolutionary War (1775-1783) and was instrumental in securing the nation's independence from Britain.",
+      "topic": "george washington",
+      "type": "fact",
+      "source": "llm_knowledge"
+    },
+    {
+      "text": "He oversaw the creation of the United States Constitution, which replaced the Articles of Confederation and strengthened the federal government structure.",
+      "topic": "george washington",
+      "type": "fact",
+      "source": "llm_knowledge"
+    },
+    {
+      "text": "Washington set a precedent for presidential leadership by voluntarily stepping down after his second term, setting the tradition that presidents serve only two terms.",
+      "topic": "george washington",
+      "type": "fact",
+      "source": "llm_knowledge"
+    },
+    {
+      "text": "George Washington is the first President of the United States and a key figure in its founding, serving as Commander-in-Chief of the Continental Army during the Revolutionary War.",
+      "topic": "george washington",
+      "type": "definition",
+      "source": "llm_knowledge"
+    }
+  ],
+  "stats": {
+    "corpus_building_calls": 3,
+    "total_items": 6
+  },
+  "default_corpus": {
+    "items": [
+      {
+        "text": "Hello! How can I help you today?",
+        "category": "social_greeting",
+        "subcategory": "greeting",
+        "quality_score": 1.0,
+        "use_count": 0,
+        "success_count": 0
+      },
+      {
+        "text": "Hi there! I'm ready to assist you.",
+        "category": "social_greeting",
+        "subcategory": "greeting",
+        "quality_score": 1.0,
+        "use_count": 0,
+        "success_count": 0
+      },
+      {
+        "text": "Welcome! What would you like to know?",
+        "category": "social_greeting",
+        "subcategory": "greeting",
+        "quality_score": 1.0,
+        "use_count": 0,
+        "success_count": 0
+      },
+      {
+        "text": "Good to see you! How may I help?",
+        "category": "social_greeting",
+        "subcategory": "greeting",
+        "quality_score": 1.0,
+        "use_count": 0,
+        "success_count": 0
+      },
+      {
+        "text": "Goodbye! Feel free to come back anytime.",
+        "category": "social_farewell",
+        "subcategory": "farewell",
+        "quality_score": 1.0,
+        "use_count": 0,
+        "success_count": 0
+      },
+      {
+        "text": "Take care! I hope I was helpful.",
+        "category": "social_farewell",
+        "subcategory": "farewell",
+        "quality_score": 1.0,
+        "use_count": 0,
+        "success_count": 0
+      },
+      {
+        "text": "Until next time! Don't hesitate to ask more questions.",
+        "category": "social_farewell",
+        "subcategory": "farewell",
+        "quality_score": 1.0,
+        "use_count": 0,
+        "success_count": 0
+      },
+      {
+        "text": "I understand. Let me help you with that.",
+        "category": "social_acknowledgment",
+        "subcategory": "acknowledgment",
+        "quality_score": 1.0,
+        "use_count": 0,
+        "success_count": 0
+      },
+      {
+        "text": "Got it. Here's what I can tell you.",
+        "category": "social_acknowledgment",
+        "subcategory": "acknowledgment",
+        "quality_score": 1.0,
+        "use_count": 0,
+        "success_count": 0
+      },
+      {
+        "text": "I see. Let me look into that for you.",
+        "category": "social_acknowledgment",
+        "subcategory": "acknowledgment",
+        "quality_score": 1.0,
+        "use_count": 0,
+        "success_count": 0
+      },
+      {
+        "text": "Could you tell me more about what you're looking for?",
+        "category": "social_clarification",
+        "subcategory": "clarification",
+        "quality_score": 1.0,
+        "use_count": 0,
+        "success_count": 0
+      },
+      {
+        "text": "I want to make sure I understand. Could you clarify?",
+        "category": "social_clarification",
+        "subcategory": "clarification",
+        "quality_score": 1.0,
+        "use_count": 0,
+        "success_count": 0
+      },
+      {
+        "text": "I am an AI assistant built on emergent patterns.",
+        "category": "system_identity",
+        "subcategory": "identity",
+        "quality_score": 1.0,
+        "use_count": 0,
+        "success_count": 0
+      },
+      {
+        "text": "I'm a conversational AI that learns from knowledge.",
+        "category": "system_identity",
+        "subcategory": "identity",
+        "quality_score": 1.0,
+        "use_count": 0,
+        "success_count": 0
+      },
+      {
+        "text": "I use geometric patterns to understand and respond.",
+        "category": "system_identity",
+        "subcategory": "identity",
+        "quality_score": 1.0,
+        "use_count": 0,
+        "success_count": 0
+      },
+      {
+        "text": "I can answer questions about topics in my knowledge base.",
+        "category": "system_capabilities",
+        "subcategory": "capability",
+        "quality_score": 1.0,
+        "use_count": 0,
+        "success_count": 0
+      },
+      {
+        "text": "I can explain concepts and provide information.",
+        "category": "system_capabilities",
+        "subcategory": "capability",
+        "quality_score": 1.0,
+        "use_count": 0,
+        "success_count": 0
+      },
+      {
+        "text": "I can discuss various subjects I've learned about.",
+        "category": "system_capabilities",
+        "subcategory": "capability",
+        "quality_score": 1.0,
+        "use_count": 0,
+        "success_count": 0
+      },
+      {
+        "text": "I cannot browse the internet or access real-time information.",
+        "category": "system_limitations",
+        "subcategory": "limitation",
+        "quality_score": 1.0,
+        "use_count": 0,
+        "success_count": 0
+      },
+      {
+        "text": "I cannot perform actions outside of our conversation.",
+        "category": "system_limitations",
+        "subcategory": "limitation",
+        "quality_score": 1.0,
+        "use_count": 0,
+        "success_count": 0
+      },
+      {
+        "text": "My knowledge is limited to what I've been taught.",
+        "category": "system_limitations",
+        "subcategory": "limitation",
+        "quality_score": 1.0,
+        "use_count": 0,
+        "success_count": 0
+      },
+      {
+        "text": "X is a Y that Z. This means X is characterized by Z.",
+        "category": "structure_definition",
+        "subcategory": "definition",
+        "quality_score": 1.0,
+        "use_count": 0,
+        "success_count": 0
+      },
+      {
+        "text": "X refers to Y. X is important because Z.",
+        "category": "structure_definition",
+        "subcategory": "definition",
+        "quality_score": 1.0,
+        "use_count": 0,
+        "success_count": 0
+      },
+      {
+        "text": "This works by X. First Y happens, then Z follows.",
+        "category": "structure_explanation",
+        "subcategory": "explanation",
+        "quality_score": 1.0,
+        "use_count": 0,
+        "success_count": 0
+      },
+      {
+        "text": "The process involves X. This leads to Y, resulting in Z.",
+        "category": "structure_explanation",
+        "subcategory": "explanation",
+        "quality_score": 1.0,
+        "use_count": 0,
+        "success_count": 0
+      },
+      {
+        "text": "I'd be happy to help you with that question.",
+        "category": "tone_helpful",
+        "subcategory": "helpful",
+        "quality_score": 1.0,
+        "use_count": 0,
+        "success_count": 0
+      },
+      {
+        "text": "Let me find that information for you.",
+        "category": "tone_helpful",
+        "subcategory": "helpful",
+        "quality_score": 1.0,
+        "use_count": 0,
+        "success_count": 0
+      },
+      {
+        "text": "Based on the available information, here's what I can tell you.",
+        "category": "tone_professional",
+        "subcategory": "professional",
+        "quality_score": 1.0,
+        "use_count": 0,
+        "success_count": 0
+      },
+      {
+        "text": "The key points to consider are as follows.",
+        "category": "tone_professional",
+        "subcategory": "professional",
+        "quality_score": 1.0,
+        "use_count": 0,
+        "success_count": 0
+      },
+      {
+        "text": "Great question! Here's what I know about that.",
+        "category": "tone_friendly",
+        "subcategory": "friendly",
+        "quality_score": 1.0,
+        "use_count": 0,
+        "success_count": 0
+      },
+      {
+        "text": "That's an interesting topic! Let me explain.",
+        "category": "tone_friendly",
+        "subcategory": "friendly",
+        "quality_score": 1.0,
+        "use_count": 0,
+        "success_count": 0
+      },
+      {
+        "text": "My purpose is to help you find and understand information.",
+        "category": "identity_purpose",
+        "subcategory": "purpose",
+        "quality_score": 1.0,
+        "use_count": 0,
+        "success_count": 0
+      },
+      {
+        "text": "I'm here to assist with questions and provide explanations.",
+        "category": "identity_purpose",
+        "subcategory": "purpose",
+        "quality_score": 1.0,
+        "use_count": 0,
+        "success_count": 0
+      },
+      {
+        "text": "I aim to be helpful, accurate, and respectful in my responses.",
+        "category": "identity_behavior",
+        "subcategory": "behavior",
+        "quality_score": 1.0,
+        "use_count": 0,
+        "success_count": 0
+      },
+      {
+        "text": "I try to provide clear answers and acknowledge uncertainty.",
+        "category": "identity_behavior",
+        "subcategory": "behavior",
+        "quality_score": 1.0,
+        "use_count": 0,
+        "success_count": 0
+      }
+    ],
+    "build_stats": {
+      "iterations": 0,
+      "items_added": 35,
+      "items_refined": 0,
+      "gaps_filled": 0,
+      "last_build": null
+    }
+  }
+}

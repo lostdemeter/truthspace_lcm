@@ -1,0 +1,18 @@
+[Unit]
+Description=TruthSpace Corpus Generation Daemon
+After=network.target
+
+[Service]
+Type=simple
+User=%i
+WorkingDirectory=/home/thorin/truthspace-lcm
+ExecStart=/usr/bin/python3 /home/thorin/truthspace-lcm/scripts/corpus_daemon.py --corpus data/chat_corpus.json --interval 60 --save-interval 10
+Restart=on-failure
+RestartSec=10
+
+# Logging
+StandardOutput=append:/home/thorin/truthspace-lcm/logs/corpus_daemon.log
+StandardError=append:/home/thorin/truthspace-lcm/logs/corpus_daemon.log
+
+[Install]
+WantedBy=multi-user.target

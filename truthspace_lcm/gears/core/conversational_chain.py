@@ -140,6 +140,23 @@ class ConversationalChain(GearProtocol):
         except ImportError:
             pass
         
+        # Shape-based chat improvement gear (automatic, no LLM needed)
+        self.chat_improvement_gear: Optional[Any] = None
+        self.auto_improve = True  # Enabled by default
+        try:
+            from .chat_improvement import ChatImprovementGear
+            self.chat_improvement_gear = ChatImprovementGear()
+        except ImportError:
+            pass
+        
+        # Self-building corpus for social/system responses
+        self.default_corpus: Optional[Any] = None
+        try:
+            from .corpus_builder import SelfBuildingCorpusGear
+            self.default_corpus = SelfBuildingCorpusGear(auto_build=False)
+        except ImportError:
+            pass
+        
         # Knowledge corpus
         self.corpus: List[KnowledgeItem] = []
         self.topics: Set[str] = set()
@@ -325,7 +342,12 @@ Just the topic names, one per line:"""
             ]
     
     def load_corpus(self, path: str):
-        """Load corpus from JSON file."""
+        """
+        Load corpus from JSON file.
+        
+        This loads both the knowledge corpus and the default corpus
+        (social/system responses) if they were saved together.
+        """
         corpus_path = Path(path).resolve()
         self.corpus_path = str(corpus_path)
         
@@ -336,6 +358,7 @@ Just the topic names, one per line:"""
         if 'book_title' in data:
             self.book_title = data['book_title']
         
+        # Load knowledge items
         for item in data.get('items', []):
             self.add_knowledge(
                 text=item.get('text', ''),
@@ -344,11 +367,52 @@ Just the topic names, one per line:"""
                 source=item.get('source', 'file'),
             )
         
+        # Load default corpus if present
+        if 'default_corpus' in data and self.default_corpus:
+            self._load_default_corpus(data['default_corpus'])
+        
         self.semantic.learn_dimensions()
         self._discover_templates()
     
-    def save_corpus(self, path: str):
-        """Save corpus to JSON file."""
+    def _load_default_corpus(self, data: Dict):
+        """Load the default corpus from saved data."""
+        if not self.default_corpus:
+            return
+        
+        # Import CorpusItem
+        from .corpus_builder import CorpusItem
+        
+        # Clear existing items
+        self.default_corpus.all_items = []
+        for category in self.default_corpus.categories.values():
+            category.items = []
+        
+        # Load items
+        for item_data in data.get('items', []):
+            item = CorpusItem(
+                text=item_data['text'],
+                category=item_data['category'],
+                subcategory=item_data['subcategory'],
+                quality_score=item_data.get('quality_score', 1.0),
+                use_count=item_data.get('use_count', 0),
+                success_count=item_data.get('success_count', 0),
+            )
+            self.default_corpus.all_items.append(item)
+            if item.category in self.default_corpus.categories:
+                self.default_corpus.categories[item.category].items.append(item)
+        
+        # Load build stats
+        if 'build_stats' in data:
+            self.default_corpus.build_stats = data['build_stats']
+    
+    def save_corpus(self, path: str, include_default_corpus: bool = True):
+        """
+        Save corpus to JSON file.
+        
+        Args:
+            path: Path to save the corpus
+            include_default_corpus: If True, also save the self-building default corpus
+        """
         data = {
             'topics': list(self.topics),
             'definitions': self.topic_definitions,
@@ -367,6 +431,24 @@ Just the topic names, one per line:"""
                 'total_items': len(self.corpus),
             }
         }
+        
+        # Include default corpus if available
+        if include_default_corpus and self.default_corpus:
+            data['default_corpus'] = {
+                'items': [
+                    {
+                        'text': item.text,
+                        'category': item.category,
+                        'subcategory': item.subcategory,
+                        'quality_score': item.quality_score,
+                        'use_count': item.use_count,
+                        'success_count': item.success_count,
+                    }
+                    for item in self.default_corpus.all_items
+                ],
+                'build_stats': self.default_corpus.build_stats,
+            }
+        
         with open(path, 'w') as f:
             json.dump(data, f, indent=2)
     
@@ -672,6 +754,12 @@ Just the topic names, one per line:"""
             result = self.refinement_gear.evaluate_and_refine(response, main_topic)
             response = result.refined
         
+        # Shape-based auto-improvement (no LLM needed)
+        if self.auto_improve and self.chat_improvement_gear:
+            improvement = self.chat_improvement_gear.improve_response(user_input, response)
+            if improvement.improvement_applied:
+                response = improvement.improved
+        
         # Store in history
         self.history.append(ConversationTurn(
             user_input=user_input,
@@ -706,6 +794,13 @@ Just the topic names, one per line:"""
         
         response = result.refined if result else original
         
+        # Shape-based auto-improvement (no LLM needed)
+        improvement = None
+        if self.auto_improve and self.chat_improvement_gear:
+            improvement = self.chat_improvement_gear.improve_response(user_input, response)
+            if improvement.improvement_applied:
+                response = improvement.improved
+        
         # Store in history
         self.history.append(ConversationTurn(
             user_input=user_input,
@@ -721,6 +816,11 @@ Just the topic names, one per line:"""
             'score_before': result.score_before if result else None,
             'score_after': result.score_after if result else None,
             'feedback': result.feedback if result else None,
+            # Shape-based improvement details
+            'shape_improved': improvement.improvement_applied if improvement else False,
+            'shape_similarity_before': improvement.shape_similarity_before if improvement else None,
+            'shape_similarity_after': improvement.shape_similarity_after if improvement else None,
+            'improvement_type': improvement.improvement_type if improvement else None,
         }
     
     def _extract_topics(self, text: str) -> List[str]:
@@ -864,7 +964,15 @@ Just the topic names, one per line:"""
         return titles[:5]
     
     def _handle_unknown(self, user_input: str) -> str:
-        """Handle unknown queries."""
+        """Handle unknown queries using default corpus for social/system responses."""
+        
+        # First, check if the default corpus can handle this
+        if self.default_corpus:
+            category, response = self.default_corpus.match_intent(user_input)
+            if response:
+                return response
+        
+        # Try to find something related in knowledge corpus
         words = user_input.lower().split()
         
         for word in words:
@@ -873,9 +981,15 @@ Just the topic names, one per line:"""
                     if word in item.text.lower():
                         return f"I found something related: {item.text}"
         
+        # Fall back to listing known topics
         known = sorted(list(self.topics))[:10]
         if known:
             return f"I don't have information about that. I can discuss: {', '.join(known)}"
+        
+        # Use default corpus acknowledgment if available
+        if self.default_corpus:
+            return self.default_corpus.get_acknowledgment()
+        
         return "I don't have knowledge about that topic yet."
     
     # =========================================================================
