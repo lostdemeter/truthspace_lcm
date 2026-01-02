@@ -95,11 +95,30 @@ DEFAULT_SEED_TOPICS = [
 
 # Pydantic models for OpenAI API compatibility
 class Message(BaseModel):
+    model_config = {"extra": "ignore"}  # Ignore extra fields like 'name', 'tool_calls', etc.
+    
     role: str
-    content: str
+    content: Optional[Any] = ""  # Content can be str, None, or list (for vision API)
+    
+    def get_text_content(self) -> str:
+        """Extract text content, handling string, None, or list formats."""
+        if self.content is None:
+            return ""
+        if isinstance(self.content, str):
+            return self.content
+        if isinstance(self.content, list):
+            # Vision API format: [{"type": "text", "text": "..."}, {"type": "image_url", ...}]
+            texts = []
+            for item in self.content:
+                if isinstance(item, dict) and item.get("type") == "text":
+                    texts.append(item.get("text", ""))
+            return " ".join(texts)
+        return str(self.content)
 
 
 class ChatCompletionRequest(BaseModel):
+    model_config = {"extra": "ignore"}  # Ignore extra fields from clients like Goose
+    
     model: str = "emergent-chat"
     messages: List[Message]
     temperature: Optional[float] = 0.7
@@ -177,6 +196,24 @@ class EmergentChatEngine:
             self.orchestrator = GearOrchestrator()
             self.orchestrator.configure_llm(llm_url, llm_model)
         
+        # Python code gear for simple code generation
+        self.python_gear = None
+        try:
+            from truthspace_lcm.gears.core.python_code_gear import PythonCodeGear
+            self.python_gear = PythonCodeGear()
+            self.python_gear.configure_llm(llm_url, llm_model)
+        except ImportError:
+            pass
+        
+        # Code orchestrator for complex multi-step code generation
+        self.code_orchestrator = None
+        try:
+            from truthspace_lcm.gears.core.code_orchestrator import CodeOrchestrator
+            self.code_orchestrator = CodeOrchestrator()
+            self.code_orchestrator.configure_llm(llm_url, llm_model)
+        except ImportError:
+            pass
+        
         # Pending commands awaiting confirmation
         self.pending_commands: List[str] = []
         
@@ -206,11 +243,26 @@ class EmergentChatEngine:
         user_message = None
         for msg in reversed(messages):
             if msg.role == "user":
-                user_message = msg.content
+                user_message = msg.get_text_content()
                 break
         
         if not user_message:
             return "I need a question to answer."
+        
+        # Filter out Goose system prompt if present
+        goose_prefix = "You are a general-purpose AI agent called goose"
+        if user_message.startswith(goose_prefix):
+            # Extract the actual user message after the system prompt
+            # Goose typically sends: system prompt + "\n\n" + actual message
+            parts = user_message.split("\n\n", 1)
+            if len(parts) > 1:
+                user_message = parts[-1].strip()
+            else:
+                # Try to find the actual request after common delimiters
+                for delimiter in ["\nUser:", "\nHuman:", "\n---\n"]:
+                    if delimiter in user_message:
+                        user_message = user_message.split(delimiter)[-1].strip()
+                        break
         
         # Handle confirmation for pending commands
         if self.pending_commands and user_message.lower() in ('yes', 'y'):
@@ -300,6 +352,58 @@ class EmergentChatEngine:
             # Knowledge query - use emergent chain
             return self.chain.chat(user_message)
         
+        elif intent_result.intent == Intent.CODE_GENERATION:
+            # Code generation - route to simple or complex generator
+            msg_lower = user_message.lower()
+            
+            # Use CodeOrchestrator for complex requests (plots, multi-function)
+            is_complex = any(w in msg_lower for w in [
+                'plot', 'graph', 'chart', 'matplotlib', 'visualize',
+                'histogram', 'scatter', 'bar', 'pie', 'line',
+                '3d', 'surface', 'heatmap', 'contour',
+                'multiple', 'functions', 'class', 'module',
+            ])
+            
+            if is_complex and self.code_orchestrator:
+                plan = self.code_orchestrator.generate(user_message)
+                
+                if plan.complete_code:
+                    response = f"```python\n{plan.complete_code}\n```"
+                    response += f"\n\n*Generated via CodeOrchestrator ({len(plan.functions)} functions)*"
+                    if plan.verified:
+                        response += f"\n✓ Code verified"
+                    if plan.output:
+                        response += f"\nOutput: {plan.output[:200]}"
+                    if plan.error:
+                        response += f"\n⚠ {plan.error}"
+                    
+                    # Auto-execute plot code and save to run_graph.py
+                    if 'plt.' in plan.complete_code or 'matplotlib' in plan.complete_code:
+                        exec_result = self._execute_plot_code(plan.complete_code)
+                        response += f"\n\n{exec_result}"
+                    
+                    return response
+                else:
+                    return f"Failed to generate code: {plan.error}"
+            
+            # Simple code generation - use Python code gear
+            if not self.python_gear:
+                return "Python code generation is not available."
+            
+            result = self.python_gear.generate_from_text(user_message)
+            
+            if result.success:
+                response = f"```python\n{result.code}\n```"
+                if result.pattern_used:
+                    response += f"\n\n*Pattern: {result.pattern_used}*"
+                if result.verified:
+                    response += f"\n✓ Code verified - runs successfully"
+                    if result.output:
+                        response += f"\nOutput: {result.output.strip()[:200]}"
+                return response
+            else:
+                return f"Failed to generate code: {result.error}"
+        
         elif intent_result.intent in (Intent.TOOL_CALL, Intent.ORCHESTRATOR):
             # Tool call - use orchestrator
             if not self.orchestrator:
@@ -319,6 +423,36 @@ class EmergentChatEngine:
         
         # Fallback to chat
         return self.chain.chat(user_message)
+    
+    def _execute_plot_code(self, code: str) -> str:
+        """Execute plot code and save to run_graph.py for re-running."""
+        import subprocess
+        from pathlib import Path
+        
+        # Save to run_graph.py
+        run_graph_path = Path("/home/thorin/truthspace-lcm/run_graph.py")
+        run_graph_path.write_text(code)
+        
+        # Execute the code
+        try:
+            result = subprocess.run(
+                ["python", str(run_graph_path)],
+                capture_output=True,
+                text=True,
+                timeout=30,
+                cwd="/home/thorin/truthspace-lcm"
+            )
+            
+            if result.returncode == 0:
+                output = result.stdout.strip()
+                return f"\n\n**Executed!** {output}\nCode saved to `run_graph.py` for re-running."
+            else:
+                error = result.stderr.strip()[:200]
+                return f"\n\nExecution failed: {error}\nCode saved to `run_graph.py`"
+        except subprocess.TimeoutExpired:
+            return "\n\nExecution timed out (30s limit)\nCode saved to `run_graph.py`"
+        except Exception as e:
+            return f"\n\nExecution error: {str(e)}\nCode saved to `run_graph.py`"
     
     def _execute_pending(self) -> str:
         """Execute pending commands."""
@@ -612,11 +746,23 @@ def create_app(
         }
     
     @app.post("/v1/chat/completions")
-    async def chat_completions(request: ChatCompletionRequest):
+    async def chat_completions(request: Request):
         """Chat completions endpoint (OpenAI-compatible)."""
         
-        logger.info(f"Received request: model={request.model}, stream={request.stream}")
-        logger.info(f"Messages: {[m.content[:50] for m in request.messages]}")
+        # Get raw JSON to debug what Goose sends
+        raw_body = await request.json()
+        logger.info(f"Raw request body: {json.dumps(raw_body, indent=2)[:1000]}")
+        
+        # Parse into our model
+        try:
+            parsed = ChatCompletionRequest(**raw_body)
+        except Exception as e:
+            logger.error(f"Failed to parse request: {e}")
+            raise HTTPException(status_code=422, detail=str(e))
+        
+        logger.info(f"Received request: model={parsed.model}, stream={parsed.stream}")
+        logger.info(f"Messages: {[m.get_text_content()[:50] for m in parsed.messages]}")
+        request = parsed  # Use parsed request from here
         
         try:
             response_text = engine.generate(request.messages)
@@ -676,9 +822,9 @@ def create_app(
                 )
             ],
             usage=Usage(
-                prompt_tokens=sum(len(m.content.split()) for m in request.messages),
+                prompt_tokens=sum(len(m.get_text_content().split()) for m in request.messages),
                 completion_tokens=len(response_text.split()),
-                total_tokens=sum(len(m.content.split()) for m in request.messages) + len(response_text.split()),
+                total_tokens=sum(len(m.get_text_content().split()) for m in request.messages) + len(response_text.split()),
             ),
         )
     
