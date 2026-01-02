@@ -113,8 +113,11 @@ class ModificationParser:
          ModificationType.MULTIPLY, 'amplitude'),
         (r'\bdoubled?\b', ModificationType.MULTIPLY, 'amplitude'),  # Special case
         
-        # Color: "in red", "colored blue", "color red"
+        # Color: "in red", "colored blue", "color red", "red dots", "blue line"
         (r'(?:in|colored?|colour)\s*(red|blue|green|yellow|orange|purple|black|white|cyan|magenta)',
+         ModificationType.SET, 'color'),
+        # Color before noun: "red dots", "blue markers", "green bars"
+        (r'\b(red|blue|green|yellow|orange|purple|black|white|cyan|magenta)\s+(?:dots?|points?|markers?|lines?|bars?|circles?)',
          ModificationType.SET, 'color'),
         
         # Title: "titled X", "with title X"

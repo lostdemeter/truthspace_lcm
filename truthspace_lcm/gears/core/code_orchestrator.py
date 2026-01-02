@@ -733,7 +733,7 @@ Output ONLY the Python code, no explanations."""
              {'domain': 'trig', 'function': 'sine'}, self._make_sine_template()),
             ('cosine_wave', 'cosine cos wave trigonometric', 'enhancer',
              {'domain': 'trig', 'function': 'cosine'}, self._make_cosine_template()),
-            ('bar_chart', 'bar chart categories bars categorical', 'enhancer',
+            ('bar_chart', 'bar chart graph categories bars categorical', 'enhancer',
              {'domain': 'categorical', 'chart': 'bar'}, self._make_bar_template()),
             ('scatter_plot', 'scatter points dots correlation', 'enhancer',
              {'domain': 'correlation', 'chart': 'scatter'}, self._make_scatter_template()),
