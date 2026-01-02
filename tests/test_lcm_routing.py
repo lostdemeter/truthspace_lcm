@@ -28,6 +28,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from truthspace_lcm.gears.core.code_orchestrator import CodeOrchestrator
 from truthspace_lcm.gears.core.holographic_pattern_space import HolographicPatternSpace
+from truthspace_lcm.gears.core.intent_classifier import IntentClassifier, Intent, IntentMatch
 
 
 class ExpectedResult(Enum):
@@ -215,6 +216,7 @@ class LCMTestRunner:
     
     def __init__(self):
         self.orchestrator = CodeOrchestrator(use_holographic=True)
+        self.intent_classifier = IntentClassifier()
         self.results: List[Dict[str, Any]] = []
         
     def run_test(self, test: TestCase) -> Dict[str, Any]:
@@ -276,10 +278,23 @@ class LCMTestRunner:
             elif test.expected == ExpectedResult.REJECT:
                 # Should NOT find a match or should have low confidence
                 result["passed"] = not result["code_generated"] or not result["code_executes"]
-            elif test.expected in (ExpectedResult.TOOL_CALL, ExpectedResult.KNOWLEDGE):
-                # Future: for now, mark as skipped
-                result["passed"] = None  # Skipped
-                result["error"] = "Not yet implemented"
+            elif test.expected == ExpectedResult.TOOL_CALL:
+                # Use intent classifier for tool calls
+                intent_match = self.intent_classifier.classify(test.query)
+                result["intent"] = intent_match.intent.value
+                result["intent_confidence"] = intent_match.confidence
+                result["intent_reason"] = intent_match.reason
+                result["tool_name"] = intent_match.tool_name
+                result["tool_args"] = intent_match.tool_args
+                result["passed"] = intent_match.intent == Intent.TOOL_CALL
+                
+            elif test.expected == ExpectedResult.KNOWLEDGE:
+                # Use intent classifier for knowledge queries
+                intent_match = self.intent_classifier.classify(test.query)
+                result["intent"] = intent_match.intent.value
+                result["intent_confidence"] = intent_match.confidence
+                result["intent_reason"] = intent_match.reason
+                result["passed"] = intent_match.intent == Intent.KNOWLEDGE
                 
         except Exception as e:
             result["error"] = str(e)
@@ -330,7 +345,9 @@ class LCMTestRunner:
         # Filter by category
         code_tests = [r for r in self.results if r["expected"] in ("code", "code_with_mods")]
         reject_tests = [r for r in self.results if r["expected"] == "reject"]
-        future_tests = [r for r in self.results if r["expected"] in ("tool_call", "knowledge")]
+        tool_tests = [r for r in self.results if r["expected"] == "tool_call"]
+        knowledge_tests = [r for r in self.results if r["expected"] == "knowledge"]
+        intent_tests = tool_tests + knowledge_tests
         
         # Pattern match rate (for code tests)
         code_matched = sum(1 for r in code_tests if r["code_generated"])
@@ -349,25 +366,41 @@ class LCMTestRunner:
         correctly_rejected = sum(1 for r in reject_tests if r["passed"])
         rejection_accuracy = correctly_rejected / len(reject_tests) if reject_tests else 0
         
-        # Overall pass rate (excluding future tests)
-        current_tests = [r for r in self.results if r["passed"] is not None]
-        overall_pass = sum(1 for r in current_tests if r["passed"])
-        overall_rate = overall_pass / len(current_tests) if current_tests else 0
+        # Intent classification accuracy (Phase 2)
+        intent_correct = sum(1 for r in intent_tests if r["passed"])
+        intent_accuracy = intent_correct / len(intent_tests) if intent_tests else 0
+        
+        # Tool call accuracy
+        tool_correct = sum(1 for r in tool_tests if r["passed"])
+        tool_accuracy = tool_correct / len(tool_tests) if tool_tests else 0
+        
+        # Knowledge query accuracy
+        knowledge_correct = sum(1 for r in knowledge_tests if r["passed"])
+        knowledge_accuracy = knowledge_correct / len(knowledge_tests) if knowledge_tests else 0
+        
+        # Overall pass rate (all tests now active)
+        all_tests = self.results
+        overall_pass = sum(1 for r in all_tests if r["passed"])
+        overall_rate = overall_pass / len(all_tests) if all_tests else 0
         
         metrics = {
             "total_tests": len(self.results),
-            "current_tests": len(current_tests),
-            "future_tests": len(future_tests),
+            "code_tests": len(code_tests),
+            "intent_tests": len(intent_tests),
             "pattern_match_rate": pattern_match_rate,
             "execution_success_rate": execution_rate,
             "modification_accuracy": mod_accuracy,
             "rejection_accuracy": rejection_accuracy,
+            "intent_classification_accuracy": intent_accuracy,
+            "tool_call_accuracy": tool_accuracy,
+            "knowledge_accuracy": knowledge_accuracy,
             "overall_pass_rate": overall_rate,
             "targets": {
                 "pattern_match_rate": 0.80,
                 "execution_success_rate": 0.90,
                 "modification_accuracy": 0.80,
                 "rejection_accuracy": 0.90,
+                "intent_classification_accuracy": 0.85,
             }
         }
         
@@ -379,24 +412,39 @@ class LCMTestRunner:
         print("LCM ROUTING TEST REPORT")
         print("="*60)
         
-        print(f"\nTests: {metrics['current_tests']} current, {metrics['future_tests']} future (skipped)")
+        print(f"\nTests: {metrics['code_tests']} code, {metrics['intent_tests']} intent")
         
-        print("\n--- Metrics vs Targets ---")
+        print("\n--- Phase 1 Metrics (Code Generation) ---")
         for key in ["pattern_match_rate", "execution_success_rate", "modification_accuracy", "rejection_accuracy"]:
             actual = metrics[key]
             target = metrics["targets"][key]
             status = "✓" if actual >= target else "✗"
             print(f"{status} {key}: {actual*100:.1f}% (target: {target*100:.0f}%)")
         
+        print("\n--- Phase 2 Metrics (Intent Classification) ---")
+        intent_acc = metrics["intent_classification_accuracy"]
+        intent_target = metrics["targets"]["intent_classification_accuracy"]
+        status = "✓" if intent_acc >= intent_target else "✗"
+        print(f"{status} intent_classification_accuracy: {intent_acc*100:.1f}% (target: {intent_target*100:.0f}%)")
+        print(f"  - tool_call_accuracy: {metrics['tool_call_accuracy']*100:.1f}%")
+        print(f"  - knowledge_accuracy: {metrics['knowledge_accuracy']*100:.1f}%")
+        
         print(f"\n--- Overall ---")
         print(f"Pass rate: {metrics['overall_pass_rate']*100:.1f}%")
         
-        # Check if ready for Phase 2
-        ready = all(
+        # Check if ready for Phase 3
+        phase1_ready = all(
             metrics[k] >= metrics["targets"][k] 
-            for k in metrics["targets"]
+            for k in ["pattern_match_rate", "execution_success_rate", "modification_accuracy", "rejection_accuracy"]
         )
-        print(f"\nReady for Phase 2 (Intent Classification): {'YES ✓' if ready else 'NO - keep improving'}")
+        phase2_ready = intent_acc >= intent_target
+        
+        if phase1_ready and phase2_ready:
+            print(f"\nReady for Phase 3 (Tool Calling Implementation): YES ✓")
+        elif phase1_ready:
+            print(f"\nPhase 1 complete. Phase 2 in progress - improve intent classification.")
+        else:
+            print(f"\nPhase 1 incomplete - improve code generation first.")
         
         print("="*60)
 
