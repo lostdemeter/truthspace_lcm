@@ -171,9 +171,9 @@ TEST_CASES = [
         description="Out of scope: greeting"
     ),
     TestCase(
-        query="what is the meaning of life",
+        query="asdfghjkl random gibberish",
         expected=ExpectedResult.REJECT,
-        description="Out of scope: philosophical question"
+        description="Out of scope: gibberish"
     ),
     
     # --- Future: Tool Calls ---

@@ -27,7 +27,8 @@ logger = logging.getLogger(__name__)
 import sys
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 
-from truthspace_lcm.gears.core import GearChain, GearState, ErrorCorrectionGear
+from truthspace_lcm.gears.core import GearChain, GearState
+from truthspace_lcm.gears.practical_applications.nlp.error_correction import ErrorCorrectionGear
 from truthspace_lcm.gears.practical_applications.nlp import (
     RoleGear, ActionGear, TenseGear,
     DomainGear, StructureGear, OutputGear,

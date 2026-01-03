@@ -10,75 +10,33 @@ behave in text, enabling similarity search and semantic analysis.
 Includes semantic labeling to convert dimension features into
 human-readable trait descriptions.
 
+NOTE: Feature labels are now loaded from corpus file (corpus/feature_labels.json)
+rather than being hard-coded. This follows the fail-fast philosophy.
+
 Author: Lesley Gushurst
 License: GPLv3
 """
 
+import json
 import re
+from pathlib import Path
 from typing import Dict, Any, Optional, List, Tuple
 from .emergent_chain import EmergentDimensionChain, DataItem
 
 
-# Comprehensive verb/adverb to semantic label mapping
-FEATURE_LABELS = {
-    # Investigative/Analytical
-    'investigates': 'investigative', 'examines': 'investigative', 'analyzes': 'analytical',
-    'deduces': 'deductive', 'scrutinizes': 'analytical', 'observes': 'observant',
-    'studies': 'studious', 'researches': 'investigative', 'inspects': 'analytical',
-    'discovers': 'exploratory', 'uncovers': 'investigative', 'detects': 'perceptive',
-    'reads': 'studious', 'deciphers': 'analytical', 'interprets': 'interpretive',
-    
-    # Authoritative/Commanding
-    'commands': 'authoritative', 'orders': 'commanding', 'leads': 'leadership',
-    'directs': 'directive', 'rules': 'authoritative', 'governs': 'governing',
-    'decrees': 'authoritative', 'dictates': 'commanding', 'controls': 'controlling',
-    'manages': 'managerial', 'oversees': 'supervisory', 'dominates': 'dominant',
-    
-    # Supportive/Helpful
-    'assists': 'supportive', 'helps': 'helpful', 'supports': 'supportive',
-    'aids': 'helpful', 'serves': 'servile', 'accompanies': 'companionable',
-    'follows': 'loyal', 'attends': 'attentive', 'cares': 'caring',
-    'listens': 'attentive', 'comforts': 'comforting', 'nurtures': 'nurturing',
-    
-    # Scheming/Cunning
-    'plots': 'scheming', 'schemes': 'cunning', 'manipulates': 'manipulative',
-    'deceives': 'deceptive', 'conspires': 'conspiratorial', 'betrays': 'treacherous',
-    'tricks': 'cunning', 'lies': 'deceptive', 'cheats': 'dishonest',
-    'whispers': 'secretive', 'lurks': 'stealthy', 'hides': 'secretive',
-    
-    # Heroic/Brave
-    'rescues': 'heroic', 'protects': 'protective', 'defends': 'defensive',
-    'saves': 'heroic', 'fights': 'combative', 'confronts': 'confrontational',
-    'battles': 'combative', 'challenges': 'challenging', 'stands': 'steadfast',
-    'shields': 'protective', 'guards': 'protective', 'champions': 'heroic',
-    
-    # Wise/Teaching
-    'advises': 'wise', 'teaches': 'educational', 'guides': 'guiding',
-    'counsels': 'wise', 'mentors': 'mentoring', 'instructs': 'instructive',
-    'enlightens': 'enlightening', 'explains': 'explanatory', 'shares': 'generous',
-    'reflects': 'reflective', 'contemplates': 'contemplative', 'meditates': 'meditative',
-    
-    # Playful/Creative
-    'plays': 'playful', 'explores': 'exploratory', 'imagines': 'imaginative',
-    'creates': 'creative', 'builds': 'constructive', 'invents': 'inventive',
-    'dreams': 'dreamy', 'wonders': 'curious', 'experiments': 'experimental',
-    'crafts': 'skilled', 'designs': 'creative', 'composes': 'artistic',
-    
-    # Destructive/Violent
-    'destroys': 'destructive', 'rages': 'violent', 'attacks': 'aggressive',
-    'strikes': 'aggressive', 'crushes': 'destructive', 'burns': 'destructive',
-    'engulfs': 'overwhelming', 'consumes': 'consuming', 'devastates': 'devastating',
-    'threatens': 'threatening', 'intimidates': 'intimidating', 'overwhelms': 'overwhelming',
-    
-    # Adverbs
-    'carefully': 'careful', 'quickly': 'swift', 'methodically': 'methodical',
-    'bravely': 'brave', 'cunningly': 'cunning', 'wisely': 'wise',
-    'playfully': 'playful', 'fiercely': 'fierce', 'gently': 'gentle',
-    'skillfully': 'skilled', 'meticulously': 'meticulous', 'intently': 'focused',
-    'silently': 'silent', 'patiently': 'patient', 'boldly': 'bold',
-    'cautiously': 'cautious', 'swiftly': 'swift', 'deliberately': 'deliberate',
-    'attentively': 'attentive', 'diligently': 'diligent', 'passionately': 'passionate',
-}
+def _load_feature_labels() -> Dict[str, str]:
+    """Load feature labels from corpus file."""
+    corpus_path = Path(__file__).parent.parent / 'corpus' / 'feature_labels.json'
+    if corpus_path.exists():
+        with open(corpus_path) as f:
+            data = json.load(f)
+            # Filter out metadata keys starting with _
+            return {k: v for k, v in data.items() if not k.startswith('_')}
+    return {}  # Empty dict if file doesn't exist - fail-fast will show missing labels
+
+
+# Load feature labels from corpus file (editable without code changes)
+FEATURE_LABELS = _load_feature_labels()
 
 
 class SemanticChain(EmergentDimensionChain):

@@ -21,7 +21,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent.parent))
 
 from truthspace_lcm.gears.core import ConversationalChain
-from truthspace_lcm.gears.core.intent_detector import IntentDetectorGear, SmartChatGear, Intent
+from truthspace_lcm.gears.core.intent_classifier import IntentClassifier, Intent, IntentMatch
 from truthspace_lcm.gears.core.gear_orchestrator import GearOrchestrator
 
 
@@ -65,8 +65,8 @@ class EmergentChat:
         self.chain = ConversationalChain()
         self.chain.configure_llm(llm_url, llm_model)
         
-        # Intent detector for routing
-        self.intent_detector = IntentDetectorGear()
+        # Emergent intent classifier (fail-fast: no legacy fallback)
+        self.intent_classifier = IntentClassifier()
         
         # Gear orchestrator for tool calls
         self.orchestrator: Optional[GearOrchestrator] = None
@@ -74,11 +74,14 @@ class EmergentChat:
             self.orchestrator = GearOrchestrator()
             self.orchestrator.configure_llm(llm_url, llm_model)
         
-        # Smart chat that combines both
-        self.smart_chat = SmartChatGear()
-        self.smart_chat.set_chain(self.chain)
-        if self.orchestrator:
-            self.smart_chat.set_orchestrator(self.orchestrator)
+        # Python code gear for code generation
+        self.python_gear = None
+        try:
+            from truthspace_lcm.gears.core.python_code_gear import PythonCodeGear
+            self.python_gear = PythonCodeGear()
+            self.python_gear.configure_llm(llm_url, llm_model)
+        except ImportError:
+            pass
         
         # Command history
         self.history: List[str] = []
@@ -162,8 +165,8 @@ class EmergentChat:
     
     def query(self, question: str) -> str:
         """Process a query through smart routing (knowledge or tools)."""
-        # Detect intent
-        intent_result = self.intent_detector.detect(question)
+        # Detect intent using emergent classifier (fail-fast: no legacy fallback)
+        intent_result = self.intent_classifier.classify(question)
         
         if self.debug:
             print(f"\n[DEBUG] Input: {question}")
@@ -171,7 +174,7 @@ class EmergentChat:
             print(f"[DEBUG] Reason: {intent_result.reason}")
         
         # Route based on intent
-        if intent_result.intent == Intent.CHAT:
+        if intent_result.intent == Intent.KNOWLEDGE:
             # Knowledge query - use emergent chain
             if self.debug:
                 topics = self.chain._extract_topics(question)
@@ -185,10 +188,36 @@ class EmergentChat:
             
             return response
         
-        elif intent_result.intent in (Intent.TOOL_CALL, Intent.ORCHESTRATOR):
+        elif intent_result.intent == Intent.CODE_GENERATION:
+            # Code generation - use Python code gear
+            if not self.python_gear:
+                raise RuntimeError("CODE_GENERATION intent detected but no code generator available")
+            
+            if self.debug:
+                print(f"[DEBUG] Routing to PythonCodeGear")
+            
+            result = self.python_gear.generate_from_text(question)
+            
+            if self.debug:
+                print(f"[DEBUG] Pattern used: {result.pattern_used}")
+                print(f"[DEBUG] Verified: {result.verified}")
+            
+            if result.success:
+                response = f"```python\n{result.code}\n```"
+                if result.pattern_used:
+                    response += f"\n\n*Pattern: {result.pattern_used}*"
+                if result.verified:
+                    response += f"\n✓ Code verified - runs successfully"
+                    if result.output:
+                        response += f"\nOutput: {result.output.strip()[:200]}"
+                return response
+            else:
+                return f"Failed to generate code: {result.error}"
+        
+        elif intent_result.intent == Intent.TOOL_CALL:
             # Tool call - use orchestrator
             if not self.orchestrator:
-                return "Tool calls are disabled. Start with --tools to enable."
+                raise RuntimeError("TOOL_CALL intent detected but orchestrator not enabled")
             
             result = self.orchestrator.execute(question, dry_run=True)
             
@@ -207,10 +236,14 @@ class EmergentChat:
                     f"Type 'yes' or 'y' to execute, or anything else to cancel."
                 )
             else:
-                return "I couldn't figure out what commands to run for that request."
+                raise RuntimeError(f"TOOL_CALL intent detected but no commands generated for: {question}")
         
-        else:
-            return "I'm not sure how to help with that. Try asking a question or requesting an action."
+        elif intent_result.intent == Intent.UNSUPPORTED:
+            # Fail-fast: don't silently fall back
+            raise RuntimeError(f"UNSUPPORTED intent - emergent classifier could not route: {question}")
+        
+        # CLARIFICATION intent - ask for more info
+        return f"I need more information to help you. Could you clarify: {question}"
     
     def execute_pending(self) -> str:
         """Execute pending commands after user confirmation."""

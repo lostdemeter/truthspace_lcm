@@ -44,7 +44,7 @@ Tools:
 """
 
 # Re-export core classes for convenience
-from .core import Gear, GearState, GearChain, Quaternion, ErrorCorrectionGear
+from .core import Gear, GearState, GearChain, Quaternion
 
 # Re-export NLP gears for convenience
 from .practical_applications.nlp import (
@@ -58,7 +58,6 @@ __all__ = [
     'GearState', 
     'GearChain',
     'Quaternion',
-    'ErrorCorrectionGear',
     # NLP Gears (for backward compatibility)
     'RoleGear',
     'ActionGear',

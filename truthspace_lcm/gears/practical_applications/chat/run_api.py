@@ -210,38 +210,91 @@ Available books:
             }
         raise HTTPException(status_code=500, detail="Failed to load book")
     
+    # Import the full EmergentChatEngine for intent classification and code generation
+    from truthspace_lcm.gears.practical_applications.chat.api_server import EmergentChatEngine, Message as APIMessage
+    
+    # Create engine with our pre-built chain
+    engine = EmergentChatEngine(lazy_init=True, enable_tools=True)
+    engine.chain = chain  # Use the chain we already built
+    engine._initialized = True
+    
     @app.post("/v1/chat/completions")
-    async def chat(request: ChatRequest):
-        user_msg = None
-        for msg in reversed(request.messages):
-            if msg.role == "user":
-                user_msg = msg.content
-                break
+    async def chat(request: Request):
+        raw_body = await request.json()
         
-        if not user_msg:
-            response_text = "I need a question to answer."
-        else:
-            response_text = chain.chat(user_msg)
+        # Convert to API Message format
+        messages = [APIMessage(**m) for m in raw_body.get("messages", [])]
+        stream = raw_body.get("stream", False)
+        model = raw_body.get("model", "emergent-chat")
         
-        if request.stream:
-            async def stream():
+        # Parse tools if provided (from Goose)
+        tools = None
+        if "tools" in raw_body:
+            from truthspace_lcm.gears.practical_applications.chat.api_server import Tool
+            tools = [Tool(**t) for t in raw_body["tools"]]
+        
+        # Use the full generate_with_tools which handles intent classification
+        response_text, tool_calls = engine.generate_with_tools(messages, tools)
+        
+        if stream:
+            async def stream_response():
                 chunk_id = f"chatcmpl-{uuid.uuid4().hex[:8]}"
-                yield f"data: {json.dumps({'id': chunk_id, 'choices': [{'delta': {'content': response_text}}]})}\n\n"
-                yield f"data: {json.dumps({'id': chunk_id, 'choices': [{'delta': {}, 'finish_reason': 'stop'}]})}\n\n"
+                if tool_calls:
+                    # First chunk: role
+                    yield f"data: {json.dumps({'id': chunk_id, 'object': 'chat.completion.chunk', 'choices': [{'index': 0, 'delta': {'role': 'assistant', 'content': None}}]})}\n\n"
+                    # Tool call chunks
+                    for i, tc in enumerate(tool_calls):
+                        chunk = {
+                            "id": chunk_id,
+                            "object": "chat.completion.chunk",
+                            "choices": [{
+                                "index": 0,
+                                "delta": {
+                                    "tool_calls": [{
+                                        "index": i,
+                                        "id": tc.id,
+                                        "type": "function",
+                                        "function": {"name": tc.function.name, "arguments": tc.function.arguments}
+                                    }]
+                                }
+                            }]
+                        }
+                        yield f"data: {json.dumps(chunk)}\n\n"
+                    # Finish with tool_calls reason
+                    yield f"data: {json.dumps({'id': chunk_id, 'object': 'chat.completion.chunk', 'choices': [{'index': 0, 'delta': {}, 'finish_reason': 'tool_calls'}]})}\n\n"
+                else:
+                    yield f"data: {json.dumps({'id': chunk_id, 'object': 'chat.completion.chunk', 'choices': [{'index': 0, 'delta': {'role': 'assistant', 'content': response_text}}]})}\n\n"
+                    yield f"data: {json.dumps({'id': chunk_id, 'object': 'chat.completion.chunk', 'choices': [{'index': 0, 'delta': {}, 'finish_reason': 'stop'}]})}\n\n"
                 yield "data: [DONE]\n\n"
-            return StreamingResponse(stream(), media_type="text/event-stream")
+            return StreamingResponse(stream_response(), media_type="text/event-stream")
         
-        return {
+        # Build response
+        response = {
             "id": f"chatcmpl-{uuid.uuid4().hex[:8]}",
             "object": "chat.completion",
             "created": int(time.time()),
-            "model": request.model,
+            "model": model,
             "choices": [{
                 "index": 0,
-                "message": {"role": "assistant", "content": response_text},
-                "finish_reason": "stop",
+                "message": {"role": "assistant"},
+                "finish_reason": "stop" if not tool_calls else "tool_calls",
             }],
         }
+        
+        if tool_calls:
+            response["choices"][0]["message"]["tool_calls"] = [
+                {"id": tc.id, "type": "function", "function": {"name": tc.function.name, "arguments": tc.function.arguments}}
+                for tc in tool_calls
+            ]
+            response["choices"][0]["message"]["content"] = response_text  # Include the "looking it up" message
+            import sys
+            sys.stderr.write(f"[DEBUG] Returning tool_calls response with {len(tool_calls)} tool calls\n")
+            sys.stderr.write(f"[DEBUG] Tool: {tool_calls[0].function.name}, args: {tool_calls[0].function.arguments[:100]}...\n")
+            sys.stderr.flush()
+        else:
+            response["choices"][0]["message"]["content"] = response_text
+        
+        return response
     
     print(f"\nStarting server on http://{args.host}:{args.port}")
     print("Press Ctrl+C to stop\n")

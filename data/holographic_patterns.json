@@ -1,0 +1,147 @@
+{
+  "dims": 12,
+  "modules": [
+    {
+      "name": "sine_wave",
+      "text": "sine sin wave trigonometric",
+      "words": [
+        "trigonometric",
+        "sin",
+        "wave",
+        "sine"
+      ],
+      "module_type": "enhancer",
+      "effects": {
+        "domain": "trig",
+        "function": "sine"
+      },
+      "target_gears": [],
+      "code_template": "import matplotlib.pyplot as plt\nimport numpy as np\n\ndef create_data(x_offset=0, y_offset=0, amplitude=1, frequency=1):\n    \"\"\"Generate x values and compute sin(x) with optional modifications.\"\"\"\n    x = np.linspace(0, 2 * np.pi, 100) + x_offset\n    y = amplitude * np.sin(frequency * x) + y_offset\n    return x, y\n\ndef create_plot(x, y, title=\"Sine Wave\"):\n    \"\"\"Create the plot with labels.\"\"\"\n    plt.figure(figsize=(10, 6))\n    plt.plot(x, y, 'b-', linewidth=2)\n    plt.xlabel('x')\n    plt.ylabel('sin(x)')\n    plt.title(title)\n    plt.grid(True)\n    plt.axhline(y=0, color='k', linewidth=0.5)\n    plt.axvline(x=0, color='k', linewidth=0.5)\n\nif __name__ == \"__main__\":\n    x, y = create_data()\n    create_plot(x, y)\n    plt.savefig('/home/thorin/truthspace-lcm/output/sine_wave.png', dpi=150)\n    print(\"Saved to /home/thorin/truthspace-lcm/output/sine_wave.png\")\n",
+      "examples": [],
+      "use_count": 1,
+      "success_count": 1
+    },
+    {
+      "name": "cosine_wave",
+      "text": "cosine cos wave trigonometric",
+      "words": [
+        "trigonometric",
+        "cos",
+        "cosine",
+        "wave"
+      ],
+      "module_type": "enhancer",
+      "effects": {
+        "domain": "trig",
+        "function": "cosine"
+      },
+      "target_gears": [],
+      "code_template": "import matplotlib.pyplot as plt\nimport numpy as np\n\ndef create_data(x_offset=0, y_offset=0, amplitude=1, frequency=1):\n    \"\"\"Generate x values and compute cos(x) with optional modifications.\"\"\"\n    x = np.linspace(0, 2 * np.pi, 100) + x_offset\n    y = amplitude * np.cos(frequency * x) + y_offset\n    return x, y\n\ndef create_plot(x, y, title=\"Cosine Wave\"):\n    \"\"\"Create the plot with labels.\"\"\"\n    plt.figure(figsize=(10, 6))\n    plt.plot(x, y, 'b-', linewidth=2)\n    plt.xlabel('x')\n    plt.ylabel('cos(x)')\n    plt.title(title)\n    plt.grid(True)\n    plt.axhline(y=0, color='k', linewidth=0.5)\n    plt.axvline(x=0, color='k', linewidth=0.5)\n\nif __name__ == \"__main__\":\n    x, y = create_data()\n    create_plot(x, y)\n    plt.savefig('/home/thorin/truthspace-lcm/output/cosine_wave.png', dpi=150)\n    print(\"Saved to /home/thorin/truthspace-lcm/output/cosine_wave.png\")\n",
+      "examples": [],
+      "use_count": 0,
+      "success_count": 0
+    },
+    {
+      "name": "bar_chart",
+      "text": "bar chart graph categories bars categorical",
+      "words": [
+        "bar",
+        "categorical",
+        "categories",
+        "bars",
+        "graph",
+        "chart"
+      ],
+      "module_type": "enhancer",
+      "effects": {
+        "domain": "categorical",
+        "chart": "bar"
+      },
+      "target_gears": [],
+      "code_template": "import matplotlib.pyplot as plt\n\ndef create_data():\n    \"\"\"Generate categories and values for bar chart.\"\"\"\n    categories = ['A', 'B', 'C', 'D', 'E']\n    values = [23, 45, 56, 78, 32]\n    return categories, values\n\ndef create_plot(categories, values, title=\"Bar Chart\"):\n    \"\"\"Create bar chart with labels.\"\"\"\n    plt.figure(figsize=(10, 6))\n    plt.bar(categories, values, color='steelblue')\n    plt.xlabel('Category')\n    plt.ylabel('Value')\n    plt.title(title)\n\nif __name__ == \"__main__\":\n    categories, values = create_data()\n    create_plot(categories, values)\n    plt.savefig('/home/thorin/truthspace-lcm/output/bar_chart.png', dpi=150)\n    print(\"Saved to /home/thorin/truthspace-lcm/output/bar_chart.png\")\n",
+      "examples": [],
+      "use_count": 0,
+      "success_count": 0
+    },
+    {
+      "name": "scatter_plot",
+      "text": "scatter points dots correlation",
+      "words": [
+        "points",
+        "scatter",
+        "correlation",
+        "dots"
+      ],
+      "module_type": "enhancer",
+      "effects": {
+        "domain": "correlation",
+        "chart": "scatter"
+      },
+      "target_gears": [],
+      "code_template": "import matplotlib.pyplot as plt\nimport numpy as np\n\ndef create_data(n_points=50):\n    \"\"\"Generate random x,y data points.\"\"\"\n    np.random.seed(42)\n    x = np.random.randn(n_points)\n    y = x + np.random.randn(n_points) * 0.5\n    return x, y\n\ndef create_plot(x, y, title=\"Scatter Plot\"):\n    \"\"\"Create scatter plot.\"\"\"\n    plt.figure(figsize=(10, 6))\n    plt.scatter(x, y, c='steelblue', alpha=0.7)\n    plt.xlabel('X')\n    plt.ylabel('Y')\n    plt.title(title)\n    plt.grid(True, alpha=0.3)\n\nif __name__ == \"__main__\":\n    x, y = create_data()\n    create_plot(x, y)\n    plt.savefig('/home/thorin/truthspace-lcm/output/scatter_plot.png', dpi=150)\n    print(\"Saved to /home/thorin/truthspace-lcm/output/scatter_plot.png\")\n",
+      "examples": [],
+      "use_count": 0,
+      "success_count": 0
+    },
+    {
+      "name": "histogram",
+      "text": "histogram distribution frequency bins",
+      "words": [
+        "distribution",
+        "histogram",
+        "bins",
+        "frequency"
+      ],
+      "module_type": "enhancer",
+      "effects": {
+        "domain": "distribution",
+        "chart": "histogram"
+      },
+      "target_gears": [],
+      "code_template": "import matplotlib.pyplot as plt\nimport numpy as np\n\ndef create_data(n_samples=1000):\n    \"\"\"Generate random data for histogram.\"\"\"\n    np.random.seed(42)\n    data = np.random.randn(n_samples)\n    return data\n\ndef create_plot(data, bins=30, title=\"Histogram\"):\n    \"\"\"Create histogram.\"\"\"\n    plt.figure(figsize=(10, 6))\n    plt.hist(data, bins=bins, color='steelblue', edgecolor='white')\n    plt.xlabel('Value')\n    plt.ylabel('Frequency')\n    plt.title(title)\n\nif __name__ == \"__main__\":\n    data = create_data()\n    create_plot(data)\n    plt.savefig('/home/thorin/truthspace-lcm/output/histogram.png', dpi=150)\n    print(\"Saved to /home/thorin/truthspace-lcm/output/histogram.png\")\n",
+      "examples": [],
+      "use_count": 0,
+      "success_count": 0
+    },
+    {
+      "name": "line_plot",
+      "text": "line plot graph trend",
+      "words": [
+        "graph",
+        "line",
+        "trend"
+      ],
+      "module_type": "enhancer",
+      "effects": {
+        "domain": "general",
+        "chart": "line"
+      },
+      "target_gears": [],
+      "code_template": "import matplotlib.pyplot as plt\n\ndef create_data():\n    \"\"\"Generate sample data.\"\"\"\n    x = list(range(10))\n    y = [i**2 for i in x]\n    return x, y\n\ndef create_plot(x, y, title=\"Line Plot\"):\n    \"\"\"Create line plot.\"\"\"\n    plt.figure(figsize=(10, 6))\n    plt.plot(x, y, 'b-o', linewidth=2, markersize=8)\n    plt.xlabel('X')\n    plt.ylabel('Y')\n    plt.title(title)\n    plt.grid(True)\n\nif __name__ == \"__main__\":\n    x, y = create_data()\n    create_plot(x, y)\n    plt.savefig('/home/thorin/truthspace-lcm/output/line_plot.png', dpi=150)\n    print(\"Saved to /home/thorin/truthspace-lcm/output/line_plot.png\")\n",
+      "examples": [],
+      "use_count": 0,
+      "success_count": 0
+    },
+    {
+      "name": "temp_f1ffe525",
+      "text": "what is matplotlib",
+      "words": [
+        "what",
+        "matplotlib"
+      ],
+      "module_type": "enhancer",
+      "effects": {
+        "task": "llm_generation",
+        "learned": true,
+        "source": "llm"
+      },
+      "target_gears": [],
+      "code_template": "import numpy as np\nimport matplotlib.pyplot as plt\n\ndef create_data():\n    x = np.linspace(0, 10, 100)\n    y = np.sin(x)\n    return x, y\n\ndef create_plot(x, y):\n    plt.figure(figsize=(8, 6))\n    plt.plot(x, y, label='sin(x)')\n    plt.title('Sine Wave')\n    plt.xlabel('x-axis')\n    plt.ylabel('y-axis')\n    plt.legend()\n    plt.savefig('/home/thorin/truthspace-lcm/output/sine_wave.png')\n    print(f'Saved plot to: /home/thorin/truthspace-lcm/output/sine_wave.png')\n\nif __name__ == \"__main__\":\n    x, y = create_data()\n    create_plot(x, y)",
+      "examples": [
+        "what is matplotlib"
+      ],
+      "use_count": 0,
+      "success_count": 1
+    }
+  ]
+}

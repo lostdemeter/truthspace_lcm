@@ -1,0 +1,477 @@
+{
+  "patterns": [
+    {
+      "name": "print_string",
+      "contact": {
+        "verb": "OUTPUT",
+        "noun": "TEXT",
+        "structure": "SINGLE",
+        "params": {}
+      },
+      "template": "print(\"{message}\")",
+      "description": "Print a string message",
+      "examples": [
+        "print hello",
+        "display message",
+        "output text"
+      ],
+      "test_code": null,
+      "use_count": 0,
+      "success_count": 0
+    },
+    {
+      "name": "print_variable",
+      "contact": {
+        "verb": "OUTPUT",
+        "noun": "NONE",
+        "structure": "SINGLE",
+        "params": {}
+      },
+      "template": "print({variable})",
+      "description": "Print a variable",
+      "examples": [
+        "print the result",
+        "show the value"
+      ],
+      "test_code": null,
+      "use_count": 0,
+      "success_count": 0
+    },
+    {
+      "name": "print_formatted",
+      "contact": {
+        "verb": "OUTPUT",
+        "noun": "TEXT",
+        "structure": "SINGLE",
+        "params": {}
+      },
+      "template": "print(f\"{format_string}\")",
+      "description": "Print formatted string",
+      "examples": [
+        "print with formatting",
+        "display formatted"
+      ],
+      "test_code": null,
+      "use_count": 0,
+      "success_count": 0
+    },
+    {
+      "name": "create_variable_string",
+      "contact": {
+        "verb": "CREATE",
+        "noun": "TEXT",
+        "structure": "SINGLE",
+        "params": {}
+      },
+      "template": "{name} = \"{value}\"",
+      "description": "Create a string variable",
+      "examples": [
+        "create a string",
+        "make a text variable"
+      ],
+      "test_code": null,
+      "use_count": 0,
+      "success_count": 0
+    },
+    {
+      "name": "create_variable_number",
+      "contact": {
+        "verb": "CREATE",
+        "noun": "NUMBER",
+        "structure": "SINGLE",
+        "params": {}
+      },
+      "template": "{name} = {value}",
+      "description": "Create a numeric variable",
+      "examples": [
+        "create a number",
+        "make an integer"
+      ],
+      "test_code": null,
+      "use_count": 0,
+      "success_count": 0
+    },
+    {
+      "name": "create_variable_list",
+      "contact": {
+        "verb": "CREATE",
+        "noun": "SEQUENCE",
+        "structure": "SINGLE",
+        "params": {}
+      },
+      "template": "{name} = [{items}]",
+      "description": "Create a list",
+      "examples": [
+        "create a list",
+        "make an array"
+      ],
+      "test_code": null,
+      "use_count": 0,
+      "success_count": 0
+    },
+    {
+      "name": "create_function",
+      "contact": {
+        "verb": "CREATE",
+        "noun": "NONE",
+        "structure": "SINGLE",
+        "params": {}
+      },
+      "template": "def {name}({args}):\n    {body}",
+      "description": "Create a function",
+      "examples": [
+        "create a function",
+        "define a function"
+      ],
+      "test_code": null,
+      "use_count": 0,
+      "success_count": 0
+    },
+    {
+      "name": "create_main",
+      "contact": {
+        "verb": "CREATE",
+        "noun": "NONE",
+        "structure": "SINGLE",
+        "params": {}
+      },
+      "template": "def main():\n    {body}\n\nif __name__ == \"__main__\":\n    main()",
+      "description": "Create main function with entry point",
+      "examples": [
+        "create main",
+        "make a program"
+      ],
+      "test_code": null,
+      "use_count": 0,
+      "success_count": 0
+    },
+    {
+      "name": "read_input",
+      "contact": {
+        "verb": "READ",
+        "noun": "TEXT",
+        "structure": "SINGLE",
+        "params": {}
+      },
+      "template": "{name} = input(\"{prompt}\")",
+      "description": "Read user input",
+      "examples": [
+        "get input",
+        "read from user",
+        "ask user"
+      ],
+      "test_code": null,
+      "use_count": 0,
+      "success_count": 0
+    },
+    {
+      "name": "read_file",
+      "contact": {
+        "verb": "READ",
+        "noun": "FILE",
+        "structure": "SINGLE",
+        "params": {}
+      },
+      "template": "with open(\"{filename}\", \"r\") as f:\n    {name} = f.read()",
+      "description": "Read entire file",
+      "examples": [
+        "read a file",
+        "load file contents"
+      ],
+      "test_code": null,
+      "use_count": 0,
+      "success_count": 0
+    },
+    {
+      "name": "read_file_lines",
+      "contact": {
+        "verb": "READ",
+        "noun": "FILE",
+        "structure": "REPEAT",
+        "params": {}
+      },
+      "template": "with open(\"{filename}\", \"r\") as f:\n    for line in f:\n        {body}",
+      "description": "Read file line by line",
+      "examples": [
+        "read each line",
+        "iterate file lines"
+      ],
+      "test_code": null,
+      "use_count": 0,
+      "success_count": 0
+    },
+    {
+      "name": "calculate_sum",
+      "contact": {
+        "verb": "TRANSFORM",
+        "noun": "NUMBER",
+        "structure": "SINGLE",
+        "params": {}
+      },
+      "template": "{result} = {a} + {b}",
+      "description": "Add two numbers",
+      "examples": [
+        "add numbers",
+        "calculate sum"
+      ],
+      "test_code": null,
+      "use_count": 0,
+      "success_count": 0
+    },
+    {
+      "name": "calculate_expression",
+      "contact": {
+        "verb": "TRANSFORM",
+        "noun": "NUMBER",
+        "structure": "SINGLE",
+        "params": {}
+      },
+      "template": "{result} = {expression}",
+      "description": "Calculate an expression",
+      "examples": [
+        "calculate",
+        "compute"
+      ],
+      "test_code": null,
+      "use_count": 0,
+      "success_count": 0
+    },
+    {
+      "name": "transform_list",
+      "contact": {
+        "verb": "TRANSFORM",
+        "noun": "SEQUENCE",
+        "structure": "SINGLE",
+        "params": {}
+      },
+      "template": "{result} = [{transform} for item in {source}]",
+      "description": "Transform a list with comprehension",
+      "examples": [
+        "transform list",
+        "map over items"
+      ],
+      "test_code": null,
+      "use_count": 0,
+      "success_count": 0
+    },
+    {
+      "name": "sum_list",
+      "contact": {
+        "verb": "TRANSFORM",
+        "noun": "SEQUENCE",
+        "structure": "SINGLE",
+        "params": {}
+      },
+      "template": "{result} = sum({source})",
+      "description": "Sum a list of numbers",
+      "examples": [
+        "sum the list",
+        "total the numbers"
+      ],
+      "test_code": null,
+      "use_count": 0,
+      "success_count": 0
+    },
+    {
+      "name": "for_loop",
+      "contact": {
+        "verb": "TRANSFORM",
+        "noun": "SEQUENCE",
+        "structure": "REPEAT",
+        "params": {}
+      },
+      "template": "for {item} in {sequence}:\n    {body}",
+      "description": "Iterate over a sequence",
+      "examples": [
+        "for each item",
+        "loop through"
+      ],
+      "test_code": null,
+      "use_count": 0,
+      "success_count": 0
+    },
+    {
+      "name": "for_range",
+      "contact": {
+        "verb": "TRANSFORM",
+        "noun": "NUMBER",
+        "structure": "REPEAT",
+        "params": {}
+      },
+      "template": "for {item} in range({start}, {end}):\n    {body}",
+      "description": "Loop through a range of numbers",
+      "examples": [
+        "for numbers from",
+        "loop from to"
+      ],
+      "test_code": null,
+      "use_count": 0,
+      "success_count": 0
+    },
+    {
+      "name": "while_loop",
+      "contact": {
+        "verb": "TRANSFORM",
+        "noun": "BOOLEAN",
+        "structure": "REPEAT",
+        "params": {}
+      },
+      "template": "while {condition}:\n    {body}",
+      "description": "While loop",
+      "examples": [
+        "while condition",
+        "repeat until"
+      ],
+      "test_code": null,
+      "use_count": 0,
+      "success_count": 0
+    },
+    {
+      "name": "if_statement",
+      "contact": {
+        "verb": "TRANSFORM",
+        "noun": "BOOLEAN",
+        "structure": "BRANCH",
+        "params": {}
+      },
+      "template": "if {condition}:\n    {then_body}",
+      "description": "If statement",
+      "examples": [
+        "if condition",
+        "when true"
+      ],
+      "test_code": null,
+      "use_count": 0,
+      "success_count": 0
+    },
+    {
+      "name": "if_else",
+      "contact": {
+        "verb": "TRANSFORM",
+        "noun": "BOOLEAN",
+        "structure": "BRANCH",
+        "params": {}
+      },
+      "template": "if {condition}:\n    {then_body}\nelse:\n    {else_body}",
+      "description": "If-else statement",
+      "examples": [
+        "if else",
+        "condition with alternative"
+      ],
+      "test_code": null,
+      "use_count": 0,
+      "success_count": 0
+    },
+    {
+      "name": "write_file",
+      "contact": {
+        "verb": "OUTPUT",
+        "noun": "FILE",
+        "structure": "SINGLE",
+        "params": {}
+      },
+      "template": "with open(\"{filename}\", \"w\") as f:\n    f.write({content})",
+      "description": "Write to a file",
+      "examples": [
+        "write to file",
+        "save to file"
+      ],
+      "test_code": null,
+      "use_count": 0,
+      "success_count": 0
+    },
+    {
+      "name": "append_file",
+      "contact": {
+        "verb": "OUTPUT",
+        "noun": "FILE",
+        "structure": "SINGLE",
+        "params": {}
+      },
+      "template": "with open(\"{filename}\", \"a\") as f:\n    f.write({content})",
+      "description": "Append to a file",
+      "examples": [
+        "append to file",
+        "add to file"
+      ],
+      "test_code": null,
+      "use_count": 0,
+      "success_count": 0
+    },
+    {
+      "name": "hello_world",
+      "contact": {
+        "verb": "OUTPUT",
+        "noun": "TEXT",
+        "structure": "SINGLE",
+        "params": {}
+      },
+      "template": "def main():\n    print(\"Hello, World!\")\n\nif __name__ == \"__main__\":\n    main()",
+      "description": "Hello World program",
+      "examples": [
+        "hello world",
+        "simple program"
+      ],
+      "test_code": null,
+      "use_count": 0,
+      "success_count": 0
+    },
+    {
+      "name": "read_print_file",
+      "contact": {
+        "verb": "READ",
+        "noun": "FILE",
+        "structure": "COMPOSE",
+        "params": {}
+      },
+      "template": "def main():\n    with open(\"{filename}\", \"r\") as f:\n        for line in f:\n            print(line.strip())\n\nif __name__ == \"__main__\":\n    main()",
+      "description": "Read and print file contents",
+      "examples": [
+        "read file and print",
+        "display file contents"
+      ],
+      "test_code": null,
+      "use_count": 0,
+      "success_count": 0
+    },
+    {
+      "name": "sum_numbers_program",
+      "contact": {
+        "verb": "TRANSFORM",
+        "noun": "NUMBER",
+        "structure": "COMPOSE",
+        "params": {}
+      },
+      "template": "def main():\n    numbers = [{numbers}]\n    total = sum(numbers)\n    print(f\"Sum: {total}\")\n\nif __name__ == \"__main__\":\n    main()",
+      "description": "Sum numbers and print result",
+      "examples": [
+        "sum numbers",
+        "add up and print"
+      ],
+      "test_code": null,
+      "use_count": 0,
+      "success_count": 0
+    },
+    {
+      "name": "learned_1bc3e9a0",
+      "contact": {
+        "verb": "OUTPUT",
+        "noun": "NUMBER",
+        "structure": "SINGLE",
+        "params": {
+          "numbers": [
+            10
+          ]
+        }
+      },
+      "template": "def count_to_ten():\n    for i in range(1, 11):\n        print(i)\n\nif __name__ == \"__main__\":\n    count_to_ten()",
+      "description": "Learned from: write a python program that counts to 10",
+      "examples": [
+        "write a python program that counts to 10"
+      ],
+      "test_code": null,
+      "use_count": 1,
+      "success_count": 1
+    }
+  ]
+}

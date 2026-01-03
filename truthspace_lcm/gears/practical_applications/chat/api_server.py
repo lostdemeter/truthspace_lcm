@@ -57,7 +57,7 @@ License: GPLv3
 
 import time
 import uuid
-from typing import List, Optional, Dict, Any
+from typing import List, Optional, Dict, Any, Tuple
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Request
@@ -74,7 +74,7 @@ import sys
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent.parent))
 
 from truthspace_lcm.gears.core import ConversationalChain
-from truthspace_lcm.gears.core.intent_detector import IntentDetectorGear, Intent
+from truthspace_lcm.gears.core.intent_classifier import IntentClassifier, Intent, IntentMatch
 from truthspace_lcm.gears.core.gear_orchestrator import GearOrchestrator
 
 
@@ -99,6 +99,7 @@ class Message(BaseModel):
     
     role: str
     content: Optional[Any] = ""  # Content can be str, None, or list (for vision API)
+    tool_call_id: Optional[str] = None  # For tool role messages
     
     def get_text_content(self) -> str:
         """Extract text content, handling string, None, or list formats."""
@@ -116,6 +117,34 @@ class Message(BaseModel):
         return str(self.content)
 
 
+class ToolFunction(BaseModel):
+    """Function definition for a tool."""
+    model_config = {"extra": "ignore"}
+    name: str
+    description: Optional[str] = ""
+    parameters: Optional[Dict[str, Any]] = None
+
+
+class Tool(BaseModel):
+    """Tool definition from Goose."""
+    model_config = {"extra": "ignore"}
+    type: str = "function"
+    function: ToolFunction
+
+
+class FunctionCall(BaseModel):
+    """A function call in a tool_calls response."""
+    name: str
+    arguments: str  # JSON string of arguments
+
+
+class ToolCall(BaseModel):
+    """A tool call in the response."""
+    id: str
+    type: str = "function"
+    function: FunctionCall
+
+
 class ChatCompletionRequest(BaseModel):
     model_config = {"extra": "ignore"}  # Ignore extra fields from clients like Goose
     
@@ -124,11 +153,20 @@ class ChatCompletionRequest(BaseModel):
     temperature: Optional[float] = 0.7
     max_tokens: Optional[int] = 1000
     stream: Optional[bool] = False
+    tools: Optional[List[Tool]] = None  # Tools available for calling
+    tool_choice: Optional[Any] = None  # Tool choice preference
+
+
+class ResponseMessage(BaseModel):
+    """Message in a response, can include tool_calls."""
+    role: str = "assistant"
+    content: Optional[str] = None
+    tool_calls: Optional[List[ToolCall]] = None
 
 
 class ChatCompletionChoice(BaseModel):
     index: int
-    message: Message
+    message: ResponseMessage
     finish_reason: str = "stop"
 
 
@@ -187,8 +225,8 @@ class EmergentChatEngine:
         self.chain = ConversationalChain()
         self.chain.configure_llm(llm_url, llm_model)
         
-        # Intent detector for routing
-        self.intent_detector = IntentDetectorGear()
+        # Emergent intent classifier (fail-fast: no legacy fallback)
+        self.intent_classifier = IntentClassifier()
         
         # Gear orchestrator for tool calls
         self.orchestrator: Optional[GearOrchestrator] = None
@@ -345,26 +383,16 @@ class EmergentChatEngine:
             topics = self.chain.list_topics()[:20]
             return f"I can discuss: {', '.join(topics)}"
         
-        # Detect intent and route
-        intent_result = self.intent_detector.detect(user_message)
+        # Detect intent using emergent classifier (fail-fast: no legacy fallback)
+        intent_result = self.intent_classifier.classify(user_message)
         
-        if intent_result.intent == Intent.CHAT:
+        if intent_result.intent == Intent.KNOWLEDGE:
             # Knowledge query - use emergent chain
             return self.chain.chat(user_message)
         
         elif intent_result.intent == Intent.CODE_GENERATION:
-            # Code generation - route to simple or complex generator
-            msg_lower = user_message.lower()
-            
-            # Use CodeOrchestrator for complex requests (plots, multi-function)
-            is_complex = any(w in msg_lower for w in [
-                'plot', 'graph', 'chart', 'matplotlib', 'visualize',
-                'histogram', 'scatter', 'bar', 'pie', 'line',
-                '3d', 'surface', 'heatmap', 'contour',
-                'multiple', 'functions', 'class', 'module',
-            ])
-            
-            if is_complex and self.code_orchestrator:
+            # Code generation - route to code orchestrator
+            if self.code_orchestrator:
                 plan = self.code_orchestrator.generate(user_message)
                 
                 if plan.complete_code:
@@ -388,7 +416,7 @@ class EmergentChatEngine:
             
             # Simple code generation - use Python code gear
             if not self.python_gear:
-                return "Python code generation is not available."
+                raise RuntimeError("CODE_GENERATION intent detected but no code generator available")
             
             result = self.python_gear.generate_from_text(user_message)
             
@@ -404,10 +432,10 @@ class EmergentChatEngine:
             else:
                 return f"Failed to generate code: {result.error}"
         
-        elif intent_result.intent in (Intent.TOOL_CALL, Intent.ORCHESTRATOR):
+        elif intent_result.intent == Intent.TOOL_CALL:
             # Tool call - use orchestrator
             if not self.orchestrator:
-                return "Tool calls are disabled."
+                raise RuntimeError("TOOL_CALL intent detected but orchestrator not enabled")
             
             result = self.orchestrator.execute(user_message, dry_run=True)
             
@@ -419,10 +447,14 @@ class EmergentChatEngine:
                     f"Reply 'yes' to execute, or anything else to cancel."
                 )
             else:
-                return "I couldn't figure out what commands to run for that request."
+                raise RuntimeError(f"TOOL_CALL intent detected but no commands generated for: {user_message}")
         
-        # Fallback to chat
-        return self.chain.chat(user_message)
+        elif intent_result.intent == Intent.UNSUPPORTED:
+            # Fail-fast: don't silently fall back to chat
+            raise RuntimeError(f"UNSUPPORTED intent - emergent classifier could not route: {user_message}")
+        
+        # CLARIFICATION intent - ask for more info
+        return f"I need more information to help you. Could you clarify: {user_message}"
     
     def _execute_plot_code(self, code: str) -> str:
         """Execute plot code and save to run_graph.py for re-running."""
@@ -478,6 +510,279 @@ class EmergentChatEngine:
         
         self.pending_commands = []
         return "Executed:\n" + '\n'.join(results)
+    
+    def generate_with_tools(self, messages: List[Message], tools: Optional[List[Tool]] = None) -> Tuple[Optional[str], Optional[List[ToolCall]]]:
+        """
+        Generate a response, potentially including tool calls.
+        
+        Returns: (content, tool_calls) - one will be None
+        """
+        # Check if the last message is a tool result
+        if messages and messages[-1].role == "tool":
+            tool_result = messages[-1].get_text_content()
+            tool_call_id = messages[-1].tool_call_id
+            logger.info(f"Processing tool result (id={tool_call_id}): {tool_result[:100]}...")
+            
+            # Find the original user request before the tool call
+            user_message = None
+            for msg in reversed(messages):
+                if msg.role == "user":
+                    user_message = msg.get_text_content()
+                    break
+            
+            # Generate a response that incorporates the tool result
+            if tool_result:
+                # Check if the result is a file path that we should read
+                if "Content saved to:" in tool_result or "saved to:" in tool_result.lower():
+                    # Extract the file path and try to read it
+                    import re
+                    path_match = re.search(r'saved to[:\s]+([^\s\n]+)', tool_result, re.IGNORECASE)
+                    if path_match:
+                        file_path = path_match.group(1).strip()
+                        try:
+                            with open(file_path, 'r') as f:
+                                content = f.read()
+                            
+                            # If it's HTML, try to extract text content
+                            if '<html' in content.lower() or '<!doctype' in content.lower():
+                                # Simple HTML text extraction
+                                import re as regex
+                                # Remove script and style elements
+                                content = regex.sub(r'<script[^>]*>.*?</script>', '', content, flags=regex.DOTALL | regex.IGNORECASE)
+                                content = regex.sub(r'<style[^>]*>.*?</style>', '', content, flags=regex.DOTALL | regex.IGNORECASE)
+                                # Remove HTML tags
+                                content = regex.sub(r'<[^>]+>', ' ', content)
+                                # Clean up whitespace
+                                content = regex.sub(r'\s+', ' ', content).strip()
+                                # Decode HTML entities
+                                content = content.replace('&nbsp;', ' ').replace('&amp;', '&').replace('&lt;', '<').replace('&gt;', '>')
+                            
+                            # Truncate if too long
+                            if len(content) > 2000:
+                                content = content[:2000] + "\n\n... (truncated)"
+                            return f"Here's what I found:\n\n{content}", None
+                        except Exception as e:
+                            logger.warning(f"Could not read file {file_path}: {e}")
+                
+                # Simple response that presents the tool result
+                return f"Here's what I found:\n\n{tool_result}", None
+            else:
+                return "The tool completed but returned no output.", None
+        
+        # Get the last user message
+        user_message = None
+        for msg in reversed(messages):
+            if msg.role == "user":
+                user_message = msg.get_text_content()
+                break
+        
+        if not user_message:
+            return "I need a question to answer.", None
+        
+        # Handle Goose session description requests (no tools, asking for short description)
+        system_msg = next((m.get_text_content() for m in messages if m.role == "system"), "")
+        if "description in four words or less" in system_msg.lower() or "reply *only* with the description" in user_message.lower():
+            # Extract key words from the user messages mentioned in the request
+            words = []
+            for word in ["file", "list", "read", "plot", "sine", "create", "run"]:
+                if word in user_message.lower():
+                    words.append(word)
+            if words:
+                return " ".join(words[:4]).title(), None
+            return "General Query", None
+        
+        # Filter out Goose system prompt if present
+        goose_prefix = "You are a general-purpose AI agent called goose"
+        if user_message.startswith(goose_prefix):
+            parts = user_message.split("\n\n", 1)
+            if len(parts) > 1:
+                user_message = parts[-1].strip()
+        
+        # Use the new intent classifier
+        intent_match = self.intent_classifier.classify(user_message)
+        logger.info(f"Intent: {intent_match.intent.value}, confidence: {intent_match.confidence}, reason: {intent_match.reason}")
+        
+        # If tools are available and intent is TOOL_CALL, generate tool call
+        if tools and intent_match.intent == Intent.TOOL_CALL:
+            logger.info(f"Available tools from client: {[t.function.name for t in tools]}")
+            
+            # Map our tool names to Goose tool name patterns (order matters - more specific first)
+            TOOL_NAME_MAP = {
+                'Glob': ['developer__shell'],  # Use shell for ls/find commands
+                'Read': ['developer__text_editor', 'developer__shell'],  # text_editor can read files
+                'Bash': ['developer__shell'],  # Shell for running commands
+                'Write': ['developer__text_editor'],  # text_editor for writing
+                'Edit': ['developer__text_editor'],  # text_editor for editing
+                'Grep': ['developer__shell'],  # Shell for grep
+            }
+            
+            # Find a matching tool - try exact match first, then pattern match
+            matching_tool = None
+            tool_to_use = intent_match.tool_name
+            
+            # First try exact match
+            for tool in tools:
+                if tool.function.name == intent_match.tool_name:
+                    matching_tool = tool
+                    break
+            
+            # If no exact match, try to find a tool that matches our intent
+            if not matching_tool and intent_match.tool_name in TOOL_NAME_MAP:
+                patterns = TOOL_NAME_MAP[intent_match.tool_name]
+                for tool in tools:
+                    tool_lower = tool.function.name.lower()
+                    for pattern in patterns:
+                        if pattern in tool_lower:
+                            matching_tool = tool
+                            tool_to_use = tool.function.name  # Use the actual tool name
+                            logger.info(f"Mapped {intent_match.tool_name} -> {tool_to_use}")
+                            break
+                    if matching_tool:
+                        break
+            
+            # If still no match, don't use a random tool - return text explaining what we need
+            if not matching_tool:
+                logger.info(f"No matching tool found for intent {intent_match.tool_name}. Available: {[t.function.name for t in tools]}")
+                # Return a helpful text response instead of calling wrong tool
+                return f"I'd like to help with that, but I need shell/file access tools. The available tools ({', '.join(t.function.name for t in tools)}) don't include file system operations. Please enable the developer extension in Goose.", None
+            
+            if matching_tool:
+                # Generate tool call with the actual tool name Goose expects
+                import uuid
+                
+                # Transform arguments for Goose's developer__shell tool
+                # It expects {"command": "actual shell command"}
+                tool_args = intent_match.tool_args
+                if tool_to_use == "developer__shell":
+                    # Convert our intent args to shell commands
+                    if intent_match.tool_name == "Glob":
+                        # List files - use ls command
+                        path = tool_args.get("pattern", ".") or "."
+                        if path in ["current directory", "here", "this directory", "."]:
+                            path = "."
+                        tool_args = {"command": f"ls -la {path}"}
+                    elif intent_match.tool_name == "Bash":
+                        # Already a command
+                        cmd = tool_args.get("command", "")
+                        tool_args = {"command": cmd}
+                    elif intent_match.tool_name == "Grep":
+                        # Search command
+                        query = tool_args.get("query", "")
+                        tool_args = {"command": f"grep -r '{query}' ."}
+                    elif intent_match.tool_name == "Read":
+                        # Cat file
+                        path = tool_args.get("file_path", "")
+                        tool_args = {"command": f"cat {path}"}
+                
+                tool_call = ToolCall(
+                    id=f"call_{uuid.uuid4().hex[:8]}",
+                    type="function",
+                    function=FunctionCall(
+                        name=tool_to_use,
+                        arguments=json.dumps(tool_args)
+                    )
+                )
+                logger.info(f"Generated tool call: {tool_to_use}({tool_args})")
+                return None, [tool_call]
+        
+        # Handle based on intent from our classifier (not the legacy one in generate())
+        if intent_match.intent == Intent.KNOWLEDGE:
+            # Knowledge query - use emergent chain directly
+            response = self.chain.chat(user_message)
+            
+            # Check for empty or generic fallback responses
+            generic_responses = [
+                "I understand. Let me help you with that.",
+                "I don't have enough information",
+                "I'm not sure",
+                "I found something related:",  # This is a fallback response
+                "I don't have information about that",  # Another fallback
+                "I can discuss:",  # Listing topics means we don't know the answer
+            ]
+            is_generic = not response or response.strip() == "" or any(g in response for g in generic_responses)
+            if is_generic:
+                # Extract the topic from the query
+                topic = user_message.lower().replace("what is ", "").replace("what are ", "").replace("explain ", "").replace("?", "").strip()
+                
+                # If tools are available, generate a tool call to look up the information via LLM
+                if tools:
+                    # Look for developer__shell to call LLM via curl
+                    shell_tool = None
+                    for tool in tools:
+                        if tool.function.name == 'developer__shell':
+                            shell_tool = tool
+                            break
+                    
+                    if shell_tool:
+                        # Use shell to call LLM API with a well-crafted prompt
+                        import uuid
+                        
+                        # Build a curl command to query an LLM
+                        prompt = f"Explain what {topic} is in 2-3 concise sentences. Be informative and accurate."
+                        # Escape the prompt for shell
+                        escaped_prompt = prompt.replace('"', '\\"')
+                        
+                        # Call our own LLM endpoint or a local LLM
+                        curl_cmd = f'''curl -s http://127.0.0.1:11434/api/generate -d '{{"model": "qwen2.5:14b", "prompt": "{escaped_prompt}", "stream": false}}' | jq -r '.response' '''
+                        
+                        tool_args = {"command": curl_cmd}
+                        
+                        tool_call = ToolCall(
+                            id=f"call_{uuid.uuid4().hex[:8]}",
+                            type="function",
+                            function=FunctionCall(
+                                name=shell_tool.function.name,
+                                arguments=json.dumps(tool_args)
+                            )
+                        )
+                        logger.info(f"Knowledge not found for '{topic}', generating LLM lookup via shell")
+                        return f"I don't have '{topic}' in my knowledge base. Let me look that up for you.", [tool_call]
+                
+                # No tools available - return helpful message
+                response = f"I don't have specific information about '{topic}' in my knowledge base yet. You could ask me to create a visualization instead, like 'create a {topic} example plot'."
+            return response, None
+        
+        elif intent_match.intent == Intent.CODE_GENERATION:
+            # Code generation - use code orchestrator directly
+            if self.code_orchestrator:
+                plan = self.code_orchestrator.generate(user_message)
+                
+                if plan.complete_code:
+                    response = f"```python\n{plan.complete_code}\n```"
+                    response += f"\n\n*Generated via CodeOrchestrator ({len(plan.functions)} functions)*"
+                    if plan.verified:
+                        response += f"\n✓ Code verified"
+                    if plan.output:
+                        response += f"\nOutput: {plan.output[:200]}"
+                    if plan.error:
+                        response += f"\n⚠ {plan.error}"
+                    
+                    # Auto-execute plot code and save to run_graph.py
+                    if 'plt.' in plan.complete_code or 'matplotlib' in plan.complete_code:
+                        exec_result = self._execute_plot_code(plan.complete_code)
+                        response += f"\n\n{exec_result}"
+                    
+                    return response, None
+                else:
+                    return f"Failed to generate code: {plan.error}", None
+            
+            # Fallback to python_gear
+            if self.python_gear:
+                result = self.python_gear.generate_from_text(user_message)
+                if result.success:
+                    return f"```python\n{result.code}\n```", None
+                else:
+                    return f"Failed to generate code: {result.error}", None
+            
+            return "Code generation not available", None
+        
+        elif intent_match.intent == Intent.UNSUPPORTED:
+            # Unsupported - provide a helpful response
+            return "I'm not sure how to help with that. I can help with:\n- Creating plots and visualizations\n- File operations (list, read, write)\n- Running shell commands\n- Answering questions about topics I know", None
+        
+        # Fallback to generate for anything else
+        response = self.generate(messages)
+        return response, None
     
     def get_stats(self) -> Dict[str, Any]:
         """Get engine statistics."""
@@ -747,11 +1052,9 @@ def create_app(
     
     @app.post("/v1/chat/completions")
     async def chat_completions(request: Request):
-        """Chat completions endpoint (OpenAI-compatible)."""
+        """Chat completions endpoint (OpenAI-compatible with tool calling support)."""
         
-        # Get raw JSON to debug what Goose sends
         raw_body = await request.json()
-        logger.info(f"Raw request body: {json.dumps(raw_body, indent=2)[:1000]}")
         
         # Parse into our model
         try:
@@ -760,13 +1063,17 @@ def create_app(
             logger.error(f"Failed to parse request: {e}")
             raise HTTPException(status_code=422, detail=str(e))
         
-        logger.info(f"Received request: model={parsed.model}, stream={parsed.stream}")
-        logger.info(f"Messages: {[m.get_text_content()[:50] for m in parsed.messages]}")
+        logger.info(f"Request: model={parsed.model}, stream={parsed.stream}, tools={len(parsed.tools) if parsed.tools else 0}")
+        
         request = parsed  # Use parsed request from here
         
+        # Generate response (with potential tool calls)
         try:
-            response_text = engine.generate(request.messages)
-            logger.info(f"Generated response: {response_text[:100]}")
+            response_text, tool_calls = engine.generate_with_tools(request.messages, request.tools)
+            if tool_calls:
+                logger.info(f"Generated tool calls: {[tc.function.name for tc in tool_calls]}")
+            else:
+                logger.info(f"Generated response: {(response_text or '')[:100]}...")
         except Exception as e:
             logger.error(f"Error generating response: {e}")
             raise HTTPException(status_code=500, detail=str(e))
@@ -775,33 +1082,77 @@ def create_app(
         if request.stream:
             async def generate_stream():
                 chunk_id = f"chatcmpl-{uuid.uuid4().hex[:8]}"
-                # Send the content in one chunk
-                chunk = {
-                    "id": chunk_id,
-                    "object": "chat.completion.chunk",
-                    "created": int(time.time()),
-                    "model": request.model,
-                    "choices": [{
-                        "index": 0,
-                        "delta": {"role": "assistant", "content": response_text},
-                        "finish_reason": None
-                    }]
-                }
-                yield f"data: {json.dumps(chunk)}\n\n"
                 
-                # Send finish chunk
-                finish_chunk = {
-                    "id": chunk_id,
-                    "object": "chat.completion.chunk",
-                    "created": int(time.time()),
-                    "model": request.model,
-                    "choices": [{
-                        "index": 0,
-                        "delta": {},
-                        "finish_reason": "stop"
-                    }]
-                }
-                yield f"data: {json.dumps(finish_chunk)}\n\n"
+                if tool_calls:
+                    # Stream tool calls
+                    for tc in tool_calls:
+                        chunk = {
+                            "id": chunk_id,
+                            "object": "chat.completion.chunk",
+                            "created": int(time.time()),
+                            "model": request.model,
+                            "choices": [{
+                                "index": 0,
+                                "delta": {
+                                    "role": "assistant",
+                                    "content": None,
+                                    "tool_calls": [{
+                                        "index": 0,
+                                        "id": tc.id,
+                                        "type": "function",
+                                        "function": {
+                                            "name": tc.function.name,
+                                            "arguments": tc.function.arguments
+                                        }
+                                    }]
+                                },
+                                "finish_reason": None
+                            }]
+                        }
+                        yield f"data: {json.dumps(chunk)}\n\n"
+                    
+                    # Send finish chunk for tool calls
+                    finish_chunk = {
+                        "id": chunk_id,
+                        "object": "chat.completion.chunk",
+                        "created": int(time.time()),
+                        "model": request.model,
+                        "choices": [{
+                            "index": 0,
+                            "delta": {},
+                            "finish_reason": "tool_calls"
+                        }]
+                    }
+                    yield f"data: {json.dumps(finish_chunk)}\n\n"
+                else:
+                    # Stream text content
+                    chunk = {
+                        "id": chunk_id,
+                        "object": "chat.completion.chunk",
+                        "created": int(time.time()),
+                        "model": request.model,
+                        "choices": [{
+                            "index": 0,
+                            "delta": {"role": "assistant", "content": response_text},
+                            "finish_reason": None
+                        }]
+                    }
+                    yield f"data: {json.dumps(chunk)}\n\n"
+                    
+                    # Send finish chunk
+                    finish_chunk = {
+                        "id": chunk_id,
+                        "object": "chat.completion.chunk",
+                        "created": int(time.time()),
+                        "model": request.model,
+                        "choices": [{
+                            "index": 0,
+                            "delta": {},
+                            "finish_reason": "stop"
+                        }]
+                    }
+                    yield f"data: {json.dumps(finish_chunk)}\n\n"
+                
                 yield "data: [DONE]\n\n"
             
             return StreamingResponse(
@@ -809,24 +1160,49 @@ def create_app(
                 media_type="text/event-stream"
             )
         
-        # Non-streaming response
-        return ChatCompletionResponse(
-            id=f"chatcmpl-{uuid.uuid4().hex[:8]}",
-            created=int(time.time()),
-            model=request.model,
-            choices=[
-                ChatCompletionChoice(
-                    index=0,
-                    message=Message(role="assistant", content=response_text),
-                    finish_reason="stop",
-                )
-            ],
-            usage=Usage(
-                prompt_tokens=sum(len(m.get_text_content().split()) for m in request.messages),
-                completion_tokens=len(response_text.split()),
-                total_tokens=sum(len(m.get_text_content().split()) for m in request.messages) + len(response_text.split()),
-            ),
-        )
+        # Non-streaming response (with tool call support)
+        if tool_calls:
+            # Response with tool calls
+            return ChatCompletionResponse(
+                id=f"chatcmpl-{uuid.uuid4().hex[:8]}",
+                created=int(time.time()),
+                model=request.model,
+                choices=[
+                    ChatCompletionChoice(
+                        index=0,
+                        message=ResponseMessage(
+                            role="assistant",
+                            content=None,
+                            tool_calls=tool_calls,
+                        ),
+                        finish_reason="tool_calls",
+                    )
+                ],
+                usage=Usage(
+                    prompt_tokens=sum(len(m.get_text_content().split()) for m in request.messages),
+                    completion_tokens=10,  # Approximate for tool calls
+                    total_tokens=sum(len(m.get_text_content().split()) for m in request.messages) + 10,
+                ),
+            )
+        else:
+            # Regular text response
+            return ChatCompletionResponse(
+                id=f"chatcmpl-{uuid.uuid4().hex[:8]}",
+                created=int(time.time()),
+                model=request.model,
+                choices=[
+                    ChatCompletionChoice(
+                        index=0,
+                        message=ResponseMessage(role="assistant", content=response_text),
+                        finish_reason="stop",
+                    )
+                ],
+                usage=Usage(
+                    prompt_tokens=sum(len(m.get_text_content().split()) for m in request.messages),
+                    completion_tokens=len((response_text or "").split()),
+                    total_tokens=sum(len(m.get_text_content().split()) for m in request.messages) + len((response_text or "").split()),
+                ),
+            )
     
     return app
 

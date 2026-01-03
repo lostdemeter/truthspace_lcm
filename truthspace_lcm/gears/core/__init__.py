@@ -36,7 +36,6 @@ Usage:
 """
 
 from .base import Gear, GearState, GearChain, Quaternion
-from .error_correction import ErrorCorrectionGear
 from .emergent_chain import EmergentDimensionChain, DimensionInfo, DataItem
 from .semantic_chain import SemanticChain
 from .linguistic_chain import LinguisticChain
@@ -68,7 +67,6 @@ __all__ = [
     'GearState',
     'GearChain',
     'Quaternion',
-    'ErrorCorrectionGear',
     # Gear message protocol
     'GearMessage',
     'GearProtocol',

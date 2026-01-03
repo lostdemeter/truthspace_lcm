@@ -42,6 +42,7 @@ class Intent(Enum):
     CHAT = auto()          # Knowledge query, conversation
     TOOL_CALL = auto()     # Single system action needed
     ORCHESTRATOR = auto()  # Complex multi-step task
+    CODE_GENERATION = auto()  # Python code generation needed
     UNKNOWN = auto()       # Can't determine
 
 
@@ -118,6 +119,39 @@ class IntentDetectorGear(GearProtocol):
         r'\b(build|deploy|release)\s+(the\s+)?(app|application|project)\b',
     ]
     
+    # Patterns that indicate code generation
+    CODE_PATTERNS = [
+        r'\b(write|generate|create)\s+(a\s+)?(python|code|script|program|function)\b',
+        r'\bpython\s+(code|script|program|function)\b',
+        r'\b(code|script)\s+that\s+(will|can|does)\b',
+        r'\bfunction\s+that\s+(takes|returns|calculates|computes)\b',
+        r'\bprogram\s+that\s+(reads|writes|prints|calculates)\b',
+        r'\b(write|create)\s+code\s+(to|for|that)\b',
+        r'\bgenerate\s+(some\s+)?(code|python)\b',
+        r'\bcan you (write|code|program)\b',
+        r'\b(simple|basic)\s+(python\s+)?(program|script|code)\b',
+        # Visualization/plotting patterns
+        r'\b(create|make|generate|plot|draw)\s+(a\s+)?(bar\s+chart|line\s+chart|pie\s+chart|scatter\s+plot|histogram|graph|plot)\b',
+        r'\b(matplotlib|pyplot|plt)\b',
+        r'\bplot\s+(a\s+)?(sine|cosine|line|bar|scatter)\b',
+        r'\bvisualize\s+(the\s+)?(data|results)\b',
+        r'\b(sine|cosine)\s+(wave|plot|graph)\b',
+        r'\b(bar|scatter|line)\s+(chart|plot|graph)\b',
+        r'\bcreate\s+(a\s+)?(histogram|plot|chart|graph)\b',
+        r'\b3d\s+(plot|surface|graph)\b',
+        r'\bsurface\s+plot\b',
+        r'\bheatmap\b',
+        r'\bcontour\s+plot\b',
+    ]
+    
+    # Code-related keywords
+    CODE_KEYWORDS = {
+        'python', 'code', 'script', 'program', 'function', 'def',
+        'variable', 'loop', 'iterate', 'calculate', 'compute',
+        'plot', 'chart', 'graph', 'matplotlib', 'visualize', 'histogram',
+        '3d', 'surface', 'heatmap', 'contour',
+    }
+    
     # Patterns that indicate chat/knowledge
     CHAT_PATTERNS = [
         r'^(who|what|where|when|why|how|which)\s+(is|are|was|were|did|do|does)\b',
@@ -138,6 +172,7 @@ class IntentDetectorGear(GearProtocol):
         self.tool_patterns = [re.compile(p, re.IGNORECASE) for p in self.TOOL_PATTERNS]
         self.orchestrator_patterns = [re.compile(p, re.IGNORECASE) for p in self.ORCHESTRATOR_PATTERNS]
         self.chat_patterns = [re.compile(p, re.IGNORECASE) for p in self.CHAT_PATTERNS]
+        self.code_patterns = [re.compile(p, re.IGNORECASE) for p in self.CODE_PATTERNS]
     
     def detect(self, text: str) -> IntentResult:
         """
@@ -153,11 +188,13 @@ class IntentDetectorGear(GearProtocol):
             Intent.CHAT: 0.0,
             Intent.TOOL_CALL: 0.0,
             Intent.ORCHESTRATOR: 0.0,
+            Intent.CODE_GENERATION: 0.0,
         }
         reasons = {
             Intent.CHAT: [],
             Intent.TOOL_CALL: [],
             Intent.ORCHESTRATOR: [],
+            Intent.CODE_GENERATION: [],
         }
         
         # Check for action verbs
@@ -196,6 +233,19 @@ class IntentDetectorGear(GearProtocol):
                 reasons[Intent.CHAT].append("chat pattern match")
                 break
         
+        # Check code generation patterns
+        for pattern in self.code_patterns:
+            if pattern.search(text_lower):
+                scores[Intent.CODE_GENERATION] += 0.6
+                reasons[Intent.CODE_GENERATION].append("code pattern match")
+                break
+        
+        # Check for code keywords
+        code_keywords_found = words & self.CODE_KEYWORDS
+        if code_keywords_found:
+            scores[Intent.CODE_GENERATION] += len(code_keywords_found) * 0.2
+            reasons[Intent.CODE_GENERATION].append(f"code keywords: {code_keywords_found}")
+        
         # Multi-step detection: commas or "and" with action verbs
         if ',' in text and action_verbs_found:
             scores[Intent.ORCHESTRATOR] += 0.3
@@ -205,8 +255,10 @@ class IntentDetectorGear(GearProtocol):
             scores[Intent.ORCHESTRATOR] += 0.3
             reasons[Intent.ORCHESTRATOR].append("multiple actions with 'and'")
         
-        # Determine winner
-        if scores[Intent.ORCHESTRATOR] > scores[Intent.TOOL_CALL]:
+        # Determine winner - code generation takes priority if strong match
+        if scores[Intent.CODE_GENERATION] >= 0.6:
+            best = Intent.CODE_GENERATION
+        elif scores[Intent.ORCHESTRATOR] > scores[Intent.TOOL_CALL]:
             # Orchestrator beats tool call
             best = Intent.ORCHESTRATOR
         elif scores[Intent.TOOL_CALL] > scores[Intent.CHAT]:
@@ -257,6 +309,7 @@ class IntentDetectorGear(GearProtocol):
             Intent.CHAT: MessageIntent.QUERY,
             Intent.TOOL_CALL: MessageIntent.EXECUTE,
             Intent.ORCHESTRATOR: MessageIntent.EXECUTE,
+            Intent.CODE_GENERATION: MessageIntent.EXECUTE,
             Intent.UNKNOWN: MessageIntent.QUERY,
         }
         
