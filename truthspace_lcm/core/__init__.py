@@ -1,171 +1,112 @@
 """
-TruthSpace LCM Core Module
+Gear Chain Core
 
-Fully Geometric Language Understanding with Holographic Templates and Semantic Quaternions.
+The foundational classes for building gear-based transformation pipelines.
+These are domain-agnostic and can be used for any transformation task.
 
-Core Principle: All semantic operations are geometric operations in concept space.
+Core Components:
+- Quaternion: 4D rotation encoding for gear parameters
+- GearState: Base state object that flows through the chain
+- Gear: Abstract base class for all transformation gears
+- GearChain: Container for composing gears into pipelines
 
-Architecture:
-    Surface Text (any language)
-            ↓
-    Position-Based Frame Extraction
-            ↓
-    GEOMETRIC FRAME (position bands)
-    {INITIATOR: [0, 0.33), MEDIATOR: [0.33, 0.66), RECEIVER: [0.66, 1]}
-            ↓
-    φ-Space Representation (language-agnostic)
-            ↓
-    Holographic Template Projection + Semantic Quaternion
-            ↓
-    φ-Dial Styled Response
-
-Primary Components:
-- GeometricKnowledge: Position-based frame extraction, geometric stop words
-- GeometricMorphology: Verb equivalence learned from parallel structures
-- GeometricConjugation: Output generation learned from parallel structures
-- GeometricQA: Question answering using geometric principles
-- HolographicGeometricQA: Enhanced QA with holographic templates + quaternions
-- HolographicTemplateProjector: Dynamic templates via interference
-- SemanticQuaternionNavigator: 4D concept encoding for analogies (100% accuracy)
-
-Two Quaternions:
-- φ-Dial (OUTPUT): Style, Perspective, Depth, Certainty
-- Semantic (ENCODING): Gender, Age, Agency (φ-direction), Animacy
-
-Core Formulas (Geometric):
-- Position: p(w) = normalized position in sentence [0, 1]
-- φ-direction: (initiator_count - receiver_count) / total_roles
-- Stop word: no semantic role OR short+frequent
-- Morphology: learned from parallel structures ("I love. I loved.")
-- Phase: φ-direction × π (geometric encoding, not hash)
-- Magnitude: role_strength (how strongly typed)
+Emergent Components:
+- EmergentDimensionChain: Base class for self-discovering dimension chains
+- SemanticChain: Understanding chain (discovers dimensions from agent behavior)
+- LinguisticChain: Output chain (discovers dimensions from sentence structure)
 
 Usage:
-    from truthspace_lcm.core import HolographicGeometricQA
+    from truthspace_lcm.core import Gear, GearState, GearChain, Quaternion
+    from truthspace_lcm.core import SemanticChain, LinguisticChain
     
-    # Create enhanced QA system
-    qa = HolographicGeometricQA()
-    qa.load_corpus('concept_corpus.json')
+    # Traditional gear chain
+    class MyGear(Gear):
+        def forward(self, state: GearState) -> GearState:
+            return state
     
-    # Ask questions (uses holographic templates)
-    answer = qa.ask("Who is Darcy?")
+    chain = GearChain("MyPipeline")
+    chain.add(MyGear())
+    result = chain.process(initial_state)
     
-    # Complete analogies (uses semantic quaternions)
-    results = qa.complete_analogy("king", "queen", "man")  # -> woman
+    # Emergent dimension chain
+    semantic = SemanticChain()
+    semantic.ingest_corpus("corpus.json")
+    semantic.learn_dimensions()
+    similar = semantic.find_similar("holmes")
 """
 
-# =============================================================================
-# PRIMARY GEOMETRIC COMPONENTS
-# =============================================================================
-
-from .geometric import (
-    PHI,
-    MORPHOLOGY_BOOTSTRAP,
-    GeometricConcept,
-    Frame,
-    VerbCluster,
-    GeometricMorphology,
-    GeometricConjugation,
-    GeometricKnowledge,
-    GeometricQA,
-    HolographicGeometricQA,
+from .base import Gear, GearState, GearChain, Quaternion
+from .emergent_chain import EmergentDimensionChain, DimensionInfo, DataItem
+from .semantic_chain import SemanticChain
+from .linguistic_chain import LinguisticChain
+from .conversational_chain import ConversationalChain, KnowledgeItem, ConversationTurn
+from .gear_message import (
+    GearMessage, GearProtocol, MessageIntent, MessageAwareGear,
+    EmergentIntentSpace, get_intent_space,
+    normalize_input, normalize_output,
+    adapt_to_gear_state, adapt_from_gear_state,
 )
-
-from .holographic_templates import (
-    HolographicTemplateProjector,
-    HolographicResponseSynthesizer,
-    HolographicConceptNavigator,
-    HolographicSummarizer,
-    HolographicParaphraser,
-    ProjectedTemplate,
-    QAPair,
+from .folding_deficiency import (
+    FoldingStructure, FoldingDeficiencyDetector,
+    ShapeDeficiency, ShapeDeficiencyType,
 )
-
-from .semantic_quaternion import (
-    SemanticQuaternion,
-    SemanticQuaternionNavigator,
-    SemanticFeatureLearner,
+from .gear_improvement_loop import (
+    GearImprovementLoop, GearTestHarness, ShapeBasedTestHarness,
+    DeficiencyType, Deficiency, TestCase, TestResult,
 )
-
-# =============================================================================
-# SUPPORTING COMPONENTS
-# =============================================================================
-
-from .conversation_memory import (
-    ConversationMemory,
-    ConversationTurn,
+from .chat_improvement import (
+    ChatImprovementGear, ResponseTemplate, ImprovementResult,
 )
-
-from .reasoning_engine import (
-    ReasoningEngine,
-    ReasoningStep,
-    ReasoningPath,
-)
-
-from .holographic_generator import (
-    HolographicGenerator,
-    InterferencePattern,
-)
-
-from .code_generator import (
-    CodeGenerator,
-    CodeFrame,
-)
-
-from .planner import (
-    Planner,
-    PlanStep,
-    ExecutionPlan,
-    Sandbox,
+from .corpus_builder import (
+    SelfBuildingCorpusGear, CorpusItem, CorpusCategory,
 )
 
 __all__ = [
-    # Primary Geometric Components
-    "PHI",
-    "MORPHOLOGY_BOOTSTRAP",
-    "GeometricConcept",
-    "Frame",
-    "VerbCluster",
-    "GeometricMorphology",
-    "GeometricConjugation",
-    "GeometricKnowledge",
-    "GeometricQA",
-    "HolographicGeometricQA",
-    
-    # Holographic Templates
-    "HolographicTemplateProjector",
-    "HolographicResponseSynthesizer",
-    "HolographicConceptNavigator",
-    "HolographicSummarizer",
-    "HolographicParaphraser",
-    "ProjectedTemplate",
-    "QAPair",
-    
-    # Semantic Quaternions
-    "SemanticQuaternion",
-    "SemanticQuaternionNavigator",
-    "SemanticFeatureLearner",
-    
-    # Conversation Memory
-    "ConversationMemory",
-    "ConversationTurn",
-    
-    # Reasoning Engine
-    "ReasoningEngine",
-    "ReasoningStep",
-    "ReasoningPath",
-    
-    # Holographic Generator
-    "HolographicGenerator",
-    "InterferencePattern",
-    
-    # Code Generator
-    "CodeGenerator",
-    "CodeFrame",
-    
-    # Planner
-    "Planner",
-    "PlanStep",
-    "ExecutionPlan",
-    "Sandbox",
+    # Base classes
+    'Gear',
+    'GearState',
+    'GearChain',
+    'Quaternion',
+    # Gear message protocol
+    'GearMessage',
+    'GearProtocol',
+    'MessageAwareGear',  # Alias for GearProtocol
+    'MessageIntent',
+    'EmergentIntentSpace',
+    'get_intent_space',
+    'normalize_input',
+    'normalize_output',
+    'adapt_to_gear_state',
+    'adapt_from_gear_state',
+    # Emergent dimension chains
+    'EmergentDimensionChain',
+    'DimensionInfo',
+    'DataItem',
+    'SemanticChain',
+    'LinguisticChain',
+    # Conversational chain
+    'ConversationalChain',
+    'KnowledgeItem',
+    'ConversationTurn',
+    # Folding deficiency detection (shape-based)
+    'FoldingStructure',
+    'FoldingDeficiencyDetector',
+    'ShapeDeficiency',
+    'ShapeDeficiencyType',
+    # Improvement loop
+    'GearImprovementLoop',
+    'GearTestHarness',
+    'ShapeBasedTestHarness',
+    'DeficiencyType',
+    'Deficiency',
+    'TestCase',
+    'TestResult',
+    # Chat improvement
+    'ChatImprovementGear',
+    'ResponseTemplate',
+    'ImprovementResult',
+    # Self-building corpus
+    'SelfBuildingCorpusGear',
+    'CorpusItem',
+    'CorpusCategory',
 ]

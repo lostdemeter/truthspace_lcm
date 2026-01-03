@@ -87,8 +87,8 @@ python truthspace_lcm/gears/practical_applications/data_pipeline.py
 ### Python API (Gear Chain)
 
 ```python
-from truthspace_lcm.gears.core import GearChain, GearState
-from truthspace_lcm.gears.practical_applications.nlp import RoleGear, ActionGear, TenseGear, OutputGear
+from truthspace_lcm.core import GearChain, GearState
+from truthspace_lcm.practical_applications.nlp import RoleGear, ActionGear, TenseGear, OutputGear
 
 # Build NLP pipeline
 chain = GearChain("NLPPipeline")
@@ -111,8 +111,8 @@ result = chain.process(state)
 ### Data Pipeline API
 
 ```python
-from truthspace_lcm.gears.core import GearChain
-from truthspace_lcm.gears.practical_applications.data import (
+from truthspace_lcm.core import GearChain
+from truthspace_lcm.practical_applications.data import (
     DataState, ValidationGear, NormalizationGear, FormatGear
 )
 

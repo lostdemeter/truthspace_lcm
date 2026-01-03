@@ -1,86 +1,43 @@
 """
-TruthSpace LCM - Geometric Language Concept Model
+TruthSpace Gear System
 
-A conversational AI system using fully geometric language understanding.
-All semantic operations are geometric operations in concept space.
+A modular, extensible gear chain architecture for transformation pipelines.
 
-No training. No neural networks. Pure geometry.
+The gear system is organized into:
+- core/: Base classes (Gear, GearState, GearChain, Quaternion) and core functionality
+- corpus/: Corpus management utilities
+- tools/: Corpus pruning, correction, and reinforcement tools
+- practical_applications/: Domain-specific implementations
+  - chat/: Emergent conversational chat (truly emergent responses)
 
-Architecture:
-    Surface Text (any language)
-            ↓
-    Position-Based Frame Extraction
-            ↓
-    Holographic Template Projection + Semantic Quaternion
-            ↓
-    φ-Dial Styled Response
-
-Example:
-    from truthspace_lcm.core import HolographicGeometricQA
+Usage (Chat):
+    from truthspace_lcm.practical_applications.chat import EmergentChat
     
-    qa = HolographicGeometricQA()
-    qa.load_corpus('concept_corpus.json')
+    chat = EmergentChat()
+    response = chat.chat("Hello, how are you?")
+
+Usage (API Server):
+    python -m truthspace_lcm.practical_applications.chat.run_api --port 8002
+
+Corpus management:
+    from truthspace_lcm.corpus import load_corpus, save_corpus
     
-    answer = qa.ask("Who is Darcy?")
-    # "Darcy is a character from Pride and Prejudice..."
-    
-    # Complete analogies with 100% accuracy
-    results = qa.complete_analogy("king", "queen", "man")  # -> woman
+Tools:
+    from truthspace_lcm.tools import CorpusPruner, CorpusCorrector, CorpusReinforcer
 """
 
-__version__ = "1.0.0"
-__author__ = "TruthSpace Team"
+# Re-export core classes for convenience
+from .core import Gear, GearState, GearChain, Quaternion
 
-from truthspace_lcm.core import (
-    # Primary Geometric Components
-    PHI,
-    GeometricConcept,
-    Frame,
-    GeometricMorphology,
-    GeometricConjugation,
-    GeometricKnowledge,
-    GeometricQA,
-    HolographicGeometricQA,
-    
-    # Holographic Templates
-    HolographicTemplateProjector,
-    HolographicResponseSynthesizer,
-    HolographicConceptNavigator,
-    
-    # Semantic Quaternions
-    SemanticQuaternion,
-    SemanticQuaternionNavigator,
-    
-    # Supporting Components
-    ConversationMemory,
-    ReasoningEngine,
-    CodeGenerator,
-    Planner,
-)
+# Re-export chat application
+from .practical_applications.chat import EmergentChat
 
 __all__ = [
-    # Primary Geometric Components
-    "PHI",
-    "GeometricConcept",
-    "Frame",
-    "GeometricMorphology",
-    "GeometricConjugation",
-    "GeometricKnowledge",
-    "GeometricQA",
-    "HolographicGeometricQA",
-    
-    # Holographic Templates
-    "HolographicTemplateProjector",
-    "HolographicResponseSynthesizer",
-    "HolographicConceptNavigator",
-    
-    # Semantic Quaternions
-    "SemanticQuaternion",
-    "SemanticQuaternionNavigator",
-    
-    # Supporting Components
-    "ConversationMemory",
-    "ReasoningEngine",
-    "CodeGenerator",
-    "Planner",
+    # Core classes
+    'Gear',
+    'GearState', 
+    'GearChain',
+    'Quaternion',
+    # Chat application
+    'EmergentChat',
 ]

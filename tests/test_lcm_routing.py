@@ -26,9 +26,9 @@ from enum import Enum
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from truthspace_lcm.gears.core.code_orchestrator import CodeOrchestrator
-from truthspace_lcm.gears.core.holographic_pattern_space import HolographicPatternSpace
-from truthspace_lcm.gears.core.intent_classifier import IntentClassifier, Intent, IntentMatch
+from truthspace_lcm.core.code_orchestrator import CodeOrchestrator
+from truthspace_lcm.core.holographic_pattern_space import HolographicPatternSpace
+from truthspace_lcm.core.intent_classifier import IntentClassifier, Intent, IntentMatch
 
 
 class ExpectedResult(Enum):

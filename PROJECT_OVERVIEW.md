@@ -95,16 +95,22 @@ The system exhibits fractal self-similarity:
 ```
 truthspace-lcm/
 ├── truthspace_lcm/           # Main project code
-│   └── gears/                # Gear-based implementation
-│       ├── core/             # Domain-agnostic core functionality
-│       ├── practical_applications/  # Applications of core
-│       │   ├── chat/         # Chat interface & API server
-│       │   ├── nlp/          # NLP-specific gears
-│       │   └── data/         # Data transformation gears
-│       ├── corpus/           # Knowledge corpuses (JSON)
-│       └── tools/            # Corpus management tools
+│   ├── core/                 # Domain-agnostic core functionality
+│   │   ├── gear.py           # Base Gear class
+│   │   ├── conversational_chain.py  # Main chat chain
+│   │   ├── emergent_classifier.py   # Intent classification
+│   │   ├── code_orchestrator.py     # Code generation
+│   │   └── ...               # Other core components
+│   ├── practical_applications/
+│   │   └── chat/             # Chat interface & API server
+│   │       ├── api_server.py # OpenAI-compatible API
+│   │       ├── chat.py       # EmergentChat class
+│   │       └── run_api.py    # Server runner
+│   ├── corpus/               # Knowledge corpuses (JSON)
+│   └── tools/                # Corpus management tools
 │
-├── experiments/              # Experimental code during development
+├── temp/                     # Deprecated/legacy code
+│   └── legacy_truthspace_lcm/  # Old core and NLP gears
 ├── design_considerations/    # Design documentation (87+ documents)
 ├── data/                     # Runtime data storage
 └── output/                   # Generated outputs (plots, etc.)
@@ -112,11 +118,11 @@ truthspace-lcm/
 
 ### Directory Philosophy
 
-- **`core/`** - Contains domain-agnostic base classes and fundamental abstractions. If it's not specific to a particular application, it belongs here.
+- **`core/`** - Contains domain-agnostic base classes and fundamental abstractions. Includes gear base classes, conversational chain, intent classification, and code orchestration.
 
-- **`practical_applications/`** - Contains applications built on top of core. Each application demonstrates how core functionality can be composed for specific use cases.
+- **`practical_applications/`** - Contains applications built on top of core. Currently focused on the chat application which provides an OpenAI-compatible API.
 
-- **`experiments/`** - Unstable, exploratory code. Once validated, concepts move to `truthspace_lcm/`.
+- **`temp/`** - Deprecated code and legacy implementations. Kept for reference but not actively used.
 
 - **`design_considerations/`** - Living documentation of architectural decisions, discoveries, and research notes.
 
@@ -489,7 +495,7 @@ python truthspace_lcm/gears/run.py
 ### Run API Server
 
 ```bash
-python -m truthspace_lcm.gears.practical_applications.chat.api_server --port 8002
+python -m truthspace_lcm.practical_applications.chat.api_server --port 8002
 ```
 
 ### Run Tests

@@ -74,6 +74,8 @@ Thumbs.db
 *.log
 temp/
 tmp/
+logs/
+output/
 
 # Outside projects (cloned repos for reference, not part of this project)
 outside_projects/

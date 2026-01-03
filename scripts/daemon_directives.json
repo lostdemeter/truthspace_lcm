@@ -1,8 +1,0 @@
-{
-    "priority_topics": [],
-    "priority_domains": ["science", "philosophy"],
-    "skip_topics": [],
-    "min_quality": 0.5,
-    "use_attention_extraction": true,
-    "notes": "Edit this file to direct the self-improvement daemon. Changes take effect on next cycle."
-}
