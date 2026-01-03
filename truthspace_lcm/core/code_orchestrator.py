@@ -45,7 +45,8 @@ from truthspace_lcm.core.template_composer import TemplateComposer
 # PLOT CORPUS - Learnable pattern storage (Legacy - kept for compatibility)
 # =============================================================================
 
-OUTPUT_DIR = '/home/thorin/truthspace-lcm/output'
+# Output directory relative to this module (truthspace_lcm/core/)
+OUTPUT_DIR = str(Path(__file__).parent.parent.parent / 'output')
 
 
 @dataclass

@@ -21,8 +21,8 @@ API Endpoints:
     GET  /corpus          - Corpus information
     GET  /books           - List available books
     POST /learn           - Learn a new topic: {"topic": "George Washington"}
-    POST /save            - Save corpus: {"path": "data/corpus.json"}
-    POST /reload          - Reload corpus: {"path": "data/corpus.json"}
+    POST /save            - Save corpus: {"path": "corpus/chat_corpus.json"}
+    POST /reload          - Reload corpus: {"path": "corpus/chat_corpus.json"}
     POST /build           - Run one corpus build iteration
     POST /load_book       - Load a book: {"book_name": "moby_dick"}
     POST /v1/chat/completions - OpenAI-compatible chat endpoint
@@ -40,7 +40,7 @@ Example workflow with curl:
     curl -X POST http://localhost:8001/learn -H "Content-Type: application/json" -d '{"topic": "George Washington"}'
     
     # Save the corpus
-    curl -X POST http://localhost:8001/save -H "Content-Type: application/json" -d '{"path": "data/chat_corpus.json"}'
+    curl -X POST http://localhost:8001/save -H "Content-Type: application/json" -d '{"path": "corpus/chat_corpus.json"}'
     
     # Ask about the topic
     curl -X POST http://localhost:8001/v1/chat/completions -H "Content-Type: application/json" -d '{
@@ -49,7 +49,7 @@ Example workflow with curl:
     }'
     
     # Reload after restart
-    curl -X POST http://localhost:8001/reload -H "Content-Type: application/json" -d '{"path": "data/chat_corpus.json"}'
+    curl -X POST http://localhost:8001/reload -H "Content-Type: application/json" -d '{"path": "corpus/chat_corpus.json"}'
 
 Author: Lesley Gushurst
 License: GPLv3
@@ -325,35 +325,36 @@ class EmergentChatEngine:
             return f"I couldn't learn about {topic}. Make sure the LLM is running."
         
         if user_message.lower() == "/save":
-            path = "data/chat_corpus.json"
-            full_path = str(Path(__file__).parent.parent.parent.parent.parent / path)
-            Path(full_path).parent.mkdir(parents=True, exist_ok=True)
+            from truthspace_lcm.corpus import CORPUS_DIR
+            full_path = str(CORPUS_DIR / "chat_corpus.json")
             self.chain.save_corpus(full_path)
             stats = self.chain.get_stats()
-            return f"Saved corpus to {path}. {stats['topics']} topics, {stats['corpus_items']} items."
+            return f"Saved corpus. {stats['topics']} topics, {stats['corpus_items']} items."
         
         if user_message.lower().startswith("/save "):
+            from truthspace_lcm.corpus import CORPUS_DIR
             path = user_message[6:].strip()
             if not Path(path).is_absolute():
-                path = str(Path(__file__).parent.parent.parent.parent.parent / path)
+                path = str(CORPUS_DIR / path)
             Path(path).parent.mkdir(parents=True, exist_ok=True)
             self.chain.save_corpus(path)
             stats = self.chain.get_stats()
             return f"Saved corpus. {stats['topics']} topics, {stats['corpus_items']} items."
         
         if user_message.lower() == "/reload":
-            path = "data/chat_corpus.json"
-            full_path = str(Path(__file__).parent.parent.parent.parent.parent / path)
+            from truthspace_lcm.corpus import CORPUS_DIR
+            full_path = str(CORPUS_DIR / "chat_corpus.json")
             if Path(full_path).exists():
                 self.chain.load_corpus(full_path)
                 stats = self.chain.get_stats()
-                return f"Reloaded corpus from {path}. {stats['topics']} topics, {stats['corpus_items']} items."
-            return f"No corpus file found at {path}. Use /save first."
+                return f"Reloaded corpus. {stats['topics']} topics, {stats['corpus_items']} items."
+            return f"No corpus file found. Use /save first."
         
         if user_message.lower().startswith("/reload "):
+            from truthspace_lcm.corpus import CORPUS_DIR
             path = user_message[8:].strip()
             if not Path(path).is_absolute():
-                path = str(Path(__file__).parent.parent.parent.parent.parent / path)
+                path = str(CORPUS_DIR / path)
             if Path(path).exists():
                 self.chain.load_corpus(path)
                 stats = self.chain.get_stats()
@@ -373,7 +374,7 @@ class EmergentChatEngine:
         if user_message.lower() == "/help":
             return """Available commands:
 /learn <topic> - Learn about a new topic (uses LLM)
-/save [path]   - Save corpus (default: data/chat_corpus.json)
+/save [path]   - Save corpus (default: corpus/chat_corpus.json)
 /reload [path] - Reload corpus from file
 /topics        - List known topics
 /stats         - Show statistics
@@ -457,34 +458,39 @@ class EmergentChatEngine:
         return f"I need more information to help you. Could you clarify: {user_message}"
     
     def _execute_plot_code(self, code: str) -> str:
-        """Execute plot code and save to run_graph.py for re-running."""
+        """Execute plot code and save to output/ directory for re-running."""
         import subprocess
         from pathlib import Path
         
-        # Save to run_graph.py
-        run_graph_path = Path("/home/thorin/truthspace-lcm/run_graph.py")
-        run_graph_path.write_text(code)
+        # Get project root and output directory
+        project_root = Path(__file__).parent.parent.parent.parent
+        output_dir = project_root / "output"
+        output_dir.mkdir(exist_ok=True)
+        
+        # Save script to output directory
+        script_path = output_dir / "generated_plot.py"
+        script_path.write_text(code)
         
         # Execute the code
         try:
             result = subprocess.run(
-                ["python", str(run_graph_path)],
+                ["python", str(script_path)],
                 capture_output=True,
                 text=True,
                 timeout=30,
-                cwd="/home/thorin/truthspace-lcm"
+                cwd=str(project_root)
             )
             
             if result.returncode == 0:
                 output = result.stdout.strip()
-                return f"\n\n**Executed!** {output}\nCode saved to `run_graph.py` for re-running."
+                return f"\n\n**Executed!** {output}\nCode saved to `output/generated_plot.py`"
             else:
                 error = result.stderr.strip()[:200]
-                return f"\n\nExecution failed: {error}\nCode saved to `run_graph.py`"
+                return f"\n\nExecution failed: {error}\nCode saved to `output/generated_plot.py`"
         except subprocess.TimeoutExpired:
-            return "\n\nExecution timed out (30s limit)\nCode saved to `run_graph.py`"
+            return "\n\nExecution timed out (30s limit)\nCode saved to `output/generated_plot.py`"
         except Exception as e:
-            return f"\n\nExecution error: {str(e)}\nCode saved to `run_graph.py`"
+            return f"\n\nExecution error: {str(e)}\nCode saved to `output/generated_plot.py`"
     
     def _execute_pending(self) -> str:
         """Execute pending commands."""
@@ -890,14 +896,12 @@ def create_app(
     async def save_corpus(request: Request):
         """Save the current corpus to a file."""
         data = await request.json()
-        path = data.get("path", "data/chat_corpus.json")
+        from truthspace_lcm.corpus import CORPUS_DIR
+        path = data.get("path", "chat_corpus.json")
         
-        # Resolve relative paths
+        # Resolve relative paths to corpus directory
         if not Path(path).is_absolute():
-            path = str(Path(__file__).parent.parent.parent.parent.parent / path)
-        
-        # Ensure directory exists
-        Path(path).parent.mkdir(parents=True, exist_ok=True)
+            path = str(CORPUS_DIR / path)
         
         logger.info(f"Saving corpus to: {path}")
         engine.chain.save_corpus(path)
@@ -917,11 +921,12 @@ def create_app(
     async def reload_corpus(request: Request):
         """Reload the corpus from a file."""
         data = await request.json()
-        path = data.get("path", "data/chat_corpus.json")
+        from truthspace_lcm.corpus import CORPUS_DIR
+        path = data.get("path", "chat_corpus.json")
         
-        # Resolve relative paths
+        # Resolve relative paths to corpus directory
         if not Path(path).is_absolute():
-            path = str(Path(__file__).parent.parent.parent.parent.parent / path)
+            path = str(CORPUS_DIR / path)
         
         if not Path(path).exists():
             raise HTTPException(status_code=404, detail=f"Corpus file not found: {path}")
