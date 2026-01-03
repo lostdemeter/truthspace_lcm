@@ -21,7 +21,7 @@ import json
 import re
 from pathlib import Path
 from typing import Dict, Any, Optional, List, Tuple
-from .emergent_chain import EmergentDimensionChain, DataItem
+from .base_chain import EmergentDimensionChain, DataItem
 
 
 def _load_feature_labels() -> Dict[str, str]:

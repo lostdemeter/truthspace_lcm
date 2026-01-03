@@ -21,7 +21,7 @@ from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Any, Tuple, Set
 import re
 
-from truthspace_lcm.core.holographic_pattern_space import HolographicPatternSpace, HolographicModule
+from truthspace_lcm.core.utils.holographic_pattern_space import HolographicPatternSpace, HolographicModule
 
 
 class Intent(Enum):

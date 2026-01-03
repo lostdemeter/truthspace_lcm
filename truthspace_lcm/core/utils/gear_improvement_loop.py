@@ -20,8 +20,8 @@ import re
 import json
 from pathlib import Path
 
-from .base import Gear, GearState
-from .folding_deficiency import (
+from truthspace_lcm.core.gear import Gear, GearState
+from truthspace_lcm.core.utils.folding_deficiency import (
     FoldingDeficiencyDetector, FoldingStructure,
     ShapeDeficiency, ShapeDeficiencyType
 )

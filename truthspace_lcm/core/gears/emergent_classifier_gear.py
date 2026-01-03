@@ -32,8 +32,8 @@ from collections import Counter, defaultdict
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Set, Tuple, Any, Callable
 
-from truthspace_lcm.core.base import Gear, GearState
-from truthspace_lcm.core.gear_message import GearProtocol, GearMessage, MessageIntent
+from truthspace_lcm.core.gear import Gear, GearState
+from truthspace_lcm.core.protocol import GearProtocol, GearMessage, MessageIntent
 
 
 @dataclass

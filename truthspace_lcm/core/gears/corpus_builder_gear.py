@@ -30,11 +30,11 @@ from collections import defaultdict
 from pathlib import Path
 import threading
 
-from .folding_deficiency import (
+from truthspace_lcm.core.utils.folding_deficiency import (
     FoldingStructure, FoldingDeficiencyDetector,
     ShapeDeficiency, ShapeDeficiencyType
 )
-from .chat_improvement import ChatImprovementGear
+from truthspace_lcm.core.gears.chat_improvement_gear import ChatImprovementGear
 
 
 @dataclass

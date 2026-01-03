@@ -26,11 +26,11 @@ from typing import Dict, List, Optional, Any, Tuple
 
 import numpy as np
 
-from .contact_point import (
+from truthspace_lcm.core.utils.contact_point import (
     ContactPoint, ContactVerb, ContactNoun, ContactStructure,
     ContactMessage, parse_intent,
 )
-from .gear_message import GearProtocol, GearMessage, MessageIntent
+from truthspace_lcm.core.protocol import GearProtocol, GearMessage, MessageIntent
 
 # Golden ratio
 PHI = (1 + np.sqrt(5)) / 2

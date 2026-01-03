@@ -22,7 +22,7 @@ from pathlib import Path
 from typing import Dict, List, Tuple, Optional, Any, Set
 
 from .semantic_chain import SemanticChain
-from .gear_message import GearProtocol, GearMessage, MessageIntent
+from truthspace_lcm.core.protocol import GearProtocol, GearMessage, MessageIntent
 
 # Try to import tachyon ingestor for advanced frame extraction
 try:
@@ -125,7 +125,7 @@ class ConversationalChain(GearProtocol):
         
         # Emergent classifier for word categories (replaces hardcoded lists)
         try:
-            from truthspace_lcm.core.emergent_classifier import EmergentClassifierGear
+            from truthspace_lcm.core.gears.emergent_classifier_gear import EmergentClassifierGear
             self.classifier_gear = EmergentClassifierGear()
         except ImportError:
             pass
@@ -144,7 +144,7 @@ class ConversationalChain(GearProtocol):
         self.chat_improvement_gear: Optional[Any] = None
         self.auto_improve = True  # Enabled by default
         try:
-            from .chat_improvement import ChatImprovementGear
+            from truthspace_lcm.core.gears.chat_improvement_gear import ChatImprovementGear
             self.chat_improvement_gear = ChatImprovementGear()
         except ImportError:
             pass
@@ -152,7 +152,7 @@ class ConversationalChain(GearProtocol):
         # Self-building corpus for social/system responses
         self.default_corpus: Optional[Any] = None
         try:
-            from .corpus_builder import SelfBuildingCorpusGear
+            from truthspace_lcm.core.gears.corpus_builder_gear import SelfBuildingCorpusGear
             self.default_corpus = SelfBuildingCorpusGear(auto_build=False)
         except ImportError:
             pass
@@ -380,7 +380,7 @@ Just the topic names, one per line:"""
             return
         
         # Import CorpusItem
-        from .corpus_builder import CorpusItem
+        from truthspace_lcm.core.gears.corpus_builder_gear import CorpusItem
         
         # Clear existing items
         self.default_corpus.all_items = []

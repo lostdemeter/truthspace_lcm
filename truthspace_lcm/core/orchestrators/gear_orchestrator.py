@@ -36,13 +36,13 @@ import re
 from typing import Dict, List, Optional, Any, Tuple
 from pathlib import Path
 
-from truthspace_lcm.core.base import Gear, GearState
-from truthspace_lcm.core.gear_message import (
+from truthspace_lcm.core.gear import Gear, GearState
+from truthspace_lcm.core.protocol import (
     GearProtocol, GearMessage, MessageIntent,
     adapt_from_gear_state
 )
-from truthspace_lcm.core.bootstrap_gear import BootstrapGear
-from truthspace_lcm.core.gear_factory import GearFactoryGear
+from truthspace_lcm.core.gears.bootstrap_gear import BootstrapGear
+from truthspace_lcm.core.gears.factory_gear import GearFactoryGear
 
 
 class PlannerGear(GearProtocol):

@@ -406,7 +406,7 @@ def compare_detection_methods(expected: str, actual: str,
     
     Returns comparison metrics for both methods.
     """
-    from .gear_improvement_loop import DeficiencyDetectorGear, TestCase
+    from truthspace_lcm.core.utils.gear_improvement_loop import DeficiencyDetectorGear, TestCase
     
     # Old method (pattern matching)
     old_detector = DeficiencyDetectorGear()

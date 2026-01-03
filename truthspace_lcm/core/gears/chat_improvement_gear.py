@@ -21,7 +21,7 @@ from collections import defaultdict
 import re
 import time
 
-from .folding_deficiency import (
+from truthspace_lcm.core.utils.folding_deficiency import (
     FoldingStructure, FoldingDeficiencyDetector,
     ShapeDeficiency, ShapeDeficiencyType
 )

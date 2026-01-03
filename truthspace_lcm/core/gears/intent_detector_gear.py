@@ -30,8 +30,8 @@ from enum import Enum, auto
 from dataclasses import dataclass
 from typing import Dict, List, Optional, Any, Set
 
-from truthspace_lcm.core.base import Gear, GearState
-from truthspace_lcm.core.gear_message import (
+from truthspace_lcm.core.gear import Gear, GearState
+from truthspace_lcm.core.protocol import (
     GearProtocol, GearMessage, MessageIntent, 
     normalize_input, adapt_to_gear_state, adapt_from_gear_state
 )

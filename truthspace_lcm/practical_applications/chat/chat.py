@@ -21,8 +21,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent.parent))
 
 from truthspace_lcm.core import ConversationalChain
-from truthspace_lcm.core.intent_classifier import IntentClassifier, Intent, IntentMatch
-from truthspace_lcm.core.gear_orchestrator import GearOrchestrator
+from truthspace_lcm.core.classifiers.intent_classifier import IntentClassifier, Intent, IntentMatch
+from truthspace_lcm.core.orchestrators.gear_orchestrator import GearOrchestrator
 
 
 # Default LLM configuration
@@ -77,7 +77,7 @@ class EmergentChat:
         # Python code gear for code generation
         self.python_gear = None
         try:
-            from truthspace_lcm.core.python_code_gear import PythonCodeGear
+            from truthspace_lcm.core.gears.python_code_gear import PythonCodeGear
             self.python_gear = PythonCodeGear()
             self.python_gear.configure_llm(llm_url, llm_model)
         except ImportError:

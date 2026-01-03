@@ -89,7 +89,7 @@ Available books:
     
     # Handle --list-books
     if args.list_books:
-        from truthspace_lcm.core.conversational_chain import GUTENBERG_BOOKS
+        from truthspace_lcm.core.chains.conversational_chain import GUTENBERG_BOOKS
         print("Available books:")
         for name in GUTENBERG_BOOKS:
             print(f"  {name}")

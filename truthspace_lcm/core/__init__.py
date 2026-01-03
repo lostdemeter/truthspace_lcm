@@ -4,20 +4,18 @@ Gear Chain Core
 The foundational classes for building gear-based transformation pipelines.
 These are domain-agnostic and can be used for any transformation task.
 
-Core Components:
-- Quaternion: 4D rotation encoding for gear parameters
-- GearState: Base state object that flows through the chain
-- Gear: Abstract base class for all transformation gears
-- GearChain: Container for composing gears into pipelines
-
-Emergent Components:
-- EmergentDimensionChain: Base class for self-discovering dimension chains
-- SemanticChain: Understanding chain (discovers dimensions from agent behavior)
-- LinguisticChain: Output chain (discovers dimensions from sentence structure)
+Structure:
+- gear.py: Base classes (Gear, GearState, GearChain, Quaternion)
+- protocol.py: Message protocol (GearProtocol, GearMessage, MessageIntent)
+- gears/: Individual gear implementations
+- chains/: Chain implementations (ConversationalChain, etc.)
+- orchestrators/: Multi-gear orchestration (CodeOrchestrator, GearOrchestrator)
+- classifiers/: Intent classification
+- utils/: Utility classes (holographic space, templates, etc.)
 
 Usage:
     from truthspace_lcm.core import Gear, GearState, GearChain, Quaternion
-    from truthspace_lcm.core import SemanticChain, LinguisticChain
+    from truthspace_lcm.core import ConversationalChain
     
     # Traditional gear chain
     class MyGear(Gear):
@@ -27,37 +25,40 @@ Usage:
     chain = GearChain("MyPipeline")
     chain.add(MyGear())
     result = chain.process(initial_state)
-    
-    # Emergent dimension chain
-    semantic = SemanticChain()
-    semantic.ingest_corpus("corpus.json")
-    semantic.learn_dimensions()
-    similar = semantic.find_similar("holmes")
 """
 
-from .base import Gear, GearState, GearChain, Quaternion
-from .emergent_chain import EmergentDimensionChain, DimensionInfo, DataItem
-from .semantic_chain import SemanticChain
-from .linguistic_chain import LinguisticChain
-from .conversational_chain import ConversationalChain, KnowledgeItem, ConversationTurn
-from .gear_message import (
+# Base classes
+from .gear import Gear, GearState, GearChain, Quaternion
+
+# Protocol
+from .protocol import (
     GearMessage, GearProtocol, MessageIntent, MessageAwareGear,
     EmergentIntentSpace, get_intent_space,
     normalize_input, normalize_output,
     adapt_to_gear_state, adapt_from_gear_state,
 )
-from .folding_deficiency import (
+
+# Chains
+from .chains.base_chain import EmergentDimensionChain, DimensionInfo, DataItem
+from .chains.semantic_chain import SemanticChain
+from .chains.linguistic_chain import LinguisticChain
+from .chains.conversational_chain import ConversationalChain, KnowledgeItem, ConversationTurn
+
+# Utils
+from .utils.folding_deficiency import (
     FoldingStructure, FoldingDeficiencyDetector,
     ShapeDeficiency, ShapeDeficiencyType,
 )
-from .gear_improvement_loop import (
+from .utils.gear_improvement_loop import (
     GearImprovementLoop, GearTestHarness, ShapeBasedTestHarness,
     DeficiencyType, Deficiency, TestCase, TestResult,
 )
-from .chat_improvement import (
+
+# Gears
+from .gears.chat_improvement_gear import (
     ChatImprovementGear, ResponseTemplate, ImprovementResult,
 )
-from .corpus_builder import (
+from .gears.corpus_builder_gear import (
     SelfBuildingCorpusGear, CorpusItem, CorpusCategory,
 )
 

@@ -14,7 +14,7 @@ License: GPLv3
 import re
 import hashlib
 from typing import Dict, Any, List
-from .emergent_chain import EmergentDimensionChain, DataItem
+from .base_chain import EmergentDimensionChain, DataItem
 
 
 class LinguisticChain(EmergentDimensionChain):
