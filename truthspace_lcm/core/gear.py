@@ -7,14 +7,22 @@ This module provides the foundational classes that all gears inherit from:
 - Gear: Abstract base class for all gears
 - GearChain: Container for composing gears
 
+Phase 2 additions (Design 088):
+- Gears can optionally have a knowledge_store
+- GearState carries new_knowledge through the chain
+- GearChain aggregates knowledge from all gears
+
 Author: Lesley Gushurst
 License: GPLv3
 """
 
 import math
-from typing import List, Optional, Any, Dict
+from typing import List, Optional, Any, Dict, TYPE_CHECKING
 from dataclasses import dataclass, field
 from abc import ABC, abstractmethod
+
+if TYPE_CHECKING:
+    from .knowledge import GeometricKnowledgeStore, Concept
 
 
 @dataclass
@@ -140,6 +148,14 @@ class GearState:
     # Metadata
     metadata: Dict[str, Any] = field(default_factory=dict)
     
+    # Knowledge flow (Phase 2 - Design 088)
+    # New concepts discovered during processing flow through the chain
+    new_knowledge: List[Any] = field(default_factory=list)  # List[Concept]
+    
+    def add_knowledge(self, concept: Any) -> None:
+        """Add a new concept to the knowledge flow."""
+        self.new_knowledge.append(concept)
+    
     def clone(self) -> 'GearState':
         """Create a deep copy of the state."""
         import copy
@@ -162,6 +178,7 @@ class Gear(ABC):
         ratio: Control parameter (0.0 to 1.0) that affects transformation strength
         quaternion: 4D parameter encoding for the gear
         enabled: Whether the gear is active
+        _knowledge_store: Optional geometric knowledge store for this gear
     """
     
     def __init__(self, name: str, ratio: float = 1.0):
@@ -169,6 +186,7 @@ class Gear(ABC):
         self.ratio = ratio
         self.quaternion = Quaternion(1, 0, 0, 0)
         self.enabled = True
+        self._knowledge_store: Optional['GeometricKnowledgeStore'] = None
     
     @abstractmethod
     def forward(self, state: GearState) -> GearState:
@@ -212,6 +230,34 @@ class Gear(ABC):
         self.enabled = False
         return self
     
+    @property
+    def knowledge_store(self) -> Optional['GeometricKnowledgeStore']:
+        """Get this gear's knowledge store (if any)."""
+        return self._knowledge_store
+    
+    @knowledge_store.setter
+    def knowledge_store(self, store: 'GeometricKnowledgeStore') -> None:
+        """Set this gear's knowledge store."""
+        self._knowledge_store = store
+    
+    def init_knowledge_store(self, name: str = None, dims: int = 12) -> 'GeometricKnowledgeStore':
+        """
+        Initialize a knowledge store for this gear.
+        
+        Args:
+            name: Store name (defaults to gear name)
+            dims: Number of dimensions for positions
+            
+        Returns:
+            The created knowledge store
+        """
+        from .knowledge import GeometricKnowledgeStore
+        self._knowledge_store = GeometricKnowledgeStore(
+            name=name or self.name,
+            dims=dims
+        )
+        return self._knowledge_store
+    
     def __repr__(self) -> str:
         status = "enabled" if self.enabled else "disabled"
         return f"{self.name}(ratio={self.ratio:.2f}, {status})"
@@ -223,6 +269,10 @@ class GearChain:
     
     Gears are applied in order, with each gear receiving the output
     of the previous gear as its input.
+    
+    Phase 2 additions (Design 088):
+    - Chain has its own knowledge_store for aggregated knowledge
+    - Can merge knowledge from all gears in the chain
     
     Usage:
         chain = GearChain()
@@ -236,6 +286,7 @@ class GearChain:
     def __init__(self, name: str = "GearChain"):
         self.name = name
         self.gears: List[Gear] = []
+        self._knowledge_store: Optional['GeometricKnowledgeStore'] = None
     
     def add(self, gear: Gear, position: int = -1) -> 'GearChain':
         """
@@ -313,6 +364,73 @@ class GearChain:
         if gear:
             gear.disable()
         return self
+    
+    @property
+    def knowledge_store(self) -> Optional['GeometricKnowledgeStore']:
+        """Get this chain's aggregated knowledge store."""
+        return self._knowledge_store
+    
+    @knowledge_store.setter
+    def knowledge_store(self, store: 'GeometricKnowledgeStore') -> None:
+        """Set this chain's knowledge store."""
+        self._knowledge_store = store
+    
+    def init_knowledge_store(self, name: str = None, dims: int = 12) -> 'GeometricKnowledgeStore':
+        """
+        Initialize a knowledge store for this chain.
+        
+        Args:
+            name: Store name (defaults to chain name)
+            dims: Number of dimensions for positions
+            
+        Returns:
+            The created knowledge store
+        """
+        from .knowledge import GeometricKnowledgeStore
+        self._knowledge_store = GeometricKnowledgeStore(
+            name=name or self.name,
+            dims=dims
+        )
+        return self._knowledge_store
+    
+    def aggregate_knowledge(self) -> Optional['GeometricKnowledgeStore']:
+        """
+        Merge knowledge from all gears into the chain's store.
+        
+        Creates a chain-level store if one doesn't exist.
+        
+        Returns:
+            The aggregated knowledge store
+        """
+        from .knowledge import GeometricKnowledgeStore
+        
+        if self._knowledge_store is None:
+            self._knowledge_store = GeometricKnowledgeStore(
+                name=self.name,
+                dims=12
+            )
+        
+        for gear in self.gears:
+            if gear.knowledge_store is not None:
+                self._knowledge_store.merge(gear.knowledge_store)
+        
+        return self._knowledge_store
+    
+    def collect_new_knowledge(self, state: GearState) -> None:
+        """
+        Collect new knowledge from state into the chain's store.
+        
+        Called after processing to persist any new concepts
+        discovered during the chain's execution.
+        """
+        if not state.new_knowledge:
+            return
+        
+        if self._knowledge_store is None:
+            self.init_knowledge_store()
+        
+        for concept in state.new_knowledge:
+            self._knowledge_store.add(concept)
     
     def __repr__(self) -> str:
         gear_names = [g.name for g in self.gears if g.enabled]

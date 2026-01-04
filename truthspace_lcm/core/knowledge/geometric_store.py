@@ -80,6 +80,9 @@ class GeometricKnowledgeStore:
     _id_to_index: Dict[str, int] = field(default_factory=dict)
     _word_to_concepts: Dict[str, Set[str]] = field(default_factory=dict)
     
+    # Internal flag for deferred reprojection
+    _needs_reproject: bool = field(default=False, repr=False)
+    
     def __post_init__(self):
         """Initialize indices after creation."""
         self._rebuild_indices()
@@ -186,6 +189,11 @@ class GeometricKnowledgeStore:
         # Update geometry
         if reproject:
             self._update_geometry_incremental(concept)
+            
+            # Check if full reproject is needed (dimension mismatch was detected)
+            if self._needs_reproject:
+                self._reproject()
+                self._needs_reproject = False
         
         self.modified = datetime.now().isoformat()
     
@@ -323,6 +331,13 @@ class GeometricKnowledgeStore:
             self.positions = np.zeros((1, self.dims))
             new_concept.quaternion = (1.0, 0.0, 0.0, 0.0)
             return
+        
+        # Check if positions matrix needs reinitialization (dimension mismatch)
+        if self.positions is None or self.positions.shape[1] != self.dims:
+            # Reinitialize positions with correct dimensions
+            self.positions = np.zeros((n-1, self.dims))
+            # Trigger full reproject after this add
+            self._needs_reproject = True
         
         # Compute similarity to all existing concepts
         new_similarities = np.array([
