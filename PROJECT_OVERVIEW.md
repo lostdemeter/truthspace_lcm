@@ -94,37 +94,64 @@ The system exhibits fractal self-similarity:
 
 ```
 truthspace-lcm/
-├── truthspace_lcm/           # Main project code
-│   ├── core/                 # Domain-agnostic core functionality
-│   │   ├── gear.py           # Base Gear class
-│   │   ├── conversational_chain.py  # Main chat chain
-│   │   ├── emergent_classifier.py   # Intent classification
-│   │   ├── code_orchestrator.py     # Code generation
-│   │   └── ...               # Other core components
-│   ├── practical_applications/
-│   │   └── chat/             # Chat interface & API server
-│   │       ├── api_server.py # OpenAI-compatible API
-│   │       ├── chat.py       # EmergentChat class
-│   │       └── run_api.py    # Server runner
+├── run.py                    # Interactive chat entry point
+├── run_api.py                # API server entry point
+├── truthspace_lcm/           # Main package
+│   ├── core/                 # Core functionality
+│   │   ├── gear.py           # Base: Gear, GearState, GearChain, Quaternion
+│   │   ├── protocol.py       # GearProtocol, GearMessage, MessageIntent
+│   │   ├── gears/            # Gear implementations
+│   │   │   ├── bootstrap_gear.py
+│   │   │   ├── chat_improvement_gear.py
+│   │   │   ├── corpus_builder_gear.py
+│   │   │   ├── emergent_classifier_gear.py
+│   │   │   ├── emergent_gear.py
+│   │   │   ├── factory_gear.py
+│   │   │   ├── intent_detector_gear.py
+│   │   │   └── python_code_gear.py
+│   │   ├── chains/           # Chain implementations
+│   │   │   ├── base_chain.py           # EmergentDimensionChain
+│   │   │   ├── conversational_chain.py # Main chat chain
+│   │   │   ├── linguistic_chain.py
+│   │   │   └── semantic_chain.py
+│   │   ├── orchestrators/    # Multi-gear orchestration
+│   │   │   ├── code_orchestrator.py
+│   │   │   └── gear_orchestrator.py
+│   │   ├── classifiers/      # Intent classification
+│   │   │   └── intent_classifier.py
+│   │   └── utils/            # Utilities
+│   │       ├── holographic_pattern_space.py
+│   │       ├── template_composer.py
+│   │       └── ...
 │   ├── corpus/               # Knowledge corpuses (JSON)
-│   └── tools/                # Corpus management tools
+│   └── practical_applications/
+│       └── chat/             # Chat application
+│           ├── api_server.py # OpenAI-compatible API
+│           ├── chat.py       # EmergentChat class
+│           └── run_api.py    # Server runner
 │
-├── temp/                     # Deprecated/legacy code
-│   └── legacy_truthspace_lcm/  # Old core and NLP gears
-├── design_considerations/    # Design documentation (87+ documents)
-├── data/                     # Runtime data storage
-└── output/                   # Generated outputs (plots, etc.)
+├── docs/                     # Documentation
+│   ├── papers/               # Research papers
+│   └── design_considerations/ # Design documents (87+)
+├── temp/                     # Legacy/deprecated code
+└── output/                   # Generated outputs (gitignored)
 ```
 
 ### Directory Philosophy
 
-- **`core/`** - Contains domain-agnostic base classes and fundamental abstractions. Includes gear base classes, conversational chain, intent classification, and code orchestration.
+- **`core/`** - Domain-agnostic base classes organized by type:
+  - `gear.py`, `protocol.py` - Base classes at root
+  - `gears/` - Individual gear implementations
+  - `chains/` - Chain implementations
+  - `orchestrators/` - Multi-gear coordination
+  - `classifiers/` - Intent classification
+  - `utils/` - Support utilities
 
-- **`practical_applications/`** - Contains applications built on top of core. Currently focused on the chat application which provides an OpenAI-compatible API.
+- **`practical_applications/`** - Applications built on core. Currently the chat application with OpenAI-compatible API.
 
-- **`temp/`** - Deprecated code and legacy implementations. Kept for reference but not actively used.
+- **`docs/`** - Documentation including 87+ design consideration documents.
 
-- **`design_considerations/`** - Living documentation of architectural decisions, discoveries, and research notes.
+- **`temp/`** - Legacy code kept for reference but not actively used.
 
 ---
 

@@ -2,347 +2,113 @@
 
 ## Overview
 
-TruthSpace LCM is a **Geometric Language Model** with a modular **Gear Chain** architecture. It performs all semantic operations as geometric transformations - no neural networks, no training, just composable gears and quaternion geometry.
-
-**Version**: 2.0.0
-
-## Core Principles
-
-> **Each gear is a dimension - swap in/out at runtime.**
-> **Corpus is knowledge, gears are reasoning - separate what from how.**
-> **Same architecture works for NLP, data pipelines, and more.**
-
-### The Gear Chain System
-
-| Component | Purpose | Key Innovation |
-|-----------|---------|----------------|
-| **Gear** | Transformation unit | Composable, swappable at runtime |
-| **GearState** | Data flowing through chain | Domain-agnostic state object |
-| **GearChain** | Composes gears | Sequential processing with quaternion accumulation |
-| **Quaternion** | 4D rotation encoding | Parameters and semantic features |
-
----
-
-## Architecture Diagram
-
-### Gear Chain Architecture
-
-```
-INPUT: GearState(entity="Holmes", role="character", actions=["investigates"])
-        │
-        ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                        GEAR CHAIN                                │
-│                                                                  │
-│  ┌──────────┐   ┌──────────┐   ┌──────────┐   ┌──────────┐     │
-│  │ RoleGear │ → │ActionGear│ → │TenseGear │ → │OutputGear│     │
-│  │          │   │          │   │          │   │          │     │
-│  │ Classify │   │ Gerunds  │   │ Tense    │   │ Assemble │     │
-│  │ roles    │   │ convert  │   │ transform│   │ text     │     │
-│  └────┬─────┘   └────┬─────┘   └────┬─────┘   └────┬─────┘     │
-│       │              │              │              │            │
-│       └──────────────┴──────────────┴──────────────┘            │
-│                              │                                   │
-│                    Quaternion accumulates                        │
-│                    through each gear                             │
-└─────────────────────────────────────────────────────────────────┘
-        │
-        ▼
-OUTPUT: "Holmes is a character who investigating, particularly crimes."
-```
-
-### Data Pipeline Architecture
-
-```
-INPUT: DataState(records=[{name: "John", age: "25"}, ...])
-        │
-        ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                      DATA PIPELINE                               │
-│                                                                  │
-│  ┌───────────┐  ┌────────────┐  ┌──────────┐  ┌──────────┐     │
-│  │Validation │→ │Normalizat- │→ │Enrichment│→ │ Format   │     │
-│  │Gear       │  │ionGear     │  │Gear      │  │ Gear     │     │
-│  │           │  │            │  │          │  │          │     │
-│  │ Required  │  │ Trim, case │  │ Computed │  │ JSON/CSV │     │
-│  │ Type/Range│  │ Date parse │  │ Lookups  │  │ output   │     │
-│  └───────────┘  └────────────┘  └──────────┘  └──────────┘     │
-└─────────────────────────────────────────────────────────────────┘
-        │
-        ▼
-OUTPUT: [{"name": "John", "age": 25, "age_group": "young"}, ...]
-```
-
----
+TruthSpace LCM uses a **gear chain architecture** where composable transformation units (gears) process state through pipelines. This replaces traditional neural network approaches with explicit, interpretable geometric transformations.
 
 ## Core Components
 
-### Gear (`gears/core/base.py`)
-
-The fundamental transformation unit.
+### 1. Base Classes (`core/gear.py`)
 
 ```python
-class Gear(ABC):
-    name: str
-    ratio: float  # 0.0 to 1.0, controls transformation strength
-    enabled: bool
-    q: Quaternion  # Gear's quaternion parameters
-    
-    @abstractmethod
-    def forward(self, state: GearState) -> GearState:
-        """Transform the state. Must be implemented by subclasses."""
-        pass
-    
-    def set_ratio(self, ratio: float) -> 'Gear'
-    def enable(self) / disable(self)
+Gear          # Abstract base class for transformations
+GearState     # State object flowing through chains
+GearChain     # Container for composing gears
+Quaternion    # 4D rotation encoding for parameters
 ```
 
-### GearState (`gears/core/base.py`)
-
-Data object flowing through the chain.
+### 2. Protocol (`core/protocol.py`)
 
 ```python
-@dataclass
-class GearState:
-    entity: str = ""           # Main entity being described
-    role: str = ""             # Role (character, concept, field, etc.)
-    actions: List[str]         # Verbs/actions
-    targets: List[str]         # Objects/targets
-    connector: str = "that"    # Connecting word
-    accumulated_q: Quaternion  # Accumulated quaternion through chain
-    metadata: Dict[str, Any]   # Additional data
+GearProtocol  # Interface for message-aware gears
+GearMessage   # Standardized message format
+MessageIntent # Intent enumeration
 ```
 
-### GearChain (`gears/core/base.py`)
+### 3. Gears (`core/gears/`)
 
-Composes gears into a pipeline.
+Individual transformation units:
+- `bootstrap_gear.py` - Pattern bootstrapping
+- `chat_improvement_gear.py` - Response improvement
+- `corpus_builder_gear.py` - Self-building corpus
+- `emergent_classifier_gear.py` - Emergent classification
+- `emergent_gear.py` - Dimension discovery
+- `factory_gear.py` - Gear creation
+- `intent_detector_gear.py` - Intent detection
+- `python_code_gear.py` - Code generation
 
-```python
-class GearChain:
-    name: str
-    gears: List[Gear]
-    
-    def add(self, gear: Gear, position: int = None) -> 'GearChain'
-    def remove(self, name: str) -> 'GearChain'
-    def get(self, name: str) -> Optional[Gear]
-    def process(self, state: GearState) -> Any
-    def set_ratio(self, gear_name: str, ratio: float)
-    def disable(self, gear_name: str)
-```
+### 4. Chains (`core/chains/`)
 
-### Quaternion (`gears/core/base.py`)
+Sequences of gears:
+- `base_chain.py` - EmergentDimensionChain (abstract)
+- `conversational_chain.py` - Main chat chain
+- `semantic_chain.py` - Semantic understanding
+- `linguistic_chain.py` - Linguistic processing
 
-4D rotation encoding.
+### 5. Orchestrators (`core/orchestrators/`)
 
-```python
-@dataclass
-class Quaternion:
-    w: float = 1.0  # Scalar (formality/quality)
-    x: float = 0.0  # Style/Gender
-    y: float = 0.0  # Perspective/Age
-    z: float = 0.0  # Depth/Agency
-    
-    def __mul__(self, other) -> 'Quaternion'  # Quaternion multiplication
-    def normalize(self) -> 'Quaternion'
-    def magnitude(self) -> float
-```
+Multi-gear coordination:
+- `code_orchestrator.py` - Code generation orchestration
+- `gear_orchestrator.py` - General gear orchestration
 
----
+### 6. Classifiers (`core/classifiers/`)
 
-## NLP Gears (`gears/practical_applications/nlp/`)
+Intent classification:
+- `intent_classifier.py` - Geometric intent detection
 
-### RoleGear
+### 7. Utilities (`core/utils/`)
 
-Transforms roles based on concept type.
+Support classes:
+- `holographic_pattern_space.py` - Pattern matching
+- `template_composer.py` - Template generation
+- `folding_deficiency.py` - Shape analysis
+- `gear_improvement_loop.py` - Self-improvement
+- `contact_point.py` - Contact structures
 
-```python
-class RoleGear(Gear):
-    def forward(self, state: GearState) -> GearState:
-        # Detect if entity is person, abstract, plural
-        # Transform role accordingly (character → concept)
-```
-
-### ActionGear
-
-Converts verbs to gerunds.
-
-```python
-class ActionGear(Gear):
-    def forward(self, state: GearState) -> GearState:
-        # When ratio > 0.5, convert verbs to gerunds
-        # "investigates" → "investigating"
-```
-
-### TenseGear
-
-Transforms verb tenses.
-
-```python
-class TenseGear(Gear):
-    tense: str  # 'present', 'past', 'future', 'perfect'
-    
-    def set_tense(self, tense: str)
-    def forward(self, state: GearState) -> GearState:
-        # Transform actions to specified tense
-```
-
-### OutputGear
-
-Assembles final text output.
-
-```python
-class OutputGear(Gear):
-    def forward(self, state: GearState) -> str:
-        # Assemble: "{entity} is a {role} {connector} {actions}, {targets}"
-```
-
----
-
-## Data Gears (`gears/practical_applications/data/`)
-
-### ValidationGear
-
-Validates data records.
-
-```python
-class ValidationGear(Gear):
-    def add_required(self, field: str) -> 'ValidationGear'
-    def add_type(self, field: str, expected_type: str) -> 'ValidationGear'
-    def add_range(self, field: str, min_val, max_val) -> 'ValidationGear'
-    def add_pattern(self, field: str, pattern: str) -> 'ValidationGear'
-```
-
-### NormalizationGear
-
-Standardizes data formats.
-
-```python
-class NormalizationGear(Gear):
-    def trim(self, field: str) -> 'NormalizationGear'
-    def lowercase(self, field: str) -> 'NormalizationGear'
-    def to_int(self, field: str) -> 'NormalizationGear'
-    def to_date(self, field: str) -> 'NormalizationGear'
-```
-
-### EnrichmentGear
-
-Adds derived fields.
-
-```python
-class EnrichmentGear(Gear):
-    def add_computed(self, field: str, fn: Callable) -> 'EnrichmentGear'
-    def add_lookup(self, target: str, source: str, table: str) -> 'EnrichmentGear'
-```
-
-### FormatGear
-
-Outputs in various formats.
-
-```python
-class FormatGear(Gear):
-    format: str  # 'dict', 'json', 'csv', 'summary'
-    
-    def forward(self, state: GearState) -> Any:
-        # Format records according to specified format
-```
-
----
-
-## Corpus Tools (`gears/tools/`)
-
-### CorpusPruner
-
-Removes bad data from corpus.
-
-```python
-class CorpusPruner:
-    def set_min_length(self, length: int)
-    def set_max_duplicates(self, count: int)
-    def prune(self, corpus: Dict) -> Tuple[Dict, PruneResult]
-```
-
-### CorpusCorrector
-
-Applies corrections to corpus.
-
-```python
-class CorpusCorrector:
-    def add_spelling(self, wrong: str, correct: str)
-    def add_role_correction(self, concept: str, role: str)
-    def correct(self, corpus: Dict) -> Tuple[Dict, CorrectResult]
-```
-
-### CorpusReinforcer
-
-Additive learning by adding frames.
-
-```python
-class CorpusReinforcer:
-    def reinforce(self, concept: str, role: str, actions: List[str], strength: int)
-    def apply(self, corpus: Dict) -> Tuple[Dict, ReinforceResult]
-```
-
----
-
-## Legacy Components
-
-The original geometric system is still available in `truthspace_lcm/core/`:
-
-- **GeometricKnowledge** - Position-based frame extraction
-- **HolographicTemplateProjector** - Dynamic templates via interference
-- **SemanticQuaternionNavigator** - 100% analogy accuracy
-- **HolographicGeometricQA** - Unified Q&A system
-
----
-
-## File Structure
+## Data Flow
 
 ```
-truthspace_lcm/
-├── gears/                           # Modular Gear Chain System
-│   ├── core/                        # Domain-agnostic base classes
-│   │   ├── base.py                  # Gear, GearState, GearChain, Quaternion
-│   │   └── error_correction.py      # ErrorCorrectionGear
-│   │
-│   ├── practical_applications/      # Domain-specific implementations
-│   │   ├── nlp/                     # NLP gears + chat/API
-│   │   │   ├── role.py, action.py, tense.py, output.py
-│   │   │   ├── chat.py              # Interactive chat
-│   │   │   └── api_server.py        # OpenAI-compatible API
-│   │   │
-│   │   └── data/                    # Data transformation gears
-│   │       ├── validation.py, normalization.py
-│   │       └── format.py
-│   │
-│   ├── corpus/                      # Knowledge corpuses (45K+ frames)
-│   ├── tools/                       # Pruner, Corrector, Reinforcer
-│   ├── run.py                       # Chat entry point
-│   └── run_api.py                   # API server entry point
-│
-├── core/                            # Original geometric system
-│   ├── geometric.py                 # GeometricQA, HolographicGeometricQA
-│   └── semantic_quaternion.py       # 4D quaternion encoding
-│
-├── api/                             # Original API server
-└── experiments/                     # Research experiments
+User Input
+    ↓
+EmergentChatEngine (api_server.py)
+    ↓
+IntentClassifier → Intent (KNOWLEDGE, CODE_GENERATION, etc.)
+    ↓
+┌─────────────────────────────────────────┐
+│ KNOWLEDGE → ConversationalChain.chat()  │
+│ CODE_GENERATION → CodeOrchestrator      │
+│ TOOL_CALL → GearOrchestrator            │
+└─────────────────────────────────────────┘
+    ↓
+Response (text or tool_calls)
 ```
 
----
+## Key Design Principles
 
-## The Vision
+### 1. Fail-Fast
+No graceful fallbacks. If geometric classification fails, we see the error rather than hiding it with pattern matching.
 
-**"Each gear is a dimension. Corpus is knowledge, gears are reasoning."**
+### 2. Emergent Structure
+Dimensions are discovered via SVD, not designed top-down. The system learns its own structure from data.
 
-| Neural Networks | Gear Chain |
-|-----------------|------------|
-| Knowledge + reasoning entangled | Knowledge (corpus) separate from reasoning (gears) |
-| Opaque weights | Every transformation explicit |
-| Retrain to change | Swap gears at runtime |
-| Fixed architecture | Infinite composability |
-| Domain-specific | Same architecture, any domain |
+### 3. ENCODE = DECODE
+Encoding and decoding are the same operation in opposite directions. The transformation IS the understanding.
 
-The key insight: The same gear chain architecture that powers NLP chat also powers data transformation pipelines. **Structure is the new training.**
+### 4. Separation of Concerns
+- **Corpus** = Knowledge (what)
+- **Gears** = Reasoning (how)
+- **Chains** = Composition (flow)
 
----
+## API Layer
 
-*"Each gear is a dimension - swap in/out at runtime."*
+The `practical_applications/chat/` module provides:
+- `api_server.py` - OpenAI-compatible REST API
+- `chat.py` - EmergentChat class for programmatic use
+- `run_api.py` - Server runner with corpus options
+
+## Corpus Structure
+
+Knowledge is stored in JSON corpuses (`corpus/`):
+- Topic-based organization
+- Definitions and facts
+- Relationship patterns
+
+The corpus is built at startup using LLM calls, then chat operates without LLM (truly emergent).
