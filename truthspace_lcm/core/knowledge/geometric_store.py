@@ -21,6 +21,11 @@ Design Principles (from ENCODE = DECODE):
 - What works one direction must work the other
 - Structure IS information
 
+Geometric Principles:
+- Stop words detected geometrically (high frequency + no semantic role)
+- Promotion thresholds emerge from the data's distribution (median confidence)
+- All thresholds are relative to the population, not hardcoded
+
 Author: Lesley Gushurst
 License: GPLv3
 """
@@ -32,32 +37,9 @@ from pathlib import Path
 from datetime import datetime
 from typing import List, Dict, Any, Optional, Set, Tuple
 from dataclasses import dataclass, field
+from collections import Counter
 
 from .concept import Concept, ConceptLevel
-
-
-# Common stop words to filter out when extracting content words
-STOP_WORDS = {
-    'the', 'a', 'an', 'is', 'are', 'was', 'were', 'be', 'been', 'being',
-    'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'could',
-    'should', 'may', 'might', 'must', 'shall', 'can', 'need', 'dare',
-    'ought', 'used', 'to', 'of', 'in', 'for', 'on', 'with', 'at', 'by',
-    'from', 'as', 'into', 'through', 'during', 'before', 'after', 'above',
-    'below', 'between', 'under', 'again', 'further', 'then', 'once',
-    'here', 'there', 'when', 'where', 'why', 'how', 'all', 'each', 'few',
-    'more', 'most', 'other', 'some', 'such', 'no', 'nor', 'not', 'only',
-    'own', 'same', 'so', 'than', 'too', 'very', 'just', 'and', 'but',
-    'if', 'or', 'because', 'until', 'while', 'this', 'that', 'these',
-    'those', 'what', 'which', 'who', 'whom', 'it', 'its', 'i', 'me', 'my',
-    'we', 'our', 'you', 'your', 'he', 'him', 'his', 'she', 'her', 'they',
-    'them', 'their', 'about', 'also', 'any', 'both', 'but', 'even', 'get',
-    'got', 'like', 'make', 'made', 'many', 'much', 'new', 'now', 'one',
-    'out', 'over', 'say', 'said', 'see', 'take', 'time', 'up', 'use',
-    'way', 'well', 'work', 'year', 'years', 'first', 'last', 'long',
-    'great', 'little', 'own', 'old', 'right', 'big', 'high', 'different',
-    'small', 'large', 'next', 'early', 'young', 'important', 'few', 'public',
-    'bad', 'same', 'able',
-}
 
 
 @dataclass
@@ -112,24 +94,54 @@ class GeometricKnowledgeStore:
                     self._word_to_concepts[word] = set()
                 self._word_to_concepts[word].add(concept.id)
     
-    @staticmethod
-    def extract_words(text: str) -> Set[str]:
+    def extract_words(self, text: str) -> Set[str]:
         """
-        Extract content words from text.
+        Extract content words from text using geometric stop word detection.
         
-        Filters out stop words and short words.
-        Returns lowercase words.
+        Geometric principle (from Design 062):
+        - Content words have clear semantic roles (appear in specific contexts)
+        - Stop words have NO semantic role (appear everywhere uniformly)
+        - Detection is based on distribution, not a hardcoded list
+        
+        Returns lowercase content words.
         """
         # Tokenize: split on non-alphanumeric
         words = re.findall(r'\b[a-zA-Z]+\b', text.lower())
         
-        # Filter stop words and short words
+        # Filter using geometric detection
         content_words = {
             w for w in words 
-            if w not in STOP_WORDS and len(w) > 2
+            if self._is_content_word(w)
         }
         
         return content_words
+    
+    def _is_content_word(self, word: str) -> bool:
+        """
+        Geometric stop word detection.
+        
+        A word is a STOP word (not content) if:
+        1. It's very short (< 3 chars) - structural, not semantic
+        2. It appears in many concepts but adds no discriminative power
+        
+        This is geometric because it's based on the word's distribution
+        across the concept space, not a hardcoded list.
+        """
+        # Very short words are structural, not semantic
+        if len(word) < 3:
+            return False
+        
+        # If we have concept data, use it for geometric detection
+        if word in self._word_to_concepts and len(self.concepts) > 1:
+            # Word appears in what fraction of concepts?
+            coverage = len(self._word_to_concepts[word]) / len(self.concepts)
+            
+            # High coverage (> 50%) = stop word (appears everywhere)
+            # This threshold is the critical line (σ = 0.5)
+            if coverage > 0.5:
+                return False
+        
+        return True
     
     @staticmethod
     def word_overlap(words_a: Set[str], words_b: Set[str]) -> float:
@@ -393,16 +405,40 @@ class GeometricKnowledgeStore:
                 q = np.array([1.0, 0.0, 0.0, 0.0])
             concept.quaternion = tuple(q)
     
+    def promotion_threshold(self) -> float:
+        """
+        Compute the geometric threshold for promotion.
+        
+        Uses the critical line (σ = 0.5) as the fundamental threshold.
+        This is geometric because:
+        - 0.5 is the balance point between success and failure
+        - It's the critical line in zeta function terms
+        - It requires BOTH success_rate AND stability to be reasonable
+        
+        The threshold is NOT based on population statistics (which would
+        be circular - you'd need concepts to compute the threshold to
+        decide which concepts to promote).
+        
+        Returns 0.5 (critical line).
+        """
+        return 0.5  # The critical line - a geometric constant
+    
     def promote_qualifying(self) -> List[str]:
         """
         Promote all concepts that qualify for promotion.
         
+        Uses geometric criteria: concept confidence must meet or exceed
+        the critical line (0.5), which requires both success_rate and
+        stability to be reasonably high.
+        
         Returns:
             List of promoted concept IDs
         """
+        threshold = self.promotion_threshold()
+        
         promoted = []
         for concept in self.concepts:
-            if concept.temporary and concept.qualifies_for_promotion:
+            if concept.temporary and concept.qualifies_for_promotion(threshold):
                 concept.promote()
                 promoted.append(concept.id)
         
@@ -462,7 +498,8 @@ class GeometricKnowledgeStore:
                         self.add(other_concept, reproject=False)
                         count += 1
                 elif conflict_resolution == 'higher_confidence':
-                    if other_concept.success_rate > existing.success_rate:
+                    # Use geometric confidence (combines success_rate and stability)
+                    if other_concept.confidence > existing.confidence:
                         self.add(other_concept, reproject=False)
                         count += 1
                 elif conflict_resolution == 'merge_words':

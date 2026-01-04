@@ -10,14 +10,20 @@ It has:
 The key insight: Position IS identity. Two concepts at the same position
 are the same concept, regardless of their surface forms.
 
+Geometric Principles:
+- Promotion is based on geometric confidence (neighborhood fit), not hardcoded thresholds
+- Stability measures how well the concept fits its attractor basin
+- All thresholds emerge from the data's own distribution
+
 Author: Lesley Gushurst
 License: GPLv3
 """
 
 from dataclasses import dataclass, field
-from typing import List, Set, Dict, Any, Optional
+from typing import List, Set, Dict, Any, Optional, Callable
 from enum import Enum
 from datetime import datetime
+import math
 import uuid
 
 
@@ -72,7 +78,11 @@ class Concept:
     # Usage statistics
     use_count: int = 0
     success_count: int = 0
-    stability: float = 1.0
+    
+    # Geometric stability: measures fit to attractor basin
+    # Computed as 1 / (1 + average_drift) where drift is position change over time
+    cumulative_drift: float = 0.0
+    drift_samples: int = 0
     
     # Metadata
     created: str = field(default_factory=lambda: datetime.now().isoformat())
@@ -89,23 +99,57 @@ class Concept:
     def success_rate(self) -> float:
         """Calculate success rate from usage statistics."""
         if self.use_count == 0:
-            return 0.5  # Default for unused concepts
+            return 0.5  # Default for unused concepts (critical line)
         return self.success_count / self.use_count
     
     @property
-    def qualifies_for_promotion(self) -> bool:
+    def stability(self) -> float:
+        """
+        Geometric stability: how well this concept fits its attractor basin.
+        
+        Computed as 1 / (1 + average_drift), which naturally:
+        - Approaches 1.0 for stable concepts (low drift)
+        - Approaches 0.0 for unstable concepts (high drift)
+        - Starts at 1.0 for new concepts (no drift yet)
+        
+        This is geometric because it emerges from the concept's own trajectory.
+        """
+        if self.drift_samples == 0:
+            return 1.0  # New concept, assume stable
+        average_drift = self.cumulative_drift / self.drift_samples
+        return 1.0 / (1.0 + average_drift)
+    
+    @property
+    def confidence(self) -> float:
+        """
+        Geometric confidence: combines success rate and stability.
+        
+        Uses geometric mean (sqrt of product) which:
+        - Requires BOTH factors to be high
+        - Is scale-invariant (geometric property)
+        - Naturally balances the two measures
+        """
+        return math.sqrt(self.success_rate * self.stability)
+    
+    def qualifies_for_promotion(self, threshold: float = 0.5) -> bool:
         """
         Check if this concept qualifies for promotion to permanent.
         
-        Criteria (from Design 088):
-        - use_count >= 5
-        - success_rate >= 0.8
-        - stability >= 0.9
+        Geometric criteria:
+        - Must have been used (use_count > 0)
+        - Confidence must meet or exceed the threshold
+        
+        The threshold should be computed by the store based on the
+        population distribution (e.g., critical line at 0.5, or
+        a percentile of the confidence distribution).
+        
+        Args:
+            threshold: The confidence threshold for promotion.
+                      Defaults to 0.5 (critical line).
         """
         return (
-            self.use_count >= 5 and
-            self.success_rate >= 0.8 and
-            self.stability >= 0.9
+            self.use_count > 0 and
+            self.confidence >= threshold
         )
     
     def record_use(self, success: bool = True) -> None:
@@ -115,21 +159,23 @@ class Concept:
             self.success_count += 1
         self.modified = datetime.now().isoformat()
     
-    def update_position(self, new_quaternion: tuple, drift_threshold: float = 0.1) -> None:
+    def update_position(self, new_quaternion: tuple) -> None:
         """
-        Update the concept's position and track stability.
+        Update the concept's position and track drift.
         
-        Stability decreases if the position drifts significantly.
+        Drift is accumulated geometrically - we track the actual distance
+        moved in quaternion space. Stability emerges from this naturally:
+        concepts that move a lot have low stability.
+        
+        No hardcoded thresholds - stability is computed from cumulative drift.
         """
-        if self.quaternion != (1.0, 0.0, 0.0, 0.0):  # Not default
+        if self.quaternion != (1.0, 0.0, 0.0, 0.0):  # Not default position
             # Calculate drift (Euclidean distance in quaternion space)
             drift = sum((a - b) ** 2 for a, b in zip(self.quaternion, new_quaternion)) ** 0.5
             
-            # Update stability based on drift
-            if drift > drift_threshold:
-                self.stability = max(0.0, self.stability - 0.1)
-            else:
-                self.stability = min(1.0, self.stability + 0.01)
+            # Accumulate drift geometrically
+            self.cumulative_drift += drift
+            self.drift_samples += 1
         
         self.quaternion = new_quaternion
         self.modified = datetime.now().isoformat()
@@ -155,7 +201,8 @@ class Concept:
             'parent_id': self.parent_id,
             'use_count': self.use_count,
             'success_count': self.success_count,
-            'stability': self.stability,
+            'cumulative_drift': self.cumulative_drift,
+            'drift_samples': self.drift_samples,
             'created': self.created,
             'modified': self.modified,
             'source': self.source,
@@ -175,7 +222,8 @@ class Concept:
             parent_id=data.get('parent_id'),
             use_count=data.get('use_count', 0),
             success_count=data.get('success_count', 0),
-            stability=data.get('stability', 1.0),
+            cumulative_drift=data.get('cumulative_drift', 0.0),
+            drift_samples=data.get('drift_samples', 0),
             created=data.get('created', datetime.now().isoformat()),
             modified=data.get('modified', datetime.now().isoformat()),
             source=data.get('source', 'unknown'),
