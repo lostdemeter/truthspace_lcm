@@ -23,6 +23,7 @@ from typing import Dict, List, Tuple, Optional, Any, Set
 
 from .semantic_chain import SemanticChain
 from truthspace_lcm.core.protocol import GearProtocol, GearMessage, MessageIntent
+from truthspace_lcm.core.knowledge import GeometricKnowledgeStore, Concept, CRITICAL_LINE
 
 # Try to import tachyon ingestor for advanced frame extraction
 try:
@@ -157,10 +158,15 @@ class ConversationalChain(GearProtocol):
         except ImportError:
             pass
         
-        # Knowledge corpus
+        # Knowledge corpus (legacy)
         self.corpus: List[KnowledgeItem] = []
         self.topics: Set[str] = set()
         self.topic_definitions: Dict[str, str] = {}
+        
+        # Geometric knowledge store (Design 091/093)
+        # Uses position-based matching instead of string matching
+        self.knowledge_store = GeometricKnowledgeStore(name="conversational", dims=4)
+        self.use_geometric_matching = True  # Toggle for comparison
         
         # Entity relationships (from tachyon frames)
         self.entity_actions: Dict[str, Counter] = defaultdict(Counter)
@@ -246,6 +252,13 @@ class ConversationalChain(GearProtocol):
             'agent': topic.lower(),
             'source': source,
         })
+        
+        # Add to geometric knowledge store (Design 091/093)
+        # This creates a concept with position that can be matched geometrically
+        concept = self.knowledge_store.add_from_text(text, source=source)
+        # Store topic association in metadata for retrieval
+        if not hasattr(concept, 'topic'):
+            concept.topic = topic.lower()
     
     def learn_topic(self, topic: str) -> bool:
         """
@@ -824,7 +837,31 @@ Just the topic names, one per line:"""
         }
     
     def _extract_topics(self, text: str) -> List[str]:
-        """Extract known topics from text."""
+        """
+        Extract known topics from text.
+        
+        If use_geometric_matching is True, uses GeometricKnowledgeStore
+        to find concepts by position proximity (Design 091/093).
+        Otherwise falls back to string matching (legacy).
+        """
+        if self.use_geometric_matching and len(self.knowledge_store) > 0:
+            # Geometric matching: find concepts by word overlap → position proximity
+            matches = self.knowledge_store.query(text, top_k=5)
+            
+            # Extract unique topics from matched concepts
+            found = []
+            seen = set()
+            for concept, score in matches:
+                # Get topic from concept (stored during add_knowledge)
+                topic = getattr(concept, 'topic', None)
+                if topic and topic not in seen and score > 0.1:
+                    found.append(topic)
+                    seen.add(topic)
+            
+            if found:
+                return found
+        
+        # Fallback to string matching (legacy)
         text_lower = text.lower()
         found = []
         
@@ -938,7 +975,29 @@ Just the topic names, one per line:"""
         return '\n'.join(response_parts)
     
     def _get_relevant_content(self, topic: str) -> List[str]:
-        """Get relevant content from corpus for a topic."""
+        """
+        Get relevant content from corpus for a topic.
+        
+        If use_geometric_matching is True, uses GeometricKnowledgeStore
+        to find content by position proximity (Design 091/093).
+        """
+        if self.use_geometric_matching and len(self.knowledge_store) > 0:
+            # Geometric matching: find concepts similar to the topic
+            matches = self.knowledge_store.query(topic, top_k=10)
+            
+            relevant = []
+            for concept, score in matches:
+                if score > 0.1 and concept.text_snippets:
+                    for snippet in concept.text_snippets[:2]:
+                        if len(snippet) > 40:  # Prefer narrative over titles
+                            relevant.append(snippet)
+                        elif len(relevant) < 5:
+                            relevant.append(snippet)
+            
+            if relevant:
+                return relevant[:5]
+        
+        # Fallback to legacy string matching
         relevant = []
         titles = []
         
