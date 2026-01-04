@@ -1,30 +1,27 @@
-"""
-GeometricKnowledgeStore - Persistent Geometric Knowledge Storage
+"""GeometricKnowledgeStore - Persistent Geometric Knowledge Storage
 
-The core insight: geometry IS the knowledge. We persist geometry directly,
-not text that needs to be reconstructed into geometry.
+The core insight (Design 091): POSITION IS EVERYTHING.
 
 This store manages:
-1. Concepts (atomic units of knowledge)
+1. Concepts (position + words)
 2. Similarity matrix (word overlap between concepts)
 3. Positions (derived from similarity via eigendecomposition)
-4. Two-tier persistence (temporary → permanent via promotion)
 
 Key Operations:
-- add(): Add a concept, update geometry incrementally
-- query(): Find nearest concepts by word overlap
-- promote(): Move concept from temporary to permanent
+- add(): Add a concept at the origin
+- use(): THE learning operation - move concept based on success/failure
+- query(): Find nearest concepts by word overlap or position
+- prune(): Remove concepts inside the critical line
 - save()/load(): Persist to/from JSON
 
-Design Principles (from ENCODE = DECODE):
-- The space is conformally symmetric
-- What works one direction must work the other
-- Structure IS information
+Design Principles (from Design 091):
+- POSITION IS IDENTITY
+- MOVEMENT IS LEARNING
+- THE CRITICAL LINE IS THE HORIZON
 
-Geometric Principles:
-- Stop words detected geometrically (high frequency + no semantic role)
-- Promotion thresholds emerge from the data's distribution (median confidence)
-- All thresholds are relative to the population, not hardcoded
+Concepts start at the origin. Success moves them toward query positions.
+Failure moves them away. Concepts past the critical line (σ = 0.5) persist.
+Concepts inside the critical line fade and can be pruned.
 
 Author: Lesley Gushurst
 License: GPLv3
@@ -39,7 +36,7 @@ from typing import List, Dict, Any, Optional, Set, Tuple
 from dataclasses import dataclass, field
 from collections import Counter
 
-from .concept import Concept, ConceptLevel
+from .concept import Concept, CRITICAL_LINE
 
 
 @dataclass
@@ -62,8 +59,7 @@ class GeometricKnowledgeStore:
     """
     
     name: str = "default"
-    dims: int = 12
-    tier: str = "temporary"
+    dims: int = 4  # Default to 4D (quaternion-like)
     
     # Concepts
     concepts: List[Concept] = field(default_factory=list)
@@ -197,15 +193,16 @@ class GeometricKnowledgeStore:
         
         self.modified = datetime.now().isoformat()
     
-    def add_from_text(self, text: str, source: str = "text", 
-                      temporary: bool = True) -> Concept:
+    def add_from_text(self, text: str, source: str = "text") -> Concept:
         """
         Create and add a concept from text.
+        
+        The concept starts at the origin. It will move based on
+        successful/failed uses via the use() method.
         
         Args:
             text: The text to create a concept from
             source: Source attribution
-            temporary: Whether this is a temporary concept
             
         Returns:
             The created concept
@@ -215,7 +212,6 @@ class GeometricKnowledgeStore:
         concept = Concept(
             words=words,
             source=source,
-            temporary=temporary,
             text_snippets=[text],
         )
         
@@ -328,8 +324,15 @@ class GeometricKnowledgeStore:
         if n == 1:
             # First concept - initialize matrices
             self.similarity_matrix = np.array([[1.0]])
-            self.positions = np.zeros((1, self.dims))
-            new_concept.quaternion = (1.0, 0.0, 0.0, 0.0)
+            # Use concept's existing position if set, otherwise origin
+            if new_concept.magnitude > 0:
+                pos = np.array(new_concept.position)
+                if len(pos) != self.dims:
+                    pos = np.pad(pos, (0, max(0, self.dims - len(pos))))[:self.dims]
+                self.positions = pos.reshape(1, -1)
+            else:
+                self.positions = np.zeros((1, self.dims))
+                new_concept.position = tuple(np.zeros(self.dims))
             return
         
         # Check if positions matrix needs reinitialization (dimension mismatch)
@@ -363,18 +366,19 @@ class GeometricKnowledgeStore:
             # No overlap - place at origin (will be refined on reproject)
             new_position = np.zeros(self.dims)
         
+        # Use concept's existing position if set, otherwise use computed position
+        if new_concept.magnitude > 0:
+            # Concept already has a position - use it
+            pos = np.array(new_concept.position)
+            if len(pos) != self.dims:
+                pos = np.pad(pos, (0, max(0, self.dims - len(pos))))[:self.dims]
+            new_position = pos
+        
         # Extend positions matrix
         self.positions = np.vstack([self.positions, new_position])
         
-        # Update concept's quaternion from position
-        # Use first 4 dimensions as quaternion (normalized)
-        q = new_position[:4] if self.dims >= 4 else np.pad(new_position, (0, 4 - self.dims))
-        norm = np.linalg.norm(q)
-        if norm > 1e-10:
-            q = q / norm
-        else:
-            q = np.array([1.0, 0.0, 0.0, 0.0])
-        new_concept.quaternion = tuple(q)
+        # Update concept's position
+        new_concept.position = tuple(new_position)
     
     def _reproject(self) -> None:
         """
@@ -409,78 +413,72 @@ class GeometricKnowledgeStore:
         
         self.positions = selected_eigenvectors * np.sqrt(selected_eigenvalues)
         
-        # Update concept quaternions
+        # Update concept positions from the projected space
         for i, concept in enumerate(self.concepts):
-            concept.position_index = i
-            q = self.positions[i, :4] if self.dims >= 4 else np.pad(self.positions[i], (0, 4 - self.dims))
-            norm = np.linalg.norm(q)
-            if norm > 1e-10:
-                q = q / norm
-            else:
-                q = np.array([1.0, 0.0, 0.0, 0.0])
-            concept.quaternion = tuple(q)
+            concept.position = tuple(self.positions[i])
     
-    def promotion_threshold(self) -> float:
+    def use(self, concept_id: str, query_position: tuple, success: bool,
+            attract_strength: float = 0.1, repel_strength: float = 0.05) -> bool:
         """
-        Compute the geometric threshold for promotion.
+        THE learning operation. Move concept based on success/failure.
         
-        Uses the critical line (σ = 0.5) as the fundamental threshold.
-        This is geometric because:
-        - 0.5 is the balance point between success and failure
-        - It's the critical line in zeta function terms
-        - It requires BOTH success_rate AND stability to be reasonable
+        This is the ONLY way concepts learn. Everything else emerges:
+        - Frequently successful concepts move toward query clusters
+        - Failed concepts drift away
+        - Concepts past the critical line persist
+        - Concepts inside the critical line fade
         
-        The threshold is NOT based on population statistics (which would
-        be circular - you'd need concepts to compute the threshold to
-        decide which concepts to promote).
-        
-        Returns 0.5 (critical line).
-        """
-        return 0.5  # The critical line - a geometric constant
-    
-    def promote_qualifying(self) -> List[str]:
-        """
-        Promote all concepts that qualify for promotion.
-        
-        Uses geometric criteria: concept confidence must meet or exceed
-        the critical line (0.5), which requires both success_rate and
-        stability to be reasonably high.
-        
+        Args:
+            concept_id: ID of the concept that was used
+            query_position: Position of the query that matched this concept
+            success: Whether the use was successful
+            attract_strength: How much to move toward on success (default 0.1)
+            repel_strength: How much to move away on failure (default 0.05)
+            
         Returns:
-            List of promoted concept IDs
+            True if concept was found and updated, False otherwise
         """
-        threshold = self.promotion_threshold()
+        concept = self.get(concept_id)
+        if concept is None:
+            return False
         
-        promoted = []
-        for concept in self.concepts:
-            if concept.temporary and concept.qualifies_for_promotion(threshold):
-                concept.promote()
-                promoted.append(concept.id)
+        if success:
+            concept.move_toward(query_position, attract_strength)
+        else:
+            concept.move_away(query_position, repel_strength)
         
-        if promoted:
-            self.modified = datetime.now().isoformat()
-        
-        return promoted
+        self.modified = datetime.now().isoformat()
+        return True
     
-    def get_temporary_concepts(self) -> List[Concept]:
-        """Get all temporary concepts."""
-        return [c for c in self.concepts if c.temporary]
+    def get_persisting_concepts(self) -> List[Concept]:
+        """Get all concepts past the critical line (will persist)."""
+        return [c for c in self.concepts if c.persists]
     
-    def get_permanent_concepts(self) -> List[Concept]:
-        """Get all permanent concepts."""
-        return [c for c in self.concepts if not c.temporary]
+    def get_fading_concepts(self) -> List[Concept]:
+        """Get all concepts inside the critical line (will fade)."""
+        return [c for c in self.concepts if not c.persists]
     
-    def clear_temporary(self) -> int:
+    def prune(self, threshold: float = None) -> int:
         """
-        Remove all temporary concepts.
+        Remove concepts inside the critical line.
         
+        This is the natural garbage collection - concepts that haven't
+        moved past the critical line are pruned.
+        
+        Args:
+            threshold: Magnitude threshold (default: CRITICAL_LINE = 0.5)
+            
         Returns:
             Number of concepts removed
         """
-        temp_ids = [c.id for c in self.concepts if c.temporary]
-        for cid in temp_ids:
+        if threshold is None:
+            threshold = CRITICAL_LINE
+        
+        to_remove = [c.id for c in self.concepts if c.magnitude < threshold]
+        for cid in to_remove:
             self.remove(cid)
-        return len(temp_ids)
+        
+        return len(to_remove)
     
     def merge(self, other: 'GeometricKnowledgeStore', 
               conflict_resolution: str = 'newer') -> int:
@@ -512,9 +510,9 @@ class GeometricKnowledgeStore:
                     if other_concept.modified > existing.modified:
                         self.add(other_concept, reproject=False)
                         count += 1
-                elif conflict_resolution == 'higher_confidence':
-                    # Use geometric confidence (combines success_rate and stability)
-                    if other_concept.confidence > existing.confidence:
+                elif conflict_resolution == 'higher_magnitude':
+                    # Use position magnitude (concepts further from origin are stronger)
+                    if other_concept.magnitude > existing.magnitude:
                         self.add(other_concept, reproject=False)
                         count += 1
                 elif conflict_resolution == 'merge_words':
@@ -541,8 +539,8 @@ class GeometricKnowledgeStore:
             'metadata': {
                 'name': self.name,
                 'dims': self.dims,
-                'tier': self.tier,
                 'concept_count': len(self.concepts),
+                'persisting_count': len(self.get_persisting_concepts()),
                 'created': self.created,
                 'modified': self.modified,
             },
@@ -578,8 +576,7 @@ class GeometricKnowledgeStore:
         
         store = cls(
             name=metadata.get('name', 'loaded'),
-            dims=metadata.get('dims', 12),
-            tier=metadata.get('tier', 'temporary'),
+            dims=metadata.get('dims', 4),
             created=metadata.get('created', datetime.now().isoformat()),
             modified=metadata.get('modified', datetime.now().isoformat()),
         )

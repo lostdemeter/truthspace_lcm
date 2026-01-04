@@ -2,36 +2,35 @@
 Concept - The Atomic Unit of Geometric Knowledge
 
 A Concept represents a single unit of knowledge in the geometric space.
-It has:
-- A position (quaternion) in concept space
-- Surface forms (words that represent it)
-- Metadata (usage statistics, hierarchy, source)
 
-The key insight: Position IS identity. Two concepts at the same position
-are the same concept, regardless of their surface forms.
+The key insight (Design 091): POSITION IS EVERYTHING.
 
-Geometric Principles:
-- Promotion is based on geometric confidence (neighborhood fit), not hardcoded thresholds
-- Stability measures how well the concept fits its attractor basin
-- All thresholds emerge from the data's own distribution
+A concept has:
+- A position (quaternion) in concept space - this IS the concept
+- Surface forms (words) - just labels for the position
+- Created/modified timestamps - for debugging only
+
+Everything else is DERIVED from position:
+- Magnitude = confidence (distance from origin)
+- Persistence = magnitude >= 0.5 (critical line)
+- Stability = low variance in position over time (tracked by store)
+
+The critical line (σ = 0.5) is the information horizon.
+Concepts past the horizon persist. Concepts inside fade.
 
 Author: Lesley Gushurst
 License: GPLv3
 """
 
 from dataclasses import dataclass, field
-from typing import List, Set, Dict, Any, Optional, Callable
-from enum import Enum
+from typing import List, Set, Dict, Any
 from datetime import datetime
-import math
+import numpy as np
 import uuid
 
 
-class ConceptLevel(Enum):
-    """Hierarchical level of a concept."""
-    FACT = "fact"           # Atomic fact (e.g., "Washington was first president")
-    CLUSTER = "cluster"     # Group of related facts (e.g., "Founding Fathers")
-    TOPIC = "topic"         # High-level topic (e.g., "American Revolution")
+# Critical line constant - the information horizon
+CRITICAL_LINE = 0.5
 
 
 @dataclass
@@ -39,145 +38,117 @@ class Concept:
     """
     The atomic unit of geometric knowledge.
     
-    A concept is defined by its position in quaternion space, not by its text.
-    The words are just surface forms - different words can map to the same concept,
-    and the same word can map to different concepts (polysemy).
+    POSITION IS EVERYTHING (Design 091).
+    
+    A concept is defined entirely by its position. The words are just
+    surface forms - labels that point to the position.
+    
+    Everything is derived from position:
+    - magnitude: How "strong" the concept is
+    - persists: Whether it's past the critical line (σ = 0.5)
+    - At origin: New/unused concept
+    - Past critical line: Established concept
     
     Attributes:
         id: Unique identifier
-        words: Set of content words associated with this concept
-        quaternion: Position in 4D concept space (w, x, y, z)
-        position_index: Index in the store's position matrix (set by store)
-        
-        level: Hierarchical level (fact, cluster, topic)
-        parent_id: ID of parent concept (for hierarchy)
-        
-        use_count: How many times this concept has been accessed
-        success_count: How many times access led to successful outcome
-        stability: How stable the position has been (0.0-1.0)
-        
-        created: When the concept was created
-        modified: When the concept was last modified
-        source: Where this concept came from
-        
-        temporary: Whether this is a temporary (session) concept
+        words: Set of content words (surface forms)
+        position: N-dimensional position vector (the concept's identity)
+        created: When created (for debugging)
+        modified: When last modified (for debugging)
     """
     
     # Core identity
     id: str = field(default_factory=lambda: str(uuid.uuid4())[:8])
     words: Set[str] = field(default_factory=set)
     
-    # Geometric position (quaternion: w, x, y, z)
-    quaternion: tuple = field(default=(1.0, 0.0, 0.0, 0.0))
-    position_index: int = -1  # Set by store when added
+    # THE position - this IS the concept
+    # Stored as tuple for immutability, converted to numpy for math
+    position: tuple = field(default_factory=lambda: (0.0, 0.0, 0.0, 0.0))
     
-    # Hierarchy
-    level: ConceptLevel = ConceptLevel.FACT
-    parent_id: Optional[str] = None
-    
-    # Usage statistics
-    use_count: int = 0
-    success_count: int = 0
-    
-    # Geometric stability: measures fit to attractor basin
-    # Computed as 1 / (1 + average_drift) where drift is position change over time
-    cumulative_drift: float = 0.0
-    drift_samples: int = 0
-    
-    # Metadata
+    # Metadata (for debugging/display only)
     created: str = field(default_factory=lambda: datetime.now().isoformat())
     modified: str = field(default_factory=lambda: datetime.now().isoformat())
     source: str = "unknown"
-    
-    # Tier
-    temporary: bool = True
-    
-    # Optional text cache (for debugging/display)
     text_snippets: List[str] = field(default_factory=list)
     
     @property
-    def success_rate(self) -> float:
-        """Calculate success rate from usage statistics."""
-        if self.use_count == 0:
-            return 0.5  # Default for unused concepts (critical line)
-        return self.success_count / self.use_count
+    def position_array(self) -> np.ndarray:
+        """Position as numpy array for math operations."""
+        return np.array(self.position)
     
     @property
-    def stability(self) -> float:
+    def magnitude(self) -> float:
         """
-        Geometric stability: how well this concept fits its attractor basin.
+        Magnitude of position vector.
         
-        Computed as 1 / (1 + average_drift), which naturally:
-        - Approaches 1.0 for stable concepts (low drift)
-        - Approaches 0.0 for unstable concepts (high drift)
-        - Starts at 1.0 for new concepts (no drift yet)
-        
-        This is geometric because it emerges from the concept's own trajectory.
+        This IS the concept's "strength" or "confidence".
+        - 0.0 = at origin (new/unused)
+        - 0.5 = at critical line (threshold)
+        - 1.0+ = well-established
         """
-        if self.drift_samples == 0:
-            return 1.0  # New concept, assume stable
-        average_drift = self.cumulative_drift / self.drift_samples
-        return 1.0 / (1.0 + average_drift)
+        return float(np.linalg.norm(self.position_array))
     
     @property
-    def confidence(self) -> float:
+    def persists(self) -> bool:
         """
-        Geometric confidence: combines success rate and stability.
+        Whether this concept persists (is past the critical line).
         
-        Uses geometric mean (sqrt of product) which:
-        - Requires BOTH factors to be high
-        - Is scale-invariant (geometric property)
-        - Naturally balances the two measures
+        The critical line (σ = 0.5) is the information horizon.
+        Concepts past it have enough "weight" to persist.
+        Concepts inside it will fade.
         """
-        return math.sqrt(self.success_rate * self.stability)
+        return self.magnitude >= CRITICAL_LINE
     
-    def qualifies_for_promotion(self, threshold: float = 0.5) -> bool:
+    @property
+    def normalized_position(self) -> tuple:
         """
-        Check if this concept qualifies for promotion to permanent.
+        Position normalized to unit sphere.
         
-        Geometric criteria:
-        - Must have been used (use_count > 0)
-        - Confidence must meet or exceed the threshold
+        Useful for direction-only comparisons.
+        """
+        mag = self.magnitude
+        if mag < 1e-10:
+            return self.position
+        arr = self.position_array / mag
+        return tuple(arr)
+    
+    def move_toward(self, target: tuple, strength: float = 0.1) -> None:
+        """
+        Move this concept toward a target position.
         
-        The threshold should be computed by the store based on the
-        population distribution (e.g., critical line at 0.5, or
-        a percentile of the confidence distribution).
+        This is the ONLY learning operation needed.
+        Called on successful use - pulls concept toward query position.
         
         Args:
-            threshold: The confidence threshold for promotion.
-                      Defaults to 0.5 (critical line).
+            target: Target position to move toward
+            strength: How much to move (0.0-1.0)
         """
-        return (
-            self.use_count > 0 and
-            self.confidence >= threshold
-        )
-    
-    def record_use(self, success: bool = True) -> None:
-        """Record a use of this concept."""
-        self.use_count += 1
-        if success:
-            self.success_count += 1
+        current = self.position_array
+        target_arr = np.array(target)
+        
+        # Move toward target
+        new_pos = current + strength * (target_arr - current)
+        
+        self.position = tuple(new_pos)
         self.modified = datetime.now().isoformat()
     
-    def update_position(self, new_quaternion: tuple) -> None:
+    def move_away(self, target: tuple, strength: float = 0.05) -> None:
         """
-        Update the concept's position and track drift.
+        Move this concept away from a target position.
         
-        Drift is accumulated geometrically - we track the actual distance
-        moved in quaternion space. Stability emerges from this naturally:
-        concepts that move a lot have low stability.
+        Called on failed use - pushes concept away from query position.
         
-        No hardcoded thresholds - stability is computed from cumulative drift.
+        Args:
+            target: Target position to move away from
+            strength: How much to move (0.0-1.0)
         """
-        if self.quaternion != (1.0, 0.0, 0.0, 0.0):  # Not default position
-            # Calculate drift (Euclidean distance in quaternion space)
-            drift = sum((a - b) ** 2 for a, b in zip(self.quaternion, new_quaternion)) ** 0.5
-            
-            # Accumulate drift geometrically
-            self.cumulative_drift += drift
-            self.drift_samples += 1
+        current = self.position_array
+        target_arr = np.array(target)
         
-        self.quaternion = new_quaternion
+        # Move away from target
+        new_pos = current - strength * (target_arr - current)
+        
+        self.position = tuple(new_pos)
         self.modified = datetime.now().isoformat()
     
     def add_words(self, new_words: Set[str]) -> None:
@@ -185,49 +156,30 @@ class Concept:
         self.words.update(new_words)
         self.modified = datetime.now().isoformat()
     
-    def promote(self) -> None:
-        """Promote this concept from temporary to permanent."""
-        self.temporary = False
-        self.modified = datetime.now().isoformat()
-    
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for JSON serialization."""
         return {
             'id': self.id,
             'words': list(self.words),
-            'quaternion': list(self.quaternion),
-            'position_index': self.position_index,
-            'level': self.level.value,
-            'parent_id': self.parent_id,
-            'use_count': self.use_count,
-            'success_count': self.success_count,
-            'cumulative_drift': self.cumulative_drift,
-            'drift_samples': self.drift_samples,
+            'position': list(self.position),
             'created': self.created,
             'modified': self.modified,
             'source': self.source,
-            'temporary': self.temporary,
             'text_snippets': self.text_snippets,
         }
     
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'Concept':
         """Create a Concept from a dictionary."""
+        # Handle legacy 'quaternion' field
+        position = data.get('position') or data.get('quaternion', [0.0, 0.0, 0.0, 0.0])
         return cls(
             id=data.get('id', str(uuid.uuid4())[:8]),
             words=set(data.get('words', [])),
-            quaternion=tuple(data.get('quaternion', [1.0, 0.0, 0.0, 0.0])),
-            position_index=data.get('position_index', -1),
-            level=ConceptLevel(data.get('level', 'fact')),
-            parent_id=data.get('parent_id'),
-            use_count=data.get('use_count', 0),
-            success_count=data.get('success_count', 0),
-            cumulative_drift=data.get('cumulative_drift', 0.0),
-            drift_samples=data.get('drift_samples', 0),
+            position=tuple(position),
             created=data.get('created', datetime.now().isoformat()),
             modified=data.get('modified', datetime.now().isoformat()),
             source=data.get('source', 'unknown'),
-            temporary=data.get('temporary', True),
             text_snippets=data.get('text_snippets', []),
         )
     
@@ -235,8 +187,8 @@ class Concept:
         words_preview = ', '.join(list(self.words)[:3])
         if len(self.words) > 3:
             words_preview += '...'
-        tier = "temp" if self.temporary else "perm"
-        return f"Concept({self.id}, [{words_preview}], {tier}, uses={self.use_count})"
+        status = "persists" if self.persists else "fading"
+        return f"Concept({self.id}, [{words_preview}], mag={self.magnitude:.2f}, {status})"
     
     def __hash__(self) -> int:
         return hash(self.id)
