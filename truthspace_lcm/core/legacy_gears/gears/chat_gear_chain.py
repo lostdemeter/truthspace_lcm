@@ -24,7 +24,7 @@ from pathlib import Path
 from typing import Optional, List, Dict, Any
 from dataclasses import dataclass, field
 
-from truthspace_lcm.core.gear import Gear, GearChain, GearState
+from truthspace_lcm.core.legacy_gears.gear import Gear, GearChain, GearState
 from truthspace_lcm.core.knowledge import GeometricKnowledgeStore, Concept, CRITICAL_LINE
 
 
@@ -174,7 +174,7 @@ class ChatGearChain(GearChain):
         # Intent detector (optional, added if available)
         self._intent_gear = None
         try:
-            from truthspace_lcm.core.gears.intent_detector_gear import IntentDetectorGear
+            from truthspace_lcm.core.legacy_gears.gears.intent_detector_gear import IntentDetectorGear
             self._intent_gear = IntentDetectorGear()
             # Note: IntentDetectorGear is not a Gear subclass, so we use it directly
         except ImportError:
@@ -192,7 +192,7 @@ class ChatGearChain(GearChain):
         # Python code gear (optional)
         self._code_gear = None
         try:
-            from truthspace_lcm.core.gears.python_code_gear import PythonCodeGear
+            from truthspace_lcm.core.legacy_gears.gears.python_code_gear import PythonCodeGear
             self._code_gear = PythonCodeGear()
             self._code_gear.configure_llm(self.config.llm_url, self.config.llm_model)
         except ImportError:
@@ -201,7 +201,7 @@ class ChatGearChain(GearChain):
         # Orchestrator (optional)
         self._orchestrator = None
         try:
-            from truthspace_lcm.core.orchestrators.gear_orchestrator import GearOrchestrator
+            from truthspace_lcm.core.legacy_gears.orchestrators.gear_orchestrator import GearOrchestrator
             self._orchestrator = GearOrchestrator()
             self._orchestrator.configure_llm(self.config.llm_url, self.config.llm_model)
         except ImportError:

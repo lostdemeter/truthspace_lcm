@@ -1,48 +1,60 @@
 """
-Gear Chain Core
+TruthSpace LCM Core
 
-The foundational classes for building gear-based transformation pipelines.
-These are domain-agnostic and can be used for any transformation task.
+The core module for TruthSpace LCM, providing both the new HyperMapping-based
+architecture and legacy gear-based classes for backwards compatibility.
 
-Structure:
-- gear.py: Base classes (Gear, GearState, GearChain, Quaternion)
-- protocol.py: Message protocol (GearProtocol, GearMessage, MessageIntent)
-- gears/: Individual gear implementations
-- chains/: Chain implementations (ConversationalChain, etc.)
-- orchestrators/: Multi-gear orchestration (CodeOrchestrator, GearOrchestrator)
-- classifiers/: Intent classification
-- utils/: Utility classes (holographic space, templates, etc.)
+NEW ARCHITECTURE (HyperMapping-based):
+- ChatPipeline: Main chat interface with intent detection, knowledge, and code
+- KnowledgeSpace: Geometric knowledge storage (replaces GeometricKnowledgeStore)
+- CodeSpace: Code generation via geometric pattern matching
+- IntentSpace: Intent detection via bootstrap + geometric matching
 
-Usage:
-    from truthspace_lcm.core import Gear, GearState, GearChain, Quaternion
+LEGACY ARCHITECTURE (Gear-based):
+- Located in legacy_gears/ for backwards compatibility
+- Gear, GearState, GearChain, Quaternion
+- ConversationalChain, ChatGearChain, etc.
+
+Usage (New):
+    from truthspace_lcm.core import ChatPipeline, KnowledgeSpace, CodeSpace
+    
+    pipeline = ChatPipeline()
+    pipeline.add_knowledge("Python is a programming language")
+    response = pipeline.chat("What is Python?")
+
+Usage (Legacy - for backwards compatibility):
+    from truthspace_lcm.core import Gear, GearState, GearChain
     from truthspace_lcm.core import ConversationalChain
-    
-    # Traditional gear chain
-    class MyGear(Gear):
-        def forward(self, state: GearState) -> GearState:
-            return state
-    
-    chain = GearChain("MyPipeline")
-    chain.add(MyGear())
-    result = chain.process(initial_state)
 """
 
-# Base classes
-from .gear import Gear, GearState, GearChain, Quaternion
+# =============================================================================
+# NEW HYPERMAPPING-BASED ARCHITECTURE
+# =============================================================================
 
-# Protocol
-from .protocol import (
+from .chat_pipeline import ChatPipeline, ChatConfig, Intent, IntentResult, IntentSpace
+from .knowledge_space import KnowledgeSpace
+from .code_space import CodeSpace, CodeResult, CodeVerifier
+
+# =============================================================================
+# LEGACY GEAR-BASED ARCHITECTURE (for backwards compatibility)
+# =============================================================================
+
+# Base classes (legacy)
+from .legacy_gears.gear import Gear, GearState, GearChain, Quaternion
+
+# Protocol (legacy)
+from .legacy_gears.protocol import (
     GearMessage, GearProtocol, MessageIntent, MessageAwareGear,
     EmergentIntentSpace, get_intent_space,
     normalize_input, normalize_output,
     adapt_to_gear_state, adapt_from_gear_state,
 )
 
-# Chains
-from .chains.base_chain import EmergentDimensionChain, DimensionInfo, DataItem
-from .chains.semantic_chain import SemanticChain
-from .chains.linguistic_chain import LinguisticChain
-from .chains.conversational_chain import ConversationalChain, KnowledgeItem, ConversationTurn
+# Chains (legacy)
+from .legacy_gears.chains.base_chain import EmergentDimensionChain, DimensionInfo, DataItem
+from .legacy_gears.chains.semantic_chain import SemanticChain
+from .legacy_gears.chains.linguistic_chain import LinguisticChain
+from .legacy_gears.chains.conversational_chain import ConversationalChain, KnowledgeItem, ConversationTurn
 
 # Utils
 from .utils.folding_deficiency import (
@@ -54,24 +66,48 @@ from .utils.gear_improvement_loop import (
     DeficiencyType, Deficiency, TestCase, TestResult,
 )
 
-# Gears
-from .gears.chat_improvement_gear import (
+# Gears (legacy)
+from .legacy_gears.gears.chat_improvement_gear import (
     ChatImprovementGear, ResponseTemplate, ImprovementResult,
 )
-from .gears.corpus_builder_gear import (
+from .legacy_gears.gears.corpus_builder_gear import (
     SelfBuildingCorpusGear, CorpusItem, CorpusCategory,
 )
 
 __all__ = [
+    # ==========================================================================
+    # NEW HYPERMAPPING-BASED ARCHITECTURE
+    # ==========================================================================
+    
+    # Chat pipeline
+    'ChatPipeline',
+    'ChatConfig',
+    'Intent',
+    'IntentResult',
+    'IntentSpace',
+    
+    # Knowledge space
+    'KnowledgeSpace',
+    
+    # Code space
+    'CodeSpace',
+    'CodeResult',
+    'CodeVerifier',
+    
+    # ==========================================================================
+    # LEGACY GEAR-BASED ARCHITECTURE (backwards compatibility)
+    # ==========================================================================
+    
     # Base classes
     'Gear',
     'GearState',
     'GearChain',
     'Quaternion',
+    
     # Gear message protocol
     'GearMessage',
     'GearProtocol',
-    'MessageAwareGear',  # Alias for GearProtocol
+    'MessageAwareGear',
     'MessageIntent',
     'EmergentIntentSpace',
     'get_intent_space',
@@ -79,21 +115,25 @@ __all__ = [
     'normalize_output',
     'adapt_to_gear_state',
     'adapt_from_gear_state',
+    
     # Emergent dimension chains
     'EmergentDimensionChain',
     'DimensionInfo',
     'DataItem',
     'SemanticChain',
     'LinguisticChain',
+    
     # Conversational chain
     'ConversationalChain',
     'KnowledgeItem',
     'ConversationTurn',
-    # Folding deficiency detection (shape-based)
+    
+    # Folding deficiency detection
     'FoldingStructure',
     'FoldingDeficiencyDetector',
     'ShapeDeficiency',
     'ShapeDeficiencyType',
+    
     # Improvement loop
     'GearImprovementLoop',
     'GearTestHarness',
@@ -102,10 +142,12 @@ __all__ = [
     'Deficiency',
     'TestCase',
     'TestResult',
+    
     # Chat improvement
     'ChatImprovementGear',
     'ResponseTemplate',
     'ImprovementResult',
+    
     # Self-building corpus
     'SelfBuildingCorpusGear',
     'CorpusItem',

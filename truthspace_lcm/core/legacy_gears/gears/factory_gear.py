@@ -29,9 +29,9 @@ import re
 from typing import Dict, List, Optional, Any, Tuple
 from pathlib import Path
 
-from truthspace_lcm.core.gear import Gear, GearState
-from truthspace_lcm.core.protocol import GearProtocol, GearMessage, MessageIntent
-from truthspace_lcm.core.gears.bootstrap_gear import BootstrapGear, EmergentPattern
+from truthspace_lcm.core.legacy_gears.gear import Gear, GearState
+from truthspace_lcm.core.legacy_gears.protocol import GearProtocol, GearMessage, MessageIntent
+from truthspace_lcm.core.legacy_gears.gears.bootstrap_gear import BootstrapGear, EmergentPattern
 
 
 class GearFactoryGear(GearProtocol):

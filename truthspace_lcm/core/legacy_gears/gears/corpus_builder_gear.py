@@ -34,7 +34,7 @@ from truthspace_lcm.core.utils.folding_deficiency import (
     FoldingStructure, FoldingDeficiencyDetector,
     ShapeDeficiency, ShapeDeficiencyType
 )
-from truthspace_lcm.core.gears.chat_improvement_gear import ChatImprovementGear
+from truthspace_lcm.core.legacy_gears.gears.chat_improvement_gear import ChatImprovementGear
 
 
 @dataclass

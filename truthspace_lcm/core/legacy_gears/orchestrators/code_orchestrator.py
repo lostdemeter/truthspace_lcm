@@ -35,8 +35,8 @@ from typing import Dict, List, Optional, Any, Tuple, Set
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from truthspace_lcm.core.protocol import GearProtocol, GearMessage, MessageIntent
-from truthspace_lcm.core.gears.python_code_gear import PythonCodeGear, CodeVerifier
+from truthspace_lcm.core.legacy_gears.protocol import GearProtocol, GearMessage, MessageIntent
+from truthspace_lcm.core.legacy_gears.gears.python_code_gear import PythonCodeGear, CodeVerifier
 from truthspace_lcm.core.utils.holographic_pattern_space import HolographicPatternSpace, HolographicModule
 from truthspace_lcm.core.utils.template_composer import TemplateComposer
 
