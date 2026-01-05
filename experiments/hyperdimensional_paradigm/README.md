@@ -108,15 +108,32 @@ Complexity:
 - Update: O(1)
 - Delete: O(1)
 
-## Next Steps
+## Results
 
-1. **Improve encoding** - The text transcoder's bag-of-words is too simple
-2. **Add spatial indexing** - k-d tree or ball tree for faster queries
-3. **Test with real domains** - Images, audio, structured data
-4. **Formalize the paradigm** - Mathematical foundations
+| Version | Accuracy | Method |
+|---------|----------|--------|
+| V1 (hard-coded) | ~60% | String-based semantic categories |
+| V2 (learned) | 80% | Co-occurrence attraction |
+| Pure | 82% | Word overlap at query time |
+| Geometric | 92% | Positions only, no string at query |
+| **Final** | **94%** | Synonyms + Temporary injection |
+
+## Key Features Implemented
+
+1. **Truly Geometric** - No string comparison at query time
+2. **Synonym Expansion** - Bootstrap JSON includes synonym groups
+3. **Temporary Word Injection** - Unknown words get temporary positions (Design 085)
+4. **Multi-Domain** - Bash + Git with chromosome-like sharing (Design 077)
+5. **Structure Chaining** - Connect structures with intent routing
+6. **Learning** - Feedback promotes successful temporary words
 
 ## Files
 
 - `hyperdimensional_structure.py` - The data structure
 - `hyperdimensional_transcoder.py` - The execution engine + example transcoders
+- `nl_to_bash_final.py` - Final 94% accuracy translator
+- `multi_domain.py` - Multi-domain with chromosome-like sharing
+- `structure_chain.py` - Structure chaining mechanism
+- `integrated_demo.py` - Complete integrated demo
+- `bootstrap/` - JSON bootstrap files for Bash and Git domains
 - `README.md` - This file
