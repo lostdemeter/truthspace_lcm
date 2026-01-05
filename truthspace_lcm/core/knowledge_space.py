@@ -193,51 +193,40 @@ class KnowledgeSpace(HyperMapping):
         # Filter using geometric detection
         return {w for w in words if self._is_content_word(w)}
     
-    # Common English stop words that are structural, not semantic
-    # These appear everywhere and add no discriminative power
-    STOP_WORDS = {
-        'the', 'and', 'for', 'with', 'that', 'this', 'from', 'are', 'was',
-        'were', 'been', 'being', 'have', 'has', 'had', 'having', 'does',
-        'did', 'doing', 'will', 'would', 'could', 'should', 'may', 'might',
-        'must', 'shall', 'can', 'need', 'dare', 'ought', 'used', 'its',
-        'into', 'through', 'during', 'before', 'after', 'above', 'below',
-        'between', 'under', 'again', 'further', 'then', 'once', 'here',
-        'there', 'when', 'where', 'why', 'how', 'all', 'each', 'few',
-        'more', 'most', 'other', 'some', 'such', 'only', 'own', 'same',
-        'than', 'too', 'very', 'just', 'also', 'now', 'any', 'both',
-        'but', 'not', 'nor', 'yet', 'what', 'which', 'who', 'whom',
-        'these', 'those', 'about', 'over', 'out', 'off', 'down', 'while',
-        'because', 'until', 'although', 'though', 'since', 'unless',
-        'include', 'including', 'includes', 'included', 'use', 'uses',
-        'using', 'used', 'like', 'such', 'well', 'even', 'back', 'still',
-    }
-    
     def _is_content_word(self, word: str) -> bool:
         """
-        Geometric stop word detection.
+        Fully geometric stop word detection (Emergent Gear Pattern).
         
-        A word is a STOP word (not content) if:
-        1. It's in the common stop words set (structural words)
-        2. It appears in > 50% of concepts (high coverage)
-        3. It's too short (< 3 chars)
+        NO HARDCODED STOP WORD LIST. Detection is purely emergent:
         
-        The critical line (σ = 0.5) is the threshold for coverage.
+        1. Short words (< 3 chars) are structural - length is a property
+        2. High coverage (> critical line) = appears everywhere = structural
+        
+        Key insight: Structural words appear across MANY topics uniformly.
+        Domain words like "python" may be frequent but are topic-specific.
+        
+        The geometric signal is COVERAGE (fraction of concepts containing word),
+        not raw frequency. A word appearing 10 times in 2 concepts about Python
+        is content. A word appearing 10 times across 10 different topics is structural.
+        
+        This follows the Emergent Gear Pattern (Design 086):
+        - STRUCTURE: Coverage is the geometric property
+        - BOOTSTRAP: Initial concepts establish coverage distribution
+        - MATCH: Coverage > critical line → structural
+        - LEARN: As more concepts added, coverage distribution refines
         """
-        # Short words are typically structural (is, to, in, a, an, etc.)
+        # Short words are structural (length is a property, not a list)
         if len(word) < 3:
             return False
         
-        # Common stop words are structural
-        if word in self.STOP_WORDS:
-            return False
-        
-        # If we have concept data, use geometric detection
+        # Geometric detection via coverage
+        # Coverage = fraction of concepts containing this word
+        # High coverage (> critical line) = appears everywhere = structural
         if word in self._word_counts and self._total_concepts > 1:
-            # Word appears in what fraction of concepts?
             coverage = self._word_counts[word] / self._total_concepts
             
-            # High coverage (> 50%) = stop word (appears everywhere)
-            # This threshold is the critical line (σ = 0.5)
+            # Critical line (σ = 0.5) is the threshold
+            # Words in > 50% of concepts are structural scaffolding
             if coverage > CRITICAL_LINE:
                 return False
         
