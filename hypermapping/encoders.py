@@ -451,59 +451,84 @@ class QuaternionEncoder(Encoder):
     4D Quaternion encoder with semantic axes (from Design 044).
     
     The quaternion structure provides natural 4D control:
-    - X (i-axis): Polarity/Style - positive vs negative
+    - X (i-axis): Polarity - positive vs negative
     - Y (j-axis): Intensity - how strong the signal
-    - Z (k-axis): Style - formal vs casual
+    - Z (k-axis): Style - formal vs casual (derived from word length)
     - W (scalar): Certainty - definitive vs hedged
     
-    Particularly effective for sentiment analysis and text classification.
+    Vocabularies are customizable - pass empty dicts for a clean slate,
+    or load from serialized state.
+    
+    Usage:
+        # With defaults
+        encoder = QuaternionEncoder()
+        
+        # Clean slate (no defaults)
+        encoder = QuaternionEncoder(polarity_vocab={}, intensity_vocab={}, certainty_vocab={})
+        encoder.polarity_vocab['awesome'] = 0.9
+        
+        # From serialized state
+        encoder = QuaternionEncoder.from_dict(saved_data)
     """
     
-    def __init__(self, dims: int = 4):
+    # Default vocabularies (can be overridden)
+    DEFAULT_POLARITY = {
+        'love': 1.0, 'amazing': 0.9, 'great': 0.8, 'excellent': 0.9,
+        'good': 0.6, 'best': 1.0, 'wonderful': 0.9, 'fantastic': 0.9,
+        'hate': -1.0, 'terrible': -0.9, 'awful': -0.9, 'worst': -1.0,
+        'bad': -0.6, 'poor': -0.5, 'disappointed': -0.7, 'waste': -0.8,
+        'okay': 0.0, 'average': 0.0, 'nothing': -0.1, 'special': 0.3,
+    }
+    
+    DEFAULT_INTENSITY = {
+        'very': 0.8, 'really': 0.7, 'extremely': 0.9, 'somewhat': 0.3,
+        'slightly': 0.2, 'totally': 0.9, 'completely': 0.9, 'so': 0.7,
+    }
+    
+    DEFAULT_CERTAINTY = {
+        'definitely': -0.8, 'certainly': -0.8, 'absolutely': -0.9,
+        'clearly': -0.7, 'undoubtedly': -0.9,
+        'maybe': 0.5, 'perhaps': 0.6, 'possibly': 0.7,
+        'seems': 0.4, 'appears': 0.5, 'might': 0.6,
+    }
+    
+    def __init__(self, dims: int = 4,
+                 polarity_vocab: Optional[Dict[str, float]] = None,
+                 intensity_vocab: Optional[Dict[str, float]] = None,
+                 certainty_vocab: Optional[Dict[str, float]] = None):
         super().__init__(dims)
         
-        # Polarity vocabulary (X-axis)
-        self.polarity_vocab = {
-            'love': 1.0, 'amazing': 0.9, 'great': 0.8, 'excellent': 0.9,
-            'good': 0.6, 'best': 1.0, 'wonderful': 0.9, 'fantastic': 0.9,
-            'hate': -1.0, 'terrible': -0.9, 'awful': -0.9, 'worst': -1.0,
-            'bad': -0.6, 'poor': -0.5, 'disappointed': -0.7, 'waste': -0.8,
-            'okay': 0.0, 'average': 0.0, 'nothing': -0.1, 'special': 0.3,
-        }
+        # Use provided vocabs or defaults
+        self.polarity_vocab = dict(polarity_vocab) if polarity_vocab is not None else dict(self.DEFAULT_POLARITY)
+        self.intensity_vocab = dict(intensity_vocab) if intensity_vocab is not None else dict(self.DEFAULT_INTENSITY)
+        self.certainty_vocab = dict(certainty_vocab) if certainty_vocab is not None else dict(self.DEFAULT_CERTAINTY)
         
-        # Intensity vocabulary (Y-axis)
-        self.intensity_vocab = {
-            'very': 0.8, 'really': 0.7, 'extremely': 0.9, 'somewhat': 0.3,
-            'slightly': 0.2, 'totally': 0.9, 'completely': 0.9, 'so': 0.7,
-        }
-        
-        # Certainty vocabulary (W-axis)
-        self.certainty_vocab = {
-            'definitely': -0.8, 'certainly': -0.8, 'absolutely': -0.9,
-            'clearly': -0.7, 'undoubtedly': -0.9,
-            'maybe': 0.5, 'perhaps': 0.6, 'possibly': 0.7,
-            'seems': 0.4, 'appears': 0.5, 'might': 0.6,
+        # Output label positions (customizable)
+        self.output_positions: Dict[str, np.ndarray] = {
+            'positive': np.array([1.0, 0.5, 0.0, 0.0]),
+            'negative': np.array([-1.0, 0.5, 0.0, 0.0]),
+            'neutral': np.array([0.0, 0.0, 0.0, 0.0]),
         }
     
     def encode_input(self, text: str) -> np.ndarray:
         words = str(text).lower().split()
         
-        # X-axis: Polarity
+        # X-axis: Polarity (sum of word polarities, clipped)
         polarity = sum(self.polarity_vocab.get(w, 0) for w in words)
         polarity = np.clip(polarity, -1, 1)
         
-        # Y-axis: Intensity
-        intensity = 0.5  # default moderate
+        # Y-axis: Intensity (first matching word, or default 0.5)
+        intensity = 0.5
         for word in words:
             if word in self.intensity_vocab:
                 intensity = self.intensity_vocab[word]
                 break
         
-        # Z-axis: Style (based on word length as proxy)
+        # Z-axis: Style (word length proxy - longer = more formal)
         avg_word_len = np.mean([len(w) for w in words]) if words else 5
-        style = np.clip((avg_word_len - 5) / 5, -1, 1)  # longer = more formal
+        style = np.clip((avg_word_len - 5) / 5, -1, 1)
         
-        # W-axis: Certainty
+        # W-axis: Certainty (first matching word, or default 0.0)
         certainty = 0.0
         for word in words:
             if word in self.certainty_vocab:
@@ -517,13 +542,14 @@ class QuaternionEncoder(Encoder):
         return pos
     
     def encode_output(self, output: str) -> np.ndarray:
-        """Encode sentiment labels to positions."""
-        if output == 'positive':
-            return np.array([1.0, 0.5, 0.0, 0.0]) * CRITICAL_LINE
-        elif output == 'negative':
-            return np.array([-1.0, 0.5, 0.0, 0.0]) * CRITICAL_LINE
-        else:  # neutral
-            return np.array([0.0, 0.0, 0.0, 0.0])
+        """Encode output labels to positions."""
+        if output in self.output_positions:
+            return self.output_positions[output] * CRITICAL_LINE
+        # Fallback: hash-based position
+        seed = hash(output) % (2**31)
+        np.random.seed(seed)
+        pos = np.random.randn(self.dims)
+        return pos / np.linalg.norm(pos) * CRITICAL_LINE
     
     def encode_mapping(self, input_val, output_val) -> np.ndarray:
         return self.encode_input(input_val)
@@ -538,6 +564,7 @@ class QuaternionEncoder(Encoder):
                 'polarity_vocab': self.polarity_vocab,
                 'intensity_vocab': self.intensity_vocab,
                 'certainty_vocab': self.certainty_vocab,
+                'output_positions': {k: v.tolist() for k, v in self.output_positions.items()},
             }
         }
     
@@ -545,15 +572,17 @@ class QuaternionEncoder(Encoder):
     def from_dict(cls, data: Dict[str, Any]) -> 'QuaternionEncoder':
         """Deserialize QuaternionEncoder with vocabularies."""
         config = data.get('config', {})
-        encoder = cls(dims=config.get('dims', 4))
-        
         state = data.get('state', {})
-        if 'polarity_vocab' in state:
-            encoder.polarity_vocab = state['polarity_vocab']
-        if 'intensity_vocab' in state:
-            encoder.intensity_vocab = state['intensity_vocab']
-        if 'certainty_vocab' in state:
-            encoder.certainty_vocab = state['certainty_vocab']
+        
+        encoder = cls(
+            dims=config.get('dims', 4),
+            polarity_vocab=state.get('polarity_vocab'),
+            intensity_vocab=state.get('intensity_vocab'),
+            certainty_vocab=state.get('certainty_vocab'),
+        )
+        
+        if 'output_positions' in state:
+            encoder.output_positions = {k: np.array(v) for k, v in state['output_positions'].items()}
         
         return encoder
 
