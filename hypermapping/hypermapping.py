@@ -48,6 +48,7 @@ License: GPLv3
 """
 
 import json
+import time
 import numpy as np
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
@@ -80,16 +81,48 @@ class Mapping(Generic[I, O]):
     - output: The output value
     - position: N-dimensional coordinates (computed from both)
     - metadata: Optional additional data
+    - use_count: How many times this mapping has been queried
+    - success_count: How many times feedback was positive
+    - created: Timestamp when mapping was created
+    
+    Geometric Properties:
+    - magnitude: Distance from origin (determines persistence)
+    - persists: True if past the critical line (σ = 0.5)
+    - success_rate: Emergent measure of mapping quality
     """
     input: I
     output: O
     position: np.ndarray
     metadata: Dict[str, Any] = field(default_factory=dict)
+    use_count: int = 0
+    success_count: int = 0
+    created: float = field(default_factory=time.time)
     
     @property
     def magnitude(self) -> float:
-        """Distance from origin."""
+        """Distance from origin - determines persistence."""
         return float(np.linalg.norm(self.position))
+    
+    @property
+    def persists(self) -> bool:
+        """
+        True if mapping is past the critical line.
+        
+        Mappings past σ = 0.5 persist in the space.
+        Mappings inside fade and can be pruned.
+        """
+        return self.magnitude >= CRITICAL_LINE
+    
+    @property
+    def success_rate(self) -> float:
+        """
+        Emergent quality measure based on feedback.
+        
+        This is NOT hardcoded - it emerges from use patterns.
+        """
+        if self.use_count == 0:
+            return 0.0
+        return self.success_count / self.use_count
     
     def similarity_to(self, position: np.ndarray) -> float:
         """Cosine similarity to a position."""
@@ -100,6 +133,17 @@ class Mapping(Generic[I, O]):
             return float(dot / (norm1 * norm2))
         return 0.0
     
+    def record_use(self, success: bool) -> None:
+        """
+        Record a use of this mapping.
+        
+        This is the feedback mechanism - success/failure affects
+        emergent quality metrics without hardcoding thresholds.
+        """
+        self.use_count += 1
+        if success:
+            self.success_count += 1
+    
     def to_dict(self) -> Dict[str, Any]:
         """Serialize to dictionary."""
         return {
@@ -107,6 +151,9 @@ class Mapping(Generic[I, O]):
             'output': self.output,
             'position': self.position.tolist(),
             'metadata': self.metadata,
+            'use_count': self.use_count,
+            'success_count': self.success_count,
+            'created': self.created,
         }
     
     @classmethod
@@ -117,6 +164,9 @@ class Mapping(Generic[I, O]):
             output=data['output'],
             position=np.array(data['position']),
             metadata=data.get('metadata', {}),
+            use_count=data.get('use_count', 0),
+            success_count=data.get('success_count', 0),
+            created=data.get('created', time.time()),
         )
     
     def __repr__(self) -> str:
@@ -837,6 +887,123 @@ class HyperMapping(Generic[I, O]):
         return self._templates
     
     # -------------------------------------------------------------------------
+    # Persistence and Pruning (Geometric)
+    # -------------------------------------------------------------------------
+    
+    def get_persisting(self) -> List[Mapping[I, O]]:
+        """
+        Get mappings past the critical line.
+        
+        These mappings have "earned" their place in the space through
+        successful use. Position magnitude determines persistence.
+        """
+        return [m for m in self._mappings if m.persists]
+    
+    def get_fading(self) -> List[Mapping[I, O]]:
+        """
+        Get mappings below the critical line.
+        
+        These mappings haven't been reinforced enough to persist.
+        They can be pruned to keep the space clean.
+        """
+        return [m for m in self._mappings if not m.persists]
+    
+    def prune(self, threshold: Optional[float] = None) -> int:
+        """
+        Remove mappings below the threshold.
+        
+        Default threshold is CRITICAL_LINE (σ = 0.5).
+        This is GEOMETRIC pruning - position determines survival.
+        
+        Returns:
+            Number of mappings removed
+        """
+        threshold = threshold if threshold is not None else CRITICAL_LINE
+        before = len(self._mappings)
+        
+        # Keep only mappings past threshold
+        self._mappings = [m for m in self._mappings if m.magnitude >= threshold]
+        
+        # Rebuild indices
+        self._rebuild_indices()
+        
+        return before - len(self._mappings)
+    
+    def _rebuild_indices(self) -> None:
+        """Rebuild lookup indices after pruning."""
+        self._input_index = {}
+        self._output_index = {}
+        
+        for idx, mapping in enumerate(self._mappings):
+            try:
+                input_key = mapping.input if not hasattr(mapping.input, 'tobytes') else mapping.input.tobytes()
+                if input_key not in self._input_index:
+                    self._input_index[input_key] = []
+                self._input_index[input_key].append(idx)
+            except (TypeError, AttributeError):
+                pass
+            
+            try:
+                output_key = mapping.output if not hasattr(mapping.output, 'tobytes') else mapping.output.tobytes()
+                if output_key not in self._output_index:
+                    self._output_index[output_key] = []
+                self._output_index[output_key].append(idx)
+            except (TypeError, AttributeError):
+                pass
+    
+    def reinforce(self, mapping: Mapping, success: bool, 
+                  strength: float = 0.1) -> None:
+        """
+        Reinforce a mapping based on success/failure.
+        
+        Success: Move position outward (toward persistence)
+        Failure: Move position inward (toward pruning)
+        
+        This is GEOMETRIC learning - position movement IS learning.
+        No hardcoded thresholds - the critical line is the natural boundary.
+        
+        Args:
+            mapping: The mapping to reinforce
+            success: Whether the use was successful
+            strength: How much to move (default 0.1 = 10% of current magnitude)
+        """
+        mapping.record_use(success)
+        
+        if success:
+            # Move outward - scale position up
+            scale = 1.0 + strength
+        else:
+            # Move inward - scale position down
+            scale = 1.0 - (strength * 0.5)  # Failure has less effect
+        
+        mapping.position = mapping.position * scale
+    
+    def get_stats(self) -> Dict[str, Any]:
+        """
+        Get statistics about the space.
+        
+        All metrics are EMERGENT from the data, not hardcoded.
+        """
+        persisting = self.get_persisting()
+        fading = self.get_fading()
+        
+        total_uses = sum(m.use_count for m in self._mappings)
+        total_successes = sum(m.success_count for m in self._mappings)
+        
+        return {
+            'total_mappings': len(self._mappings),
+            'persisting_mappings': len(persisting),
+            'fading_mappings': len(fading),
+            'total_uses': total_uses,
+            'total_successes': total_successes,
+            'overall_success_rate': total_successes / total_uses if total_uses > 0 else 0.0,
+            'critical_line': CRITICAL_LINE,
+            'dims': self.dims,
+            'has_templates': hasattr(self, '_templates') and len(self._templates) > 0,
+            'template_count': len(self._templates) if hasattr(self, '_templates') else 0,
+        }
+    
+    # -------------------------------------------------------------------------
     # Iteration
     # -------------------------------------------------------------------------
     
@@ -934,25 +1101,99 @@ class HyperMapping(Generic[I, O]):
 
 class HyperPipeline:
     """
-    A pipeline of chained HyperMappings.
+    A pipeline of chained HyperMappings with named stages.
+    
+    Replaces GearChain with a cleaner, more geometric API.
     
     Usage:
+        # Via pipe operator
         pipeline = space1 | space2 | space3
         result = pipeline("input")
+        
+        # Via explicit construction with names
+        pipeline = HyperPipeline(name="chat")
+        pipeline.add("intent", intent_space)
+        pipeline.add("knowledge", knowledge_space)
+        pipeline.add("response", response_space)
+        
+        # Enable/disable stages
+        pipeline.disable("knowledge")
+        pipeline.enable("knowledge")
+        
+        # Get specific stage
+        intent = pipeline.get("intent")
     """
     
-    def __init__(self, mappings: List[HyperMapping]):
-        self.mappings = mappings
+    def __init__(self, mappings: Optional[List[HyperMapping]] = None,
+                 name: str = "pipeline"):
+        self.name = name
+        self._stages: List[Tuple[str, HyperMapping]] = []
+        self._enabled: Dict[str, bool] = {}
+        
+        # Support legacy list-based construction
+        if mappings:
+            for m in mappings:
+                self.add(m.name, m)
+    
+    @property
+    def mappings(self) -> List[HyperMapping]:
+        """Get list of mappings (for backwards compatibility)."""
+        return [m for _, m in self._stages]
+    
+    def add(self, name: str, space: HyperMapping) -> 'HyperPipeline':
+        """
+        Add a named stage to the pipeline.
+        
+        Args:
+            name: Name for this stage (for lookup and enable/disable)
+            space: The HyperMapping for this stage
+            
+        Returns:
+            Self for chaining
+        """
+        self._stages.append((name, space))
+        self._enabled[name] = True
+        return self
+    
+    def get(self, name: str) -> Optional[HyperMapping]:
+        """Get a stage by name."""
+        for n, space in self._stages:
+            if n == name:
+                return space
+        return None
+    
+    def enable(self, name: str) -> 'HyperPipeline':
+        """Enable a stage by name."""
+        if name in self._enabled:
+            self._enabled[name] = True
+        return self
+    
+    def disable(self, name: str) -> 'HyperPipeline':
+        """Disable a stage by name."""
+        if name in self._enabled:
+            self._enabled[name] = False
+        return self
+    
+    def is_enabled(self, name: str) -> bool:
+        """Check if a stage is enabled."""
+        return self._enabled.get(name, False)
     
     def __or__(self, other: HyperMapping) -> 'HyperPipeline':
-        """Add another mapping to the pipeline."""
-        return HyperPipeline(self.mappings + [other])
+        """Add another mapping to the pipeline via | operator."""
+        new_pipeline = HyperPipeline(name=self.name)
+        new_pipeline._stages = self._stages.copy()
+        new_pipeline._enabled = self._enabled.copy()
+        new_pipeline.add(other.name, other)
+        return new_pipeline
     
     def __call__(self, input_val: Any) -> Optional[Any]:
-        """Process input through the pipeline."""
+        """Process input through enabled stages."""
         current = input_val
         
-        for mapping in self.mappings:
+        for name, mapping in self._stages:
+            if not self._enabled.get(name, True):
+                continue  # Skip disabled stages
+            
             result = mapping.forward(current)
             if result is None:
                 return None
@@ -960,23 +1201,58 @@ class HyperPipeline:
         
         return current
     
-    def process(self, input_val: Any, k: int = 1) -> List[MatchResult]:
-        """Process with full results."""
+    def process(self, input_val: Any, k: int = 1) -> List[Tuple[str, MatchResult]]:
+        """
+        Process with full results including stage names.
+        
+        Returns list of (stage_name, result) tuples.
+        """
         results = []
         current = input_val
         
-        for mapping in self.mappings:
+        for name, mapping in self._stages:
+            if not self._enabled.get(name, True):
+                continue
+            
             result = mapping.forward(current, k=k)
             if result is None:
                 return results
-            results.append(result)
+            results.append((name, result))
             current = result.output
         
         return results
     
+    def get_stats(self) -> Dict[str, Any]:
+        """Get statistics about the pipeline."""
+        stage_stats = {}
+        for name, space in self._stages:
+            stage_stats[name] = {
+                'enabled': self._enabled.get(name, True),
+                'mappings': len(space),
+                'persisting': len(space.get_persisting()),
+            }
+        
+        return {
+            'name': self.name,
+            'stages': len(self._stages),
+            'enabled_stages': sum(1 for e in self._enabled.values() if e),
+            'stage_stats': stage_stats,
+        }
+    
+    def __len__(self) -> int:
+        return len(self._stages)
+    
+    def __iter__(self):
+        return iter(self._stages)
+    
     def __repr__(self) -> str:
-        names = [m.name for m in self.mappings]
-        return f"HyperPipeline({' | '.join(names)})"
+        stage_names = []
+        for name, _ in self._stages:
+            if self._enabled.get(name, True):
+                stage_names.append(name)
+            else:
+                stage_names.append(f"({name})")  # Parentheses = disabled
+        return f"HyperPipeline({' | '.join(stage_names)})"
 
 
 # =============================================================================
