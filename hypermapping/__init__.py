@@ -51,9 +51,13 @@ from .encoders import (
     ImageEncoder,
     CategoricalEncoder,
     CompositeEncoder,
+    # Advanced encoders from design docs
+    QuaternionEncoder,    # Design 044: 4D semantic axes
+    SelfSimilarEncoder,   # Design 072: Function approximation
+    SequenceEncoder,      # Design 055: Tachyon navigation
 )
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 __all__ = [
     # Core
     "HyperMapping",
@@ -61,7 +65,7 @@ __all__ = [
     "MatchResult",
     "HyperPipeline",
     
-    # Encoders
+    # Basic Encoders
     "Encoder",
     "HashEncoder",
     "TextEncoder",
@@ -69,6 +73,11 @@ __all__ = [
     "ImageEncoder",
     "CategoricalEncoder",
     "CompositeEncoder",
+    
+    # Advanced Encoders (from design docs)
+    "QuaternionEncoder",    # Design 044: Sentiment, text classification
+    "SelfSimilarEncoder",   # Design 072: Function approximation
+    "SequenceEncoder",      # Design 055: Sequence prediction
     
     # Convenience
     "from_pairs",
