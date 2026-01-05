@@ -210,13 +210,60 @@ pipeline = space1 | space2 | space3
 result = pipeline(input)
 ```
 
+## Serialization Architecture (Design 094)
+
+All encoders are **serializable** - no magic numbers, all state is explicit:
+
+```python
+# Serialize encoder
+data = encoder.to_dict()
+# {
+#   'type': 'QuaternionEncoder',
+#   'version': '1.0',
+#   'config': {'dims': 4},
+#   'state': {
+#     'polarity_vocab': {'love': 1.0, 'hate': -1.0, ...},
+#     'intensity_vocab': {...},
+#     'certainty_vocab': {...},
+#   }
+# }
+
+# Deserialize any encoder
+from hypermapping import encoder_from_dict
+encoder = encoder_from_dict(data)
+
+# Or specific class
+encoder = QuaternionEncoder.from_dict(data)
+```
+
+### What Gets Serialized
+
+| Encoder | Config | Learned State |
+|---------|--------|---------------|
+| HashEncoder | dims | (none - stateless) |
+| TextEncoder | dims | word_positions, synonyms |
+| NumericEncoder | dims, use_nonlinear | projection_matrix |
+| ImageEncoder | dims, histogram_bins | projection matrices |
+| CategoricalEncoder | dims | category_positions |
+| QuaternionEncoder | dims | polarity/intensity/certainty vocabs |
+| SelfSimilarEncoder | dims | known_points, transforms |
+| SequenceEncoder | dims | (none - algorithmic) |
+| CompositeEncoder | dims | sub-encoders, weights |
+
+### The Serialization Contract
+
+From Design 094:
+- **JSON is serialization** - Not the source of truth, just a snapshot
+- **Structure is truth** - The geometric positions ARE the knowledge
+- **Round-trip guarantee** - `from_dict(to_dict(x))` preserves geometric state
+
 ## Files
 
 ```
 hypermapping/
 ├── __init__.py          # Package exports
 ├── hypermapping.py      # Core data structure
-├── encoders.py          # All encoder implementations
+├── encoders.py          # All encoder implementations + ENCODER_REGISTRY
 ├── README.md            # Documentation
 └── SPECIFICATION.md     # Formal specification
 ```
