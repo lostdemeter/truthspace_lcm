@@ -40,6 +40,7 @@ from hypermapping import (
 )
 
 from .knowledge_space import KnowledgeSpace
+from .code_space import CodeSpace
 
 
 class Intent(Enum):
@@ -261,6 +262,12 @@ class ChatPipeline:
             dims=self.config.dims
         )
         
+        # Code generation space
+        self.code_space = CodeSpace(
+            name="code_generation",
+            dims=self.config.dims
+        )
+        
         # Response templates (bootstrapped)
         self.response_space = HyperMapping(
             dims=self.config.dims,
@@ -272,6 +279,7 @@ class ChatPipeline:
         self.pipeline = HyperPipeline(name="chat")
         self.pipeline.add("intent", self.intent_space)
         self.pipeline.add("knowledge", self.knowledge_space)
+        self.pipeline.add("code", self.code_space)
         self.pipeline.add("responses", self.response_space)
         
         # Track last query for feedback
@@ -356,10 +364,27 @@ class ChatPipeline:
         return self.response_space.compose("tool_not_available")
     
     def _handle_code(self, query: str) -> str:
-        """Handle code generation request."""
-        # For now, just indicate code gen isn't available
-        # This will be extended when we integrate code generation
-        return self.response_space.compose("code_not_available")
+        """Handle code generation request using CodeSpace."""
+        result = self.code_space.generate(query, verify=True)
+        
+        if not result.success:
+            return f"Failed to generate code: {result.error}"
+        
+        # Format response
+        response = f"```python\n{result.code}\n```"
+        
+        if result.pattern_name:
+            response += f"\n\n*Pattern: {result.pattern_name}*"
+        
+        if result.verified:
+            response += "\n✓ Code verified - runs successfully"
+            if result.output:
+                output_preview = result.output.strip()[:200]
+                response += f"\nOutput: {output_preview}"
+        elif result.error:
+            response += f"\n⚠ Verification failed: {result.error}"
+        
+        return response
     
     def feedback(self, success: bool) -> bool:
         """
