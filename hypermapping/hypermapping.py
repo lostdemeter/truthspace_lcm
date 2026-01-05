@@ -155,6 +155,12 @@ class Encoder(ABC):
     
     Unlike a codec that only encodes keys, an Encoder can use
     BOTH the input and output to compute a position.
+    
+    Encoders are SERIALIZABLE (Design 094):
+    - to_dict() / from_dict() for persistence
+    - Learned state (vocabularies, positions) is saved
+    - Configuration (dims, flags) is saved
+    - No magic numbers - all state is explicit
     """
     
     def __init__(self, dims: int):
@@ -186,6 +192,31 @@ class Encoder(ABC):
         if norm > 1e-10:
             pos = pos / norm * CRITICAL_LINE
         return pos
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """
+        Serialize encoder state to dictionary.
+        
+        Override in subclasses to include learned state.
+        """
+        return {
+            'type': self.__class__.__name__,
+            'version': '1.0',
+            'config': {
+                'dims': self.dims,
+            },
+            'state': {}
+        }
+    
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> 'Encoder':
+        """
+        Deserialize encoder from dictionary.
+        
+        Override in subclasses to restore learned state.
+        """
+        config = data.get('config', {})
+        return cls(dims=config.get('dims', 8))
 
 
 # =============================================================================
@@ -196,7 +227,7 @@ class HashEncoder(Encoder):
     """
     Hash-based encoder - deterministic positions from hashes.
     
-    Simple but no semantic similarity.
+    Simple but no semantic similarity. No learned state.
     """
     
     def _hash_to_position(self, value: Any) -> np.ndarray:
@@ -210,6 +241,19 @@ class HashEncoder(Encoder):
     
     def encode_output(self, output_val: Any) -> np.ndarray:
         return self._hash_to_position(output_val)
+    
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            'type': 'HashEncoder',
+            'version': '1.0',
+            'config': {'dims': self.dims},
+            'state': {}  # No learned state
+        }
+    
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> 'HashEncoder':
+        config = data.get('config', {})
+        return cls(dims=config.get('dims', 8))
 
 
 class TextEncoder(Encoder):
@@ -328,6 +372,42 @@ class TextEncoder(Encoder):
     
     def encode_output(self, output_val: Any) -> np.ndarray:
         return self._encode_text(str(output_val))
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Serialize TextEncoder including learned word positions."""
+        return {
+            'type': 'TextEncoder',
+            'version': '1.0',
+            'config': {'dims': self.dims},
+            'state': {
+                'word_positions': {
+                    word: pos.tolist() 
+                    for word, pos in self.word_positions.items()
+                },
+                'synonyms': [list(group) for group in self.synonyms],
+            }
+        }
+    
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> 'TextEncoder':
+        """Deserialize TextEncoder with learned word positions."""
+        config = data.get('config', {})
+        encoder = cls(dims=config.get('dims', 8))
+        
+        state = data.get('state', {})
+        
+        # Restore word positions
+        word_positions = state.get('word_positions', {})
+        encoder.word_positions = {
+            word: np.array(pos) 
+            for word, pos in word_positions.items()
+        }
+        
+        # Restore synonyms
+        synonyms = state.get('synonyms', [])
+        encoder.synonyms = [set(group) for group in synonyms]
+        
+        return encoder
 
 
 # =============================================================================

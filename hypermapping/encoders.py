@@ -99,6 +99,38 @@ class NumericEncoder(Encoder):
                 pos = pos / norm * CRITICAL_LINE
             return pos
         return self.encode_input(output_val)
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Serialize NumericEncoder including projection matrix."""
+        return {
+            'type': 'NumericEncoder',
+            'version': '1.0',
+            'config': {
+                'dims': self.dims,
+                'input_dims': self.input_dims,
+                'use_nonlinear': self.use_nonlinear,
+            },
+            'state': {
+                'projection_matrix': self._projection_matrix.tolist() if self._projection_matrix is not None else None,
+            }
+        }
+    
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> 'NumericEncoder':
+        """Deserialize NumericEncoder with projection matrix."""
+        config = data.get('config', {})
+        encoder = cls(
+            dims=config.get('dims', 8),
+            input_dims=config.get('input_dims'),
+            use_nonlinear=config.get('use_nonlinear', True),
+        )
+        
+        state = data.get('state', {})
+        proj = state.get('projection_matrix')
+        if proj is not None:
+            encoder._projection_matrix = np.array(proj)
+        
+        return encoder
 
 
 class ImageEncoder(Encoder):
@@ -273,6 +305,42 @@ class ImageEncoder(Encoder):
             if norm > 1e-10:
                 pos = pos / norm * CRITICAL_LINE
             return pos
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Serialize ImageEncoder including projection matrices."""
+        return {
+            'type': 'ImageEncoder',
+            'version': '1.0',
+            'config': {
+                'dims': self.dims,
+                'use_histogram': self.use_histogram,
+                'use_spatial': self.use_spatial,
+                'histogram_bins': self.histogram_bins,
+            },
+            'state': {
+                'hist_projection': self._hist_projection.tolist() if self._hist_projection is not None else None,
+                'spatial_projection': self._spatial_projection.tolist() if self._spatial_projection is not None else None,
+            }
+        }
+    
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> 'ImageEncoder':
+        """Deserialize ImageEncoder with projection matrices."""
+        config = data.get('config', {})
+        encoder = cls(
+            dims=config.get('dims', 16),
+            use_histogram=config.get('use_histogram', True),
+            use_spatial=config.get('use_spatial', True),
+            histogram_bins=config.get('histogram_bins', 16),
+        )
+        
+        state = data.get('state', {})
+        if state.get('hist_projection') is not None:
+            encoder._hist_projection = np.array(state['hist_projection'])
+        if state.get('spatial_projection') is not None:
+            encoder._spatial_projection = np.array(state['spatial_projection'])
+        
+        return encoder
 
 
 class CategoricalEncoder(Encoder):
@@ -341,6 +409,41 @@ class CategoricalEncoder(Encoder):
     
     def encode_output(self, output_val: Any) -> np.ndarray:
         return self.encode_input(output_val)
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Serialize CategoricalEncoder including category positions."""
+        return {
+            'type': 'CategoricalEncoder',
+            'version': '1.0',
+            'config': {
+                'dims': self.dims,
+                'categories': self.categories,
+            },
+            'state': {
+                'category_positions': {
+                    cat: pos.tolist() 
+                    for cat, pos in self._category_positions.items()
+                },
+            }
+        }
+    
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> 'CategoricalEncoder':
+        """Deserialize CategoricalEncoder with category positions."""
+        config = data.get('config', {})
+        encoder = cls(
+            dims=config.get('dims', 8),
+            categories=None,  # Don't auto-initialize
+        )
+        encoder.categories = config.get('categories', [])
+        
+        state = data.get('state', {})
+        encoder._category_positions = {
+            cat: np.array(pos) 
+            for cat, pos in state.get('category_positions', {}).items()
+        }
+        
+        return encoder
 
 
 class QuaternionEncoder(Encoder):
@@ -424,6 +527,35 @@ class QuaternionEncoder(Encoder):
     
     def encode_mapping(self, input_val, output_val) -> np.ndarray:
         return self.encode_input(input_val)
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Serialize QuaternionEncoder including vocabularies."""
+        return {
+            'type': 'QuaternionEncoder',
+            'version': '1.0',
+            'config': {'dims': self.dims},
+            'state': {
+                'polarity_vocab': self.polarity_vocab,
+                'intensity_vocab': self.intensity_vocab,
+                'certainty_vocab': self.certainty_vocab,
+            }
+        }
+    
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> 'QuaternionEncoder':
+        """Deserialize QuaternionEncoder with vocabularies."""
+        config = data.get('config', {})
+        encoder = cls(dims=config.get('dims', 4))
+        
+        state = data.get('state', {})
+        if 'polarity_vocab' in state:
+            encoder.polarity_vocab = state['polarity_vocab']
+        if 'intensity_vocab' in state:
+            encoder.intensity_vocab = state['intensity_vocab']
+        if 'certainty_vocab' in state:
+            encoder.certainty_vocab = state['certainty_vocab']
+        
+        return encoder
 
 
 class SelfSimilarEncoder(Encoder):
@@ -526,6 +658,35 @@ class SelfSimilarEncoder(Encoder):
     
     def encode_mapping(self, x, y) -> np.ndarray:
         return self.encode_input(float(x))
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Serialize SelfSimilarEncoder including learned points and transforms."""
+        return {
+            'type': 'SelfSimilarEncoder',
+            'version': '1.0',
+            'config': {'dims': self.dims},
+            'state': {
+                'known_points': self.known_points,
+                'transforms': {f"{k[0]},{k[1]}": v for k, v in self.transforms.items()},
+            }
+        }
+    
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> 'SelfSimilarEncoder':
+        """Deserialize SelfSimilarEncoder with learned points and transforms."""
+        config = data.get('config', {})
+        encoder = cls(dims=config.get('dims', 8))
+        
+        state = data.get('state', {})
+        encoder.known_points = [tuple(p) for p in state.get('known_points', [])]
+        
+        transforms = state.get('transforms', {})
+        encoder.transforms = {
+            tuple(map(int, k.split(','))): v 
+            for k, v in transforms.items()
+        }
+        
+        return encoder
 
 
 class SequenceEncoder(Encoder):
@@ -613,6 +774,21 @@ class SequenceEncoder(Encoder):
     
     def encode_mapping(self, seq, val) -> np.ndarray:
         return self.encode_input(seq)
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Serialize SequenceEncoder (stateless - pattern detection is algorithmic)."""
+        return {
+            'type': 'SequenceEncoder',
+            'version': '1.0',
+            'config': {'dims': self.dims},
+            'state': {}  # Pattern detection is algorithmic, not learned
+        }
+    
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> 'SequenceEncoder':
+        """Deserialize SequenceEncoder."""
+        config = data.get('config', {})
+        return cls(dims=config.get('dims', 8))
 
 
 class CompositeEncoder(Encoder):
@@ -668,3 +844,62 @@ class CompositeEncoder(Encoder):
     
     def encode_output(self, output_val: Any) -> np.ndarray:
         return self.encode_input(output_val)
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Serialize CompositeEncoder including sub-encoders."""
+        return {
+            'type': 'CompositeEncoder',
+            'version': '1.0',
+            'config': {'dims': self.dims},
+            'state': {
+                'encoders': {name: enc.to_dict() for name, enc in self.encoders.items()},
+                'weights': self._weights,
+            }
+        }
+    
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> 'CompositeEncoder':
+        """Deserialize CompositeEncoder with sub-encoders."""
+        config = data.get('config', {})
+        state = data.get('state', {})
+        
+        # Reconstruct sub-encoders
+        encoders = {}
+        for name, enc_data in state.get('encoders', {}).items():
+            enc_type = enc_data.get('type')
+            encoder_cls = ENCODER_REGISTRY.get(enc_type)
+            if encoder_cls:
+                encoders[name] = encoder_cls.from_dict(enc_data)
+        
+        encoder = cls(dims=config.get('dims', 8), encoders=encoders)
+        encoder._weights = state.get('weights', {k: 1.0 for k in encoders})
+        
+        return encoder
+
+
+# =============================================================================
+# ENCODER REGISTRY - For deserialization
+# =============================================================================
+
+from .hypermapping import HashEncoder, TextEncoder
+
+ENCODER_REGISTRY: Dict[str, type] = {
+    'HashEncoder': HashEncoder,
+    'TextEncoder': TextEncoder,
+    'NumericEncoder': NumericEncoder,
+    'ImageEncoder': ImageEncoder,
+    'CategoricalEncoder': CategoricalEncoder,
+    'QuaternionEncoder': QuaternionEncoder,
+    'SelfSimilarEncoder': SelfSimilarEncoder,
+    'SequenceEncoder': SequenceEncoder,
+    'CompositeEncoder': CompositeEncoder,
+}
+
+
+def encoder_from_dict(data: Dict[str, Any]) -> Encoder:
+    """Deserialize any encoder from dictionary."""
+    enc_type = data.get('type')
+    encoder_cls = ENCODER_REGISTRY.get(enc_type)
+    if encoder_cls:
+        return encoder_cls.from_dict(data)
+    raise ValueError(f"Unknown encoder type: {enc_type}")
