@@ -37,6 +37,7 @@ from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 
 import sys
@@ -478,9 +479,9 @@ def create_app(debug: bool = False, knowledge_path: str = None) -> FastAPI:
         stats = engine.get_stats()
         return {"status": "success", "concepts": stats['knowledge']['total_mappings']}
     
-    @app.post("/v1/chat/completions", response_model=ChatCompletionResponse)
+    @app.post("/v1/chat/completions")
     async def chat_completions(request: ChatCompletionRequest):
-        logger.info(f"Chat request: {len(request.messages)} messages, tools: {len(request.tools) if request.tools else 0}")
+        logger.info(f"Chat request: {len(request.messages)} messages, tools: {len(request.tools) if request.tools else 0}, stream: {request.stream}")
         
         if request.tools:
             content, tool_calls = engine.generate_with_tools(request.messages, request.tools)
@@ -488,6 +489,103 @@ def create_app(debug: bool = False, knowledge_path: str = None) -> FastAPI:
             content = engine.generate(request.messages)
             tool_calls = None
         
+        # Handle streaming response (SSE format for Goose compatibility)
+        if request.stream:
+            async def generate_stream():
+                chunk_id = f"chatcmpl-{uuid.uuid4().hex[:8]}"
+                
+                if tool_calls:
+                    # Stream tool calls
+                    for tc in tool_calls:
+                        chunk = {
+                            "id": chunk_id,
+                            "object": "chat.completion.chunk",
+                            "created": int(time.time()),
+                            "model": request.model,
+                            "choices": [{
+                                "index": 0,
+                                "delta": {
+                                    "role": "assistant",
+                                    "content": None,
+                                    "tool_calls": [{
+                                        "index": 0,
+                                        "id": tc.id,
+                                        "type": "function",
+                                        "function": {
+                                            "name": tc.function.name,
+                                            "arguments": tc.function.arguments
+                                        }
+                                    }]
+                                },
+                                "finish_reason": None
+                            }]
+                        }
+                        yield f"data: {json.dumps(chunk)}\n\n"
+                    
+                    # Send finish chunk for tool calls
+                    finish_chunk = {
+                        "id": chunk_id,
+                        "object": "chat.completion.chunk",
+                        "created": int(time.time()),
+                        "model": request.model,
+                        "choices": [{
+                            "index": 0,
+                            "delta": {},
+                            "finish_reason": "tool_calls"
+                        }]
+                    }
+                    yield f"data: {json.dumps(finish_chunk)}\n\n"
+                else:
+                    # Stream text content - send role first
+                    role_chunk = {
+                        "id": chunk_id,
+                        "object": "chat.completion.chunk",
+                        "created": int(time.time()),
+                        "model": request.model,
+                        "choices": [{
+                            "index": 0,
+                            "delta": {"role": "assistant"},
+                            "finish_reason": None
+                        }]
+                    }
+                    yield f"data: {json.dumps(role_chunk)}\n\n"
+                    
+                    # Send content
+                    content_chunk = {
+                        "id": chunk_id,
+                        "object": "chat.completion.chunk",
+                        "created": int(time.time()),
+                        "model": request.model,
+                        "choices": [{
+                            "index": 0,
+                            "delta": {"content": content or ""},
+                            "finish_reason": None
+                        }]
+                    }
+                    yield f"data: {json.dumps(content_chunk)}\n\n"
+                    
+                    # Send finish chunk
+                    finish_chunk = {
+                        "id": chunk_id,
+                        "object": "chat.completion.chunk",
+                        "created": int(time.time()),
+                        "model": request.model,
+                        "choices": [{
+                            "index": 0,
+                            "delta": {},
+                            "finish_reason": "stop"
+                        }]
+                    }
+                    yield f"data: {json.dumps(finish_chunk)}\n\n"
+                
+                yield "data: [DONE]\n\n"
+            
+            return StreamingResponse(
+                generate_stream(),
+                media_type="text/event-stream"
+            )
+        
+        # Non-streaming response
         response_message = ResponseMessage(
             role="assistant",
             content=content,
