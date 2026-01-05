@@ -41,6 +41,8 @@ from hypermapping import (
 
 from .knowledge_space import KnowledgeSpace
 from .code_space import CodeSpace
+from .plot_space import PlotSpace
+from .ollama_space import OllamaSpace
 
 
 class Intent(Enum):
@@ -48,6 +50,7 @@ class Intent(Enum):
     KNOWLEDGE = auto()      # Knowledge/information query
     TOOL_CALL = auto()      # Execute a command/tool
     CODE_GENERATION = auto() # Generate code
+    PLOT_GENERATION = auto() # Generate matplotlib plot
     CLARIFICATION = auto()  # Need more information
     UNKNOWN = auto()        # Cannot determine intent
 
@@ -114,6 +117,14 @@ class IntentSpace(HyperMapping):
             "script that", "function that",
         ])
         
+        # Plot generation
+        all_patterns.extend([
+            "plot", "graph", "chart", "visualize",
+            "sine wave", "cosine wave", "histogram",
+            "scatter plot", "bar chart", "pie chart",
+            "create a plot", "make a graph", "draw a chart",
+        ])
+        
         # Clarification
         all_patterns.extend([
             "help", "what do you mean",
@@ -157,6 +168,16 @@ class IntentSpace(HyperMapping):
         for pattern in code_patterns:
             self.bootstrap(pattern, Intent.CODE_GENERATION.name)
         
+        # Plot generation (matplotlib)
+        plot_patterns = [
+            "plot", "graph", "chart", "visualize",
+            "sine wave", "cosine wave", "histogram",
+            "scatter plot", "bar chart", "pie chart",
+            "create a plot", "make a graph", "draw a chart",
+        ]
+        for pattern in plot_patterns:
+            self.bootstrap(pattern, Intent.PLOT_GENERATION.name)
+        
         # Clarification needed
         clarification_patterns = [
             "help", "?", "what do you mean",
@@ -177,6 +198,18 @@ class IntentSpace(HyperMapping):
         allowing geometric generalization for novel queries.
         """
         query_lower = query.lower().strip()
+        
+        # Phase 0: Check for plot-related keywords FIRST
+        # This takes priority over generic "create" which would match TOOL_CALL
+        plot_keywords = ['plot', 'graph', 'chart', 'sine', 'cosine', 'histogram', 
+                         'scatter', 'bar chart', 'pie chart', 'visualize', 'wave']
+        if any(kw in query_lower for kw in plot_keywords):
+            return IntentResult(
+                intent=Intent.PLOT_GENERATION,
+                confidence=1.0,
+                reason=f"Plot keyword detected",
+                metadata={'match_type': 'keyword'}
+            )
         
         # Phase 1: Check for prefix matches against templates
         # This is the BOOTSTRAP phase - exact pattern matching
@@ -268,6 +301,22 @@ class ChatPipeline:
             dims=self.config.dims
         )
         
+        # Plot generation space
+        self.plot_space = PlotSpace(
+            name="plot_generation",
+            dims=self.config.dims
+        )
+        
+        # LLM knowledge acquisition (optional)
+        self.ollama_space: Optional[OllamaSpace] = None
+        try:
+            self.ollama_space = OllamaSpace(
+                name="ollama",
+                dims=self.config.dims
+            )
+        except Exception:
+            pass  # Ollama not available
+        
         # Response templates (bootstrapped)
         self.response_space = HyperMapping(
             dims=self.config.dims,
@@ -280,6 +329,7 @@ class ChatPipeline:
         self.pipeline.add("intent", self.intent_space)
         self.pipeline.add("knowledge", self.knowledge_space)
         self.pipeline.add("code", self.code_space)
+        self.pipeline.add("plot", self.plot_space)
         self.pipeline.add("responses", self.response_space)
         
         # Track last query for feedback
@@ -335,17 +385,26 @@ class ChatPipeline:
             return self._handle_tool(query)
         elif intent_result.intent == Intent.CODE_GENERATION:
             return self._handle_code(query)
+        elif intent_result.intent == Intent.PLOT_GENERATION:
+            return self._handle_plot(query)
         elif intent_result.intent == Intent.CLARIFICATION:
             return self.response_space.compose("clarification_needed")
         else:
             # Unknown - try knowledge anyway
             return self._handle_knowledge(query)
     
-    def _handle_knowledge(self, query: str) -> str:
-        """Handle knowledge query."""
+    def _handle_knowledge(self, query: str, use_llm: bool = True) -> str:
+        """
+        Handle knowledge query.
+        
+        1. Try to find matching knowledge in KnowledgeSpace
+        2. If no match and Ollama available, query LLM
+        3. If still no match, return "I don't know"
+        """
         results = self.knowledge_space.query_text(query, top_k=3)
         
-        if results and results[0].similarity > 0.1:
+        # Check if we have a good match
+        if results and results[0].similarity > 0.3:
             self._last_mapping = results[0].mapping
             
             if self.config.debug:
@@ -354,8 +413,46 @@ class ChatPipeline:
             # Return the matched knowledge
             return results[0].output
         
-        # No good match - return fallback
-        return self.response_space.compose("no_knowledge")
+        # No good match - try LLM if available
+        if use_llm and self.ollama_space and self.ollama_space.is_available():
+            if self.config.debug:
+                print(f"[DEBUG] No knowledge match, querying LLM...")
+            
+            llm_result = self.ollama_space.query(query)
+            
+            if llm_result.success:
+                # Add to knowledge space for future queries
+                self.knowledge_space.add_text(
+                    llm_result.content,
+                    source=f"ollama:{llm_result.model}"
+                )
+                
+                if self.config.debug:
+                    print(f"[DEBUG] LLM response added to knowledge")
+                
+                return llm_result.content
+        
+        # No match and no LLM - return "I don't know"
+        topic = self._extract_topic(query)
+        return f"I don't have information about '{topic}'. You can teach me by adding knowledge with /add or by enabling LLM knowledge acquisition."
+    
+    def _extract_topic(self, query: str) -> str:
+        """Extract the main topic from a query."""
+        query_lower = query.lower()
+        
+        prefixes = [
+            'what is ', 'what are ', 'who is ', 'who are ',
+            'tell me about ', 'explain ', 'describe ',
+            'how does ', 'how do ', 'why does ', 'why do ',
+        ]
+        
+        topic = query
+        for prefix in prefixes:
+            if query_lower.startswith(prefix):
+                topic = query[len(prefix):]
+                break
+        
+        return topic.rstrip('?!.').strip()
     
     def _handle_tool(self, query: str) -> str:
         """Handle tool call request."""
@@ -381,6 +478,33 @@ class ChatPipeline:
             if result.output:
                 output_preview = result.output.strip()[:200]
                 response += f"\nOutput: {output_preview}"
+        elif result.error:
+            response += f"\n⚠ Verification failed: {result.error}"
+        
+        return response
+    
+    def _handle_plot(self, query: str) -> str:
+        """Handle plot generation request using PlotSpace."""
+        result = self.plot_space.generate(query)
+        
+        if not result.success:
+            return f"Failed to generate plot: {result.error}"
+        
+        # Verify the code
+        result = self.plot_space.verify(result)
+        
+        # Format response
+        response = f"```python\n{result.code}\n```"
+        
+        if result.plot_type:
+            response += f"\n\n*Plot type: {result.plot_type}*"
+        
+        if result.modifiers:
+            mods = ", ".join(f"{k}={v}" for k, v in result.modifiers.items())
+            response += f"\n*Modifiers: {mods}*"
+        
+        if result.verified:
+            response += "\n✓ Code verified - syntax OK"
         elif result.error:
             response += f"\n⚠ Verification failed: {result.error}"
         

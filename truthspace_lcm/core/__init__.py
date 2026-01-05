@@ -34,6 +34,8 @@ Usage (Legacy - for backwards compatibility):
 from .chat_pipeline import ChatPipeline, ChatConfig, Intent, IntentResult, IntentSpace
 from .knowledge_space import KnowledgeSpace
 from .code_space import CodeSpace, CodeResult, CodeVerifier
+from .plot_space import PlotSpace, PlotResult, PlotPattern
+from .ollama_space import OllamaSpace, KnowledgeResult
 
 # =============================================================================
 # LEGACY GEAR-BASED ARCHITECTURE (for backwards compatibility)
@@ -93,6 +95,15 @@ __all__ = [
     'CodeSpace',
     'CodeResult',
     'CodeVerifier',
+    
+    # Plot space
+    'PlotSpace',
+    'PlotResult',
+    'PlotPattern',
+    
+    # Ollama space
+    'OllamaSpace',
+    'KnowledgeResult',
     
     # ==========================================================================
     # LEGACY GEAR-BASED ARCHITECTURE (backwards compatibility)
