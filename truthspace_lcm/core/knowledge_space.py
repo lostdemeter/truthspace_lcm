@@ -114,48 +114,34 @@ class KnowledgeSpace(HyperMapping):
         - Content words have clear semantic roles (appear in specific contexts)
         - Stop words have NO semantic role (appear everywhere uniformly)
         - Detection is based on distribution, not a hardcoded list
+        
+        All text is lowercased - case is orthographic noise, not semantic.
+        The geometry handles similarity through word co-occurrence.
         """
-        # Tokenize: split on non-alphanumeric, preserve case for acronym detection
-        raw_words = re.findall(r'\b[a-zA-Z]+\b', text)
+        # Tokenize and lowercase - case is not semantic information
+        words = re.findall(r'\b[a-zA-Z]+\b', text.lower())
         
-        # Filter using geometric detection, lowercase for matching
-        content_words = set()
-        for w in raw_words:
-            # Check if it's an acronym (all uppercase, 2+ chars)
-            is_acronym = w.isupper() and len(w) >= 2
-            w_lower = w.lower()
-            
-            if is_acronym or self._is_content_word(w_lower):
-                content_words.add(w_lower)
-        
-        return content_words
+        # Filter using geometric detection
+        return {w for w in words if self._is_content_word(w)}
     
     def _is_content_word(self, word: str) -> bool:
         """
         Geometric stop word detection.
         
-        A word is a STOP word (not content) if:
-        1. It's very short (< 2 chars) - structural, not semantic
-        2. It appears in many concepts but adds no discriminative power
+        A word is a STOP word (not content) if it appears in many concepts
+        but adds no discriminative power. This is geometric because it's
+        based on the word's distribution across the concept space.
         
-        This is geometric because it's based on the word's distribution
-        across the concept space, not a hardcoded list.
+        The critical line (σ = 0.5) is the threshold - words appearing in
+        more than 50% of concepts are structural, not semantic.
         
-        Note: Acronyms like "AI", "ML", "NLP" are kept (2+ chars, uppercase pattern)
+        Single-char words are filtered as they're typically structural.
         """
         # Single char words are structural
         if len(word) < 2:
             return False
         
-        # Keep acronyms (all uppercase, 2+ chars)
-        if word.upper() == word and len(word) >= 2:
-            return True
-        
-        # Very short lowercase words are likely structural
-        if len(word) < 3:
-            return False
-        
-        # If we have concept data, use it for geometric detection
+        # If we have concept data, use geometric detection
         if word in self._word_counts and self._total_concepts > 1:
             # Word appears in what fraction of concepts?
             coverage = self._word_counts[word] / self._total_concepts
