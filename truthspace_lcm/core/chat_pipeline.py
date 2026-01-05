@@ -43,6 +43,7 @@ from .knowledge_space import KnowledgeSpace
 from .code_space import CodeSpace
 from .plot_space import PlotSpace
 from .ollama_space import OllamaSpace
+from .bootstrap_knowledge import get_bootstrap_knowledge, get_bootstrap_synonyms
 
 
 class Intent(Enum):
@@ -324,6 +325,9 @@ class ChatPipeline:
         )
         self._bootstrap_responses()
         
+        # Bootstrap knowledge
+        self._bootstrap_knowledge()
+        
         # Build pipeline
         self.pipeline = HyperPipeline(name="chat")
         self.pipeline.add("intent", self.intent_space)
@@ -356,6 +360,35 @@ class ChatPipeline:
             "code_not_available",
             "Code generation is not available in this mode."
         )
+    
+    def _bootstrap_knowledge(self) -> None:
+        """Bootstrap knowledge from predefined topics."""
+        knowledge_items = get_bootstrap_knowledge()
+        synonyms = get_bootstrap_synonyms()
+        
+        # Add synonyms to the knowledge space encoder
+        if hasattr(self.knowledge_space, 'encoder'):
+            self.knowledge_space.encoder.add_synonyms(synonyms)
+        
+        # Train encoder on all knowledge texts and keywords
+        all_texts = []
+        for item in knowledge_items:
+            all_texts.append(item["text"])
+            all_texts.extend(item.get("keywords", []))
+        
+        if hasattr(self.knowledge_space, 'encoder'):
+            self.knowledge_space.encoder.learn(all_texts)
+        
+        # Add each knowledge item
+        for item in knowledge_items:
+            # Add the main text
+            self.knowledge_space.add_text(
+                item["text"],
+                source="bootstrap"
+            )
+        
+        if self.config.debug:
+            print(f"[DEBUG] Bootstrapped {len(knowledge_items)} knowledge items")
     
     def chat(self, query: str) -> str:
         """
@@ -397,10 +430,11 @@ class ChatPipeline:
         """
         Handle knowledge query.
         
-        1. Try to find matching knowledge in KnowledgeSpace
+        1. Try geometric matching in KnowledgeSpace
         2. If no match and Ollama available, query LLM
         3. If still no match, return "I don't know"
         """
+        # Geometric matching in KnowledgeSpace
         results = self.knowledge_space.query_text(query, top_k=3)
         
         # Check if we have a good match

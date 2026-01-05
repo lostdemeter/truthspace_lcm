@@ -115,14 +115,18 @@ class KnowledgeSpace(HyperMapping):
         - Stop words have NO semantic role (appear everywhere uniformly)
         - Detection is based on distribution, not a hardcoded list
         """
-        # Tokenize: split on non-alphanumeric
-        words = re.findall(r'\b[a-zA-Z]+\b', text.lower())
+        # Tokenize: split on non-alphanumeric, preserve case for acronym detection
+        raw_words = re.findall(r'\b[a-zA-Z]+\b', text)
         
-        # Filter using geometric detection
-        content_words = {
-            w for w in words 
-            if self._is_content_word(w)
-        }
+        # Filter using geometric detection, lowercase for matching
+        content_words = set()
+        for w in raw_words:
+            # Check if it's an acronym (all uppercase, 2+ chars)
+            is_acronym = w.isupper() and len(w) >= 2
+            w_lower = w.lower()
+            
+            if is_acronym or self._is_content_word(w_lower):
+                content_words.add(w_lower)
         
         return content_words
     
@@ -131,13 +135,23 @@ class KnowledgeSpace(HyperMapping):
         Geometric stop word detection.
         
         A word is a STOP word (not content) if:
-        1. It's very short (< 3 chars) - structural, not semantic
+        1. It's very short (< 2 chars) - structural, not semantic
         2. It appears in many concepts but adds no discriminative power
         
         This is geometric because it's based on the word's distribution
         across the concept space, not a hardcoded list.
+        
+        Note: Acronyms like "AI", "ML", "NLP" are kept (2+ chars, uppercase pattern)
         """
-        # Very short words are structural, not semantic
+        # Single char words are structural
+        if len(word) < 2:
+            return False
+        
+        # Keep acronyms (all uppercase, 2+ chars)
+        if word.upper() == word and len(word) >= 2:
+            return True
+        
+        # Very short lowercase words are likely structural
         if len(word) < 3:
             return False
         
@@ -202,19 +216,43 @@ class KnowledgeSpace(HyperMapping):
             'type': 'concept',
         })
         
-        # Reproject if requested
+        # Reproject if requested - use content word similarity
         if reproject and len(self) > 1:
-            self.reproject()
+            self.reproject(similarity_fn=self._content_word_similarity)
         
         self.modified = datetime.now().isoformat()
         return mapping
+    
+    def _content_word_similarity(self, a: Any, b: Any) -> float:
+        """
+        Compute similarity using content words only.
+        
+        This is the key to geometric matching - we compare content words,
+        not full text. This gives much higher similarity for related concepts.
+        """
+        # Get words from mapping metadata if available
+        if hasattr(a, 'metadata') and a.metadata and 'words' in a.metadata:
+            words_a = set(a.metadata['words'])
+        elif hasattr(a, 'input'):
+            words_a = self.extract_words(str(a.input))
+        else:
+            words_a = self.extract_words(str(a))
+        
+        if hasattr(b, 'metadata') and b.metadata and 'words' in b.metadata:
+            words_b = set(b.metadata['words'])
+        elif hasattr(b, 'input'):
+            words_b = self.extract_words(str(b.input))
+        else:
+            words_b = self.extract_words(str(b))
+        
+        return self.word_overlap(words_a, words_b)
     
     def query_text(self, text: str, top_k: int = 5,
                    min_similarity: float = 0.0) -> List[MatchResult]:
         """
         Find concepts most similar to the query text.
         
-        Uses geometric position matching (not word overlap).
+        Uses geometric position matching with content word similarity.
         
         Args:
             text: Query text
@@ -224,7 +262,17 @@ class KnowledgeSpace(HyperMapping):
         Returns:
             List of MatchResult, sorted by similarity descending
         """
-        results = self.query(text, k=top_k)
+        # Project query using content word similarity
+        if hasattr(self, '_eigenvectors') and self._eigenvectors is not None:
+            query_position = self.project_query(
+                text, 
+                similarity_fn=lambda q, m: self._content_word_similarity(q, m)
+            )
+        else:
+            query_position = self.encoder.encode_input(text)
+        
+        # Find nearest by position
+        results = self._query_by_position(query_position, top_k)
         
         # Filter by minimum similarity
         if min_similarity > 0:
