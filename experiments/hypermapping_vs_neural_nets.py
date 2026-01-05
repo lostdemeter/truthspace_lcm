@@ -73,11 +73,11 @@ def test_xor():
         print(f"  {inputs} → {output}")
     print()
     
-    # Test
+    # Test - use encoder-based matching for numeric data
     print("HyperMapping predictions:")
     correct = 0
     for inputs, expected in xor_data:
-        result = space.forward(tuple(inputs))
+        result = space.forward(tuple(inputs), use_similarity=False)
         predicted = result.output if result else None
         is_correct = predicted == expected
         correct += is_correct
@@ -98,7 +98,7 @@ def test_xor():
     
     correct = 0
     for inputs, expected in noisy_tests:
-        result = space.forward(tuple(inputs))
+        result = space.forward(tuple(inputs), use_similarity=False)
         predicted = result.output if result else None
         is_correct = predicted == expected
         correct += is_correct
@@ -218,7 +218,7 @@ def test_image_classification():
     print("Testing on clean patterns:")
     correct = 0
     for digit, pattern in patterns.items():
-        result = space.forward(pattern)
+        result = space.forward(pattern, use_similarity=False)
         predicted = result.output if result else None
         is_correct = predicted == str(digit)
         correct += is_correct
@@ -237,7 +237,7 @@ def test_image_classification():
         noise = np.random.randn(*noisy.shape) * 0.1
         noisy = np.clip(noisy + noise, 0, 1)
         
-        result = space.forward(noisy)
+        result = space.forward(noisy, use_similarity=False)
         predicted = result.output if result else None
         is_correct = predicted == str(digit)
         correct += is_correct
@@ -253,7 +253,7 @@ def test_image_classification():
         shifted = np.zeros_like(pattern)
         shifted[:, 1:] = pattern[:, :-1]
         
-        result = space.forward(shifted)
+        result = space.forward(shifted, use_similarity=False)
         predicted = result.output if result else None
         is_correct = predicted == str(digit)
         correct += is_correct
@@ -323,18 +323,18 @@ def test_sentiment():
     # Create HyperMapping
     space = HyperMapping(dims=12, encoder=encoder, name="sentiment")
     
-    # Add mappings
+    # Add mappings (encoder computes positions from text)
     for text, sentiment in training_data:
         space.map(text, sentiment)
     
     print(f"Trained on {len(training_data)} examples")
     print()
     
-    # Test
+    # Test - use encoder-based matching (TextEncoder with synonyms)
     print("Testing on new phrases:")
     correct = 0
     for text, expected in test_data:
-        result = space.forward(text)
+        result = space.forward(text, use_similarity=False)
         predicted = result.output if result else None
         is_correct = predicted == expected
         correct += is_correct
@@ -387,7 +387,7 @@ def test_function_approximation():
     print("Testing on intermediate points:")
     errors = []
     for x, expected in zip(test_x, test_y):
-        result = space.forward((x,))
+        result = space.forward((x,), use_similarity=False)
         if result:
             predicted = result.output
             error = abs(predicted - expected)
@@ -405,7 +405,7 @@ def test_function_approximation():
     for i in range(0, len(test_x), 4):
         x = test_x[i]
         expected = test_y[i]
-        result = space.forward((x,))
+        result = space.forward((x,), use_similarity=False)
         predicted = result.output if result else None
         print(f"  sin({x:.2f}) = {expected:.4f}, predicted = {predicted:.4f}")
     
@@ -471,7 +471,7 @@ def test_sequence():
     print("Testing sequence predictions:")
     correct = 0
     for seq, expected in test_sequences:
-        result = space.forward(tuple(seq))
+        result = space.forward(tuple(seq), use_similarity=False)
         predicted = result.output if result else None
         # Allow some tolerance for numeric predictions
         is_correct = predicted is not None and abs(predicted - expected) < expected * 0.2
