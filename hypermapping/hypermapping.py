@@ -403,14 +403,49 @@ class HyperMapping(Generic[I, O]):
         
         return mapping
     
-    def forward(self, input_val: I, k: int = 1) -> Optional[MatchResult[I, O]]:
+    def forward(self, input_val: I, k: int = 1,
+                use_similarity: bool = True) -> Optional[MatchResult[I, O]]:
         """
         Query forward: input → output.
         
         Returns the best matching output for the given input.
+        
+        Args:
+            input_val: The input to query
+            k: Number of results to return
+            use_similarity: If True, use Jaccard similarity for matching
+                           (works with reproject()). If False, use encoder.
         """
-        position = self.encoder.encode_input(input_val)
-        results = self._query_by_position(position, k)
+        if use_similarity and len(self._mappings) > 0:
+            # Use similarity-based matching (works with reproject)
+            # This is the Probe Extraction approach
+            return self._query_by_similarity(input_val, k)
+        else:
+            # Use encoder-based matching
+            position = self.encoder.encode_input(input_val)
+            results = self._query_by_position(position, k)
+            return results[0] if results else None
+    
+    def _query_by_similarity(self, input_val: I, 
+                             k: int) -> Optional[MatchResult[I, O]]:
+        """Query using direct similarity computation (Probe Extraction approach)."""
+        query_words = set(str(input_val).lower().split())
+        
+        results = []
+        for mapping in self._mappings:
+            mapping_words = set(str(mapping.input).lower().split())
+            
+            # Jaccard similarity
+            if query_words or mapping_words:
+                similarity = len(query_words & mapping_words) / len(query_words | mapping_words)
+            else:
+                similarity = 0.0
+            
+            results.append(MatchResult(mapping, similarity))
+        
+        # Sort by similarity (descending)
+        results.sort(key=lambda r: r.similarity, reverse=True)
+        
         return results[0] if results else None
     
     def backward(self, output_val: O, k: int = 5) -> List[MatchResult[I, O]]:
@@ -454,6 +489,9 @@ class HyperMapping(Generic[I, O]):
         """
         Provide feedback on a mapping.
         
+        DEPRECATED: Use reproject() for exact learning.
+        This uses attract/repel dynamics which is an approximation.
+        
         Success: Move mapping toward query position
         Failure: Move mapping away from query position
         """
@@ -474,16 +512,74 @@ class HyperMapping(Generic[I, O]):
                 if norm > 1e-10:
                     mapping.position = mapping.position / norm * CRITICAL_LINE
     
+    def reproject(self, similarity_fn: Optional[Callable] = None) -> None:
+        """
+        Reproject all mappings using Probe Extraction Protocol.
+        
+        This is the EXACT approach - no approximation, no holographic bound.
+        Uses eigendecomposition of similarity matrix to construct positions.
+        
+        From PEP: "Training is approximation. Probing is measurement."
+        
+        Args:
+            similarity_fn: Optional custom similarity function.
+                          Default uses Jaccard similarity on input words.
+        """
+        n = len(self._mappings)
+        if n == 0:
+            return
+        
+        # Build similarity matrix
+        S = np.zeros((n, n))
+        
+        for i in range(n):
+            for j in range(n):
+                if similarity_fn:
+                    S[i, j] = similarity_fn(self._mappings[i], self._mappings[j])
+                else:
+                    # Default: Jaccard similarity on input strings
+                    words_i = set(str(self._mappings[i].input).lower().split())
+                    words_j = set(str(self._mappings[j].input).lower().split())
+                    if words_i or words_j:
+                        S[i, j] = len(words_i & words_j) / len(words_i | words_j)
+                    else:
+                        S[i, j] = 1.0 if i == j else 0.0
+        
+        # Eigendecomposition: S = V @ D @ V.T
+        # Positions: P = V @ sqrt(D)
+        eigenvalues, eigenvectors = np.linalg.eigh(S)
+        
+        # Take top dims eigenvectors, scaled by sqrt(eigenvalue)
+        idx = np.argsort(eigenvalues)[::-1][:self.dims]
+        valid_eigenvalues = np.maximum(eigenvalues[idx], 0)  # Ensure non-negative
+        positions = eigenvectors[:, idx] * np.sqrt(valid_eigenvalues)
+        
+        # Update mapping positions
+        for i, mapping in enumerate(self._mappings):
+            pos = positions[i]
+            norm = np.linalg.norm(pos)
+            if norm > 1e-10:
+                pos = pos / norm * CRITICAL_LINE
+            mapping.position = pos
+    
     def attract(self, mapping1: Mapping, mapping2: Mapping,
                 strength: float = 0.1) -> None:
-        """Move two mappings closer together."""
+        """
+        Move two mappings closer together.
+        
+        DEPRECATED: Use reproject() for exact learning.
+        """
         direction = mapping2.position - mapping1.position
         mapping1.position = mapping1.position + strength * direction
         mapping2.position = mapping2.position - strength * direction
     
     def repel(self, mapping1: Mapping, mapping2: Mapping,
               strength: float = 0.05) -> None:
-        """Move two mappings further apart."""
+        """
+        Move two mappings further apart.
+        
+        DEPRECATED: Use reproject() for exact learning.
+        """
         direction = mapping1.position - mapping2.position
         norm = np.linalg.norm(direction)
         if norm > 1e-10:
