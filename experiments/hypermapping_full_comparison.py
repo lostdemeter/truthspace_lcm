@@ -408,7 +408,7 @@ def test_xor():
         space.map(tuple(inputs), output)
     
     correct = sum(1 for inputs, expected in xor_data 
-                  if space.forward(tuple(inputs), use_similarity=False).output == expected)
+                  if space.forward(tuple(inputs)).output == expected)
     
     accuracy = correct / len(xor_data) * 100
     print(f"Accuracy: {accuracy:.1f}%")
@@ -438,7 +438,7 @@ def test_image_classification():
         space.map(pattern, str(digit))
     
     correct = sum(1 for digit, pattern in patterns.items()
-                  if space.forward(pattern, use_similarity=False).output == str(digit))
+                  if space.forward(pattern).output == str(digit))
     
     accuracy = correct / len(patterns) * 100
     print(f"Accuracy: {accuracy:.1f}%")
@@ -472,7 +472,7 @@ def test_sentiment():
         space.map(text, sentiment)
     
     correct = sum(1 for text, expected in test
-                  if space.forward(text, use_similarity=False).output == expected)
+                  if space.forward(text).output == expected)
     
     accuracy = correct / len(test) * 100
     print(f"Accuracy: {accuracy:.1f}%")

@@ -277,12 +277,17 @@ class TextEncoder(Encoder):
         
         # Holographic projection
         eigenvalues, eigenvectors = np.linalg.eigh(cooccurrence)
-        idx = np.argsort(eigenvalues)[::-1][:self.dims]
+        # Take min(n, dims) eigenvectors
+        num_dims = min(n, self.dims)
+        idx = np.argsort(eigenvalues)[::-1][:num_dims]
         valid_eigenvalues = np.maximum(eigenvalues[idx], 0)
         positions = eigenvectors[:, idx] * np.sqrt(valid_eigenvalues)
         
         for i, word in enumerate(word_list):
             pos = positions[i]
+            # Pad to full dims if needed
+            if len(pos) < self.dims:
+                pos = np.pad(pos, (0, self.dims - len(pos)))
             norm = np.linalg.norm(pos)
             if norm > 1e-10:
                 pos = pos / norm * CRITICAL_LINE
@@ -412,49 +417,25 @@ class HyperMapping(Generic[I, O]):
         
         return mapping
     
-    def forward(self, input_val: I, k: int = 1,
-                use_similarity: bool = True) -> Optional[MatchResult[I, O]]:
+    def forward(self, input_val: I, k: int = 1) -> Optional[MatchResult[I, O]]:
         """
         Query forward: input → output.
         
         Returns the best matching output for the given input.
+        This is PURELY GEOMETRIC - uses position-based matching.
         
         Args:
             input_val: The input to query
             k: Number of results to return
-            use_similarity: If True, use Jaccard similarity for matching
-                           (works with reproject()). If False, use encoder.
         """
-        if use_similarity and len(self._mappings) > 0:
-            # Use similarity-based matching (works with reproject)
-            # This is the Probe Extraction approach
-            return self._query_by_similarity(input_val, k)
-        else:
-            # Use encoder-based matching
-            position = self.encoder.encode_input(input_val)
-            results = self._query_by_position(position, k)
-            return results[0] if results else None
-    
-    def _query_by_similarity(self, input_val: I, 
-                             k: int) -> Optional[MatchResult[I, O]]:
-        """Query using direct similarity computation (Probe Extraction approach)."""
-        query_words = set(str(input_val).lower().split())
+        if len(self._mappings) == 0:
+            return None
         
-        results = []
-        for mapping in self._mappings:
-            mapping_words = set(str(mapping.input).lower().split())
-            
-            # Jaccard similarity
-            if query_words or mapping_words:
-                similarity = len(query_words & mapping_words) / len(query_words | mapping_words)
-            else:
-                similarity = 0.0
-            
-            results.append(MatchResult(mapping, similarity))
+        # Encode input to position (geometric)
+        position = self.encoder.encode_input(input_val)
         
-        # Sort by similarity (descending)
-        results.sort(key=lambda r: r.similarity, reverse=True)
-        
+        # Find nearest by position (geometric)
+        results = self._query_by_position(position, k)
         return results[0] if results else None
     
     def backward(self, output_val: O, k: int = 5) -> List[MatchResult[I, O]]:
@@ -523,22 +504,27 @@ class HyperMapping(Generic[I, O]):
     
     def reproject(self, similarity_fn: Optional[Callable] = None) -> None:
         """
-        Reproject all mappings using Probe Extraction Protocol.
+        Reproject all mappings using Holographic Pattern Projection (Design 084).
         
-        This is the EXACT approach - no approximation, no holographic bound.
-        Uses eigendecomposition of similarity matrix to construct positions.
+        This is the BOOTSTRAP phase - constructs geometry from relationships.
+        String similarity is used ONLY HERE to build the similarity matrix.
+        After reprojection, all queries use GEOMETRIC position matching.
         
-        From PEP: "Training is approximation. Probing is measurement."
+        From Design 084: "We don't have to accept the geometry we're given.
+        We can construct the geometry we need."
+        
+        The key insight: dot(P[i], P[j]) ≈ S[i,j] by construction.
         
         Args:
             similarity_fn: Optional custom similarity function.
                           Default uses Jaccard similarity on input words.
+                          This is BOOTSTRAP ONLY - not used at runtime.
         """
         n = len(self._mappings)
         if n == 0:
             return
         
-        # Build similarity matrix
+        # Build similarity matrix (BOOTSTRAP - string matching acceptable here)
         S = np.zeros((n, n))
         
         for i in range(n):
@@ -547,6 +533,7 @@ class HyperMapping(Generic[I, O]):
                     S[i, j] = similarity_fn(self._mappings[i], self._mappings[j])
                 else:
                     # Default: Jaccard similarity on input strings
+                    # This is BOOTSTRAP - defines what "similar" means
                     words_i = set(str(self._mappings[i].input).lower().split())
                     words_j = set(str(self._mappings[j].input).lower().split())
                     if words_i or words_j:
@@ -554,22 +541,80 @@ class HyperMapping(Generic[I, O]):
                     else:
                         S[i, j] = 1.0 if i == j else 0.0
         
+        # Store similarity matrix for query projection
+        self._similarity_matrix = S
+        
         # Eigendecomposition: S = V @ D @ V.T
         # Positions: P = V @ sqrt(D)
+        # This constructs positions where dot(P[i], P[j]) ≈ S[i,j]
         eigenvalues, eigenvectors = np.linalg.eigh(S)
         
-        # Take top dims eigenvectors, scaled by sqrt(eigenvalue)
-        idx = np.argsort(eigenvalues)[::-1][:self.dims]
+        # Take min(n, dims) eigenvectors, scaled by sqrt(eigenvalue)
+        num_dims = min(n, self.dims)
+        idx = np.argsort(eigenvalues)[::-1][:num_dims]
         valid_eigenvalues = np.maximum(eigenvalues[idx], 0)  # Ensure non-negative
-        positions = eigenvectors[:, idx] * np.sqrt(valid_eigenvalues)
+        
+        # Store eigenvectors for query projection
+        self._eigenvectors = eigenvectors[:, idx]
+        self._eigenvalues = valid_eigenvalues
+        
+        positions = self._eigenvectors * np.sqrt(valid_eigenvalues)
         
         # Update mapping positions
         for i, mapping in enumerate(self._mappings):
             pos = positions[i]
+            # Pad to full dims if needed
+            if len(pos) < self.dims:
+                pos = np.pad(pos, (0, self.dims - len(pos)))
             norm = np.linalg.norm(pos)
             if norm > 1e-10:
                 pos = pos / norm * CRITICAL_LINE
             mapping.position = pos
+    
+    def project_query(self, query: Any, similarity_fn: Optional[Callable] = None) -> np.ndarray:
+        """
+        Project a new query into the geometric space (Design 084).
+        
+        This computes the query's position based on its similarity to existing
+        mappings, then projects into the eigenspace. This is GEOMETRIC - the
+        similarity computation is just measuring the query against known points.
+        
+        Args:
+            query: The query to project
+            similarity_fn: Optional similarity function (same as reproject)
+            
+        Returns:
+            Position vector for the query
+        """
+        if not hasattr(self, '_eigenvectors') or self._eigenvectors is None:
+            # Fall back to encoder if not reprojected
+            return self.encoder.encode_input(query)
+        
+        n = len(self._mappings)
+        if n == 0:
+            return self.encoder.encode_input(query)
+        
+        # Compute similarity of query to each mapping
+        similarities = np.zeros(n)
+        for i, mapping in enumerate(self._mappings):
+            if similarity_fn:
+                similarities[i] = similarity_fn(query, mapping)
+            else:
+                query_words = set(str(query).lower().split())
+                mapping_words = set(str(mapping.input).lower().split())
+                if query_words or mapping_words:
+                    similarities[i] = len(query_words & mapping_words) / len(query_words | mapping_words)
+                else:
+                    similarities[i] = 0.0
+        
+        # Project into eigenspace: query_pos = similarities @ eigenvectors
+        # This is the geometric projection from Design 084
+        pos = similarities @ self._eigenvectors
+        
+        norm = np.linalg.norm(pos)
+        if norm > 1e-10:
+            pos = pos / norm * CRITICAL_LINE
+        return pos
     
     def attract(self, mapping1: Mapping, mapping2: Mapping,
                 strength: float = 0.1) -> None:
@@ -629,21 +674,52 @@ class HyperMapping(Generic[I, O]):
         """
         Compose: Generate output from template or structure (Emergent Gear Pattern step 4).
         
-        If a template exists for the key, returns it exactly (100% accuracy).
-        Otherwise, falls back to forward() query.
+        This is GEOMETRIC - uses position-based matching to find the nearest
+        bootstrapped template. If an exact position match exists, returns it.
+        Otherwise, returns the nearest template by position.
         
         Args:
             key: The key to compose output for
             
         Returns:
-            The template if bootstrapped, or nearest match output
+            The nearest template by position, or forward() query result
         """
-        if hasattr(self, '_templates') and key in self._templates:
-            return self._templates[key]
+        if not hasattr(self, '_templates') or not self._templates:
+            # No templates - fall back to geometric query
+            result = self.forward(key)
+            return result.output if result else None
         
-        # Fallback to geometric query
+        # Encode the key to a position (geometric)
+        key_pos = self.encoder.encode_input(key)
+        
+        # Find nearest template by position (geometric)
+        best_template = None
+        best_similarity = -1.0
+        
+        for template_key, template_val in self._templates.items():
+            # Get position of template key
+            template_pos = self.encoder.encode_input(template_key)
+            
+            # Cosine similarity (geometric)
+            dot = np.dot(key_pos, template_pos)
+            norm1 = np.linalg.norm(key_pos)
+            norm2 = np.linalg.norm(template_pos)
+            if norm1 > 1e-10 and norm2 > 1e-10:
+                similarity = dot / (norm1 * norm2)
+            else:
+                similarity = 0.0
+            
+            if similarity > best_similarity:
+                best_similarity = similarity
+                best_template = template_val
+        
+        # If high similarity (near-exact match), return template
+        if best_similarity > 0.99:
+            return best_template
+        
+        # Otherwise, fall back to geometric query
         result = self.forward(key)
-        return result.output if result else None
+        return result.output if result else best_template
     
     def learn(self, key: Any, correction: Any) -> None:
         """
