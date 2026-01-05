@@ -1,0 +1,100 @@
+{
+  "type": "HyperdimensionalStructure",
+  "version": "1.0",
+  "name": "nl_git_bootstrap",
+  "dims": 12,
+  "description": "Bootstrap data for NL to Git command translator. A second domain to test chromosome-like corpus sharing.",
+  "mappings": [
+    {"nl": "show status", "bash": "git status"},
+    {"nl": "check status", "bash": "git status"},
+    {"nl": "what changed", "bash": "git status"},
+    {"nl": "current status", "bash": "git status"},
+    
+    {"nl": "add files", "bash": "git add"},
+    {"nl": "stage files", "bash": "git add"},
+    {"nl": "add all files", "bash": "git add -A"},
+    {"nl": "stage all", "bash": "git add -A"},
+    {"nl": "add everything", "bash": "git add ."},
+    
+    {"nl": "commit changes", "bash": "git commit"},
+    {"nl": "save changes", "bash": "git commit"},
+    {"nl": "commit with message", "bash": "git commit -m"},
+    {"nl": "save with message", "bash": "git commit -m"},
+    
+    {"nl": "push changes", "bash": "git push"},
+    {"nl": "upload changes", "bash": "git push"},
+    {"nl": "push to remote", "bash": "git push origin"},
+    {"nl": "push to main", "bash": "git push origin main"},
+    
+    {"nl": "pull changes", "bash": "git pull"},
+    {"nl": "download changes", "bash": "git pull"},
+    {"nl": "get latest", "bash": "git pull"},
+    {"nl": "update from remote", "bash": "git pull origin"},
+    
+    {"nl": "show log", "bash": "git log"},
+    {"nl": "commit history", "bash": "git log"},
+    {"nl": "show history", "bash": "git log"},
+    {"nl": "recent commits", "bash": "git log -n 5"},
+    {"nl": "last commit", "bash": "git log -1"},
+    
+    {"nl": "show diff", "bash": "git diff"},
+    {"nl": "what changed", "bash": "git diff"},
+    {"nl": "show changes", "bash": "git diff"},
+    {"nl": "compare changes", "bash": "git diff"},
+    
+    {"nl": "create branch", "bash": "git branch"},
+    {"nl": "new branch", "bash": "git checkout -b"},
+    {"nl": "make branch", "bash": "git checkout -b"},
+    
+    {"nl": "switch branch", "bash": "git checkout"},
+    {"nl": "change branch", "bash": "git checkout"},
+    {"nl": "go to branch", "bash": "git checkout"},
+    
+    {"nl": "list branches", "bash": "git branch -a"},
+    {"nl": "show branches", "bash": "git branch -a"},
+    {"nl": "all branches", "bash": "git branch -a"},
+    
+    {"nl": "merge branch", "bash": "git merge"},
+    {"nl": "combine branches", "bash": "git merge"},
+    
+    {"nl": "clone repository", "bash": "git clone"},
+    {"nl": "download repository", "bash": "git clone"},
+    {"nl": "copy repository", "bash": "git clone"},
+    
+    {"nl": "init repository", "bash": "git init"},
+    {"nl": "initialize repository", "bash": "git init"},
+    {"nl": "create repository", "bash": "git init"},
+    {"nl": "new repository", "bash": "git init"},
+    
+    {"nl": "show remote", "bash": "git remote -v"},
+    {"nl": "list remotes", "bash": "git remote -v"},
+    {"nl": "remote url", "bash": "git remote -v"},
+    
+    {"nl": "stash changes", "bash": "git stash"},
+    {"nl": "save temporarily", "bash": "git stash"},
+    {"nl": "stash pop", "bash": "git stash pop"},
+    {"nl": "restore stash", "bash": "git stash pop"},
+    
+    {"nl": "reset changes", "bash": "git reset"},
+    {"nl": "undo changes", "bash": "git reset"},
+    {"nl": "hard reset", "bash": "git reset --hard"},
+    {"nl": "discard all changes", "bash": "git reset --hard"},
+    
+    {"nl": "revert commit", "bash": "git revert"},
+    {"nl": "undo commit", "bash": "git revert"},
+    
+    {"nl": "cherry pick", "bash": "git cherry-pick"},
+    {"nl": "pick commit", "bash": "git cherry-pick"},
+    
+    {"nl": "rebase branch", "bash": "git rebase"},
+    {"nl": "rebase onto main", "bash": "git rebase main"},
+    
+    {"nl": "show blame", "bash": "git blame"},
+    {"nl": "who changed", "bash": "git blame"},
+    {"nl": "line history", "bash": "git blame"},
+    
+    {"nl": "tag version", "bash": "git tag"},
+    {"nl": "create tag", "bash": "git tag"},
+    {"nl": "list tags", "bash": "git tag -l"}
+  ]
+}
