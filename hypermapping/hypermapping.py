@@ -749,6 +749,10 @@ class HyperMapping(Generic[I, O]):
         # This is the geometric projection from Design 084
         pos = similarities @ self._eigenvectors
         
+        # Pad to full dims if needed
+        if len(pos) < self.dims:
+            pos = np.pad(pos, (0, self.dims - len(pos)))
+        
         norm = np.linalg.norm(pos)
         if norm > 1e-10:
             pos = pos / norm * CRITICAL_LINE

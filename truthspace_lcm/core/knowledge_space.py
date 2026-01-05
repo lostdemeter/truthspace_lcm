@@ -13,6 +13,11 @@ Design Principles (from Design 091):
 - MOVEMENT IS LEARNING
 - THE CRITICAL LINE IS THE HORIZON
 
+Similarity Formula (from Design 039):
+- importance = phi_weight(A) × phi_weight(B) × spread × bidir
+- phi_weight(X) = φ^(-rank(X))
+- This is geometric: encoding and weighting are dual operations
+
 Concepts start at the origin. Success moves them toward persistence.
 Failure moves them toward pruning. The critical line (σ = 0.5) is the
 natural boundary between persisting and fading concepts.
@@ -38,6 +43,66 @@ if str(hypermapping_path) not in sys.path:
     sys.path.insert(0, str(hypermapping_path))
 
 from hypermapping import HyperMapping, Mapping, MatchResult, TextEncoder, CRITICAL_LINE
+
+# Golden ratio for φ-weighting
+PHI = (1 + np.sqrt(5)) / 2
+
+
+@dataclass
+class Entity:
+    """
+    An entity (content word) with geometric importance data.
+    
+    From Design 039:
+    - importance = phi_weight(A) × phi_weight(B) × spread × bidir
+    - phi_weight(X) = φ^(-rank(X))
+    """
+    name: str
+    frequency: int = 0
+    rank: int = 0
+    sources: Set[str] = field(default_factory=set)
+    relationships: Dict[str, int] = field(default_factory=dict)  # entity -> count
+    
+    @property
+    def spread(self) -> int:
+        """How many sources mention this entity."""
+        return len(self.sources)
+    
+    def bidir(self, other: 'Entity') -> float:
+        """
+        Bidirectional relationship strength with another entity.
+        
+        If A mentions B AND B mentions A, that's a strong signal.
+        Returns geometric mean of bidirectional counts.
+        """
+        a_to_b = self.relationships.get(other.name, 0)
+        b_to_a = other.relationships.get(self.name, 0)
+        
+        if a_to_b == 0 or b_to_a == 0:
+            return 0.0
+        
+        return np.sqrt(a_to_b * b_to_a)
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Serialize entity."""
+        return {
+            'name': self.name,
+            'frequency': self.frequency,
+            'rank': self.rank,
+            'sources': list(self.sources),
+            'relationships': self.relationships,
+        }
+    
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> 'Entity':
+        """Deserialize entity."""
+        return cls(
+            name=data['name'],
+            frequency=data.get('frequency', 0),
+            rank=data.get('rank', 0),
+            sources=set(data.get('sources', [])),
+            relationships=data.get('relationships', {}),
+        )
 
 
 @dataclass
@@ -98,6 +163,10 @@ class KnowledgeSpace(HyperMapping):
         self._word_counts: Dict[str, int] = {}
         self._total_concepts: int = 0
         
+        # Entity tracking for φ^(-rank) importance (Design 039)
+        self._entities: Dict[str, Entity] = {}
+        self._ranks_computed: bool = False
+        
         # Metadata
         self.created = datetime.now().isoformat()
         self.modified = datetime.now().isoformat()
@@ -135,10 +204,11 @@ class KnowledgeSpace(HyperMapping):
         The critical line (σ = 0.5) is the threshold - words appearing in
         more than 50% of concepts are structural, not semantic.
         
-        Single-char words are filtered as they're typically structural.
+        Short words (< 3 chars) are filtered as they're typically structural
+        (is, to, in, a, an, the, etc.).
         """
-        # Single char words are structural
-        if len(word) < 2:
+        # Short words are typically structural (is, to, in, a, an, etc.)
+        if len(word) < 3:
             return False
         
         # If we have concept data, use geometric detection
@@ -153,10 +223,110 @@ class KnowledgeSpace(HyperMapping):
         
         return True
     
+    # -------------------------------------------------------------------------
+    # φ^(-rank) Importance Formula (Design 039)
+    # -------------------------------------------------------------------------
+    
+    def _compute_ranks(self) -> None:
+        """Compute ranks based on frequency (most frequent = rank 1)."""
+        sorted_entities = sorted(
+            self._entities.values(),
+            key=lambda e: -e.frequency
+        )
+        for rank, entity in enumerate(sorted_entities, 1):
+            entity.rank = rank
+        self._ranks_computed = True
+    
+    def phi_weight(self, entity_name: str) -> float:
+        """
+        φ^(-rank) weighting for an entity.
+        
+        Rare entities (high rank) get low weight.
+        Common entities (low rank) get high weight.
+        """
+        if not self._ranks_computed:
+            self._compute_ranks()
+        
+        entity = self._entities.get(entity_name)
+        if not entity:
+            return 0.0
+        
+        return PHI ** (-entity.rank)
+    
+    def entity_importance(self, entity_a: str, entity_b: str) -> float:
+        """
+        Compute importance of relationship between two entities.
+        
+        From Design 039:
+        importance = phi_weight(A) × phi_weight(B) × spread × bidir
+        
+        For same-entity matching (A == B), we use:
+        importance = phi_weight(A)² × spread
+        
+        For related entities (co-occur in concepts), we use the full formula.
+        For unrelated entities, importance is 0.
+        """
+        if entity_a not in self._entities or entity_b not in self._entities:
+            return 0.0
+        
+        ent_a = self._entities[entity_a]
+        ent_b = self._entities[entity_b]
+        
+        phi_a = self.phi_weight(entity_a)
+        phi_b = self.phi_weight(entity_b)
+        
+        # Same entity - this is the primary matching signal
+        if entity_a == entity_b:
+            # importance = φ² × spread
+            return phi_a * phi_a * ent_a.spread
+        
+        # Different entities - check for relationship
+        # Relationship exists if they co-occur in any concept
+        a_to_b = ent_a.relationships.get(entity_b, 0)
+        b_to_a = ent_b.relationships.get(entity_a, 0)
+        
+        if a_to_b == 0 and b_to_a == 0:
+            return 0.0
+        
+        # Spread: geometric mean of source counts
+        spread = np.sqrt(ent_a.spread * ent_b.spread)
+        
+        # Relationship strength: geometric mean of co-occurrence counts
+        # This is more lenient than strict bidirectionality
+        relationship = np.sqrt(max(a_to_b, 1) * max(b_to_a, 1)) if (a_to_b > 0 or b_to_a > 0) else 0.0
+        
+        return phi_a * phi_b * spread * relationship
+    
+    def text_importance(self, words_a: Set[str], words_b: Set[str]) -> float:
+        """
+        Compute importance between two texts using φ^(-rank) formula.
+        
+        Sums importance of all entity pairs between the two texts.
+        This replaces Jaccard word overlap with geometric importance.
+        """
+        if not words_a or not words_b:
+            return 0.0
+        
+        if not self._ranks_computed:
+            self._compute_ranks()
+        
+        total_importance = 0.0
+        
+        for a in words_a:
+            for b in words_b:
+                total_importance += self.entity_importance(a, b)
+        
+        # Normalize by geometric mean of word counts
+        normalizer = np.sqrt(len(words_a) * len(words_b))
+        return total_importance / normalizer if normalizer > 0 else 0.0
+    
     @staticmethod
     def word_overlap(words_a: Set[str], words_b: Set[str]) -> float:
         """
         Calculate Jaccard similarity between two word sets.
+        
+        DEPRECATED: Use text_importance() instead for geometric similarity.
+        Kept for backward compatibility.
         
         Returns value in [0, 1] where 1 means identical sets.
         """
@@ -180,6 +350,11 @@ class KnowledgeSpace(HyperMapping):
         The text is used as both input and output (self-mapping for concepts).
         Position is computed from the text content.
         
+        Entity tracking (Design 039):
+        - Updates entity frequency and sources
+        - Tracks entity relationships (co-occurrence in same concept)
+        - Invalidates rank cache for recomputation
+        
         Args:
             text: The knowledge text
             source: Source attribution
@@ -189,47 +364,76 @@ class KnowledgeSpace(HyperMapping):
             The created Mapping
         """
         words = self.extract_words(text)
+        word_list = list(words)
         
         # Update word counts for geometric stop word detection
         for word in words:
             self._word_counts[word] = self._word_counts.get(word, 0) + 1
         self._total_concepts += 1
         
+        # Update entity tracking for φ^(-rank) importance
+        for i, word in enumerate(word_list):
+            if word not in self._entities:
+                self._entities[word] = Entity(name=word)
+            
+            entity = self._entities[word]
+            entity.frequency += 1
+            entity.sources.add(source)
+            
+            # Track relationships (co-occurrence in same concept)
+            for j, other in enumerate(word_list):
+                if i != j:
+                    entity.relationships[other] = entity.relationships.get(other, 0) + 1
+        
+        # Invalidate rank cache
+        self._ranks_computed = False
+        
         # Create mapping (text → text for concepts)
         mapping = self.map(text, text, metadata={
             'source': source,
-            'words': list(words),
+            'words': word_list,
             'type': 'concept',
         })
         
-        # Reproject if requested - use content word similarity
+        # Reproject if requested - use φ-importance similarity
         if reproject and len(self) > 1:
-            self.reproject(similarity_fn=self._content_word_similarity)
+            self.reproject(similarity_fn=self._phi_importance_similarity)
         
         self.modified = datetime.now().isoformat()
         return mapping
+    
+    def _extract_words_from_item(self, item: Any) -> Set[str]:
+        """Extract words from a mapping, text, or other item."""
+        if hasattr(item, 'metadata') and item.metadata and 'words' in item.metadata:
+            return set(item.metadata['words'])
+        elif hasattr(item, 'input'):
+            return self.extract_words(str(item.input))
+        else:
+            return self.extract_words(str(item))
+    
+    def _phi_importance_similarity(self, a: Any, b: Any) -> float:
+        """
+        Compute similarity using φ^(-rank) importance formula.
+        
+        From Design 039:
+        importance = phi_weight(A) × phi_weight(B) × spread × bidir
+        
+        This replaces Jaccard word overlap with geometric importance.
+        """
+        words_a = self._extract_words_from_item(a)
+        words_b = self._extract_words_from_item(b)
+        
+        return self.text_importance(words_a, words_b)
     
     def _content_word_similarity(self, a: Any, b: Any) -> float:
         """
         Compute similarity using content words only.
         
-        This is the key to geometric matching - we compare content words,
-        not full text. This gives much higher similarity for related concepts.
+        DEPRECATED: Use _phi_importance_similarity instead.
+        Kept for backward compatibility.
         """
-        # Get words from mapping metadata if available
-        if hasattr(a, 'metadata') and a.metadata and 'words' in a.metadata:
-            words_a = set(a.metadata['words'])
-        elif hasattr(a, 'input'):
-            words_a = self.extract_words(str(a.input))
-        else:
-            words_a = self.extract_words(str(a))
-        
-        if hasattr(b, 'metadata') and b.metadata and 'words' in b.metadata:
-            words_b = set(b.metadata['words'])
-        elif hasattr(b, 'input'):
-            words_b = self.extract_words(str(b.input))
-        else:
-            words_b = self.extract_words(str(b))
+        words_a = self._extract_words_from_item(a)
+        words_b = self._extract_words_from_item(b)
         
         return self.word_overlap(words_a, words_b)
     
@@ -238,7 +442,7 @@ class KnowledgeSpace(HyperMapping):
         """
         Find concepts most similar to the query text.
         
-        Uses geometric position matching with content word similarity.
+        Uses φ^(-rank) importance formula for geometric matching.
         
         Args:
             text: Query text
@@ -248,11 +452,11 @@ class KnowledgeSpace(HyperMapping):
         Returns:
             List of MatchResult, sorted by similarity descending
         """
-        # Project query using content word similarity
+        # Project query using φ-importance similarity
         if hasattr(self, '_eigenvectors') and self._eigenvectors is not None:
             query_position = self.project_query(
                 text, 
-                similarity_fn=lambda q, m: self._content_word_similarity(q, m)
+                similarity_fn=lambda q, m: self._phi_importance_similarity(q, m)
             )
         else:
             query_position = self.encoder.encode_input(text)
@@ -318,6 +522,13 @@ class KnowledgeSpace(HyperMapping):
         data['total_concepts'] = self._total_concepts
         data['created'] = self.created
         data['modified'] = self.modified
+        
+        # Serialize entities for φ^(-rank) importance
+        data['entities'] = {
+            name: entity.to_dict() 
+            for name, entity in self._entities.items()
+        }
+        
         return data
     
     def save(self, path: str) -> None:
@@ -348,6 +559,14 @@ class KnowledgeSpace(HyperMapping):
         space._word_counts = data.get('word_counts', {})
         space._total_concepts = data.get('total_concepts', 0)
         
+        # Load entities for φ^(-rank) importance
+        entities_data = data.get('entities', {})
+        space._entities = {
+            name: Entity.from_dict(ent_data)
+            for name, ent_data in entities_data.items()
+        }
+        space._ranks_computed = False
+        
         # Load metadata
         space.created = data.get('created', datetime.now().isoformat())
         space.modified = data.get('modified', datetime.now().isoformat())
@@ -375,6 +594,7 @@ class KnowledgeSpace(HyperMapping):
         
         Concepts from other are added to this space.
         Duplicate texts are skipped.
+        Entity data is merged for φ^(-rank) importance.
         """
         existing_texts = {m.input for m in self._mappings}
         
@@ -398,12 +618,28 @@ class KnowledgeSpace(HyperMapping):
                     self._word_counts[word] = self._word_counts.get(word, 0) + 1
                 self._total_concepts += 1
         
+        # Merge entity data for φ^(-rank) importance
+        for name, other_entity in other._entities.items():
+            if name not in self._entities:
+                self._entities[name] = Entity(name=name)
+            
+            entity = self._entities[name]
+            entity.frequency += other_entity.frequency
+            entity.sources.update(other_entity.sources)
+            
+            # Merge relationships
+            for rel_name, count in other_entity.relationships.items():
+                entity.relationships[rel_name] = entity.relationships.get(rel_name, 0) + count
+        
+        # Invalidate rank cache
+        self._ranks_computed = False
+        
         # Rebuild indices
         self._rebuild_indices()
         
-        # Reproject
+        # Reproject with φ-importance similarity
         if len(self) > 1:
-            self.reproject()
+            self.reproject(similarity_fn=self._phi_importance_similarity)
         
         self.modified = datetime.now().isoformat()
     
