@@ -193,22 +193,42 @@ class KnowledgeSpace(HyperMapping):
         # Filter using geometric detection
         return {w for w in words if self._is_content_word(w)}
     
+    # Common English stop words that are structural, not semantic
+    # These appear everywhere and add no discriminative power
+    STOP_WORDS = {
+        'the', 'and', 'for', 'with', 'that', 'this', 'from', 'are', 'was',
+        'were', 'been', 'being', 'have', 'has', 'had', 'having', 'does',
+        'did', 'doing', 'will', 'would', 'could', 'should', 'may', 'might',
+        'must', 'shall', 'can', 'need', 'dare', 'ought', 'used', 'its',
+        'into', 'through', 'during', 'before', 'after', 'above', 'below',
+        'between', 'under', 'again', 'further', 'then', 'once', 'here',
+        'there', 'when', 'where', 'why', 'how', 'all', 'each', 'few',
+        'more', 'most', 'other', 'some', 'such', 'only', 'own', 'same',
+        'than', 'too', 'very', 'just', 'also', 'now', 'any', 'both',
+        'but', 'not', 'nor', 'yet', 'what', 'which', 'who', 'whom',
+        'these', 'those', 'about', 'over', 'out', 'off', 'down', 'while',
+        'because', 'until', 'although', 'though', 'since', 'unless',
+        'include', 'including', 'includes', 'included', 'use', 'uses',
+        'using', 'used', 'like', 'such', 'well', 'even', 'back', 'still',
+    }
+    
     def _is_content_word(self, word: str) -> bool:
         """
         Geometric stop word detection.
         
-        A word is a STOP word (not content) if it appears in many concepts
-        but adds no discriminative power. This is geometric because it's
-        based on the word's distribution across the concept space.
+        A word is a STOP word (not content) if:
+        1. It's in the common stop words set (structural words)
+        2. It appears in > 50% of concepts (high coverage)
+        3. It's too short (< 3 chars)
         
-        The critical line (σ = 0.5) is the threshold - words appearing in
-        more than 50% of concepts are structural, not semantic.
-        
-        Short words (< 3 chars) are filtered as they're typically structural
-        (is, to, in, a, an, the, etc.).
+        The critical line (σ = 0.5) is the threshold for coverage.
         """
         # Short words are typically structural (is, to, in, a, an, etc.)
         if len(word) < 3:
+            return False
+        
+        # Common stop words are structural
+        if word in self.STOP_WORDS:
             return False
         
         # If we have concept data, use geometric detection
@@ -239,10 +259,12 @@ class KnowledgeSpace(HyperMapping):
     
     def phi_weight(self, entity_name: str) -> float:
         """
-        φ^(-rank) weighting for an entity.
+        φ-based weighting for an entity using normalized rank.
         
-        Rare entities (high rank) get low weight.
-        Common entities (low rank) get high weight.
+        Instead of φ^(-rank) which decays too fast for large vocabularies,
+        we use φ^(-log(rank)) which gives a more gradual decay.
+        
+        This is equivalent to rank^(-log(φ)) ≈ rank^(-0.48), a power law.
         """
         if not self._ranks_computed:
             self._compute_ranks()
@@ -251,7 +273,10 @@ class KnowledgeSpace(HyperMapping):
         if not entity:
             return 0.0
         
-        return PHI ** (-entity.rank)
+        # Use log(rank) to slow down the decay
+        # φ^(-log(rank)) = rank^(-log(φ)) ≈ rank^(-0.48)
+        log_rank = np.log1p(entity.rank)  # log(1 + rank) to handle rank=0
+        return PHI ** (-log_rank)
     
     def entity_importance(self, entity_a: str, entity_b: str) -> float:
         """
@@ -442,7 +467,11 @@ class KnowledgeSpace(HyperMapping):
         """
         Find concepts most similar to the query text.
         
-        Uses φ^(-rank) importance formula for geometric matching.
+        Uses φ^(-rank) importance formula for direct matching.
+        
+        Note: We use direct importance calculation rather than position-based
+        matching because the eigenspace projection compresses differences.
+        The φ-importance formula provides better discrimination.
         
         Args:
             text: Query text
@@ -452,23 +481,27 @@ class KnowledgeSpace(HyperMapping):
         Returns:
             List of MatchResult, sorted by similarity descending
         """
-        # Project query using φ-importance similarity
-        if hasattr(self, '_eigenvectors') and self._eigenvectors is not None:
-            query_position = self.project_query(
-                text, 
-                similarity_fn=lambda q, m: self._phi_importance_similarity(q, m)
-            )
-        else:
-            query_position = self.encoder.encode_input(text)
+        query_words = self.extract_words(text)
         
-        # Find nearest by position
-        results = self._query_by_position(query_position, top_k)
+        # Direct importance calculation for each concept
+        results = []
+        for mapping in self._mappings:
+            concept_words = set(mapping.metadata.get('words', []))
+            importance = self.text_importance(query_words, concept_words)
+            
+            results.append(MatchResult(
+                mapping=mapping,
+                similarity=importance,
+            ))
+        
+        # Sort by importance descending
+        results.sort(key=lambda r: -r.similarity)
         
         # Filter by minimum similarity
         if min_similarity > 0:
             results = [r for r in results if r.similarity >= min_similarity]
         
-        return results
+        return results[:top_k]
     
     def use(self, mapping: Mapping, success: bool,
             strength: float = 0.1) -> None:
