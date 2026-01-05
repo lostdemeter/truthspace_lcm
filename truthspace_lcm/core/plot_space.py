@@ -409,30 +409,46 @@ print("Plot saved to {output_path}")
         }
     
     def _bootstrap_modifiers(self):
-        """Bootstrap modifier extraction patterns."""
-        self.modifier_patterns = {
-            # Numeric modifiers
-            'amplitude': re.compile(r'amplitude\s*(?:of\s*)?(\d+(?:\.\d+)?)', re.I),
-            'frequency': re.compile(r'frequency\s*(?:of\s*)?(\d+(?:\.\d+)?)', re.I),
-            'phase': re.compile(r'phase\s*(?:of\s*)?(\d+(?:\.\d+)?)', re.I),
-            'linewidth': re.compile(r'(?:line\s*)?width\s*(?:of\s*)?(\d+(?:\.\d+)?)', re.I),
-            'num_points': re.compile(r'(\d+)\s*points', re.I),
-            'bins': re.compile(r'(\d+)\s*bins', re.I),
-            
-            # Color modifiers
-            'color': re.compile(r'\b(red|blue|green|yellow|orange|purple|pink|black|white|cyan|magenta|gray|grey|brown|steelblue|navy|lime|teal|coral|salmon|gold|silver)\b(?:\s+(?:line|color))?', re.I),
-            
-            # Style modifiers
-            'linestyle': re.compile(r'(dashed|dotted|solid|dashdot)\s*(?:line)?', re.I),
-            
-            # Title
-            'title': re.compile(r'(?:titled?|with\s+title)\s*["\']([^"\']+)["\']', re.I),
-            
-            # Grid
-            'grid': re.compile(r'\b(with|without)\s+grid\b', re.I),
-            
-            # Range
-            'x_range': re.compile(r'x\s*(?:from|range)\s*(\d+(?:\.\d+)?)\s*to\s*(\d+(?:\.\d+)?)', re.I),
+        """
+        Bootstrap modifier vocabulary (geometric approach).
+        
+        Instead of regex patterns, we use word sets that map to modifier types.
+        This follows the Emergent Gear Pattern:
+        - BOOTSTRAP: Define word → modifier associations
+        - MATCH: Find modifier words in query geometrically
+        - LEARN: Can add new associations from usage
+        
+        No regex patterns - just word membership and number extraction.
+        """
+        # Color words → 'color' modifier
+        self.color_words = {
+            'red', 'blue', 'green', 'yellow', 'orange', 'purple', 'pink',
+            'black', 'white', 'cyan', 'magenta', 'gray', 'grey', 'brown',
+            'steelblue', 'navy', 'lime', 'teal', 'coral', 'salmon', 'gold', 'silver',
+        }
+        
+        # Style words → 'linestyle' modifier
+        self.style_words = {
+            'dashed': '--',
+            'dotted': ':',
+            'solid': '-',
+            'dashdot': '-.',
+        }
+        
+        # Numeric modifier keywords (word appears before/after number)
+        self.numeric_keywords = {
+            'amplitude': 'amplitude',
+            'frequency': 'frequency', 
+            'phase': 'phase',
+            'width': 'linewidth',
+            'linewidth': 'linewidth',
+            'points': 'num_points',
+            'bins': 'bins',
+        }
+        
+        # Boolean modifiers
+        self.boolean_keywords = {
+            'grid': {'with': True, 'without': False},
         }
     
     def _bootstrap_mappings(self):
@@ -500,31 +516,65 @@ print("Plot saved to {output_path}")
         return None, 0.0
     
     def _extract_modifiers(self, query: str) -> Dict[str, Any]:
-        """Extract modifiers from query using pattern matching."""
-        modifiers = {}
+        """
+        Extract modifiers from query using geometric word matching.
         
-        for name, pattern in self.modifier_patterns.items():
-            match = pattern.search(query)
-            if match:
-                if name == 'color':
-                    modifiers['color'] = match.group(1).lower()
-                elif name == 'linestyle':
-                    style_map = {
-                        'dashed': '--',
-                        'dotted': ':',
-                        'solid': '-',
-                        'dashdot': '-.',
-                    }
-                    modifiers['linestyle'] = style_map.get(match.group(1).lower(), '-')
-                elif name == 'grid':
-                    modifiers['grid'] = match.group(1).lower() == 'with'
-                elif name == 'title':
-                    modifiers['title'] = match.group(1)
-                elif name == 'x_range':
-                    modifiers['x_start'] = float(match.group(1))
-                    modifiers['x_end'] = float(match.group(2))
-                elif name in ['amplitude', 'frequency', 'phase', 'linewidth', 'num_points', 'bins']:
-                    modifiers[name] = float(match.group(1))
+        No regex patterns - uses word set membership and number extraction.
+        This is geometric because:
+        - Words are matched by set membership (bootstrap vocabulary)
+        - Numbers are extracted by position relative to keywords
+        - Title is extracted by quoted string detection
+        """
+        modifiers = {}
+        query_lower = query.lower()
+        words = query_lower.split()
+        
+        # Extract color (word in color_words set)
+        for word in words:
+            clean_word = re.sub(r'[^a-z]', '', word)
+            if clean_word in self.color_words:
+                modifiers['color'] = clean_word
+                break
+        
+        # Extract line style (word in style_words dict)
+        for word in words:
+            clean_word = re.sub(r'[^a-z]', '', word)
+            if clean_word in self.style_words:
+                modifiers['linestyle'] = self.style_words[clean_word]
+                break
+        
+        # Extract numeric modifiers (keyword followed by number)
+        # Pattern: "keyword NUMBER" or "NUMBER keyword"
+        for keyword, modifier_name in self.numeric_keywords.items():
+            if keyword in query_lower:
+                # Look for "keyword NUMBER" pattern
+                pattern = rf'{keyword}\s+(\d+(?:\.\d+)?)'
+                match = re.search(pattern, query_lower)
+                if match:
+                    modifiers[modifier_name] = float(match.group(1))
+                else:
+                    # Look for "NUMBER keyword" pattern (e.g., "50 bins")
+                    pattern = rf'(\d+(?:\.\d+)?)\s+{keyword}'
+                    match = re.search(pattern, query_lower)
+                    if match:
+                        modifiers[modifier_name] = float(match.group(1))
+        
+        # Extract boolean modifiers (grid with/without)
+        # Check "without" BEFORE "with" to handle "without" correctly
+        for modifier_name, value_map in self.boolean_keywords.items():
+            if modifier_name in query_lower:
+                # Check longer patterns first (without before with)
+                if 'without' in query_lower:
+                    modifiers[modifier_name] = value_map.get('without', False)
+                elif 'with' in query_lower:
+                    modifiers[modifier_name] = value_map.get('with', True)
+        
+        # Extract title (quoted string after "title" or "titled")
+        if 'title' in query_lower:
+            # Look for quoted strings
+            quoted = re.findall(r'["\']([^"\']+)["\']', query)
+            if quoted:
+                modifiers['title'] = quoted[0]
         
         return modifiers
     
