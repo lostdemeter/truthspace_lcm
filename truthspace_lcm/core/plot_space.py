@@ -487,12 +487,11 @@ print("Plot saved to {output_path}")
                     return name, 1.0
         
         # Fall back to geometric matching
-        position = self.encoder.encode_input(query)
-        result = self.forward(query, position=position)
+        result = self.forward(query)
         
-        if result and result.confidence >= CRITICAL_LINE:
+        if result and result.similarity >= CRITICAL_LINE:
             self._last_mapping = result.mapping
-            return result.output, result.confidence
+            return result.output, result.similarity
         
         # Default to sine wave for generic "plot" or "wave" requests
         if any(w in query_lower for w in ['plot', 'wave', 'graph', 'chart']):
