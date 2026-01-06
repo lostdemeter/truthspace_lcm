@@ -246,6 +246,24 @@ class HyperChatEngine:
             if len(parts) > 1:
                 user_message = parts[-1].strip()
         
+        # Handle special commands (before intent detection)
+        if user_message.lower() == "/dimension_demo" or user_message.lower().startswith("/dim"):
+            return self._dimension_demo(), None
+        
+        if user_message.lower() == "/help":
+            return self._help_text(), None
+        
+        if user_message.lower() == "/stats":
+            stats = self.pipeline.get_stats()
+            return f"Knowledge: {stats['knowledge']['total_mappings']} concepts, Intent templates: {stats['intent_templates']}", None
+        
+        if user_message.lower() == "/save":
+            return self._save_knowledge(), None
+        
+        if user_message.lower().startswith("/learn "):
+            topic = user_message[7:].strip()
+            return self._learn_topic(topic), None
+        
         # Detect intent
         intent_result = self.pipeline.intent_space.detect(user_message)
         logger.info(f"Intent: {intent_result.intent.name}, confidence: {intent_result.confidence}")
