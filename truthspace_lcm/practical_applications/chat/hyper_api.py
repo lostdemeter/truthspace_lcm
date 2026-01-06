@@ -204,6 +204,9 @@ class HyperChatEngine:
         if user_message.lower() == "/help":
             return self._help_text()
         
+        if user_message.lower() == "/dimension_demo" or user_message.lower().startswith("/dim"):
+            return self._dimension_demo()
+        
         # Process through pipeline
         return self.pipeline.chat(user_message)
     
@@ -387,6 +390,7 @@ class HyperChatEngine:
 /learn <topic> - Learn about a topic using LLM
 /save          - Save knowledge to file
 /stats         - Show statistics
+/dim           - Show dimension demo (before/after)
 /help          - Show this help
 
 Ask questions like:
@@ -406,6 +410,64 @@ Modifiers for plots:
     def get_stats(self) -> Dict[str, Any]:
         """Get engine statistics."""
         return self.pipeline.get_stats()
+    
+    def _dimension_demo(self) -> str:
+        """Generate a formatted dimension demo for chat."""
+        demos = [
+            {
+                "title": "Gender Dimension",
+                "original": "Mr Darcy was a proud gentleman of considerable fortune.",
+                "modified": "Miss Elizabeth was a proud lady of considerable fortune.",
+            },
+            {
+                "title": "Regality Dimension",
+                "original": "The servant walked through the humble cottage.",
+                "modified": "The prince walked through the grand palace.",
+            },
+            {
+                "title": "Volume Dimension",
+                "original": "She whispered softly to her sister.",
+                "modified": "She shouted loudly to her sister.",
+            },
+            {
+                "title": "Courage Dimension",
+                "original": "The cowardly man fled from danger.",
+                "modified": "The brave knight charged into danger.",
+            },
+            {
+                "title": "Multiple Dimensions",
+                "original": "The old poor woman walked slowly in the dark.",
+                "modified": "The young rich king ran quickly in the light.",
+            },
+        ]
+        
+        lines = ["# Dynamic Quaternion Dimensions Demo\n"]
+        lines.append("Shows how changing words shifts geometric positions in concept space.\n")
+        
+        total_dims = self.pipeline._quaternion_encoder.num_dimensions if self.pipeline._quaternion_encoder else 0
+        lines.append(f"**Total dimensions:** {total_dims} (12 structured + 15 dynamic)\n")
+        
+        for demo in demos:
+            orig_dims = self.pipeline.get_text_dimensions(demo["original"])
+            mod_dims = self.pipeline.get_text_dimensions(demo["modified"])
+            
+            # Find what changed
+            all_dims = set(orig_dims.keys()) | set(mod_dims.keys())
+            changes = []
+            for dim in sorted(all_dims):
+                orig_val = orig_dims.get(dim, 0)
+                mod_val = mod_dims.get(dim, 0)
+                if orig_val != mod_val:
+                    changes.append(f"{dim}: {orig_val} → {mod_val}")
+            
+            lines.append(f"\n## {demo['title']}\n")
+            lines.append(f"**BEFORE:** \"{demo['original']}\"")
+            lines.append(f"  → {orig_dims}\n")
+            lines.append(f"**AFTER:** \"{demo['modified']}\"")
+            lines.append(f"  → {mod_dims}\n")
+            lines.append(f"**CHANGES:** {', '.join(changes)}\n")
+        
+        return "\n".join(lines)
 
 
 def create_app(debug: bool = False, knowledge_path: str = None) -> FastAPI:
@@ -555,6 +617,82 @@ def create_app(debug: bool = False, knowledge_path: str = None) -> FastAPI:
             "entities_discovered": len(entities),
             "top_entities": [{"name": e[0], "score": e[1], "dim_density": e[2]} for e in entities[:10]],
             "dimensions": engine.pipeline.dimension_names,
+        }
+    
+    @app.get("/dimension_demo")
+    async def dimension_demo():
+        """
+        Interactive demonstration of dynamic dimensions.
+        
+        Shows before/after dimension changes using Pride and Prejudice style sentences.
+        Each example shows how changing words shifts the geometric position.
+        """
+        demos = [
+            {
+                "title": "Gender Dimension",
+                "original": "Mr Darcy was a proud gentleman of considerable fortune.",
+                "modified": "Miss Elizabeth was a proud lady of considerable fortune.",
+                "explanation": "Changing 'Mr Darcy/gentleman' to 'Miss Elizabeth/lady' flips the gender dimension from +1 to -1.",
+            },
+            {
+                "title": "Regality Dimension",
+                "original": "The servant walked through the humble cottage.",
+                "modified": "The prince walked through the grand palace.",
+                "explanation": "Changing 'servant/humble cottage' to 'prince/grand palace' shifts regality from -1.5 to +2.0.",
+            },
+            {
+                "title": "Volume Dimension",
+                "original": "She whispered softly to her sister.",
+                "modified": "She shouted loudly to her sister.",
+                "explanation": "Changing 'whispered softly' to 'shouted loudly' flips volume from -1 to +1.",
+            },
+            {
+                "title": "Courage Dimension",
+                "original": "The cowardly man fled from danger.",
+                "modified": "The brave knight charged into danger.",
+                "explanation": "Changing 'cowardly/fled' to 'brave knight/charged' flips courage from -1 to +1.",
+            },
+            {
+                "title": "Multiple Dimensions",
+                "original": "The old poor woman walked slowly in the dark.",
+                "modified": "The young rich king ran quickly in the light.",
+                "explanation": "Multiple dimensions shift: gender(-1→+1), age(+1→-1), wealth(-1→+1), speed(-1→+1), light(-1→+1), regality(0→+2).",
+            },
+        ]
+        
+        results = []
+        for demo in demos:
+            orig_dims = engine.pipeline.get_text_dimensions(demo["original"])
+            mod_dims = engine.pipeline.get_text_dimensions(demo["modified"])
+            
+            # Find what changed
+            all_dims = set(orig_dims.keys()) | set(mod_dims.keys())
+            changes = {}
+            for dim in all_dims:
+                orig_val = orig_dims.get(dim, 0)
+                mod_val = mod_dims.get(dim, 0)
+                if orig_val != mod_val:
+                    changes[dim] = {"from": orig_val, "to": mod_val}
+            
+            results.append({
+                "title": demo["title"],
+                "original": {
+                    "text": demo["original"],
+                    "dimensions": orig_dims,
+                },
+                "modified": {
+                    "text": demo["modified"],
+                    "dimensions": mod_dims,
+                },
+                "changes": changes,
+                "explanation": demo["explanation"],
+            })
+        
+        return {
+            "title": "Dynamic Quaternion Dimensions Demo",
+            "description": "Shows how changing words shifts geometric positions in concept space.",
+            "total_dimensions": engine.pipeline._quaternion_encoder.num_dimensions if engine.pipeline._quaternion_encoder else 0,
+            "demos": results,
         }
     
     @app.post("/v1/chat/completions")
