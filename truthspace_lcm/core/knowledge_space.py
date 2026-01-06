@@ -44,8 +44,10 @@ if str(hypermapping_path) not in sys.path:
 
 from hypermapping import HyperMapping, Mapping, MatchResult, TextEncoder, CRITICAL_LINE
 
-# Golden ratio for φ-weighting
-PHI = (1 + np.sqrt(5)) / 2
+# Import φ-lattice components
+from .phi_lattice import PhiLattice, PHI
+from .phi_encoder import PhiLatticeEncoder
+from .semantic_dimensions import DEFAULT_DIMENSIONS
 
 
 @dataclass
@@ -154,7 +156,8 @@ class KnowledgeSpace(HyperMapping):
         space = KnowledgeSpace.load("knowledge.json")
     """
     
-    def __init__(self, name: str = "knowledge", dims: int = 8):
+    def __init__(self, name: str = "knowledge", dims: int = 8,
+                 use_phi_lattice: bool = False):
         # Create TextEncoder for text-based knowledge
         encoder = TextEncoder(dims=dims)
         super().__init__(dims=dims, encoder=encoder, name=name)
@@ -166,6 +169,12 @@ class KnowledgeSpace(HyperMapping):
         # Entity tracking for φ^(-rank) importance (Design 039)
         self._entities: Dict[str, Entity] = {}
         self._ranks_computed: bool = False
+        
+        # φ-Lattice mode (Design 099: Absolute coordinates)
+        self.use_phi_lattice = use_phi_lattice
+        if use_phi_lattice:
+            self._phi_lattice = PhiLattice(DEFAULT_DIMENSIONS)
+            self._phi_encoder = PhiLatticeEncoder(self._phi_lattice)
         
         # Metadata
         self.created = datetime.now().isoformat()
@@ -315,15 +324,11 @@ class KnowledgeSpace(HyperMapping):
         """
         Compute importance between two texts using φ^(-rank) formula.
         
-        Key insight: We want SPECIFIC matches, not BROAD matches.
-        A text that contains many topic words (like "I can help with science,
-        physics, programming...") should NOT match everything.
+        Pure geometric approach (Design 039):
+        importance = Σ entity_importance(a, b) for all word pairs
         
-        Solution: Weight matching words by their SPECIFICITY (inverse coverage).
-        Words that appear in many concepts are less discriminative.
-        
-        Formula: importance = Σ φ_weight(word) × specificity(word)
-        where specificity = 1 - coverage (words in fewer concepts are more specific)
+        Entity importance uses φ-weighting based on frequency rank,
+        which emerges from the data structure itself.
         """
         if not words_a or not words_b:
             return 0.0
@@ -331,32 +336,15 @@ class KnowledgeSpace(HyperMapping):
         if not self._ranks_computed:
             self._compute_ranks()
         
-        # Find matching words
-        matching = words_a & words_b
-        if not matching:
-            return 0.0
-        
         total_importance = 0.0
         
-        for word in matching:
-            phi = self.phi_weight(word)
-            
-            # Specificity: words in fewer concepts are more discriminative
-            # coverage = fraction of concepts containing this word
-            # specificity = 1 - coverage (higher for rare words)
-            if word in self._word_counts and self._total_concepts > 0:
-                coverage = self._word_counts[word] / self._total_concepts
-                specificity = 1.0 - coverage
-            else:
-                specificity = 1.0  # Unknown words are maximally specific
-            
-            # Importance = φ-weight × specificity²
-            # Square specificity to strongly penalize common words
-            total_importance += phi * specificity * specificity
+        for a in words_a:
+            for b in words_b:
+                total_importance += self.entity_importance(a, b)
         
-        # Normalize by query size (not concept size - we want to match queries)
-        # This prevents long concepts from dominating
-        return total_importance / len(words_a) if words_a else 0.0
+        # Normalize by geometric mean of word counts
+        normalizer = np.sqrt(len(words_a) * len(words_b))
+        return total_importance / normalizer if normalizer > 0 else 0.0
     
     @staticmethod
     def word_overlap(words_a: Set[str], words_b: Set[str]) -> float:
@@ -480,13 +468,13 @@ class KnowledgeSpace(HyperMapping):
         """
         Find concepts most similar to the query text.
         
-        Uses GEOMETRIC PROJECTION (Probe Extraction Protocol):
-        1. Project query into eigenspace
-        2. Measure distance to each concept position
-        3. The geometry determines the match - no statistical weighting
+        Supports two modes:
         
-        This follows the PEP principle: "When approximation fails, measure directly."
-        The eigenspace projection IS the measurement - positions encode similarity.
+        1. EIGENSPACE MODE (default): Uses eigenspace positions with
+           sqrt-inverse eigenvalue weighting (Design 098). Achieves 88% accuracy.
+        
+        2. φ-LATTICE MODE (use_phi_lattice=True): Uses absolute φ^k coordinates
+           with semantic dimensions (Design 099). No DC component problem.
         
         Args:
             text: Query text
@@ -496,28 +484,159 @@ class KnowledgeSpace(HyperMapping):
         Returns:
             List of MatchResult, sorted by similarity descending
         """
-        # Project query into geometric space
+        # Use φ-lattice mode if enabled
+        if self.use_phi_lattice:
+            return self._query_phi_lattice(text, top_k, min_similarity)
+        n = len(self._mappings)
+        if n == 0:
+            return []
+        
+        # Compute raw similarities
+        raw_sims = np.zeros(n)
+        for i, mapping in enumerate(self._mappings):
+            raw_sims[i] = self._phi_importance_similarity(text, mapping.input)
+        
+        # Compute each concept's "generality" - average similarity to all concepts
+        # This is the DC component / baseline that matches everything
+        generalities = np.zeros(n)
+        for j, mapping in enumerate(self._mappings):
+            total = 0.0
+            for other in self._mappings:
+                total += self._phi_importance_similarity(mapping.input, other.input)
+            generalities[j] = total / n
+        
+        # EIGENSPACE GEODESIC (Design 057: Domain as t-coordinate)
+        #
+        # The eigenspace positions already encode domain separation:
+        # - Physics concepts cluster in one region
+        # - Identity concepts cluster in another
+        # - The geometry IS the discriminator
+        #
+        # Project query into eigenspace, then measure distance to each concept.
+        # Use SQRT-INVERSE EIGENVALUE WEIGHTING (Design 098):
+        # - Lower eigenvalues = more discriminative dimensions
+        # - Weight by 1/sqrt(eigenvalue) to emphasize discrimination
+        # - This improved accuracy from 75% to 88%
+        
+        # Project query into eigenspace
         query_position = self.project_query(
             text,
-            similarity_fn=self._content_word_similarity
+            similarity_fn=self._phi_importance_similarity
         )
         
-        # Measure distance to each concept (geometric matching)
+        # Get eigenvalues for weighting (from the similarity matrix decomposition)
+        # These are computed during reproject() and stored
+        if hasattr(self, '_eigenvalues') and self._eigenvalues is not None:
+            eigenvalues = self._eigenvalues[:len(query_position)]
+        else:
+            # Fallback: estimate from position variance per dimension
+            positions = np.array([m.position for m in self._mappings])
+            eigenvalues = np.var(positions, axis=0) * len(self._mappings)
+        
+        # Sqrt-inverse weighting: emphasize discriminative dimensions
+        # Add small epsilon to avoid division by zero
+        weights = 1.0 / np.sqrt(eigenvalues + 1e-10)
+        weights = weights / weights.sum()  # Normalize
+        
         results = []
-        for mapping in self._mappings:
-            # Cosine similarity in eigenspace
-            dot = np.dot(query_position, mapping.position)
-            norm_q = np.linalg.norm(query_position)
-            norm_m = np.linalg.norm(mapping.position)
+        for j, mapping in enumerate(self._mappings):
+            concept_position = mapping.position
             
-            if norm_q > 1e-10 and norm_m > 1e-10:
-                similarity = dot / (norm_q * norm_m)
-            else:
-                similarity = 0.0
+            # Weighted Euclidean distance in eigenspace
+            diff = query_position - concept_position
+            distance = np.sqrt(np.sum(weights * diff**2))
+            
+            # Convert distance to similarity: 1 / (1 + distance)
+            # Closer = higher similarity
+            similarity = 1.0 / (1.0 + distance)
             
             results.append(MatchResult(
                 mapping=mapping,
-                similarity=similarity,
+                similarity=float(similarity),
+            ))
+        
+        # Sort by similarity descending
+        results.sort(key=lambda r: -r.similarity)
+        
+        # Filter by minimum similarity
+        if min_similarity > 0:
+            results = [r for r in results if r.similarity >= min_similarity]
+        
+        return results[:top_k]
+    
+    def _query_phi_lattice(self, text: str, top_k: int,
+                           min_similarity: float) -> List[MatchResult]:
+        """
+        Query using φ-lattice coordinates (Design 099).
+        
+        Uses absolute φ^k positions with semantic dimensions.
+        No DC component problem because positions aren't derived from similarity.
+        
+        Hybrid approach:
+        1. Encode query to φ-lattice position
+        2. Also check keyword matches from bootstrap
+        3. Combine geometric distance with keyword bonus
+        
+        Args:
+            text: Query text
+            top_k: Maximum number of results
+            min_similarity: Minimum similarity threshold
+            
+        Returns:
+            List of MatchResult, sorted by similarity descending
+        """
+        n = len(self._mappings)
+        if n == 0:
+            return []
+        
+        # Encode query to φ-lattice position
+        query_pos = self._phi_encoder.encode(text)
+        query_lower = text.lower()
+        query_words = set(self._phi_encoder.tokenize(text))
+        
+        results = []
+        for mapping in self._mappings:
+            # Get concept's φ-lattice position
+            # Priority: metadata phi_levels > attribute phi_levels > encode on the fly
+            if mapping.metadata.get("phi_levels"):
+                concept_pos = self._phi_lattice.levels_to_position(mapping.metadata["phi_levels"])
+            elif hasattr(mapping, 'phi_position') and mapping.phi_position is not None:
+                concept_pos = mapping.phi_position
+            elif hasattr(mapping, 'phi_levels') and mapping.phi_levels is not None:
+                concept_pos = self._phi_lattice.levels_to_position(mapping.phi_levels)
+            else:
+                # Encode concept text to φ-lattice on the fly
+                concept_pos = self._phi_encoder.encode(mapping.input)
+            
+            # Compute base similarity using φ-lattice distance
+            geo_similarity = self._phi_encoder.similarity(query_pos, concept_pos)
+            
+            # Keyword boost: if query matches bootstrap keywords, boost similarity
+            keyword_boost = 0.0
+            keywords = mapping.metadata.get("keywords", [])
+            if keywords:
+                for kw in keywords:
+                    kw_lower = kw.lower()
+                    kw_words = set(kw_lower.split())
+                    
+                    # Check word overlap (more reliable than substring)
+                    overlap = len(query_words & kw_words)
+                    if overlap > 0 and overlap >= len(kw_words):
+                        # Full keyword match - strong boost
+                        # Longer keywords get higher boost (more specific)
+                        keyword_boost = max(keyword_boost, 0.5 + 0.1 * len(kw_words))
+                    elif overlap > 0:
+                        # Partial match - scale by overlap ratio
+                        ratio = overlap / len(kw_words)
+                        keyword_boost = max(keyword_boost, 0.3 * ratio)
+            
+            # Combine: geometric similarity + keyword boost
+            # Keyword boost is additive and can exceed 1.0 for ranking
+            similarity = geo_similarity + keyword_boost
+            
+            results.append(MatchResult(
+                mapping=mapping,
+                similarity=float(similarity),
             ))
         
         # Sort by similarity descending

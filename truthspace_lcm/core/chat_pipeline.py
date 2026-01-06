@@ -73,6 +73,7 @@ class ChatConfig:
     prune_on_save: bool = True
     debug: bool = False
     dims: int = 8
+    use_phi_lattice: bool = False  # Design 099: Use φ-lattice coordinates
 
 
 class IntentSpace(HyperMapping):
@@ -179,10 +180,12 @@ class IntentSpace(HyperMapping):
         for pattern in plot_patterns:
             self.bootstrap(pattern, Intent.PLOT_GENERATION.name)
         
-        # Clarification needed
+        # Clarification / help / about (routes to identity/capabilities)
         clarification_patterns = [
             "help", "?", "what do you mean",
             "I don't understand", "clarify",
+            "what can you do", "what are you", "who are you",
+            "what are your capabilities", "introduce yourself",
         ]
         for pattern in clarification_patterns:
             self.bootstrap(pattern, Intent.CLARIFICATION.name)
@@ -293,7 +296,8 @@ class ChatPipeline:
         # Knowledge space
         self.knowledge_space = KnowledgeSpace(
             name="chat_knowledge",
-            dims=self.config.dims
+            dims=self.config.dims,
+            use_phi_lattice=self.config.use_phi_lattice
         )
         
         # Code generation space
@@ -382,10 +386,18 @@ class ChatPipeline:
         # Add each knowledge item
         for item in knowledge_items:
             # Add the main text
-            self.knowledge_space.add_text(
+            mapping = self.knowledge_space.add_text(
                 item["text"],
                 source="bootstrap"
             )
+            
+            # Store metadata from bootstrap JSON
+            if "phi_levels" in item:
+                mapping.metadata["phi_levels"] = item["phi_levels"]
+            if "keywords" in item:
+                mapping.metadata["keywords"] = item["keywords"]
+            if "topic" in item:
+                mapping.metadata["topic"] = item["topic"]
         
         if self.config.debug:
             print(f"[DEBUG] Bootstrapped {len(knowledge_items)} knowledge items")
@@ -421,6 +433,10 @@ class ChatPipeline:
         elif intent_result.intent == Intent.PLOT_GENERATION:
             return self._handle_plot(query)
         elif intent_result.intent == Intent.CLARIFICATION:
+            # Handle help/about queries by looking up identity knowledge
+            results = self.knowledge_space.query_text(query, top_k=1)
+            if results and results[0].similarity > 0.5:
+                return results[0].output
             return self.response_space.compose("clarification_needed")
         else:
             # Unknown - try knowledge anyway
