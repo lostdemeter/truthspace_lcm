@@ -538,6 +538,10 @@ class KnowledgeSpace(HyperMapping):
         weights = 1.0 / np.sqrt(eigenvalues + 1e-10)
         weights = weights / weights.sum()  # Normalize
         
+        # Tokenize query for keyword matching
+        query_lower = text.lower()
+        query_words = set(re.findall(r'\b[a-zA-Z]+\b', query_lower))
+        
         results = []
         for j, mapping in enumerate(self._mappings):
             concept_position = mapping.position
@@ -548,7 +552,28 @@ class KnowledgeSpace(HyperMapping):
             
             # Convert distance to similarity: 1 / (1 + distance)
             # Closer = higher similarity
-            similarity = 1.0 / (1.0 + distance)
+            geo_similarity = 1.0 / (1.0 + distance)
+            
+            # Keyword boost: if query matches bootstrap keywords, boost similarity
+            keyword_boost = 0.0
+            keywords = mapping.metadata.get("keywords", [])
+            if keywords:
+                for kw in keywords:
+                    kw_lower = kw.lower()
+                    kw_words = set(kw_lower.split())
+                    
+                    # Check word overlap
+                    overlap = len(query_words & kw_words)
+                    if overlap > 0 and overlap >= len(kw_words):
+                        # Full keyword match - strong boost
+                        keyword_boost = max(keyword_boost, 0.5 + 0.1 * len(kw_words))
+                    elif overlap > 0:
+                        # Partial match
+                        ratio = overlap / len(kw_words)
+                        keyword_boost = max(keyword_boost, 0.3 * ratio)
+            
+            # Combine geometric similarity with keyword boost
+            similarity = geo_similarity + keyword_boost
             
             results.append(MatchResult(
                 mapping=mapping,
