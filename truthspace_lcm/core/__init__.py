@@ -37,6 +37,22 @@ from .code_space import CodeSpace, CodeResult, CodeVerifier
 from .plot_space import PlotSpace, PlotResult, PlotPattern
 from .ollama_space import OllamaSpace, KnowledgeResult
 
+# Dynamic Quaternion Layers (Design 104-105)
+from .dynamic_dimensions import (
+    DynamicDimensionRegistry, 
+    PhiZipfWeighting,
+    TachyonNavigator,
+    DimensionHypothesis,
+    BOOTSTRAP_DIMENSIONS,
+)
+from .quaternion_encoder import (
+    QuaternionEncoder,
+    QuaternionPosition,
+    SemanticDim,
+    GrammaticalDim,
+    ContextualDim,
+)
+
 # =============================================================================
 # LEGACY GEAR-BASED ARCHITECTURE (for backwards compatibility)
 # =============================================================================
@@ -104,6 +120,18 @@ __all__ = [
     # Ollama space
     'OllamaSpace',
     'KnowledgeResult',
+    
+    # Dynamic Quaternion Layers (Design 104-105)
+    'DynamicDimensionRegistry',
+    'PhiZipfWeighting',
+    'TachyonNavigator',
+    'DimensionHypothesis',
+    'BOOTSTRAP_DIMENSIONS',
+    'QuaternionEncoder',
+    'QuaternionPosition',
+    'SemanticDim',
+    'GrammaticalDim',
+    'ContextualDim',
     
     # ==========================================================================
     # LEGACY GEAR-BASED ARCHITECTURE (backwards compatibility)

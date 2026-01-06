@@ -44,6 +44,8 @@ from .code_space import CodeSpace
 from .plot_space import PlotSpace
 from .ollama_space import OllamaSpace
 from .bootstrap_knowledge import get_bootstrap_knowledge, get_bootstrap_synonyms
+from .quaternion_encoder import QuaternionEncoder, QuaternionPosition
+from .dynamic_dimensions import DynamicDimensionRegistry
 
 
 class Intent(Enum):
@@ -74,6 +76,7 @@ class ChatConfig:
     debug: bool = False
     dims: int = 8
     use_phi_lattice: bool = False  # Design 099: Use φ-lattice coordinates
+    use_quaternion: bool = True    # Design 104-105: Use quaternion encoding
 
 
 class IntentSpace(HyperMapping):
@@ -344,6 +347,15 @@ class ChatPipeline:
         self._last_query: Optional[str] = None
         self._last_intent: Optional[Intent] = None
         self._last_mapping: Optional[Mapping] = None
+        
+        # Quaternion encoder for dynamic dimensions (Design 104-105)
+        self._dimension_registry: Optional[DynamicDimensionRegistry] = None
+        self._quaternion_encoder: Optional[QuaternionEncoder] = None
+        if self.config.use_quaternion:
+            self._dimension_registry = DynamicDimensionRegistry()
+            self._quaternion_encoder = QuaternionEncoder(self._dimension_registry)
+            if self.config.debug:
+                print(f"[DEBUG] Quaternion encoder: {self._quaternion_encoder.summary()}")
     
     def _bootstrap_responses(self) -> None:
         """Bootstrap response templates."""
@@ -652,12 +664,92 @@ class ChatPipeline:
     
     def get_stats(self) -> Dict[str, Any]:
         """Get statistics about the pipeline."""
-        return {
+        stats = {
             'pipeline': self.pipeline.get_stats(),
             'knowledge': self.knowledge_space.get_stats(),
             'intent_templates': len(self.intent_space),
             'response_templates': len(self.response_space.templates),
         }
+        
+        # Add quaternion encoder stats if enabled
+        if self._quaternion_encoder:
+            stats['quaternion'] = self._quaternion_encoder.summary()
+            stats['dimensions'] = self._dimension_registry.summary()
+        
+        return stats
+    
+    # -------------------------------------------------------------------------
+    # Quaternion Encoding (Design 104-105)
+    # -------------------------------------------------------------------------
+    
+    def encode_quaternion(self, text: str) -> Optional[QuaternionPosition]:
+        """
+        Encode text to quaternion position with dynamic z-layer.
+        
+        Returns None if quaternion encoding is disabled.
+        """
+        if not self._quaternion_encoder:
+            return None
+        return self._quaternion_encoder.encode(text)
+    
+    def encode_quaternion_with_description(self, text: str) -> Optional[Tuple[QuaternionPosition, Dict[str, Any]]]:
+        """
+        Encode text and return position with human-readable description.
+        
+        Returns (position, description) or None if disabled.
+        """
+        if not self._quaternion_encoder:
+            return None
+        return self._quaternion_encoder.encode_with_description(text)
+    
+    def get_text_dimensions(self, text: str) -> Dict[str, float]:
+        """
+        Get active dynamic dimensions for text.
+        
+        Returns dict of dimension_name -> level.
+        """
+        if not self._dimension_registry:
+            return {}
+        vec = self._dimension_registry.encode_text(text)
+        return self._dimension_registry.describe_vector(vec)
+    
+    def quaternion_similarity(self, text1: str, text2: str) -> float:
+        """
+        Compute quaternion-based similarity between two texts.
+        
+        Uses all layers: semantic (w), grammatical (x), contextual (y), dynamic (z).
+        """
+        if not self._quaternion_encoder:
+            return 0.0
+        return self._quaternion_encoder.similarity(text1, text2)
+    
+    def ingest_corpus(self, text: str) -> None:
+        """
+        Ingest a corpus to build the dimension registry.
+        
+        This enables entity discovery and dimension expansion.
+        """
+        if self._dimension_registry:
+            self._dimension_registry.ingest_text(text)
+            if self.config.debug:
+                print(f"[DEBUG] Ingested corpus, registry: {self._dimension_registry}")
+    
+    def discover_entities(self) -> List[Tuple[str, float, float]]:
+        """
+        Discover entities (proper nouns) in ingested text.
+        
+        Returns list of (entity, score, dimension_density).
+        """
+        if not self._dimension_registry:
+            return []
+        return self._dimension_registry.discover_entities()
+    
+    @property
+    def dimension_names(self) -> List[str]:
+        """Get list of registered dimension names."""
+        if not self._dimension_registry:
+            return []
+        return self._dimension_registry.dimension_names
     
     # -------------------------------------------------------------------------
     # Context Manager

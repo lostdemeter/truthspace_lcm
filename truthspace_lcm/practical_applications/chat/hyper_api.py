@@ -479,6 +479,84 @@ def create_app(debug: bool = False, knowledge_path: str = None) -> FastAPI:
         stats = engine.get_stats()
         return {"status": "success", "concepts": stats['knowledge']['total_mappings']}
     
+    # -------------------------------------------------------------------------
+    # Quaternion Encoding Endpoints (Design 104-105)
+    # -------------------------------------------------------------------------
+    
+    @app.get("/dimensions")
+    async def get_dimensions():
+        """Get list of registered dynamic dimensions."""
+        stats = engine.get_stats()
+        return {
+            "dimensions": engine.pipeline.dimension_names,
+            "quaternion": stats.get('quaternion', {}),
+            "registry": stats.get('dimensions', {}),
+        }
+    
+    @app.post("/encode")
+    async def encode_text(request: Request):
+        """Encode text to quaternion position with dynamic z-layer."""
+        data = await request.json()
+        text = data.get("text", "")
+        if not text:
+            raise HTTPException(status_code=400, detail="Text required")
+        
+        result = engine.pipeline.encode_quaternion_with_description(text)
+        if result is None:
+            raise HTTPException(status_code=503, detail="Quaternion encoding not enabled")
+        
+        pos, desc = result
+        return {
+            "text": text,
+            "position": {
+                "w": pos.w.tolist(),
+                "x": pos.x.tolist(),
+                "y": pos.y.tolist(),
+                "z": pos.z.tolist() if len(pos.z) > 0 else [],
+            },
+            "description": desc,
+            "z_active": desc.get('z_active', {}),
+        }
+    
+    @app.post("/similarity")
+    async def compute_similarity(request: Request):
+        """Compute quaternion-based similarity between two texts."""
+        data = await request.json()
+        text1 = data.get("text1", "")
+        text2 = data.get("text2", "")
+        if not text1 or not text2:
+            raise HTTPException(status_code=400, detail="Both text1 and text2 required")
+        
+        similarity = engine.pipeline.quaternion_similarity(text1, text2)
+        dims1 = engine.pipeline.get_text_dimensions(text1)
+        dims2 = engine.pipeline.get_text_dimensions(text2)
+        
+        return {
+            "text1": text1,
+            "text2": text2,
+            "similarity": similarity,
+            "dimensions1": dims1,
+            "dimensions2": dims2,
+        }
+    
+    @app.post("/ingest")
+    async def ingest_corpus(request: Request):
+        """Ingest a corpus to build dimension registry."""
+        data = await request.json()
+        text = data.get("text", "")
+        if not text:
+            raise HTTPException(status_code=400, detail="Text required")
+        
+        engine.pipeline.ingest_corpus(text)
+        entities = engine.pipeline.discover_entities()
+        
+        return {
+            "status": "success",
+            "entities_discovered": len(entities),
+            "top_entities": [{"name": e[0], "score": e[1], "dim_density": e[2]} for e in entities[:10]],
+            "dimensions": engine.pipeline.dimension_names,
+        }
+    
     @app.post("/v1/chat/completions")
     async def chat_completions(request: ChatCompletionRequest):
         logger.info(f"Chat request: {len(request.messages)} messages, tools: {len(request.tools) if request.tools else 0}, stream: {request.stream}")
