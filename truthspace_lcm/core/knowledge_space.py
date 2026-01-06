@@ -315,8 +315,15 @@ class KnowledgeSpace(HyperMapping):
         """
         Compute importance between two texts using φ^(-rank) formula.
         
-        Sums importance of all entity pairs between the two texts.
-        This replaces Jaccard word overlap with geometric importance.
+        Key insight: We want SPECIFIC matches, not BROAD matches.
+        A text that contains many topic words (like "I can help with science,
+        physics, programming...") should NOT match everything.
+        
+        Solution: Weight matching words by their SPECIFICITY (inverse coverage).
+        Words that appear in many concepts are less discriminative.
+        
+        Formula: importance = Σ φ_weight(word) × specificity(word)
+        where specificity = 1 - coverage (words in fewer concepts are more specific)
         """
         if not words_a or not words_b:
             return 0.0
@@ -324,15 +331,32 @@ class KnowledgeSpace(HyperMapping):
         if not self._ranks_computed:
             self._compute_ranks()
         
+        # Find matching words
+        matching = words_a & words_b
+        if not matching:
+            return 0.0
+        
         total_importance = 0.0
         
-        for a in words_a:
-            for b in words_b:
-                total_importance += self.entity_importance(a, b)
+        for word in matching:
+            phi = self.phi_weight(word)
+            
+            # Specificity: words in fewer concepts are more discriminative
+            # coverage = fraction of concepts containing this word
+            # specificity = 1 - coverage (higher for rare words)
+            if word in self._word_counts and self._total_concepts > 0:
+                coverage = self._word_counts[word] / self._total_concepts
+                specificity = 1.0 - coverage
+            else:
+                specificity = 1.0  # Unknown words are maximally specific
+            
+            # Importance = φ-weight × specificity²
+            # Square specificity to strongly penalize common words
+            total_importance += phi * specificity * specificity
         
-        # Normalize by geometric mean of word counts
-        normalizer = np.sqrt(len(words_a) * len(words_b))
-        return total_importance / normalizer if normalizer > 0 else 0.0
+        # Normalize by query size (not concept size - we want to match queries)
+        # This prevents long concepts from dominating
+        return total_importance / len(words_a) if words_a else 0.0
     
     @staticmethod
     def word_overlap(words_a: Set[str], words_b: Set[str]) -> float:
@@ -456,11 +480,13 @@ class KnowledgeSpace(HyperMapping):
         """
         Find concepts most similar to the query text.
         
-        Uses φ^(-rank) importance formula for direct matching.
+        Uses GEOMETRIC PROJECTION (Probe Extraction Protocol):
+        1. Project query into eigenspace
+        2. Measure distance to each concept position
+        3. The geometry determines the match - no statistical weighting
         
-        Note: We use direct importance calculation rather than position-based
-        matching because the eigenspace projection compresses differences.
-        The φ-importance formula provides better discrimination.
+        This follows the PEP principle: "When approximation fails, measure directly."
+        The eigenspace projection IS the measurement - positions encode similarity.
         
         Args:
             text: Query text
@@ -470,20 +496,31 @@ class KnowledgeSpace(HyperMapping):
         Returns:
             List of MatchResult, sorted by similarity descending
         """
-        query_words = self.extract_words(text)
+        # Project query into geometric space
+        query_position = self.project_query(
+            text,
+            similarity_fn=self._content_word_similarity
+        )
         
-        # Direct importance calculation for each concept
+        # Measure distance to each concept (geometric matching)
         results = []
         for mapping in self._mappings:
-            concept_words = set(mapping.metadata.get('words', []))
-            importance = self.text_importance(query_words, concept_words)
+            # Cosine similarity in eigenspace
+            dot = np.dot(query_position, mapping.position)
+            norm_q = np.linalg.norm(query_position)
+            norm_m = np.linalg.norm(mapping.position)
+            
+            if norm_q > 1e-10 and norm_m > 1e-10:
+                similarity = dot / (norm_q * norm_m)
+            else:
+                similarity = 0.0
             
             results.append(MatchResult(
                 mapping=mapping,
-                similarity=importance,
+                similarity=similarity,
             ))
         
-        # Sort by importance descending
+        # Sort by similarity descending
         results.sort(key=lambda r: -r.similarity)
         
         # Filter by minimum similarity
