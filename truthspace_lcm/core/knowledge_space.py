@@ -48,6 +48,7 @@ from hypermapping import HyperMapping, Mapping, MatchResult, TextEncoder, CRITIC
 from .phi_lattice import PhiLattice, PHI
 from .phi_encoder import PhiLatticeEncoder
 from .semantic_dimensions import DEFAULT_DIMENSIONS
+from .primitive_registry import PrimitiveRegistry
 
 
 @dataclass
@@ -175,6 +176,8 @@ class KnowledgeSpace(HyperMapping):
         if use_phi_lattice:
             self._phi_lattice = PhiLattice(DEFAULT_DIMENSIONS)
             self._phi_encoder = PhiLatticeEncoder(self._phi_lattice)
+            # Primitive registry for geometric keyword transformation (Design 103)
+            self._primitive_registry = PrimitiveRegistry(self._phi_lattice)
         
         # Metadata
         self.created = datetime.now().isoformat()
@@ -592,15 +595,14 @@ class KnowledgeSpace(HyperMapping):
     def _query_phi_lattice(self, text: str, top_k: int,
                            min_similarity: float) -> List[MatchResult]:
         """
-        Query using φ-lattice coordinates (Design 099).
+        Query using φ-lattice coordinates (Design 099, 103).
         
-        Uses absolute φ^k positions with semantic dimensions.
-        No DC component problem because positions aren't derived from similarity.
+        PURE GEOMETRIC matching:
+        1. Encode query through PrimitiveRegistry (keywords → primitives → geometry)
+        2. Compare to concept positions (also geometry)
+        3. Distance/similarity is geometric
         
-        Hybrid approach:
-        1. Encode query to φ-lattice position
-        2. Also check keyword matches from bootstrap
-        3. Combine geometric distance with keyword bonus
+        No pattern matching. Transform everything to geometry first.
         
         Args:
             text: Query text
@@ -614,10 +616,9 @@ class KnowledgeSpace(HyperMapping):
         if n == 0:
             return []
         
-        # Encode query to φ-lattice position
-        query_pos = self._phi_encoder.encode(text)
-        query_lower = text.lower()
-        query_words = set(self._phi_encoder.tokenize(text))
+        # Encode query through PrimitiveRegistry (Design 103)
+        # This transforms keywords to geometry, not pattern matching
+        query_pos = self._primitive_registry.encode(text)
         
         results = []
         for mapping in self._mappings:
@@ -630,34 +631,12 @@ class KnowledgeSpace(HyperMapping):
             elif hasattr(mapping, 'phi_levels') and mapping.phi_levels is not None:
                 concept_pos = self._phi_lattice.levels_to_position(mapping.phi_levels)
             else:
-                # Encode concept text to φ-lattice on the fly
-                concept_pos = self._phi_encoder.encode(mapping.input)
+                # Encode concept text through registry
+                concept_pos = self._primitive_registry.encode(mapping.input)
             
-            # Compute base similarity using φ-lattice distance
-            geo_similarity = self._phi_encoder.similarity(query_pos, concept_pos)
-            
-            # Keyword boost: if query matches bootstrap keywords, boost similarity
-            keyword_boost = 0.0
-            keywords = mapping.metadata.get("keywords", [])
-            if keywords:
-                for kw in keywords:
-                    kw_lower = kw.lower()
-                    kw_words = set(kw_lower.split())
-                    
-                    # Check word overlap (more reliable than substring)
-                    overlap = len(query_words & kw_words)
-                    if overlap > 0 and overlap >= len(kw_words):
-                        # Full keyword match - strong boost
-                        # Longer keywords get higher boost (more specific)
-                        keyword_boost = max(keyword_boost, 0.5 + 0.1 * len(kw_words))
-                    elif overlap > 0:
-                        # Partial match - scale by overlap ratio
-                        ratio = overlap / len(kw_words)
-                        keyword_boost = max(keyword_boost, 0.3 * ratio)
-            
-            # Combine: geometric similarity + keyword boost
-            # Keyword boost is additive and can exceed 1.0 for ranking
-            similarity = geo_similarity + keyword_boost
+            # Pure geometric similarity - no keyword boost needed
+            # The keywords are already transformed to geometry via primitives
+            similarity = self._primitive_registry.similarity(query_pos, concept_pos)
             
             results.append(MatchResult(
                 mapping=mapping,

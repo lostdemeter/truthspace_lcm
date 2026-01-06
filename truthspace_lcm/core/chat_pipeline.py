@@ -398,9 +398,21 @@ class ChatPipeline:
                 mapping.metadata["keywords"] = item["keywords"]
             if "topic" in item:
                 mapping.metadata["topic"] = item["topic"]
+            
+            # Register keywords as primitives (Design 103: Self-Assembling Primitives)
+            # This transforms keywords to geometry at bootstrap time
+            if self.config.use_phi_lattice and "keywords" in item and "phi_levels" in item:
+                self.knowledge_space._primitive_registry.register_from_bootstrap(
+                    text=item["text"],
+                    keywords=item["keywords"],
+                    phi_levels=item["phi_levels"]
+                )
         
         if self.config.debug:
             print(f"[DEBUG] Bootstrapped {len(knowledge_items)} knowledge items")
+            if self.config.use_phi_lattice:
+                stats = self.knowledge_space._primitive_registry.stats
+                print(f"[DEBUG] Registered {stats['total_count']} primitives ({stats['single_word_count']} single, {stats['multi_word_count']} multi)")
     
     def chat(self, query: str) -> str:
         """
