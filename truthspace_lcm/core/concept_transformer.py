@@ -60,6 +60,7 @@ class ConceptTransformResult:
     confidence: float
     success: bool
     failure_reason: str = ""
+    was_injected: bool = False  # True if temporary injection was used
 
 
 # =============================================================================
@@ -75,6 +76,11 @@ class ConceptTransformer:
     - Position = [content_dim, tense_dim, voice_dim, ...]
     - Content dimension shared, transformation dimension differs
     - Delta is exactly φ^(target_level - source_level)
+    
+    Supports temporary injection (Design 085):
+    - Unknown phrases can be injected as temporary concepts
+    - If transformation succeeds, promote to permanent
+    - Vocabulary grows from successful usage
     """
     
     def __init__(self):
@@ -93,6 +99,10 @@ class ConceptTransformer:
         
         # Number of dimensions (content + transformation dims)
         self._ndims = 1 + len(DIMENSION_LEVELS)
+        
+        # Temporary injections (Design 085)
+        self._temporary_concepts: Set[int] = set()  # Concept IDs that are temporary
+        self._temporary_phrases: Set[str] = set()   # Phrases that are temporary
     
     @staticmethod
     def tokenize(text: str) -> List[str]:
@@ -241,26 +251,42 @@ class ConceptTransformer:
                     self._deltas[(dim, src_val, tgt_val)] = np.mean(deltas, axis=0)
     
     def transform_phrase(self, phrase: str, dimension: str, 
-                         source_value: str, target_value: str) -> Optional[str]:
+                         source_value: str, target_value: str,
+                         allow_injection: bool = False) -> Tuple[Optional[str], bool]:
         """
         Transform a phrase along a dimension.
         
-        Returns the transformed phrase, or None if not found.
+        Args:
+            phrase: The phrase to transform
+            dimension: Which dimension (tense, voice, etc.)
+            source_value: Current value (past, present, etc.)
+            target_value: Target value (future, etc.)
+            allow_injection: If True, inject unknown phrases as temporary
+        
+        Returns:
+            (transformed_phrase, was_injected) - phrase is None if not found
         """
         key = (dimension, source_value, target_value)
         if key not in self._deltas:
-            return None
+            return None, False
         
         delta = self._deltas[key]
         
         # Get source position
         src_key = (phrase, dimension, source_value)
+        was_injected = False
+        
         if src_key not in self._positions:
             # Try to compute position if phrase is known
             if phrase in self._phrase_to_concept:
                 self._positions[src_key] = self._get_position(phrase, dimension, source_value)
+            elif allow_injection:
+                # TEMPORARY INJECTION (Design 085)
+                # Inject unknown phrase as new temporary concept
+                was_injected = True
+                self._inject_temporary(phrase, dimension, source_value)
             else:
-                return None
+                return None, False
         
         src_pos = self._positions[src_key]
         transformed_pos = src_pos + delta
@@ -276,7 +302,88 @@ class ConceptTransformer:
                     best_dist = dist
                     best_phrase = p
         
-        return best_phrase
+        return best_phrase, was_injected
+    
+    def _inject_temporary(self, phrase: str, dimension: str, value: str):
+        """
+        Inject a phrase as a temporary concept (Design 085).
+        
+        The phrase gets a new concept ID and position.
+        It can be promoted to permanent if transformation succeeds.
+        """
+        # Assign new concept ID
+        concept_id = self._concept_counter
+        self._phrase_to_concept[phrase] = concept_id
+        self._concept_counter += 1
+        
+        # Mark as temporary
+        self._temporary_concepts.add(concept_id)
+        self._temporary_phrases.add(phrase)
+        
+        # Compute and store position
+        key = (phrase, dimension, value)
+        self._positions[key] = self._get_position(phrase, dimension, value)
+    
+    def promote_temporary(self, source_phrase: str, target_phrase: str,
+                          dimension: str, source_value: str, target_value: str):
+        """
+        Promote a temporary phrase to permanent after successful transformation.
+        
+        This is called when an external system (e.g., LLM) successfully
+        generates the target phrase for a temporarily injected source.
+        
+        The source and target become linked as the same concept.
+        """
+        if source_phrase not in self._temporary_phrases:
+            return  # Not a temporary phrase
+        
+        # Link source and target as same concept
+        self._assign_concept(source_phrase, target_phrase)
+        
+        # Add target position
+        tgt_key = (target_phrase, dimension, target_value)
+        if tgt_key not in self._positions:
+            self._positions[tgt_key] = self._get_position(target_phrase, dimension, target_value)
+        
+        # Add to pairs for future reference
+        self._pairs[dimension].append((source_phrase, target_phrase, source_value, target_value))
+        
+        # Remove from temporary sets
+        concept_id = self._phrase_to_concept.get(source_phrase)
+        if concept_id in self._temporary_concepts:
+            self._temporary_concepts.remove(concept_id)
+        self._temporary_phrases.discard(source_phrase)
+        self._temporary_phrases.discard(target_phrase)
+    
+    def remove_temporary(self, phrase: str):
+        """
+        Remove a temporary phrase after failed transformation.
+        """
+        if phrase not in self._temporary_phrases:
+            return
+        
+        concept_id = self._phrase_to_concept.get(phrase)
+        
+        # Remove from all data structures
+        if phrase in self._phrase_to_concept:
+            del self._phrase_to_concept[phrase]
+        
+        # Remove positions with this phrase
+        keys_to_remove = [k for k in self._positions if k[0] == phrase]
+        for k in keys_to_remove:
+            del self._positions[k]
+        
+        # Remove from temporary sets
+        if concept_id is not None:
+            self._temporary_concepts.discard(concept_id)
+        self._temporary_phrases.discard(phrase)
+    
+    def clear_all_temporary(self):
+        """
+        Remove all temporary phrases (cleanup).
+        """
+        for phrase in list(self._temporary_phrases):
+            self.remove_temporary(phrase)
     
     def transform_sentence(self, sentence: str, dimension: str,
                            source_value: str, target_value: str) -> ConceptTransformResult:
@@ -312,7 +419,7 @@ class ConceptTransformer:
             )
         
         # Transform the phrase
-        target_phrase = self.transform_phrase(best_match, dimension, source_value, target_value)
+        target_phrase, _ = self.transform_phrase(best_match, dimension, source_value, target_value)
         
         if not target_phrase:
             return ConceptTransformResult(
@@ -352,6 +459,8 @@ class ConceptTransformer:
             "positions": len(self._positions),
             "deltas": len(self._deltas),
             "pairs_per_dimension": {d: len(p) for d, p in self._pairs.items()},
+            "temporary_concepts": len(self._temporary_concepts),
+            "temporary_phrases": len(self._temporary_phrases),
         }
     
     def test_accuracy(self, dimension: str = None) -> Dict:
@@ -366,7 +475,7 @@ class ConceptTransformer:
             total = 0
             
             for src_phrase, expected_tgt, src_val, tgt_val in pairs:
-                result = self.transform_phrase(src_phrase, dim, src_val, tgt_val)
+                result, _ = self.transform_phrase(src_phrase, dim, src_val, tgt_val)
                 total += 1
                 
                 if result == expected_tgt:
