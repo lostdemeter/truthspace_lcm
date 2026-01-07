@@ -53,6 +53,7 @@ from .quaternion_encoder import (
     ContextualDim,
 )
 from .learned_knowledge import LearnedKnowledge, LearnedFact, extract_llm_response
+from .transformation_space import TransformationSpace, TransformationResult, load_transformation_space
 
 # =============================================================================
 # LEGACY GEAR-BASED ARCHITECTURE (for backwards compatibility)
@@ -138,6 +139,11 @@ __all__ = [
     'LearnedKnowledge',
     'LearnedFact',
     'extract_llm_response',
+    
+    # Transformation Space
+    'TransformationSpace',
+    'TransformationResult',
+    'load_transformation_space',
     
     # ==========================================================================
     # LEGACY GEAR-BASED ARCHITECTURE (backwards compatibility)

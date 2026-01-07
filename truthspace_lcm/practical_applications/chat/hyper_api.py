@@ -44,6 +44,7 @@ import sys
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent.parent))
 
 from truthspace_lcm.core.chat_pipeline import ChatPipeline, ChatConfig, Intent
+from truthspace_lcm.core.transformation_space import TransformationSpace, load_transformation_space
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -165,6 +166,10 @@ class HyperChatEngine:
         if knowledge_path and Path(knowledge_path).exists():
             self.pipeline.load_knowledge(knowledge_path)
             logger.info(f"Loaded knowledge from {knowledge_path}")
+        
+        # Load transformation space
+        self.transformation_space = load_transformation_space()
+        logger.info(f"Loaded transformation space: {self.transformation_space.stats()}")
     
     def generate(self, messages: List[Message]) -> str:
         """Generate a response from messages."""
@@ -286,6 +291,9 @@ class HyperChatEngine:
         if user_message.lower().startswith("/forget "):
             topic = user_message[8:].strip()
             return self._forget_topic(topic), None
+        
+        if user_message.lower().startswith("/transform "):
+            return self._handle_transform(user_message[11:].strip()), None
         
         # Detect intent
         intent_result = self.pipeline.intent_space.detect(user_message)
@@ -459,15 +467,79 @@ class HyperChatEngine:
             return f"Forgot about '{topic}'."
         return f"I don't have '{topic}' in my learned knowledge."
     
+    def _handle_transform(self, args: str) -> str:
+        """
+        Handle /transform command.
+        
+        Formats:
+            /transform future: Jack and Jill went up the hill
+            /transform tense=future regality=royal: Jack and Jill went up the hill
+        """
+        if not args:
+            dims = self.transformation_space.available_dimensions()
+            return f"Usage: /transform <dimension>=<value>: <sentence>\n\nAvailable dimensions: {', '.join(dims)}\n\nExamples:\n  /transform tense=future: Jack went home\n  /transform regality=royal: The cat sat on the mat"
+        
+        # Parse format: dimension=value [dimension=value ...]: sentence
+        if ':' not in args:
+            return "Format: /transform <dimension>=<value>: <sentence>"
+        
+        spec_part, sentence = args.split(':', 1)
+        sentence = sentence.strip()
+        
+        if not sentence:
+            return "Please provide a sentence to transform."
+        
+        # Parse transformations
+        transformations = []
+        for spec in spec_part.strip().split():
+            if '=' in spec:
+                dim, val = spec.split('=', 1)
+                transformations.append((dim.strip(), val.strip()))
+            else:
+                # Shorthand: just "future" means tense=future
+                transformations.append(('tense', spec.strip()))
+        
+        if not transformations:
+            return "Please specify at least one transformation (e.g., tense=future)"
+        
+        # Apply transformations
+        if len(transformations) == 1:
+            dim, val = transformations[0]
+            result = self.transformation_space.transform(sentence, dim, val)
+        else:
+            result = self.transformation_space.transform_multi(sentence, transformations)
+        
+        # Format response
+        lines = [
+            f"**Original:** {result.original}",
+            f"**Transformed ({result.dimension}={result.target_value}):** {result.transformed}",
+        ]
+        
+        if result.word_changes:
+            changes = ", ".join(f"'{src}'→'{tgt}'" for src, tgt in result.word_changes[:5])
+            lines.append(f"**Changes:** {changes}")
+        
+        lines.append(f"**Confidence:** {result.confidence:.0%} ({result.method})")
+        
+        return "\n".join(lines)
+    
     def _help_text(self) -> str:
         return """HyperChat API - Commands:
 /learn <topic>  - Learn about a topic using LLM
 /learned        - Show learned topics
 /forget <topic> - Forget a learned topic
+/transform      - Transform sentences along dimensions
 /save           - Save knowledge to file
 /stats          - Show statistics
 /dim            - Show dimension demo (before/after)
 /help           - Show this help
+
+Transform sentences (no LLM needed):
+  /transform tense=future: Jack went home
+  /transform regality=royal: The cat sat on the mat
+  /transform tense=future regality=noble: Jack went up the hill
+
+Available dimensions: tense, regality, formality, voice, certainty, emotion
 
 Ask questions like:
   What is machine learning?
@@ -477,11 +549,6 @@ Request plots like:
   Create a sine wave plot
   Make a bar chart
   Plot a histogram with 50 bins
-
-Modifiers for plots:
-  with amplitude 2.0
-  with red line
-  with dashed line
 
 Note: I auto-learn from LLM responses. Ask a question I don't know,
 and next time I'll answer without calling the LLM."""
