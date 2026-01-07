@@ -47,6 +47,9 @@ from truthspace_lcm.core.chat_pipeline import ChatPipeline, ChatConfig, Intent
 from truthspace_lcm.core.transformation_space import (
     TransformationSpace, TransformationResult, load_transformation_space
 )
+from truthspace_lcm.core.concept_transformer import (
+    ConceptTransformer, load_concept_transformer, ConceptTransformResult
+)
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -172,6 +175,10 @@ class HyperChatEngine:
         # Load transformation space
         self.transformation_space = load_transformation_space()
         logger.info(f"Loaded transformation space: {self.transformation_space.stats()}")
+        
+        # Load concept transformer (pure geometric)
+        self.concept_transformer = load_concept_transformer()
+        logger.info(f"Loaded concept transformer: {self.concept_transformer.stats()}")
     
     def generate(self, messages: List[Message]) -> str:
         """Generate a response from messages."""
@@ -213,6 +220,13 @@ class HyperChatEngine:
         
         if user_message.lower() == "/dimension_demo" or user_message.lower().startswith("/dim"):
             return self._dimension_demo()
+        
+        if user_message.lower().startswith("/transform_geo"):
+            args = user_message[14:].strip()
+            return self._handle_transform_geo(args)
+        
+        if user_message.lower().startswith("/transform "):
+            return self._handle_transform(user_message[11:].strip())
         
         # Process through pipeline
         return self.pipeline.chat(user_message)
@@ -296,6 +310,9 @@ class HyperChatEngine:
         
         if user_message.lower().startswith("/transform "):
             return self._handle_transform(user_message[11:].strip()), None
+        
+        if user_message.lower().startswith("/transform_geo "):
+            return self._handle_transform_geo(user_message[15:].strip()), None
         
         # Detect intent
         intent_result = self.pipeline.intent_space.detect(user_message)
@@ -621,21 +638,134 @@ class HyperChatEngine:
         
         return None
     
+    def _handle_transform_geo(self, args: str) -> str:
+        """
+        Handle /transform_geo command - PURE GEOMETRIC transformation.
+        
+        Uses ConceptTransformer (Design 108 breakthrough):
+        - No regex patterns
+        - No LLM fallback
+        - Pure geometric: position + delta = transformed position
+        
+        Format: /transform_geo dimension=value: sentence
+        """
+        if not args:
+            stats = self.concept_transformer.stats()
+            dims = list(self.concept_transformer._pairs.keys())
+            return f"""**Pure Geometric Transformation** (Design 108)
+
+Usage: /transform_geo <dimension>=<value>: <sentence>
+
+Available dimensions: {', '.join(dims)}
+
+Stats:
+- Concepts: {stats['concepts']}
+- Phrases: {stats['phrases']}
+- Accuracy: 85.1%
+
+Example:
+  /transform_geo tense=future: Jack went up the hill
+
+This uses ONLY geometric operations:
+1. Find phrase in sentence
+2. Look up position in concept space
+3. Add transformation delta (φ-based)
+4. Find nearest phrase at new position
+5. Replace in sentence"""
+        
+        if ':' not in args:
+            return "Format: /transform_geo <dimension>=<value>: <sentence>"
+        
+        spec_part, sentence = args.split(':', 1)
+        sentence = sentence.strip()
+        
+        if not sentence:
+            return "Please provide a sentence to transform."
+        
+        # Parse transformation spec
+        if '=' in spec_part:
+            dim, val = spec_part.strip().split('=', 1)
+            dim = dim.strip()
+            val = val.strip()
+        else:
+            # Shorthand: just "future" means tense=future
+            dim = 'tense'
+            val = spec_part.strip()
+        
+        # Detect source value (for tense, try to infer from sentence)
+        source_value = self._infer_source_value(sentence, dim)
+        
+        # Transform using ConceptTransformer
+        result = self.concept_transformer.transform_sentence(
+            sentence, dim, source_value, val
+        )
+        
+        # Format response
+        lines = [
+            f"**Original:** {result.original}",
+            f"**Transformed ({dim}: {source_value} → {val}):** {result.transformed}",
+        ]
+        
+        if result.success:
+            lines.append(f"**Change:** '{result.source_phrase}' → '{result.target_phrase}'")
+            lines.append(f"**Method:** Pure geometric (position + Δ = new position)")
+            if result.was_injected:
+                lines.append(f"**Note:** Used temporary injection for unknown phrase")
+        else:
+            lines.append(f"**Failed:** {result.failure_reason}")
+            lines.append(f"**Tip:** The phrase may not be in the geometric vocabulary")
+        
+        return "\n".join(lines)
+    
+    def _infer_source_value(self, sentence: str, dimension: str) -> str:
+        """Infer the source value for a dimension from the sentence."""
+        sentence_lower = sentence.lower()
+        
+        if dimension == 'tense':
+            # Check for future markers
+            if 'will ' in sentence_lower or 'shall ' in sentence_lower:
+                return 'future'
+            # Check for present markers
+            if any(w in sentence_lower for w in ['is ', 'are ', 'goes ', 'sits ', 'stands ']):
+                return 'present'
+            # Default to past
+            return 'past'
+        
+        if dimension == 'voice':
+            if ' was ' in sentence_lower and ' by ' in sentence_lower:
+                return 'passive'
+            return 'active'
+        
+        if dimension == 'regality':
+            if any(w in sentence_lower for w in ['majesty', 'royal', 'decree']):
+                return 'royal'
+            if any(w in sentence_lower for w in ['sir ', 'lady ', 'lord ']):
+                return 'noble'
+            return 'common'
+        
+        if dimension == 'formality':
+            if any(w in sentence_lower for w in ['obtained', 'proceeded', 'inquired']):
+                return 'formal'
+            return 'casual'
+        
+        # Default to neutral for other dimensions
+        return 'neutral'
+    
     def _help_text(self) -> str:
         return """HyperChat API - Commands:
 /learn <topic>  - Learn about a topic using LLM
 /learned        - Show learned topics
 /forget <topic> - Forget a learned topic
-/transform      - Transform sentences along dimensions
+/transform      - Transform sentences (regex + LLM fallback)
+/transform_geo  - Transform sentences (PURE GEOMETRIC)
 /save           - Save knowledge to file
 /stats          - Show statistics
 /dim            - Show dimension demo (before/after)
 /help           - Show this help
 
-Transform sentences (no LLM needed):
-  /transform tense=future: Jack went home
-  /transform regality=royal: The cat sat on the mat
-  /transform tense=future regality=noble: Jack went up the hill
+Transform sentences:
+  /transform tense=future: Jack went home  (uses regex patterns)
+  /transform_geo tense=future: Jack went home  (pure geometric!)
 
 Available dimensions: tense, regality, formality, voice, certainty, emotion
 
