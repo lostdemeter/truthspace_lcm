@@ -206,8 +206,21 @@ class IntentSpace(HyperMapping):
         """
         query_lower = query.lower().strip()
         
-        # Phase 0: Check for plot-related keywords FIRST
+        # Phase 0a: Check for KNOWLEDGE query patterns FIRST
+        # "what is X" and "tell me about X" are knowledge queries even if X contains plot words
+        knowledge_prefixes = ['what is', 'what are', 'who is', 'who are', 
+                              'tell me about', 'explain', 'describe', 'define']
+        if any(query_lower.startswith(prefix) for prefix in knowledge_prefixes):
+            return IntentResult(
+                intent=Intent.KNOWLEDGE,
+                confidence=1.0,
+                reason=f"Knowledge query prefix detected",
+                metadata={'match_type': 'knowledge_prefix'}
+            )
+        
+        # Phase 0b: Check for plot-related keywords
         # This takes priority over generic "create" which would match TOOL_CALL
+        # But NOT if it's a knowledge query about plotting tools
         plot_keywords = ['plot', 'graph', 'chart', 'sine', 'cosine', 'histogram', 
                          'scatter', 'bar chart', 'pie chart', 'visualize', 'wave']
         if any(kw in query_lower for kw in plot_keywords):

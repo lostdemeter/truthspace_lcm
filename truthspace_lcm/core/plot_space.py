@@ -544,20 +544,28 @@ print("Plot saved to {output_path}")
                 break
         
         # Extract numeric modifiers (keyword followed by number)
-        # Pattern: "keyword NUMBER" or "NUMBER keyword"
+        # Patterns: "keyword NUMBER", "keyword of NUMBER", "NUMBER keyword"
         for keyword, modifier_name in self.numeric_keywords.items():
             if keyword in query_lower:
-                # Look for "keyword NUMBER" pattern
+                # Look for "keyword of NUMBER" pattern (e.g., "amplitude of 2.0")
+                pattern = rf'{keyword}\s+of\s+(\d+(?:\.\d+)?)'
+                match = re.search(pattern, query_lower)
+                if match:
+                    modifiers[modifier_name] = float(match.group(1))
+                    continue
+                
+                # Look for "keyword NUMBER" pattern (e.g., "amplitude 2.0")
                 pattern = rf'{keyword}\s+(\d+(?:\.\d+)?)'
                 match = re.search(pattern, query_lower)
                 if match:
                     modifiers[modifier_name] = float(match.group(1))
-                else:
-                    # Look for "NUMBER keyword" pattern (e.g., "50 bins")
-                    pattern = rf'(\d+(?:\.\d+)?)\s+{keyword}'
-                    match = re.search(pattern, query_lower)
-                    if match:
-                        modifiers[modifier_name] = float(match.group(1))
+                    continue
+                
+                # Look for "NUMBER keyword" pattern (e.g., "50 bins")
+                pattern = rf'(\d+(?:\.\d+)?)\s+{keyword}'
+                match = re.search(pattern, query_lower)
+                if match:
+                    modifiers[modifier_name] = float(match.group(1))
         
         # Extract boolean modifiers (grid with/without)
         # Check "without" BEFORE "with" to handle "without" correctly
