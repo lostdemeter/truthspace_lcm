@@ -1,0 +1,4227 @@
+{
+  "version": 1,
+  "generated": "2026-01-07T09:55:47.069540",
+  "model": "qwen2.5:14b",
+  "transformations": [
+    {
+      "source": "Jack and Jill went up the hill to fetch a pail of water.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "Jack and Jill go up the hill to fetch a pail of water.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "tense": [
+          "past",
+          "present"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in the present tense. Only output the rewritten sentence, nothing else.\n\nOriginal: \"Jack and Jill went up the hill to fetch a pail of water.\"\nRewritten:",
+      "generation_time": 0.331587553024292
+    },
+    {
+      "source": "Jack and Jill went up the hill to fetch a pail of water.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "Jack and Jill will go up the hill to fetch a pail of water.",
+      "target_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "tense": [
+          "past",
+          "future"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in the future tense. Only output the rewritten sentence, nothing else.\n\nOriginal: \"Jack and Jill went up the hill to fetch a pail of water.\"\nRewritten:",
+      "generation_time": 0.32666873931884766
+    },
+    {
+      "source": "Jack and Jill went up the hill to fetch a pail of water.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "Jack and Jill fetched a pail of water by going up the hill.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common",
+        "voice": "active"
+      },
+      "dimension_delta": {
+        "voice": [
+          "unknown",
+          "active"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in active voice. Only output the rewritten sentence, nothing else.\n\nOriginal: \"Jack and Jill went up the hill to fetch a pail of water.\"\nRewritten:",
+      "generation_time": 0.30985236167907715
+    },
+    {
+      "source": "Jack and Jill went up the hill to fetch a pail of water.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "A pail of water was fetched up the hill by Jack and Jill.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common",
+        "voice": "passive"
+      },
+      "dimension_delta": {
+        "voice": [
+          "unknown",
+          "passive"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in passive voice. Only output the rewritten sentence, nothing else.\n\nOriginal: \"Jack and Jill went up the hill to fetch a pail of water.\"\nRewritten:",
+      "generation_time": 0.31317830085754395
+    },
+    {
+      "source": "Jack and Jill went up the hill to fetch a pail of water.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "Sir Jack and fair maiden Jill did ascend the verdant hill in pursuit of fetching a pail of pure water, thus commencing their noble endeavor.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "noble"
+      },
+      "dimension_delta": {
+        "regality": [
+          "common",
+          "noble"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to sound noble (like a nobleman or noblewoman speaking with dignity). Only output the rewritten sentence, nothing else.\n\nOriginal: \"Jack and Jill went up the hill to fetch a pail of water.\"\nRewritten:",
+      "generation_time": 0.5661652088165283
+    },
+    {
+      "source": "Jack and Jill went up the hill to fetch a pail of water.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "His Majesty doth decree that Jack and Jill ascended the hallowed hill to retrieve a pail of pure water, henceforth.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "royal"
+      },
+      "dimension_delta": {
+        "regality": [
+          "common",
+          "royal"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to sound royal (like a king or queen making a royal proclamation). Only output the rewritten sentence, nothing else.\n\nOriginal: \"Jack and Jill went up the hill to fetch a pail of water.\"\nRewritten:",
+      "generation_time": 0.5198168754577637
+    },
+    {
+      "source": "Jack and Jill went up the hill to fetch a pail of water.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "Jack and Jill headed up the hill to get a pail of water.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "casual",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "formality": [
+          "neutral",
+          "casual"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in a casual tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"Jack and Jill went up the hill to fetch a pail of water.\"\nRewritten:",
+      "generation_time": 0.3120920658111572
+    },
+    {
+      "source": "Jack and Jill went up the hill to fetch a pail of water.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "Jack and Jill ascended the hill with the intention of retrieving a pail of water.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "formal",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "formality": [
+          "neutral",
+          "formal"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in a formal tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"Jack and Jill went up the hill to fetch a pail of water.\"\nRewritten:",
+      "generation_time": 0.36150264739990234
+    },
+    {
+      "source": "Jack and Jill went up the hill to fetch a pail of water.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "Jack and Jill might have gone up the hill to fetch a pail of water.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common",
+        "certainty": "uncertain"
+      },
+      "dimension_delta": {
+        "certainty": [
+          "unknown",
+          "uncertain"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to express uncertain certainty. Only output the rewritten sentence, nothing else.\n\nOriginal: \"Jack and Jill went up the hill to fetch a pail of water.\"\nRewritten:",
+      "generation_time": 0.3609199523925781
+    },
+    {
+      "source": "Jack and Jill went up the hill to fetch a pail of water.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "Jack and Jill went up the hill to fetch a pail of water.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common",
+        "certainty": "neutral"
+      },
+      "dimension_delta": {
+        "certainty": [
+          "unknown",
+          "neutral"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to express neutral certainty. Only output the rewritten sentence, nothing else.\n\nOriginal: \"Jack and Jill went up the hill to fetch a pail of water.\"\nRewritten:",
+      "generation_time": 0.31337571144104004
+    },
+    {
+      "source": "Jack and Jill went up the hill to fetch a pail of water.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "Jack and Jill definitely went up the hill to fetch a pail of water.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common",
+        "certainty": "certain"
+      },
+      "dimension_delta": {
+        "certainty": [
+          "unknown",
+          "certain"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to express certain certainty. Only output the rewritten sentence, nothing else.\n\nOriginal: \"Jack and Jill went up the hill to fetch a pail of water.\"\nRewritten:",
+      "generation_time": 0.32778072357177734
+    },
+    {
+      "source": "Jack and Jill went up the hill to fetch a pail of water.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "Jack and Jill climbed up the hill in silence, their hearts heavy as they fetched the pail of water.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common",
+        "emotion": "sad"
+      },
+      "dimension_delta": {
+        "emotion": [
+          "unknown",
+          "sad"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence with a sad emotional tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"Jack and Jill went up the hill to fetch a pail of water.\"\nRewritten:",
+      "generation_time": 0.4207439422607422
+    },
+    {
+      "source": "Jack and Jill went up the hill to fetch a pail of water.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "Jack and Jill went up the hill to retrieve a pail of water.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common",
+        "emotion": "neutral"
+      },
+      "dimension_delta": {
+        "emotion": [
+          "unknown",
+          "neutral"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence with a neutral emotional tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"Jack and Jill went up the hill to fetch a pail of water.\"\nRewritten:",
+      "generation_time": 0.309063196182251
+    },
+    {
+      "source": "Jack and Jill went up the hill to fetch a pail of water.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "Jack and Jill cheerfully climbed up the hill to fetch a pail of sparkling water!",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common",
+        "emotion": "happy"
+      },
+      "dimension_delta": {
+        "emotion": [
+          "unknown",
+          "happy"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence with a happy emotional tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"Jack and Jill went up the hill to fetch a pail of water.\"\nRewritten:",
+      "generation_time": 0.3591463565826416
+    },
+    {
+      "source": "The cat sat on the mat.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The cat sits on the mat.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "tense": [
+          "past",
+          "present"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in the present tense. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The cat sat on the mat.\"\nRewritten:",
+      "generation_time": 0.18654417991638184
+    },
+    {
+      "source": "The cat sat on the mat.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The cat will sit on the mat.",
+      "target_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "tense": [
+          "past",
+          "future"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in the future tense. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The cat sat on the mat.\"\nRewritten:",
+      "generation_time": 0.20760488510131836
+    },
+    {
+      "source": "The cat sat on the mat.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The cat sat on the mat.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common",
+        "voice": "active"
+      },
+      "dimension_delta": {
+        "voice": [
+          "unknown",
+          "active"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in active voice. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The cat sat on the mat.\"\nRewritten:",
+      "generation_time": 0.19165563583374023
+    },
+    {
+      "source": "The cat sat on the mat.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The mat was sat on by the cat.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common",
+        "voice": "passive"
+      },
+      "dimension_delta": {
+        "voice": [
+          "unknown",
+          "passive"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in passive voice. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The cat sat on the mat.\"\nRewritten:",
+      "generation_time": 0.222886323928833
+    },
+    {
+      "source": "The cat sat on the mat.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The feline doth grace the tapestry with its presence.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "noble"
+      },
+      "dimension_delta": {
+        "regality": [
+          "common",
+          "noble"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to sound noble (like a nobleman or noblewoman speaking with dignity). Only output the rewritten sentence, nothing else.\n\nOriginal: \"The cat sat on the mat.\"\nRewritten:",
+      "generation_time": 0.2824826240539551
+    },
+    {
+      "source": "The cat sat on the mat.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "Let it be known throughout the realm that the feline hath taken its regal perch upon the woven tapestry.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "royal"
+      },
+      "dimension_delta": {
+        "regality": [
+          "common",
+          "royal"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to sound royal (like a king or queen making a royal proclamation). Only output the rewritten sentence, nothing else.\n\nOriginal: \"The cat sat on the mat.\"\nRewritten:",
+      "generation_time": 0.45592403411865234
+    },
+    {
+      "source": "The cat sat on the mat.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The cat was chillin' on the mat.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "casual",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "formality": [
+          "neutral",
+          "casual"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in a casual tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The cat sat on the mat.\"\nRewritten:",
+      "generation_time": 0.23653030395507812
+    },
+    {
+      "source": "The cat sat on the mat.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The feline was perched upon the mat.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "formal",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "formality": [
+          "neutral",
+          "formal"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in a formal tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The cat sat on the mat.\"\nRewritten:",
+      "generation_time": 0.2324533462524414
+    },
+    {
+      "source": "The cat sat on the mat.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The cat might have sat on the mat.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common",
+        "certainty": "uncertain"
+      },
+      "dimension_delta": {
+        "certainty": [
+          "unknown",
+          "uncertain"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to express uncertain certainty. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The cat sat on the mat.\"\nRewritten:",
+      "generation_time": 0.22388005256652832
+    },
+    {
+      "source": "The cat sat on the mat.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The cat sat on the mat.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common",
+        "certainty": "neutral"
+      },
+      "dimension_delta": {
+        "certainty": [
+          "unknown",
+          "neutral"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to express neutral certainty. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The cat sat on the mat.\"\nRewritten:",
+      "generation_time": 0.18358659744262695
+    },
+    {
+      "source": "The cat sat on the mat.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The cat definitely sat on the mat.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common",
+        "certainty": "certain"
+      },
+      "dimension_delta": {
+        "certainty": [
+          "unknown",
+          "certain"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to express certain certainty. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The cat sat on the mat.\"\nRewritten:",
+      "generation_time": 0.1997842788696289
+    },
+    {
+      "source": "The cat sat on the mat.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The lonely cat sat forlornly on the mat.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common",
+        "emotion": "sad"
+      },
+      "dimension_delta": {
+        "emotion": [
+          "unknown",
+          "sad"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence with a sad emotional tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The cat sat on the mat.\"\nRewritten:",
+      "generation_time": 0.2628939151763916
+    },
+    {
+      "source": "The cat sat on the mat.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The cat sat on the mat.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common",
+        "emotion": "neutral"
+      },
+      "dimension_delta": {
+        "emotion": [
+          "unknown",
+          "neutral"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence with a neutral emotional tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The cat sat on the mat.\"\nRewritten:",
+      "generation_time": 0.18366479873657227
+    },
+    {
+      "source": "The cat sat on the mat.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The cheerful cat plopped down comfortably on the soft mat!",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common",
+        "emotion": "happy"
+      },
+      "dimension_delta": {
+        "emotion": [
+          "unknown",
+          "happy"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence with a happy emotional tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The cat sat on the mat.\"\nRewritten:",
+      "generation_time": 0.2810394763946533
+    },
+    {
+      "source": "She believes that honesty is the best policy.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "She believed that honesty was the best policy.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "tense": [
+          "present",
+          "past"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in the past tense. Only output the rewritten sentence, nothing else.\n\nOriginal: \"She believes that honesty is the best policy.\"\nRewritten:",
+      "generation_time": 0.2206099033355713
+    },
+    {
+      "source": "She believes that honesty is the best policy.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "She will believe that honesty is the best policy.",
+      "target_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "tense": [
+          "present",
+          "future"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in the future tense. Only output the rewritten sentence, nothing else.\n\nOriginal: \"She believes that honesty is the best policy.\"\nRewritten:",
+      "generation_time": 0.23627090454101562
+    },
+    {
+      "source": "She believes that honesty is the best policy.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "She believes honesty is the best policy.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common",
+        "voice": "active"
+      },
+      "dimension_delta": {
+        "voice": [
+          "unknown",
+          "active"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in active voice. Only output the rewritten sentence, nothing else.\n\nOriginal: \"She believes that honesty is the best policy.\"\nRewritten:",
+      "generation_time": 0.20827746391296387
+    },
+    {
+      "source": "She believes that honesty is the best policy.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "It is believed by her that honesty is the best policy.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common",
+        "voice": "passive"
+      },
+      "dimension_delta": {
+        "voice": [
+          "unknown",
+          "passive"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in passive voice. Only output the rewritten sentence, nothing else.\n\nOriginal: \"She believes that honesty is the best policy.\"\nRewritten:",
+      "generation_time": 0.26181602478027344
+    },
+    {
+      "source": "She believes that honesty is the best policy.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "I hold firm that veracity constitutes the noblest course of action.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "noble"
+      },
+      "dimension_delta": {
+        "regality": [
+          "common",
+          "noble"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to sound noble (like a nobleman or noblewoman speaking with dignity). Only output the rewritten sentence, nothing else.\n\nOriginal: \"She believes that honesty is the best policy.\"\nRewritten:",
+      "generation_time": 0.2978966236114502
+    },
+    {
+      "source": "She believes that honesty is the best policy.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "Henceforth, it is her royal decree that honesty shall be upheld as the paramount virtue.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "royal"
+      },
+      "dimension_delta": {
+        "regality": [
+          "common",
+          "royal"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to sound royal (like a king or queen making a royal proclamation). Only output the rewritten sentence, nothing else.\n\nOriginal: \"She believes that honesty is the best policy.\"\nRewritten:",
+      "generation_time": 0.37532973289489746
+    },
+    {
+      "source": "She believes that honesty is the best policy.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "She thinks honesty is the way to go.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "casual",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "formality": [
+          "neutral",
+          "casual"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in a casual tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"She believes that honesty is the best policy.\"\nRewritten:",
+      "generation_time": 0.21780991554260254
+    },
+    {
+      "source": "She believes that honesty is the best policy.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "She maintains that honesty is the most effective principle.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "formal",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "formality": [
+          "neutral",
+          "formal"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in a formal tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"She believes that honesty is the best policy.\"\nRewritten:",
+      "generation_time": 0.22736144065856934
+    },
+    {
+      "source": "She believes that honesty is the best policy.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "She believes that honesty might be the best policy.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common",
+        "certainty": "uncertain"
+      },
+      "dimension_delta": {
+        "certainty": [
+          "unknown",
+          "uncertain"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to express uncertain certainty. Only output the rewritten sentence, nothing else.\n\nOriginal: \"She believes that honesty is the best policy.\"\nRewritten:",
+      "generation_time": 0.2344813346862793
+    },
+    {
+      "source": "She believes that honesty is the best policy.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "She considers that honesty is the best policy.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common",
+        "certainty": "neutral"
+      },
+      "dimension_delta": {
+        "certainty": [
+          "unknown",
+          "neutral"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to express neutral certainty. Only output the rewritten sentence, nothing else.\n\nOriginal: \"She believes that honesty is the best policy.\"\nRewritten:",
+      "generation_time": 0.21581315994262695
+    },
+    {
+      "source": "She believes that honesty is the best policy.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "She firmly believes that honesty is the best policy.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common",
+        "certainty": "certain"
+      },
+      "dimension_delta": {
+        "certainty": [
+          "unknown",
+          "certain"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to express certain certainty. Only output the rewritten sentence, nothing else.\n\nOriginal: \"She believes that honesty is the best policy.\"\nRewritten:",
+      "generation_time": 0.23314833641052246
+    },
+    {
+      "source": "She believes that honesty is the best policy.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "She sadly clings to the belief that honesty is the best policy.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common",
+        "emotion": "sad"
+      },
+      "dimension_delta": {
+        "emotion": [
+          "unknown",
+          "sad"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence with a sad emotional tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"She believes that honesty is the best policy.\"\nRewritten:",
+      "generation_time": 0.2916398048400879
+    },
+    {
+      "source": "She believes that honesty is the best policy.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "She believes honesty is the best policy.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common",
+        "emotion": "neutral"
+      },
+      "dimension_delta": {
+        "emotion": [
+          "unknown",
+          "neutral"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence with a neutral emotional tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"She believes that honesty is the best policy.\"\nRewritten:",
+      "generation_time": 0.19971466064453125
+    },
+    {
+      "source": "She believes that honesty is the best policy.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "She joyfully believes that honesty is the best policy!",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common",
+        "emotion": "happy"
+      },
+      "dimension_delta": {
+        "emotion": [
+          "unknown",
+          "happy"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence with a happy emotional tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"She believes that honesty is the best policy.\"\nRewritten:",
+      "generation_time": 0.24697279930114746
+    },
+    {
+      "source": "They will arrive at noon tomorrow.",
+      "source_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "They arrived at noon yesterday.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "tense": [
+          "future",
+          "past"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in the past tense. Only output the rewritten sentence, nothing else.\n\nOriginal: \"They will arrive at noon tomorrow.\"\nRewritten:",
+      "generation_time": 0.16628098487854004
+    },
+    {
+      "source": "They will arrive at noon tomorrow.",
+      "source_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "They are arriving at noon today. \n\n(Note: The original request asked for rewriting in the present tense and specifically \"tomorrow\" was mentioned but typically, one doesn't use present tense for future events with a specific time like \"tomorrow\". Assuming a slight adjustment to make sense in present tense, I've changed it to \"today\" as an example. If strictly adhering to \"tomorrow\", the sentence would not naturally fit into present tense without significant restructuring or context change.) \n\nFor strict adherence to original request and timeframe: \nThey are arriving at noon tomorrow. (This is a common way to express future events in the present tense, though it's more of an idiomatic usage rather than literal present tense.)",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "tense": [
+          "future",
+          "present"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in the present tense. Only output the rewritten sentence, nothing else.\n\nOriginal: \"They will arrive at noon tomorrow.\"\nRewritten:",
+      "generation_time": 2.3847787380218506
+    },
+    {
+      "source": "They will arrive at noon tomorrow.",
+      "source_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "They will arrive tomorrow at noon.",
+      "target_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "common",
+        "voice": "active"
+      },
+      "dimension_delta": {
+        "voice": [
+          "unknown",
+          "active"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in active voice. Only output the rewritten sentence, nothing else.\n\nOriginal: \"They will arrive at noon tomorrow.\"\nRewritten:",
+      "generation_time": 0.18195629119873047
+    },
+    {
+      "source": "They will arrive at noon tomorrow.",
+      "source_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "Noon tomorrow will be when they arrive.",
+      "target_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "common",
+        "voice": "passive"
+      },
+      "dimension_delta": {
+        "voice": [
+          "unknown",
+          "passive"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in passive voice. Only output the rewritten sentence, nothing else.\n\nOriginal: \"They will arrive at noon tomorrow.\"\nRewritten:",
+      "generation_time": 0.21593332290649414
+    },
+    {
+      "source": "They will arrive at noon tomorrow.",
+      "source_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "They shall arrive at precisely midday on the morrow.",
+      "target_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "noble"
+      },
+      "dimension_delta": {
+        "regality": [
+          "common",
+          "noble"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to sound noble (like a nobleman or noblewoman speaking with dignity). Only output the rewritten sentence, nothing else.\n\nOriginal: \"They will arrive at noon tomorrow.\"\nRewritten:",
+      "generation_time": 0.2618567943572998
+    },
+    {
+      "source": "They will arrive at noon tomorrow.",
+      "source_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "Tomorrow at the hour of noon shall they arrive, as decreed.",
+      "target_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "royal"
+      },
+      "dimension_delta": {
+        "regality": [
+          "common",
+          "royal"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to sound royal (like a king or queen making a royal proclamation). Only output the rewritten sentence, nothing else.\n\nOriginal: \"They will arrive at noon tomorrow.\"\nRewritten:",
+      "generation_time": 0.3100087642669678
+    },
+    {
+      "source": "They will arrive at noon tomorrow.",
+      "source_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "They'll show up at noon tomorrow.",
+      "target_dimensions": {
+        "tense": "future",
+        "formality": "casual",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "formality": [
+          "neutral",
+          "casual"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in a casual tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"They will arrive at noon tomorrow.\"\nRewritten:",
+      "generation_time": 0.20007801055908203
+    },
+    {
+      "source": "They will arrive at noon tomorrow.",
+      "source_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "They will arrive at noon on the following day.",
+      "target_dimensions": {
+        "tense": "future",
+        "formality": "formal",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "formality": [
+          "neutral",
+          "formal"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in a formal tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"They will arrive at noon tomorrow.\"\nRewritten:",
+      "generation_time": 0.23006749153137207
+    },
+    {
+      "source": "They will arrive at noon tomorrow.",
+      "source_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "They will likely arrive around noon tomorrow.",
+      "target_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "common",
+        "certainty": "uncertain"
+      },
+      "dimension_delta": {
+        "certainty": [
+          "unknown",
+          "uncertain"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to express uncertain certainty. Only output the rewritten sentence, nothing else.\n\nOriginal: \"They will arrive at noon tomorrow.\"\nRewritten:",
+      "generation_time": 0.20528221130371094
+    },
+    {
+      "source": "They will arrive at noon tomorrow.",
+      "source_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "They will arrive at noon tomorrow.",
+      "target_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "common",
+        "certainty": "neutral"
+      },
+      "dimension_delta": {
+        "certainty": [
+          "unknown",
+          "neutral"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to express neutral certainty. Only output the rewritten sentence, nothing else.\n\nOriginal: \"They will arrive at noon tomorrow.\"\nRewritten:",
+      "generation_time": 0.19196224212646484
+    },
+    {
+      "source": "They will arrive at noon tomorrow.",
+      "source_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "They will definitely arrive at noon tomorrow.",
+      "target_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "common",
+        "certainty": "certain"
+      },
+      "dimension_delta": {
+        "certainty": [
+          "unknown",
+          "certain"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to express certain certainty. Only output the rewritten sentence, nothing else.\n\nOriginal: \"They will arrive at noon tomorrow.\"\nRewritten:",
+      "generation_time": 0.20745086669921875
+    },
+    {
+      "source": "They will arrive at noon tomorrow.",
+      "source_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "They will arrive at noon tomorrow, but it will be the last time.",
+      "target_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "common",
+        "emotion": "sad"
+      },
+      "dimension_delta": {
+        "emotion": [
+          "unknown",
+          "sad"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence with a sad emotional tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"They will arrive at noon tomorrow.\"\nRewritten:",
+      "generation_time": 0.3167440891265869
+    },
+    {
+      "source": "They will arrive at noon tomorrow.",
+      "source_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "They will arrive at noon tomorrow.",
+      "target_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "common",
+        "emotion": "neutral"
+      },
+      "dimension_delta": {
+        "emotion": [
+          "unknown",
+          "neutral"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence with a neutral emotional tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"They will arrive at noon tomorrow.\"\nRewritten:",
+      "generation_time": 0.1922926902770996
+    },
+    {
+      "source": "They will arrive at noon tomorrow.",
+      "source_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "They'll be here bright and early at noon tomorrow!",
+      "target_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "common",
+        "emotion": "happy"
+      },
+      "dimension_delta": {
+        "emotion": [
+          "unknown",
+          "happy"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence with a happy emotional tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"They will arrive at noon tomorrow.\"\nRewritten:",
+      "generation_time": 0.24354028701782227
+    },
+    {
+      "source": "The ancient castle stands on the cliff overlooking the sea.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The ancient castle stood on the cliff overlooking the sea.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "tense": [
+          "present",
+          "past"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in the past tense. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The ancient castle stands on the cliff overlooking the sea.\"\nRewritten:",
+      "generation_time": 0.25334739685058594
+    },
+    {
+      "source": "The ancient castle stands on the cliff overlooking the sea.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The ancient castle will stand on the cliff overlooking the sea.",
+      "target_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "tense": [
+          "present",
+          "future"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in the future tense. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The ancient castle stands on the cliff overlooking the sea.\"\nRewritten:",
+      "generation_time": 0.26221728324890137
+    },
+    {
+      "source": "The ancient castle stands on the cliff overlooking the sea.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The ancient castle overlooks the sea from the cliff.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common",
+        "voice": "active"
+      },
+      "dimension_delta": {
+        "voice": [
+          "unknown",
+          "active"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in active voice. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The ancient castle stands on the cliff overlooking the sea.\"\nRewritten:",
+      "generation_time": 0.2456667423248291
+    },
+    {
+      "source": "The ancient castle stands on the cliff overlooking the sea.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The cliff overlooking the sea is where the ancient castle stands.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common",
+        "voice": "passive"
+      },
+      "dimension_delta": {
+        "voice": [
+          "unknown",
+          "passive"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in passive voice. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The ancient castle stands on the cliff overlooking the sea.\"\nRewritten:",
+      "generation_time": 0.2700917720794678
+    },
+    {
+      "source": "The ancient castle stands on the cliff overlooking the sea.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The venerable castle doth stand upon the craggy precipice, overlooking the vast expanse of the sea.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "noble"
+      },
+      "dimension_delta": {
+        "regality": [
+          "common",
+          "noble"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to sound noble (like a nobleman or noblewoman speaking with dignity). Only output the rewritten sentence, nothing else.\n\nOriginal: \"The ancient castle stands on the cliff overlooking the sea.\"\nRewritten:",
+      "generation_time": 0.45607662200927734
+    },
+    {
+      "source": "The ancient castle stands on the cliff overlooking the sea.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "Lofty upon the craggy brow that overlooketh the vasty deep doth stand the time-honored castle, bastion of our realm's enduring majesty.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "royal"
+      },
+      "dimension_delta": {
+        "regality": [
+          "common",
+          "royal"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to sound royal (like a king or queen making a royal proclamation). Only output the rewritten sentence, nothing else.\n\nOriginal: \"The ancient castle stands on the cliff overlooking the sea.\"\nRewritten:",
+      "generation_time": 0.6441495418548584
+    },
+    {
+      "source": "The ancient castle stands on the cliff overlooking the sea.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The old castle sits up there on the cliff, looking out over the sea.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "casual",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "formality": [
+          "neutral",
+          "casual"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in a casual tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The ancient castle stands on the cliff overlooking the sea.\"\nRewritten:",
+      "generation_time": 0.32625699043273926
+    },
+    {
+      "source": "The ancient castle stands on the cliff overlooking the sea.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The ancient castle is situated on the cliff, affording a view over the sea.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "formal",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "formality": [
+          "neutral",
+          "formal"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in a formal tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The ancient castle stands on the cliff overlooking the sea.\"\nRewritten:",
+      "generation_time": 0.3469407558441162
+    },
+    {
+      "source": "The ancient castle stands on the cliff overlooking the sea.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The ancient castle might stand on the cliff overlooking the sea.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common",
+        "certainty": "uncertain"
+      },
+      "dimension_delta": {
+        "certainty": [
+          "unknown",
+          "uncertain"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to express uncertain certainty. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The ancient castle stands on the cliff overlooking the sea.\"\nRewritten:",
+      "generation_time": 0.26860666275024414
+    },
+    {
+      "source": "The ancient castle stands on the cliff overlooking the sea.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The ancient castle stands on the cliff overlooking the sea.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common",
+        "certainty": "neutral"
+      },
+      "dimension_delta": {
+        "certainty": [
+          "unknown",
+          "neutral"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to express neutral certainty. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The ancient castle stands on the cliff overlooking the sea.\"\nRewritten:",
+      "generation_time": 0.24801349639892578
+    },
+    {
+      "source": "The ancient castle stands on the cliff overlooking the sea.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The ancient castle undoubtedly stands on the cliff overlooking the sea.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common",
+        "certainty": "certain"
+      },
+      "dimension_delta": {
+        "certainty": [
+          "unknown",
+          "certain"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to express certain certainty. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The ancient castle stands on the cliff overlooking the sea.\"\nRewritten:",
+      "generation_time": 0.2627565860748291
+    },
+    {
+      "source": "The ancient castle stands on the cliff overlooking the sea.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The ancient castle, now dilapidated and forlorn, stands\u5b64\u72ec\u5730\u77d7\u7acb\u5728\u60ac\u5d16\u4e0a\uff0c\u4fef\u77b0\u7740\u5927\u6d77\u3002\u4e3a\u4e86\u7b26\u5408\u8981\u6c42\uff0c\u6211\u518d\u5c1d\u8bd5\u4e00\u6b21\uff1a\n\n\u5b64\u5bc2\u7684\u53e4\u5821\u5728\u60ac\u5d16\u4e0a\u6447\u6447\u6b32\u5760\uff0c\u4fef\u89c6\u7740\u65e0\u8fb9\u7684\u5927\u6d77\u3002",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common",
+        "emotion": "sad"
+      },
+      "dimension_delta": {
+        "emotion": [
+          "unknown",
+          "sad"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence with a sad emotional tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The ancient castle stands on the cliff overlooking the sea.\"\nRewritten:",
+      "generation_time": 0.9644899368286133
+    },
+    {
+      "source": "The ancient castle stands on the cliff overlooking the sea.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The ancient castle is located on the cliff above the sea.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common",
+        "emotion": "neutral"
+      },
+      "dimension_delta": {
+        "emotion": [
+          "unknown",
+          "neutral"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence with a neutral emotional tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The ancient castle stands on the cliff overlooking the sea.\"\nRewritten:",
+      "generation_time": 0.2634296417236328
+    },
+    {
+      "source": "The ancient castle stands on the cliff overlooking the sea.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The magnificent ancient castle smiles down from the cliff, overlooking the vast sea!",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common",
+        "emotion": "happy"
+      },
+      "dimension_delta": {
+        "emotion": [
+          "unknown",
+          "happy"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence with a happy emotional tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The ancient castle stands on the cliff overlooking the sea.\"\nRewritten:",
+      "generation_time": 0.31909871101379395
+    },
+    {
+      "source": "The chef prepared a delicious meal for the guests.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The chef prepares a delicious meal for the guests.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "tense": [
+          "past",
+          "present"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in the present tense. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The chef prepared a delicious meal for the guests.\"\nRewritten:",
+      "generation_time": 0.23288846015930176
+    },
+    {
+      "source": "The chef prepared a delicious meal for the guests.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The chef will prepare a delicious meal for the guests.",
+      "target_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "tense": [
+          "past",
+          "future"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in the future tense. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The chef prepared a delicious meal for the guests.\"\nRewritten:",
+      "generation_time": 0.2481060028076172
+    },
+    {
+      "source": "The chef prepared a delicious meal for the guests.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The chef prepared a delicious meal for the guests.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common",
+        "voice": "active"
+      },
+      "dimension_delta": {
+        "voice": [
+          "unknown",
+          "active"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in active voice. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The chef prepared a delicious meal for the guests.\"\nRewritten:",
+      "generation_time": 0.23120570182800293
+    },
+    {
+      "source": "The chef prepared a delicious meal for the guests.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "A delicious meal was prepared for the guests by the chef.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common",
+        "voice": "passive"
+      },
+      "dimension_delta": {
+        "voice": [
+          "unknown",
+          "passive"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in passive voice. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The chef prepared a delicious meal for the guests.\"\nRewritten:",
+      "generation_time": 0.2622554302215576
+    },
+    {
+      "source": "The chef prepared a delicious meal for the guests.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The chef hath prepared a most delightful repast for our esteemed guests.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "noble"
+      },
+      "dimension_delta": {
+        "regality": [
+          "common",
+          "noble"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to sound noble (like a nobleman or noblewoman speaking with dignity). Only output the rewritten sentence, nothing else.\n\nOriginal: \"The chef prepared a delicious meal for the guests.\"\nRewritten:",
+      "generation_time": 0.2982766628265381
+    },
+    {
+      "source": "The chef prepared a delicious meal for the guests.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The royal chef hath prepared a sumptuous repast for our esteemed guests.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "royal"
+      },
+      "dimension_delta": {
+        "regality": [
+          "common",
+          "royal"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to sound royal (like a king or queen making a royal proclamation). Only output the rewritten sentence, nothing else.\n\nOriginal: \"The chef prepared a delicious meal for the guests.\"\nRewritten:",
+      "generation_time": 0.32715463638305664
+    },
+    {
+      "source": "The chef prepared a delicious meal for the guests.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The chef whipped up a yummy meal for the guests.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "casual",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "formality": [
+          "neutral",
+          "casual"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in a casual tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The chef prepared a delicious meal for the guests.\"\nRewritten:",
+      "generation_time": 0.24519777297973633
+    },
+    {
+      "source": "The chef prepared a delicious meal for the guests.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The chef prepared a delectable meal for the guests.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "formal",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "formality": [
+          "neutral",
+          "formal"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in a formal tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The chef prepared a delicious meal for the guests.\"\nRewritten:",
+      "generation_time": 0.26166868209838867
+    },
+    {
+      "source": "The chef prepared a delicious meal for the guests.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The chef probably prepared a delicious meal for the guests.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common",
+        "certainty": "uncertain"
+      },
+      "dimension_delta": {
+        "certainty": [
+          "unknown",
+          "uncertain"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to express uncertain certainty. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The chef prepared a delicious meal for the guests.\"\nRewritten:",
+      "generation_time": 0.24397969245910645
+    },
+    {
+      "source": "The chef prepared a delicious meal for the guests.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The chef prepared a meal for the guests.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common",
+        "certainty": "neutral"
+      },
+      "dimension_delta": {
+        "certainty": [
+          "unknown",
+          "neutral"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to express neutral certainty. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The chef prepared a delicious meal for the guests.\"\nRewritten:",
+      "generation_time": 0.21605587005615234
+    },
+    {
+      "source": "The chef prepared a delicious meal for the guests.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The chef definitely prepared a delicious meal for the guests.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common",
+        "certainty": "certain"
+      },
+      "dimension_delta": {
+        "certainty": [
+          "unknown",
+          "certain"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to express certain certainty. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The chef prepared a delicious meal for the guests.\"\nRewritten:",
+      "generation_time": 0.24474883079528809
+    },
+    {
+      "source": "The chef prepared a delicious meal for the guests.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The chef prepared a delicious meal for the guests, but no one was there to enjoy it.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common",
+        "emotion": "sad"
+      },
+      "dimension_delta": {
+        "emotion": [
+          "unknown",
+          "sad"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence with a sad emotional tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The chef prepared a delicious meal for the guests.\"\nRewritten:",
+      "generation_time": 0.3668496608734131
+    },
+    {
+      "source": "The chef prepared a delicious meal for the guests.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The chef prepared a meal for the guests.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common",
+        "emotion": "neutral"
+      },
+      "dimension_delta": {
+        "emotion": [
+          "unknown",
+          "neutral"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence with a neutral emotional tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The chef prepared a delicious meal for the guests.\"\nRewritten:",
+      "generation_time": 0.21423125267028809
+    },
+    {
+      "source": "The chef prepared a delicious meal for the guests.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The chef whipped up an absolutely delicious meal that was sure to make the guests smile from ear to ear!",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common",
+        "emotion": "happy"
+      },
+      "dimension_delta": {
+        "emotion": [
+          "unknown",
+          "happy"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence with a happy emotional tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The chef prepared a delicious meal for the guests.\"\nRewritten:",
+      "generation_time": 0.3995473384857178
+    },
+    {
+      "source": "The scientist discovered a new element in the laboratory.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The scientist discovers a new element in the laboratory.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "tense": [
+          "past",
+          "present"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in the present tense. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The scientist discovered a new element in the laboratory.\"\nRewritten:",
+      "generation_time": 0.23395419120788574
+    },
+    {
+      "source": "The scientist discovered a new element in the laboratory.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The scientist will discover a new element in the laboratory.",
+      "target_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "tense": [
+          "past",
+          "future"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in the future tense. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The scientist discovered a new element in the laboratory.\"\nRewritten:",
+      "generation_time": 0.2506582736968994
+    },
+    {
+      "source": "The scientist discovered a new element in the laboratory.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The scientist discovered a new element in the laboratory.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common",
+        "voice": "active"
+      },
+      "dimension_delta": {
+        "voice": [
+          "unknown",
+          "active"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in active voice. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The scientist discovered a new element in the laboratory.\"\nRewritten:",
+      "generation_time": 0.24377226829528809
+    },
+    {
+      "source": "The scientist discovered a new element in the laboratory.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "A new element was discovered in the laboratory by the scientist.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common",
+        "voice": "passive"
+      },
+      "dimension_delta": {
+        "voice": [
+          "unknown",
+          "passive"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in passive voice. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The scientist discovered a new element in the laboratory.\"\nRewritten:",
+      "generation_time": 0.26790761947631836
+    },
+    {
+      "source": "The scientist discovered a new element in the laboratory.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The learned scientist hath uncovered a novel element within the sanctum of our hallowed laboratory.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "noble"
+      },
+      "dimension_delta": {
+        "regality": [
+          "common",
+          "noble"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to sound noble (like a nobleman or noblewoman speaking with dignity). Only output the rewritten sentence, nothing else.\n\nOriginal: \"The scientist discovered a new element in the laboratory.\"\nRewritten:",
+      "generation_time": 0.35644984245300293
+    },
+    {
+      "source": "The scientist discovered a new element in the laboratory.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "By the grace of the heavens, our most esteemed scientist hath discovered a new element within the sacred confines of the royal laboratory.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "royal"
+      },
+      "dimension_delta": {
+        "regality": [
+          "common",
+          "royal"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to sound royal (like a king or queen making a royal proclamation). Only output the rewritten sentence, nothing else.\n\nOriginal: \"The scientist discovered a new element in the laboratory.\"\nRewritten:",
+      "generation_time": 0.4817831516265869
+    },
+    {
+      "source": "The scientist discovered a new element in the laboratory.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The scientist found a new element in the lab.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "casual",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "formality": [
+          "neutral",
+          "casual"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in a casual tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The scientist discovered a new element in the laboratory.\"\nRewritten:",
+      "generation_time": 0.22622108459472656
+    },
+    {
+      "source": "The scientist discovered a new element in the laboratory.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The scientist identified a new element within the laboratory.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "formal",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "formality": [
+          "neutral",
+          "formal"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in a formal tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The scientist discovered a new element in the laboratory.\"\nRewritten:",
+      "generation_time": 0.22954368591308594
+    },
+    {
+      "source": "The scientist discovered a new element in the laboratory.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The scientist may have discovered a new element in the laboratory.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common",
+        "certainty": "uncertain"
+      },
+      "dimension_delta": {
+        "certainty": [
+          "unknown",
+          "uncertain"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to express uncertain certainty. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The scientist discovered a new element in the laboratory.\"\nRewritten:",
+      "generation_time": 0.26187658309936523
+    },
+    {
+      "source": "The scientist discovered a new element in the laboratory.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The scientist discovered a new element in the laboratory.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common",
+        "certainty": "neutral"
+      },
+      "dimension_delta": {
+        "certainty": [
+          "unknown",
+          "neutral"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to express neutral certainty. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The scientist discovered a new element in the laboratory.\"\nRewritten:",
+      "generation_time": 0.23489975929260254
+    },
+    {
+      "source": "The scientist discovered a new element in the laboratory.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The scientist definitely discovered a new element in the laboratory.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common",
+        "certainty": "certain"
+      },
+      "dimension_delta": {
+        "certainty": [
+          "unknown",
+          "certain"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to express certain certainty. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The scientist discovered a new element in the laboratory.\"\nRewritten:",
+      "generation_time": 0.24862170219421387
+    },
+    {
+      "source": "The scientist discovered a new element in the laboratory.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The scientist discovered a new element in the laboratory, but the excitement was overshadowed by the loneliness of celebrating this achievement alone.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common",
+        "emotion": "sad"
+      },
+      "dimension_delta": {
+        "emotion": [
+          "unknown",
+          "sad"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence with a sad emotional tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The scientist discovered a new element in the laboratory.\"\nRewritten:",
+      "generation_time": 0.4617002010345459
+    },
+    {
+      "source": "The scientist discovered a new element in the laboratory.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The scientist discovered a new element in the laboratory.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common",
+        "emotion": "neutral"
+      },
+      "dimension_delta": {
+        "emotion": [
+          "unknown",
+          "neutral"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence with a neutral emotional tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The scientist discovered a new element in the laboratory.\"\nRewritten:",
+      "generation_time": 0.23410296440124512
+    },
+    {
+      "source": "The scientist discovered a new element in the laboratory.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The scientist danced with joy upon discovering a new element in the laboratory!",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common",
+        "emotion": "happy"
+      },
+      "dimension_delta": {
+        "emotion": [
+          "unknown",
+          "happy"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence with a happy emotional tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The scientist discovered a new element in the laboratory.\"\nRewritten:",
+      "generation_time": 0.29697608947753906
+    },
+    {
+      "source": "The king and queen ruled the kingdom with wisdom and grace.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "noble"
+      },
+      "target": "The king and queen rule the kingdom with wisdom and grace.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "noble"
+      },
+      "dimension_delta": {
+        "tense": [
+          "past",
+          "present"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in the present tense. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The king and queen ruled the kingdom with wisdom and grace.\"\nRewritten:",
+      "generation_time": 0.2671661376953125
+    },
+    {
+      "source": "The king and queen ruled the kingdom with wisdom and grace.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "noble"
+      },
+      "target": "The king and queen will rule the kingdom with wisdom and grace.",
+      "target_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "noble"
+      },
+      "dimension_delta": {
+        "tense": [
+          "past",
+          "future"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in the future tense. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The king and queen ruled the kingdom with wisdom and grace.\"\nRewritten:",
+      "generation_time": 0.2789175510406494
+    },
+    {
+      "source": "The king and queen ruled the kingdom with wisdom and grace.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "noble"
+      },
+      "target": "The king and queen wisely and graciously ruled the kingdom.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "noble",
+        "voice": "active"
+      },
+      "dimension_delta": {
+        "voice": [
+          "unknown",
+          "active"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in active voice. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The king and queen ruled the kingdom with wisdom and grace.\"\nRewritten:",
+      "generation_time": 0.2664027214050293
+    },
+    {
+      "source": "The king and queen ruled the kingdom with wisdom and grace.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "noble"
+      },
+      "target": "The kingdom was ruled with wisdom and grace by the king and queen.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "noble",
+        "voice": "passive"
+      },
+      "dimension_delta": {
+        "voice": [
+          "unknown",
+          "passive"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in passive voice. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The king and queen ruled the kingdom with wisdom and grace.\"\nRewritten:",
+      "generation_time": 0.29428935050964355
+    },
+    {
+      "source": "The king and queen ruled the kingdom with wisdom and grace.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "noble"
+      },
+      "target": "The king and queen ran the kingdom smartly and nicely.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "regality": [
+          "noble",
+          "common"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to sound common (like a common person speaking casually). Only output the rewritten sentence, nothing else.\n\nOriginal: \"The king and queen ruled the kingdom with wisdom and grace.\"\nRewritten:",
+      "generation_time": 0.2696263790130615
+    },
+    {
+      "source": "The king and queen ruled the kingdom with wisdom and grace.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "noble"
+      },
+      "target": "With wisdom and grace, we, the King and Queen, doth rule our beloved kingdom.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "royal"
+      },
+      "dimension_delta": {
+        "regality": [
+          "noble",
+          "royal"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to sound royal (like a king or queen making a royal proclamation). Only output the rewritten sentence, nothing else.\n\nOriginal: \"The king and queen ruled the kingdom with wisdom and grace.\"\nRewritten:",
+      "generation_time": 0.3782954216003418
+    },
+    {
+      "source": "The king and queen ruled the kingdom with wisdom and grace.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "noble"
+      },
+      "target": "The king and queen ran the kingdom with wise and graceful leadership.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "casual",
+        "regality": "noble"
+      },
+      "dimension_delta": {
+        "formality": [
+          "neutral",
+          "casual"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in a casual tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The king and queen ruled the kingdom with wisdom and grace.\"\nRewritten:",
+      "generation_time": 0.2742037773132324
+    },
+    {
+      "source": "The king and queen ruled the kingdom with wisdom and grace.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "noble"
+      },
+      "target": "The monarchs governed the realm with wisdom and grace.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "formal",
+        "regality": "noble"
+      },
+      "dimension_delta": {
+        "formality": [
+          "neutral",
+          "formal"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in a formal tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The king and queen ruled the kingdom with wisdom and grace.\"\nRewritten:",
+      "generation_time": 0.24953198432922363
+    },
+    {
+      "source": "The king and queen ruled the kingdom with wisdom and grace.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "noble"
+      },
+      "target": "The king and queen may have ruled the kingdom with wisdom and grace.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "noble",
+        "certainty": "uncertain"
+      },
+      "dimension_delta": {
+        "certainty": [
+          "unknown",
+          "uncertain"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to express uncertain certainty. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The king and queen ruled the kingdom with wisdom and grace.\"\nRewritten:",
+      "generation_time": 0.30054426193237305
+    },
+    {
+      "source": "The king and queen ruled the kingdom with wisdom and grace.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "noble"
+      },
+      "target": "The king and queen governed the kingdom with wisdom and grace.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "noble",
+        "certainty": "neutral"
+      },
+      "dimension_delta": {
+        "certainty": [
+          "unknown",
+          "neutral"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to express neutral certainty. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The king and queen ruled the kingdom with wisdom and grace.\"\nRewritten:",
+      "generation_time": 0.2683260440826416
+    },
+    {
+      "source": "The king and queen ruled the kingdom with wisdom and grace.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "noble"
+      },
+      "target": "The king and queen ruled the kingdom with wisdom and grace, without doubt.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "noble",
+        "certainty": "certain"
+      },
+      "dimension_delta": {
+        "certainty": [
+          "unknown",
+          "certain"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to express certain certainty. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The king and queen ruled the kingdom with wisdom and grace.\"\nRewritten:",
+      "generation_time": 0.31528472900390625
+    },
+    {
+      "source": "The king and queen ruled the kingdom with wisdom and grace.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "noble"
+      },
+      "target": "The king and queen once ruled the kingdom with wisdom and grace, but now their reign is remembered with sorrow.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "noble",
+        "emotion": "sad"
+      },
+      "dimension_delta": {
+        "emotion": [
+          "unknown",
+          "sad"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence with a sad emotional tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The king and queen ruled the kingdom with wisdom and grace.\"\nRewritten:",
+      "generation_time": 0.4240875244140625
+    },
+    {
+      "source": "The king and queen ruled the kingdom with wisdom and grace.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "noble"
+      },
+      "target": "The king and queen governed the kingdom with wisdom and grace.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "noble",
+        "emotion": "neutral"
+      },
+      "dimension_delta": {
+        "emotion": [
+          "unknown",
+          "neutral"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence with a neutral emotional tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The king and queen ruled the kingdom with wisdom and grace.\"\nRewritten:",
+      "generation_time": 0.2635359764099121
+    },
+    {
+      "source": "The king and queen ruled the kingdom with wisdom and grace.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "noble"
+      },
+      "target": "The king and queen brought joy and brilliance to the entire kingdom with their wise and graceful rule!",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "noble",
+        "emotion": "happy"
+      },
+      "dimension_delta": {
+        "emotion": [
+          "unknown",
+          "happy"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence with a happy emotional tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The king and queen ruled the kingdom with wisdom and grace.\"\nRewritten:",
+      "generation_time": 0.36658382415771484
+    },
+    {
+      "source": "Knowledge grows when shared freely among people.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "Knowledge grew when shared freely among people.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "tense": [
+          "present",
+          "past"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in the past tense. Only output the rewritten sentence, nothing else.\n\nOriginal: \"Knowledge grows when shared freely among people.\"\nRewritten:",
+      "generation_time": 0.19998598098754883
+    },
+    {
+      "source": "Knowledge grows when shared freely among people.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "Knowledge will grow when it is shared freely among people.",
+      "target_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "tense": [
+          "present",
+          "future"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in the future tense. Only output the rewritten sentence, nothing else.\n\nOriginal: \"Knowledge grows when shared freely among people.\"\nRewritten:",
+      "generation_time": 0.24741530418395996
+    },
+    {
+      "source": "Knowledge grows when shared freely among people.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "People grow knowledge by sharing it freely.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common",
+        "voice": "active"
+      },
+      "dimension_delta": {
+        "voice": [
+          "unknown",
+          "active"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in active voice. Only output the rewritten sentence, nothing else.\n\nOriginal: \"Knowledge grows when shared freely among people.\"\nRewritten:",
+      "generation_time": 0.20654511451721191
+    },
+    {
+      "source": "Knowledge grows when shared freely among people.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "When shared freely among people, knowledge grows.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common",
+        "voice": "passive"
+      },
+      "dimension_delta": {
+        "voice": [
+          "unknown",
+          "passive"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in passive voice. Only output the rewritten sentence, nothing else.\n\nOriginal: \"Knowledge grows when shared freely among people.\"\nRewritten:",
+      "generation_time": 0.2168424129486084
+    },
+    {
+      "source": "Knowledge grows when shared freely among people.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "Knowledge doth flourish when imparted freely amongst thy peers.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "noble"
+      },
+      "dimension_delta": {
+        "regality": [
+          "common",
+          "noble"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to sound noble (like a nobleman or noblewoman speaking with dignity). Only output the rewritten sentence, nothing else.\n\nOriginal: \"Knowledge grows when shared freely among people.\"\nRewritten:",
+      "generation_time": 0.27791357040405273
+    },
+    {
+      "source": "Knowledge grows when shared freely among people.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "Let it be known throughout the realms that knowledge doth flourish and grow when shared freely amongst our subjects.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "royal"
+      },
+      "dimension_delta": {
+        "regality": [
+          "common",
+          "royal"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to sound royal (like a king or queen making a royal proclamation). Only output the rewritten sentence, nothing else.\n\nOriginal: \"Knowledge grows when shared freely among people.\"\nRewritten:",
+      "generation_time": 0.4211268424987793
+    },
+    {
+      "source": "Knowledge grows when shared freely among people.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "Knowledge blooms when we share it freely with each other.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "casual",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "formality": [
+          "neutral",
+          "casual"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in a casual tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"Knowledge grows when shared freely among people.\"\nRewritten:",
+      "generation_time": 0.26187658309936523
+    },
+    {
+      "source": "Knowledge grows when shared freely among people.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "Knowledge proliferates through the unrestricted exchange among individuals.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "formal",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "formality": [
+          "neutral",
+          "formal"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in a formal tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"Knowledge grows when shared freely among people.\"\nRewritten:",
+      "generation_time": 0.22801566123962402
+    },
+    {
+      "source": "Knowledge grows when shared freely among people.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "Knowledge might grow when shared freely among people.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common",
+        "certainty": "uncertain"
+      },
+      "dimension_delta": {
+        "certainty": [
+          "unknown",
+          "uncertain"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to express uncertain certainty. Only output the rewritten sentence, nothing else.\n\nOriginal: \"Knowledge grows when shared freely among people.\"\nRewritten:",
+      "generation_time": 0.23781466484069824
+    },
+    {
+      "source": "Knowledge grows when shared freely among people.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "Knowledge grows when shared freely among people.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common",
+        "certainty": "neutral"
+      },
+      "dimension_delta": {
+        "certainty": [
+          "unknown",
+          "neutral"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to express neutral certainty. Only output the rewritten sentence, nothing else.\n\nOriginal: \"Knowledge grows when shared freely among people.\"\nRewritten:",
+      "generation_time": 0.20247244834899902
+    },
+    {
+      "source": "Knowledge grows when shared freely among people.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "Knowledge definitely grows when shared freely among people.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common",
+        "certainty": "certain"
+      },
+      "dimension_delta": {
+        "certainty": [
+          "unknown",
+          "certain"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to express certain certainty. Only output the rewritten sentence, nothing else.\n\nOriginal: \"Knowledge grows when shared freely among people.\"\nRewritten:",
+      "generation_time": 0.23815226554870605
+    },
+    {
+      "source": "Knowledge grows when shared freely among people.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "Knowledge fades when it is not shared freely among people.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common",
+        "emotion": "sad"
+      },
+      "dimension_delta": {
+        "emotion": [
+          "unknown",
+          "sad"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence with a sad emotional tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"Knowledge grows when shared freely among people.\"\nRewritten:",
+      "generation_time": 0.26462697982788086
+    },
+    {
+      "source": "Knowledge grows when shared freely among people.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "Knowledge expands through free sharing among people.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common",
+        "emotion": "neutral"
+      },
+      "dimension_delta": {
+        "emotion": [
+          "unknown",
+          "neutral"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence with a neutral emotional tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"Knowledge grows when shared freely among people.\"\nRewritten:",
+      "generation_time": 0.19845962524414062
+    },
+    {
+      "source": "Knowledge grows when shared freely among people.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "Knowledge blossoms when shared freely among people!",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common",
+        "emotion": "happy"
+      },
+      "dimension_delta": {
+        "emotion": [
+          "unknown",
+          "happy"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence with a happy emotional tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"Knowledge grows when shared freely among people.\"\nRewritten:",
+      "generation_time": 0.23500919342041016
+    },
+    {
+      "source": "The traveler walked through the forest searching for shelter.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The traveler walks through the forest searching for shelter.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "tense": [
+          "past",
+          "present"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in the present tense. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The traveler walked through the forest searching for shelter.\"\nRewritten:",
+      "generation_time": 0.23338699340820312
+    },
+    {
+      "source": "The traveler walked through the forest searching for shelter.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The traveler will walk through the forest searching for shelter.",
+      "target_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "tense": [
+          "past",
+          "future"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in the future tense. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The traveler walked through the forest searching for shelter.\"\nRewritten:",
+      "generation_time": 0.2503535747528076
+    },
+    {
+      "source": "The traveler walked through the forest searching for shelter.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The traveler searched for shelter by walking through the forest.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common",
+        "voice": "active"
+      },
+      "dimension_delta": {
+        "voice": [
+          "unknown",
+          "active"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in active voice. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The traveler walked through the forest searching for shelter.\"\nRewritten:",
+      "generation_time": 0.24926424026489258
+    },
+    {
+      "source": "The traveler walked through the forest searching for shelter.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The forest was walked through by the traveler searching for shelter.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common",
+        "voice": "passive"
+      },
+      "dimension_delta": {
+        "voice": [
+          "unknown",
+          "passive"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in passive voice. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The traveler walked through the forest searching for shelter.\"\nRewritten:",
+      "generation_time": 0.27486586570739746
+    },
+    {
+      "source": "The traveler walked through the forest searching for shelter.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The intrepid traveller did traverse through the verdant woodland in earnest pursuit of a sanctuary.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "noble"
+      },
+      "dimension_delta": {
+        "regality": [
+          "common",
+          "noble"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to sound noble (like a nobleman or noblewoman speaking with dignity). Only output the rewritten sentence, nothing else.\n\nOriginal: \"The traveler walked through the forest searching for shelter.\"\nRewritten:",
+      "generation_time": 0.36002087593078613
+    },
+    {
+      "source": "The traveler walked through the forest searching for shelter.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "His Majesty decreeth that the humble traveler did traverse the verdant expanse of the royal forest, earnestly seeking sanctuary amid the ancient trees.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "royal"
+      },
+      "dimension_delta": {
+        "regality": [
+          "common",
+          "royal"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to sound royal (like a king or queen making a royal proclamation). Only output the rewritten sentence, nothing else.\n\nOriginal: \"The traveler walked through the forest searching for shelter.\"\nRewritten:",
+      "generation_time": 0.5454003810882568
+    },
+    {
+      "source": "The traveler walked through the forest searching for shelter.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The traveler wandered through the forest looking for some shelter.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "casual",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "formality": [
+          "neutral",
+          "casual"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in a casual tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The traveler walked through the forest searching for shelter.\"\nRewritten:",
+      "generation_time": 0.24492597579956055
+    },
+    {
+      "source": "The traveler walked through the forest searching for shelter.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The traveler proceeded to traverse the forest in search of shelter.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "formal",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "formality": [
+          "neutral",
+          "formal"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence in a formal tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The traveler walked through the forest searching for shelter.\"\nRewritten:",
+      "generation_time": 0.2661752700805664
+    },
+    {
+      "source": "The traveler walked through the forest searching for shelter.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The traveler might have been walking through the forest searching for shelter.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common",
+        "certainty": "uncertain"
+      },
+      "dimension_delta": {
+        "certainty": [
+          "unknown",
+          "uncertain"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to express uncertain certainty. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The traveler walked through the forest searching for shelter.\"\nRewritten:",
+      "generation_time": 0.2783358097076416
+    },
+    {
+      "source": "The traveler walked through the forest searching for shelter.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The traveler walked through the forest in search of shelter.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common",
+        "certainty": "neutral"
+      },
+      "dimension_delta": {
+        "certainty": [
+          "unknown",
+          "neutral"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to express neutral certainty. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The traveler walked through the forest searching for shelter.\"\nRewritten:",
+      "generation_time": 0.2454533576965332
+    },
+    {
+      "source": "The traveler walked through the forest searching for shelter.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The traveler walked through the forest in search of shelter.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common",
+        "certainty": "certain"
+      },
+      "dimension_delta": {
+        "certainty": [
+          "unknown",
+          "certain"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to express certain certainty. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The traveler walked through the forest searching for shelter.\"\nRewritten:",
+      "generation_time": 0.24914026260375977
+    },
+    {
+      "source": "The traveler walked through the forest searching for shelter.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The weary traveler trudged through the darkening forest, desperately searching for any sign of shelter.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common",
+        "emotion": "sad"
+      },
+      "dimension_delta": {
+        "emotion": [
+          "unknown",
+          "sad"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence with a sad emotional tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The traveler walked through the forest searching for shelter.\"\nRewritten:",
+      "generation_time": 0.385373592376709
+    },
+    {
+      "source": "The traveler walked through the forest searching for shelter.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The traveler moved through the forest in search of shelter.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common",
+        "emotion": "neutral"
+      },
+      "dimension_delta": {
+        "emotion": [
+          "unknown",
+          "neutral"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence with a neutral emotional tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The traveler walked through the forest searching for shelter.\"\nRewritten:",
+      "generation_time": 0.24766254425048828
+    },
+    {
+      "source": "The traveler walked through the forest searching for shelter.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The cheerful traveler strolled through the lush forest, excitedly searching for the perfect spot to set up shelter!",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common",
+        "emotion": "happy"
+      },
+      "dimension_delta": {
+        "emotion": [
+          "unknown",
+          "happy"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence with a happy emotional tone. Only output the rewritten sentence, nothing else.\n\nOriginal: \"The traveler walked through the forest searching for shelter.\"\nRewritten:",
+      "generation_time": 0.4190249443054199
+    },
+    {
+      "source": "Jack and Jill went up the hill to fetch a pail of water.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "Jack and Jill shall ascend the hill to procure a pail of water.",
+      "target_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "royal"
+      },
+      "dimension_delta": {
+        "tense": [
+          "past",
+          "future"
+        ],
+        "regality": [
+          "common",
+          "royal"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to be future (tense) and royal (regality). Only output the rewritten sentence, nothing else.\n\nOriginal: \"Jack and Jill went up the hill to fetch a pail of water.\"\nRewritten:",
+      "generation_time": 0.33109259605407715
+    },
+    {
+      "source": "Jack and Jill went up the hill to fetch a pail of water.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "Jack and Jill climbed up the hill to get a pail of water.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "casual",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "tense": [
+          "past",
+          "past"
+        ],
+        "formality": [
+          "neutral",
+          "casual"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to be past (tense) and casual (formality). Only output the rewritten sentence, nothing else.\n\nOriginal: \"Jack and Jill went up the hill to fetch a pail of water.\"\nRewritten:",
+      "generation_time": 0.31143951416015625
+    },
+    {
+      "source": "Jack and Jill went up the hill to fetch a pail of water.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "Jack and Jill ascended the hill with the purpose of retrieving a pail of water.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "formal",
+        "regality": "common",
+        "certainty": "certain"
+      },
+      "dimension_delta": {
+        "formality": [
+          "neutral",
+          "formal"
+        ],
+        "certainty": [
+          "unknown",
+          "certain"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to be formal (formality) and certain (certainty). Only output the rewritten sentence, nothing else.\n\nOriginal: \"Jack and Jill went up the hill to fetch a pail of water.\"\nRewritten:",
+      "generation_time": 0.3546946048736572
+    },
+    {
+      "source": "Jack and Jill went up the hill to fetch a pail of water.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "Prince Jack and Princess Jill ascended the verdant hill with hearts aglow, eager to retrieve a gleaming pail of crystal-clear water.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "noble",
+        "emotion": "happy"
+      },
+      "dimension_delta": {
+        "regality": [
+          "common",
+          "noble"
+        ],
+        "emotion": [
+          "unknown",
+          "happy"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to be noble (regality) and happy (emotion). Only output the rewritten sentence, nothing else.\n\nOriginal: \"Jack and Jill went up the hill to fetch a pail of water.\"\nRewritten:",
+      "generation_time": 0.5444724559783936
+    },
+    {
+      "source": "The cat sat on the mat.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The feline shall sit upon the tapestry.",
+      "target_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "royal"
+      },
+      "dimension_delta": {
+        "tense": [
+          "past",
+          "future"
+        ],
+        "regality": [
+          "common",
+          "royal"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to be future (tense) and royal (regality). Only output the rewritten sentence, nothing else.\n\nOriginal: \"The cat sat on the mat.\"\nRewritten:",
+      "generation_time": 0.2397937774658203
+    },
+    {
+      "source": "The cat sat on the mat.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The cat was sitting on the mat.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "casual",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "tense": [
+          "past",
+          "past"
+        ],
+        "formality": [
+          "neutral",
+          "casual"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to be past (tense) and casual (formality). Only output the rewritten sentence, nothing else.\n\nOriginal: \"The cat sat on the mat.\"\nRewritten:",
+      "generation_time": 0.20706987380981445
+    },
+    {
+      "source": "The cat sat on the mat.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The cat is seated on the mat.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "formal",
+        "regality": "common",
+        "certainty": "certain"
+      },
+      "dimension_delta": {
+        "formality": [
+          "neutral",
+          "formal"
+        ],
+        "certainty": [
+          "unknown",
+          "certain"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to be formal (formality) and certain (certainty). Only output the rewritten sentence, nothing else.\n\nOriginal: \"The cat sat on the mat.\"\nRewritten:",
+      "generation_time": 0.20224380493164062
+    },
+    {
+      "source": "The cat sat on the mat.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The regal feline presided joyfully over the luxurious tapestry.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "noble",
+        "emotion": "happy"
+      },
+      "dimension_delta": {
+        "regality": [
+          "common",
+          "noble"
+        ],
+        "emotion": [
+          "unknown",
+          "happy"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to be noble (regality) and happy (emotion). Only output the rewritten sentence, nothing else.\n\nOriginal: \"The cat sat on the mat.\"\nRewritten:",
+      "generation_time": 0.31531596183776855
+    },
+    {
+      "source": "She believes that honesty is the best policy.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "Her Majesty will decree that honesty shall be the paramount policy.",
+      "target_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "royal"
+      },
+      "dimension_delta": {
+        "tense": [
+          "present",
+          "future"
+        ],
+        "regality": [
+          "common",
+          "royal"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to be future (tense) and royal (regality). Only output the rewritten sentence, nothing else.\n\nOriginal: \"She believes that honesty is the best policy.\"\nRewritten:",
+      "generation_time": 0.26122021675109863
+    },
+    {
+      "source": "She believes that honesty is the best policy.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "She thought honesty was the best policy.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "casual",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "tense": [
+          "present",
+          "past"
+        ],
+        "formality": [
+          "neutral",
+          "casual"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to be past (tense) and casual (formality). Only output the rewritten sentence, nothing else.\n\nOriginal: \"She believes that honesty is the best policy.\"\nRewritten:",
+      "generation_time": 0.19908833503723145
+    },
+    {
+      "source": "She believes that honesty is the best policy.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "She holds firmly that honesty is the best policy.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "formal",
+        "regality": "common",
+        "certainty": "certain"
+      },
+      "dimension_delta": {
+        "formality": [
+          "neutral",
+          "formal"
+        ],
+        "certainty": [
+          "unknown",
+          "certain"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to be formal (formality) and certain (certainty). Only output the rewritten sentence, nothing else.\n\nOriginal: \"She believes that honesty is the best policy.\"\nRewritten:",
+      "generation_time": 0.23227930068969727
+    },
+    {
+      "source": "She believes that honesty is the best policy.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "Her Majesty holds with joyous conviction that honesty is the royal path to virtue.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "noble",
+        "emotion": "happy"
+      },
+      "dimension_delta": {
+        "regality": [
+          "common",
+          "noble"
+        ],
+        "emotion": [
+          "unknown",
+          "happy"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to be noble (regality) and happy (emotion). Only output the rewritten sentence, nothing else.\n\nOriginal: \"She believes that honesty is the best policy.\"\nRewritten:",
+      "generation_time": 0.327162504196167
+    },
+    {
+      "source": "They will arrive at noon tomorrow.",
+      "source_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "Tomorrow at noon, they shall arrive.",
+      "target_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "royal"
+      },
+      "dimension_delta": {
+        "tense": [
+          "future",
+          "future"
+        ],
+        "regality": [
+          "common",
+          "royal"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to be future (tense) and royal (regality). Only output the rewritten sentence, nothing else.\n\nOriginal: \"They will arrive at noon tomorrow.\"\nRewritten:",
+      "generation_time": 0.21188592910766602
+    },
+    {
+      "source": "They will arrive at noon tomorrow.",
+      "source_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "They were gonna show up at noon tomorrow.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "casual",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "tense": [
+          "future",
+          "past"
+        ],
+        "formality": [
+          "neutral",
+          "casual"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to be past (tense) and casual (formality). Only output the rewritten sentence, nothing else.\n\nOriginal: \"They will arrive at noon tomorrow.\"\nRewritten:",
+      "generation_time": 0.21287083625793457
+    },
+    {
+      "source": "They will arrive at noon tomorrow.",
+      "source_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "They will arrive at noon tomorrow.",
+      "target_dimensions": {
+        "tense": "future",
+        "formality": "formal",
+        "regality": "common",
+        "certainty": "certain"
+      },
+      "dimension_delta": {
+        "formality": [
+          "neutral",
+          "formal"
+        ],
+        "certainty": [
+          "unknown",
+          "certain"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to be formal (formality) and certain (certainty). Only output the rewritten sentence, nothing else.\n\nOriginal: \"They will arrive at noon tomorrow.\"\nRewritten:",
+      "generation_time": 0.18242597579956055
+    },
+    {
+      "source": "They will arrive at noon tomorrow.",
+      "source_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "His Majesty's guests shall arrive at midday on the morrow, bringing joy to the court.",
+      "target_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "noble",
+        "emotion": "happy"
+      },
+      "dimension_delta": {
+        "regality": [
+          "common",
+          "noble"
+        ],
+        "emotion": [
+          "unknown",
+          "happy"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to be noble (regality) and happy (emotion). Only output the rewritten sentence, nothing else.\n\nOriginal: \"They will arrive at noon tomorrow.\"\nRewritten:",
+      "generation_time": 0.40422511100769043
+    },
+    {
+      "source": "The ancient castle stands on the cliff overlooking the sea.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The majestic castle shall stand upon the cliff, overlooking the sea.",
+      "target_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "royal"
+      },
+      "dimension_delta": {
+        "tense": [
+          "present",
+          "future"
+        ],
+        "regality": [
+          "common",
+          "royal"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to be future (tense) and royal (regality). Only output the rewritten sentence, nothing else.\n\nOriginal: \"The ancient castle stands on the cliff overlooking the sea.\"\nRewritten:",
+      "generation_time": 0.2818477153778076
+    },
+    {
+      "source": "The ancient castle stands on the cliff overlooking the sea.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The old castle was standing up there on the cliff, looking out over the sea.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "casual",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "tense": [
+          "present",
+          "past"
+        ],
+        "formality": [
+          "neutral",
+          "casual"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to be past (tense) and casual (formality). Only output the rewritten sentence, nothing else.\n\nOriginal: \"The ancient castle stands on the cliff overlooking the sea.\"\nRewritten:",
+      "generation_time": 0.34580302238464355
+    },
+    {
+      "source": "The ancient castle stands on the cliff overlooking the sea.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The ancient castle is situated on the cliff that overlooks the sea.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "formal",
+        "regality": "common",
+        "certainty": "certain"
+      },
+      "dimension_delta": {
+        "formality": [
+          "neutral",
+          "formal"
+        ],
+        "certainty": [
+          "unknown",
+          "certain"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to be formal (formality) and certain (certainty). Only output the rewritten sentence, nothing else.\n\nOriginal: \"The ancient castle stands on the cliff overlooking the sea.\"\nRewritten:",
+      "generation_time": 0.30494189262390137
+    },
+    {
+      "source": "The ancient castle stands on the cliff overlooking the sea.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The majestic castle, radiant with joy, rises upon the cliff's edge, serenely overseeing the vast sea.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "noble",
+        "emotion": "happy"
+      },
+      "dimension_delta": {
+        "regality": [
+          "common",
+          "noble"
+        ],
+        "emotion": [
+          "unknown",
+          "happy"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to be noble (regality) and happy (emotion). Only output the rewritten sentence, nothing else.\n\nOriginal: \"The ancient castle stands on the cliff overlooking the sea.\"\nRewritten:",
+      "generation_time": 0.4381544589996338
+    },
+    {
+      "source": "The chef prepared a delicious meal for the guests.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The chef shall prepare a sumptuous feast for the esteemed guests.",
+      "target_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "royal"
+      },
+      "dimension_delta": {
+        "tense": [
+          "past",
+          "future"
+        ],
+        "regality": [
+          "common",
+          "royal"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to be future (tense) and royal (regality). Only output the rewritten sentence, nothing else.\n\nOriginal: \"The chef prepared a delicious meal for the guests.\"\nRewritten:",
+      "generation_time": 0.29949140548706055
+    },
+    {
+      "source": "The chef prepared a delicious meal for the guests.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The chef whipped up a delicious meal for the guests.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "casual",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "tense": [
+          "past",
+          "past"
+        ],
+        "formality": [
+          "neutral",
+          "casual"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to be past (tense) and casual (formality). Only output the rewritten sentence, nothing else.\n\nOriginal: \"The chef prepared a delicious meal for the guests.\"\nRewritten:",
+      "generation_time": 0.25037455558776855
+    },
+    {
+      "source": "The chef prepared a delicious meal for the guests.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The chef prepared a delicious meal for the guests.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "formal",
+        "regality": "common",
+        "certainty": "certain"
+      },
+      "dimension_delta": {
+        "formality": [
+          "neutral",
+          "formal"
+        ],
+        "certainty": [
+          "unknown",
+          "certain"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to be formal (formality) and certain (certainty). Only output the rewritten sentence, nothing else.\n\nOriginal: \"The chef prepared a delicious meal for the guests.\"\nRewritten:",
+      "generation_time": 0.23081517219543457
+    },
+    {
+      "source": "The chef prepared a delicious meal for the guests.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The culinary master prepared a sumptuous feast for the honored guests, filling the hall with joyous laughter and contentment.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "noble",
+        "emotion": "happy"
+      },
+      "dimension_delta": {
+        "regality": [
+          "common",
+          "noble"
+        ],
+        "emotion": [
+          "unknown",
+          "happy"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to be noble (regality) and happy (emotion). Only output the rewritten sentence, nothing else.\n\nOriginal: \"The chef prepared a delicious meal for the guests.\"\nRewritten:",
+      "generation_time": 0.46479129791259766
+    },
+    {
+      "source": "The scientist discovered a new element in the laboratory.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The scientist shall discover a new element in the laboratory.",
+      "target_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "royal"
+      },
+      "dimension_delta": {
+        "tense": [
+          "past",
+          "future"
+        ],
+        "regality": [
+          "common",
+          "royal"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to be future (tense) and royal (regality). Only output the rewritten sentence, nothing else.\n\nOriginal: \"The scientist discovered a new element in the laboratory.\"\nRewritten:",
+      "generation_time": 0.2511484622955322
+    },
+    {
+      "source": "The scientist discovered a new element in the laboratory.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The scientist found a new element in the lab.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "casual",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "tense": [
+          "past",
+          "past"
+        ],
+        "formality": [
+          "neutral",
+          "casual"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to be past (tense) and casual (formality). Only output the rewritten sentence, nothing else.\n\nOriginal: \"The scientist discovered a new element in the laboratory.\"\nRewritten:",
+      "generation_time": 0.23578262329101562
+    },
+    {
+      "source": "The scientist discovered a new element in the laboratory.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The scientist discovered a new element in the laboratory.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "formal",
+        "regality": "common",
+        "certainty": "certain"
+      },
+      "dimension_delta": {
+        "formality": [
+          "neutral",
+          "formal"
+        ],
+        "certainty": [
+          "unknown",
+          "certain"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to be formal (formality) and certain (certainty). Only output the rewritten sentence, nothing else.\n\nOriginal: \"The scientist discovered a new element in the laboratory.\"\nRewritten:",
+      "generation_time": 0.2342538833618164
+    },
+    {
+      "source": "The scientist discovered a new element in the laboratory.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The noble scientist unveiled a newfound element with radiant joy in the illustrious laboratory.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "noble",
+        "emotion": "happy"
+      },
+      "dimension_delta": {
+        "regality": [
+          "common",
+          "noble"
+        ],
+        "emotion": [
+          "unknown",
+          "happy"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to be noble (regality) and happy (emotion). Only output the rewritten sentence, nothing else.\n\nOriginal: \"The scientist discovered a new element in the laboratory.\"\nRewritten:",
+      "generation_time": 0.32433390617370605
+    },
+    {
+      "source": "The king and queen ruled the kingdom with wisdom and grace.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "noble"
+      },
+      "target": "The king and queen shall rule the kingdom with wisdom and grace.",
+      "target_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "royal"
+      },
+      "dimension_delta": {
+        "tense": [
+          "past",
+          "future"
+        ],
+        "regality": [
+          "noble",
+          "royal"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to be future (tense) and royal (regality). Only output the rewritten sentence, nothing else.\n\nOriginal: \"The king and queen ruled the kingdom with wisdom and grace.\"\nRewritten:",
+      "generation_time": 0.27678966522216797
+    },
+    {
+      "source": "The king and queen ruled the kingdom with wisdom and grace.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "noble"
+      },
+      "target": "The king and queen ran the kingdom with wisdom and grace.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "casual",
+        "regality": "noble"
+      },
+      "dimension_delta": {
+        "tense": [
+          "past",
+          "past"
+        ],
+        "formality": [
+          "neutral",
+          "casual"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to be past (tense) and casual (formality). Only output the rewritten sentence, nothing else.\n\nOriginal: \"The king and queen ruled the kingdom with wisdom and grace.\"\nRewritten:",
+      "generation_time": 0.26830244064331055
+    },
+    {
+      "source": "The king and queen ruled the kingdom with wisdom and grace.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "noble"
+      },
+      "target": "The king and queen governed the kingdom with wisdom and grace.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "formal",
+        "regality": "noble",
+        "certainty": "certain"
+      },
+      "dimension_delta": {
+        "formality": [
+          "neutral",
+          "formal"
+        ],
+        "certainty": [
+          "unknown",
+          "certain"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to be formal (formality) and certain (certainty). Only output the rewritten sentence, nothing else.\n\nOriginal: \"The king and queen ruled the kingdom with wisdom and grace.\"\nRewritten:",
+      "generation_time": 0.2672157287597656
+    },
+    {
+      "source": "The king and queen ruled the kingdom with wisdom and grace.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "noble"
+      },
+      "target": "The sovereign monarchs governed the realm with radiant wisdom and regal grace, filling their hearts with joy.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "noble",
+        "emotion": "happy"
+      },
+      "dimension_delta": {
+        "regality": [
+          "noble",
+          "noble"
+        ],
+        "emotion": [
+          "unknown",
+          "happy"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to be noble (regality) and happy (emotion). Only output the rewritten sentence, nothing else.\n\nOriginal: \"The king and queen ruled the kingdom with wisdom and grace.\"\nRewritten:",
+      "generation_time": 0.4057636260986328
+    },
+    {
+      "source": "Knowledge grows when shared freely among people.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "Knowledge shall grow when shared freely amongst the subjects.",
+      "target_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "royal"
+      },
+      "dimension_delta": {
+        "tense": [
+          "present",
+          "future"
+        ],
+        "regality": [
+          "common",
+          "royal"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to be future (tense) and royal (regality). Only output the rewritten sentence, nothing else.\n\nOriginal: \"Knowledge grows when shared freely among people.\"\nRewritten:",
+      "generation_time": 0.2483060359954834
+    },
+    {
+      "source": "Knowledge grows when shared freely among people.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "Knowledge grew when we shared it freely with each other.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "casual",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "tense": [
+          "present",
+          "past"
+        ],
+        "formality": [
+          "neutral",
+          "casual"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to be past (tense) and casual (formality). Only output the rewritten sentence, nothing else.\n\nOriginal: \"Knowledge grows when shared freely among people.\"\nRewritten:",
+      "generation_time": 0.2431948184967041
+    },
+    {
+      "source": "Knowledge grows when shared freely among people.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "Knowledge undoubtedly expands through the free exchange among individuals.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "formal",
+        "regality": "common",
+        "certainty": "certain"
+      },
+      "dimension_delta": {
+        "formality": [
+          "neutral",
+          "formal"
+        ],
+        "certainty": [
+          "unknown",
+          "certain"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to be formal (formality) and certain (certainty). Only output the rewritten sentence, nothing else.\n\nOriginal: \"Knowledge grows when shared freely among people.\"\nRewritten:",
+      "generation_time": 0.2397782802581787
+    },
+    {
+      "source": "Knowledge grows when shared freely among people.",
+      "source_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "Knowledge flourishes nobly when shared freely among the people with joy.",
+      "target_dimensions": {
+        "tense": "present",
+        "formality": "neutral",
+        "regality": "noble",
+        "emotion": "happy"
+      },
+      "dimension_delta": {
+        "regality": [
+          "common",
+          "noble"
+        ],
+        "emotion": [
+          "unknown",
+          "happy"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to be noble (regality) and happy (emotion). Only output the rewritten sentence, nothing else.\n\nOriginal: \"Knowledge grows when shared freely among people.\"\nRewritten:",
+      "generation_time": 0.3149235248565674
+    },
+    {
+      "source": "The traveler walked through the forest searching for shelter.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The traveler shall walk through the forest, seeking shelter.",
+      "target_dimensions": {
+        "tense": "future",
+        "formality": "neutral",
+        "regality": "royal"
+      },
+      "dimension_delta": {
+        "tense": [
+          "past",
+          "future"
+        ],
+        "regality": [
+          "common",
+          "royal"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to be future (tense) and royal (regality). Only output the rewritten sentence, nothing else.\n\nOriginal: \"The traveler walked through the forest searching for shelter.\"\nRewritten:",
+      "generation_time": 0.2505471706390381
+    },
+    {
+      "source": "The traveler walked through the forest searching for shelter.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The traveler walked through the forest looking for some shelter.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "casual",
+        "regality": "common"
+      },
+      "dimension_delta": {
+        "tense": [
+          "past",
+          "past"
+        ],
+        "formality": [
+          "neutral",
+          "casual"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to be past (tense) and casual (formality). Only output the rewritten sentence, nothing else.\n\nOriginal: \"The traveler walked through the forest searching for shelter.\"\nRewritten:",
+      "generation_time": 0.2566530704498291
+    },
+    {
+      "source": "The traveler walked through the forest searching for shelter.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The traveler traversed the forest in search of shelter.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "formal",
+        "regality": "common",
+        "certainty": "certain"
+      },
+      "dimension_delta": {
+        "formality": [
+          "neutral",
+          "formal"
+        ],
+        "certainty": [
+          "unknown",
+          "certain"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to be formal (formality) and certain (certainty). Only output the rewritten sentence, nothing else.\n\nOriginal: \"The traveler walked through the forest searching for shelter.\"\nRewritten:",
+      "generation_time": 0.2506251335144043
+    },
+    {
+      "source": "The traveler walked through the forest searching for shelter.",
+      "source_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "common"
+      },
+      "target": "The noble adventurer traversed through the verdant forest with a heart full of joy, seeking a place of refuge.",
+      "target_dimensions": {
+        "tense": "past",
+        "formality": "neutral",
+        "regality": "noble",
+        "emotion": "happy"
+      },
+      "dimension_delta": {
+        "regality": [
+          "common",
+          "noble"
+        ],
+        "emotion": [
+          "unknown",
+          "happy"
+        ]
+      },
+      "prompt_used": "Rewrite the following sentence to be noble (regality) and happy (emotion). Only output the rewritten sentence, nothing else.\n\nOriginal: \"The traveler walked through the forest searching for shelter.\"\nRewritten:",
+      "generation_time": 0.430356502532959
+    }
+  ]
+}
