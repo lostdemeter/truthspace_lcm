@@ -44,7 +44,9 @@ import sys
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent.parent))
 
 from truthspace_lcm.core.chat_pipeline import ChatPipeline, ChatConfig, Intent
-from truthspace_lcm.core.transformation_space import TransformationSpace, load_transformation_space
+from truthspace_lcm.core.transformation_space import (
+    TransformationSpace, TransformationResult, load_transformation_space
+)
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -467,13 +469,15 @@ class HyperChatEngine:
             return f"Forgot about '{topic}'."
         return f"I don't have '{topic}' in my learned knowledge."
     
-    def _handle_transform(self, args: str) -> str:
+    def _handle_transform(self, args: str, use_llm_fallback: bool = True) -> str:
         """
         Handle /transform command.
         
         Formats:
             /transform future: Jack and Jill went up the hill
             /transform tense=future regality=royal: Jack and Jill went up the hill
+        
+        If coverage is low and LLM is available, falls back to LLM and learns from result.
         """
         if not args:
             dims = self.transformation_space.available_dimensions()
@@ -509,6 +513,33 @@ class HyperChatEngine:
         else:
             result = self.transformation_space.transform_multi(sentence, transformations)
         
+        # Check if we need LLM fallback
+        llm_used = False
+        learned_count = 0
+        if result.needs_llm and use_llm_fallback:
+            llm_result = self._transform_with_llm(sentence, transformations)
+            if llm_result:
+                # Learn from LLM result
+                for dim, val in transformations:
+                    learned_count += self.transformation_space.learn_from_llm_result(
+                        sentence, llm_result, dim, val
+                    )
+                
+                # Update result
+                result = TransformationResult(
+                    original=sentence,
+                    transformed=llm_result,
+                    dimension=result.dimension,
+                    target_value=result.target_value,
+                    confidence=1.0,
+                    method="llm",
+                    word_changes=[],  # LLM doesn't give us word-level changes
+                    needs_llm=False,
+                    expected_changes=result.expected_changes,
+                    coverage=1.0,
+                )
+                llm_used = True
+        
         # Format response
         lines = [
             f"**Original:** {result.original}",
@@ -519,9 +550,76 @@ class HyperChatEngine:
             changes = ", ".join(f"'{src}'→'{tgt}'" for src, tgt in result.word_changes[:5])
             lines.append(f"**Changes:** {changes}")
         
-        lines.append(f"**Confidence:** {result.confidence:.0%} ({result.method})")
+        # Show coverage info
+        coverage_info = f"{result.coverage:.0%}"
+        if result.expected_changes > 0:
+            coverage_info += f" ({len(result.word_changes)}/{result.expected_changes} words)"
+        
+        lines.append(f"**Coverage:** {coverage_info} ({result.method})")
+        
+        if llm_used:
+            lines.append(f"**Note:** Used LLM fallback, learned {learned_count} new patterns")
+        elif result.needs_llm:
+            # Show what's missing
+            missing = set()
+            for dim, _ in transformations:
+                missing.update(self.transformation_space.get_missing_words(sentence, dim))
+            if missing:
+                lines.append(f"**Gap:** Missing patterns for: {', '.join(sorted(missing)[:5])}")
+            lines.append("**Tip:** Add `--llm` to use LLM fallback and learn new patterns")
         
         return "\n".join(lines)
+    
+    def _transform_with_llm(self, sentence: str, 
+                            transformations: List[Tuple[str, str]]) -> Optional[str]:
+        """
+        Transform sentence using LLM when geometric patterns have gaps.
+        
+        Returns transformed sentence or None if LLM unavailable.
+        """
+        # Build transformation description
+        transform_desc = " and ".join(
+            f"{val} ({dim})" for dim, val in transformations
+        )
+        
+        prompt = f"Rewrite the following sentence to be {transform_desc}. Only output the rewritten sentence, nothing else.\n\nOriginal: \"{sentence}\"\nRewritten:"
+        
+        # Try to use OllamaSpace if available, otherwise direct call
+        ollama_url = "http://127.0.0.1:11434/api/generate"
+        model = "qwen2.5:14b"
+        
+        if self.pipeline.ollama_space:
+            ollama_url = self.pipeline.ollama_space.ollama_url
+            model = self.pipeline.ollama_space.model
+        
+        try:
+            import requests
+            response = requests.post(
+                ollama_url,
+                json={
+                    "model": model,
+                    "prompt": prompt,
+                    "stream": False,
+                    "options": {
+                        "temperature": 0.3,
+                        "num_predict": 200,
+                    }
+                },
+                timeout=30
+            )
+            response.raise_for_status()
+            result = response.json().get("response", "").strip()
+            
+            # Clean up quotes if present
+            result = result.strip('"\'')
+            
+            if result and len(result) > 10:
+                logger.info(f"LLM transform: '{sentence[:30]}...' -> '{result[:30]}...'")
+                return result
+        except Exception as e:
+            logger.warning(f"LLM transform failed: {e}")
+        
+        return None
     
     def _help_text(self) -> str:
         return """HyperChat API - Commands:

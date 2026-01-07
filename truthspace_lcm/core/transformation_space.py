@@ -29,6 +29,91 @@ from .dynamic_dimensions import DynamicDimensionRegistry
 
 
 # =============================================================================
+# VERB AND WORD DETECTION
+# =============================================================================
+
+# Common irregular verbs (base form -> past form)
+IRREGULAR_VERBS = {
+    # Base forms that indicate present tense
+    "go", "goes", "sit", "sits", "stand", "stands", "walk", "walks",
+    "run", "runs", "come", "comes", "is", "are", "am", "be",
+    "have", "has", "do", "does", "make", "makes", "take", "takes",
+    "give", "gives", "find", "finds", "say", "says", "know", "knows",
+    "think", "thinks", "see", "sees", "get", "gets", "play", "plays",
+    "entertain", "entertains", "develop", "develops", "believe", "believes",
+    # Past forms
+    "went", "sat", "stood", "walked", "ran", "came", "was", "were",
+    "had", "did", "made", "took", "gave", "found", "said", "knew",
+    "thought", "saw", "got", "played", "entertained", "developed", "believed",
+    # Future markers
+    "will", "shall",
+}
+
+# Words that indicate regality transformation potential
+REGALITY_MARKERS = {
+    # Common names that could be elevated
+    "jack", "jill", "mary", "john", "tom", "jane", "bob", "alice",
+    # Common words that could be formalized
+    "the", "a", "went", "walked", "said", "got", "came",
+}
+
+# Words that indicate formality transformation potential  
+FORMALITY_MARKERS = {
+    "got", "gonna", "wanna", "gotta", "kinda", "sorta",
+    "yeah", "yep", "nope", "ok", "okay",
+    "don't", "can't", "won't", "isn't", "aren't",
+}
+
+
+def detect_transformable_words(text: str, dimension: str) -> Set[str]:
+    """
+    Detect words in text that should be transformed for a given dimension.
+    
+    Returns set of words that we expect to change.
+    """
+    words = set(re.findall(r'\b[a-zA-Z]+\b', text.lower()))
+    transformable = set()
+    
+    if dimension == "tense":
+        # Look for verbs
+        for word in words:
+            # Check irregular verbs
+            if word in IRREGULAR_VERBS:
+                transformable.add(word)
+            # Check verb-like endings (past tense -ed, 3rd person -s)
+            elif word.endswith('ed') and len(word) > 3:
+                transformable.add(word)
+            elif word.endswith('ing') and len(word) > 4:
+                transformable.add(word)
+    
+    elif dimension == "regality":
+        for word in words:
+            if word in REGALITY_MARKERS:
+                transformable.add(word)
+            # Capitalized words might be names
+            # (check original text for capitalization)
+    
+    elif dimension == "formality":
+        for word in words:
+            if word in FORMALITY_MARKERS:
+                transformable.add(word)
+    
+    elif dimension == "voice":
+        # Voice changes are complex - look for verbs
+        for word in words:
+            if word in IRREGULAR_VERBS:
+                transformable.add(word)
+    
+    # For other dimensions, estimate based on sentence length
+    if not transformable and dimension in ("certainty", "emotion"):
+        # These dimensions might just add/modify punctuation or prepend phrases
+        # Not word-level changes, so return empty (will get 100% coverage)
+        pass
+    
+    return transformable
+
+
+# =============================================================================
 # DATA CLASSES
 # =============================================================================
 
@@ -54,8 +139,11 @@ class TransformationResult:
     dimension: str
     target_value: str
     confidence: float
-    method: str  # "vocabulary", "pattern", "fallback"
+    method: str  # "vocabulary", "pattern", "fallback", "llm"
     word_changes: List[Tuple[str, str]] = field(default_factory=list)
+    needs_llm: bool = False  # True if coverage is low and LLM would help
+    expected_changes: int = 0  # How many words we expected to transform
+    coverage: float = 1.0  # actual_changes / expected_changes
 
 
 # =============================================================================
@@ -356,8 +444,11 @@ class TransformationSpace:
         transformed = text
         word_changes = []
         method = "pattern"
-        confidence = 0.0
         applied_patterns = set()  # Track what we've already changed
+        
+        # Detect what words SHOULD be transformed
+        expected_words = detect_transformable_words(text, dimension)
+        expected_changes = len(expected_words)
         
         # Apply pattern-based transformations (curated, reliable)
         patterns = self._patterns.get(dimension, {}).get(target_value, [])
@@ -372,11 +463,18 @@ class TransformationSpace:
                     word_changes.append((match.group(), replacement))
                     applied_patterns.add(match.group().lower())
         
-        # Calculate confidence based on changes made
-        if word_changes:
-            confidence = min(1.0, len(word_changes) * 0.25)
+        # Calculate coverage-based confidence
+        actual_changes = len(word_changes)
+        if expected_changes > 0:
+            coverage = actual_changes / expected_changes
         else:
-            confidence = 0.1
+            # No expected changes (e.g., certainty/emotion dimensions)
+            coverage = 1.0 if actual_changes == 0 else min(1.0, actual_changes * 0.5)
+        
+        confidence = coverage
+        needs_llm = coverage < 0.5 and expected_changes > 0
+        
+        if actual_changes == 0:
             method = "fallback"
         
         # Clean up double spaces and artifacts
@@ -393,7 +491,10 @@ class TransformationSpace:
             target_value=target_value,
             confidence=confidence,
             method=method,
-            word_changes=word_changes
+            word_changes=word_changes,
+            needs_llm=needs_llm,
+            expected_changes=expected_changes,
+            coverage=coverage,
         )
     
     def transform_multi(self, text: str, 
@@ -410,24 +511,32 @@ class TransformationSpace:
         """
         current = text
         all_changes = []
-        total_confidence = 0.0
+        total_coverage = 0.0
+        total_expected = 0
+        any_needs_llm = False
         
         for dim, target_val in transformations:
             result = self.transform(current, dim, target_val)
             current = result.transformed
             all_changes.extend(result.word_changes)
-            total_confidence += result.confidence
+            total_coverage += result.coverage
+            total_expected += result.expected_changes
+            if result.needs_llm:
+                any_needs_llm = True
         
-        avg_confidence = total_confidence / len(transformations) if transformations else 0.0
+        avg_coverage = total_coverage / len(transformations) if transformations else 1.0
         
         return TransformationResult(
             original=text,
             transformed=current,
             dimension="+".join(d for d, _ in transformations),
             target_value="+".join(v for _, v in transformations),
-            confidence=avg_confidence,
+            confidence=avg_coverage,
             method="multi",
-            word_changes=all_changes
+            word_changes=all_changes,
+            needs_llm=any_needs_llm,
+            expected_changes=total_expected,
+            coverage=avg_coverage,
         )
     
     def available_dimensions(self) -> List[str]:
@@ -443,6 +552,59 @@ class TransformationSpace:
         values.update(self._patterns.get(dimension, {}).keys())
         return sorted(values)
     
+    def learn_from_llm_result(self, source: str, target: str, 
+                               dimension: str, target_value: str) -> int:
+        """
+        Learn new patterns from an LLM transformation result.
+        
+        Extracts word mappings and adds them to patterns for future use.
+        
+        Args:
+            source: Original sentence
+            target: LLM-transformed sentence
+            dimension: Dimension that was transformed
+            target_value: Target value used
+            
+        Returns:
+            Number of new patterns learned
+        """
+        # Extract word mappings
+        mappings = self._extract_word_mappings(source, target)
+        
+        learned_count = 0
+        for src_word, tgt_word in mappings.items():
+            # Add to patterns if not already present
+            pattern = (rf'\b{re.escape(src_word)}\b', tgt_word)
+            existing_patterns = self._patterns.get(dimension, {}).get(target_value, [])
+            
+            # Check if pattern already exists
+            pattern_exists = any(p[0] == pattern[0] for p in existing_patterns)
+            if not pattern_exists:
+                self._patterns[dimension][target_value].append(pattern)
+                learned_count += 1
+        
+        return learned_count
+    
+    def get_missing_words(self, text: str, dimension: str) -> Set[str]:
+        """
+        Get words that should be transformed but we don't have patterns for.
+        
+        Useful for understanding coverage gaps.
+        """
+        expected = detect_transformable_words(text, dimension)
+        
+        # Check which expected words we have patterns for
+        known_patterns = set()
+        for target_val, patterns in self._patterns.get(dimension, {}).items():
+            for pattern, _ in patterns:
+                # Extract the word from the pattern (rough heuristic)
+                match = re.search(r'\\b(\w+)\\b', pattern)
+                if match:
+                    known_patterns.add(match.group(1).lower())
+        
+        missing = expected - known_patterns
+        return missing
+    
     def stats(self) -> Dict[str, Any]:
         """Get statistics about learned transformations."""
         total_mappings = sum(
@@ -450,6 +612,11 @@ class TransformationSpace:
             for dim_deltas in self._deltas.values() 
             for delta in dim_deltas.values()
         )
+        
+        # Count patterns per dimension
+        pattern_counts = {}
+        for dim, targets in self._patterns.items():
+            pattern_counts[dim] = sum(len(patterns) for patterns in targets.values())
         
         return {
             "corpus_size": self._corpus_size,
@@ -461,6 +628,7 @@ class TransformationSpace:
                 for targets in self._vocabulary.values() 
                 for words in targets.values()
             ),
+            "patterns_per_dimension": pattern_counts,
         }
     
     def describe_delta(self, dimension: str, source_value: str, target_value: str) -> Optional[Dict[str, Any]]:
