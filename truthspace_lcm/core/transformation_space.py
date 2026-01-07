@@ -253,40 +253,56 @@ class TransformationSpace:
         """
         Extract word-level mappings between source and target.
         
-        Uses alignment heuristics to find which words changed.
+        Uses position-based alignment to find which words changed.
+        Each source word maps to at most one target word.
         """
         mappings = {}
         
-        # Tokenize
+        # Tokenize preserving order
         src_words = re.findall(r'\b[\w\']+\b', source.lower())
         tgt_words = re.findall(r'\b[\w\']+\b', target.lower())
         
-        # Find words that appear in source but not target
+        # Find words that appear in source but not target (and vice versa)
         src_set = set(src_words)
         tgt_set = set(tgt_words)
         
-        removed = src_set - tgt_set
-        added = tgt_set - src_set
+        removed = src_set - tgt_set  # Words in source but not target
+        added = tgt_set - src_set    # Words in target but not source
         
-        # Simple heuristic: if one word removed and one added at similar position,
-        # they're likely a transformation pair
-        if len(removed) == 1 and len(added) == 1:
-            src_word = list(removed)[0]
-            tgt_word = list(added)[0]
-            mappings[src_word] = tgt_word
+        if not removed or not added:
+            return mappings
         
-        # Handle verb tense changes (more complex patterns)
-        # e.g., "went" -> "will go", "sat" -> "will sit"
-        for i, src_word in enumerate(src_words):
-            if src_word in removed:
-                # Look for corresponding position in target
-                # This is approximate - real alignment would be more sophisticated
-                for j, tgt_word in enumerate(tgt_words):
-                    if tgt_word in added:
-                        # Check if positions are close
-                        if abs(i - j) <= 2:
-                            mappings[src_word] = tgt_word
-                            break
+        # Build position lists for removed and added words
+        removed_positions = [(i, w) for i, w in enumerate(src_words) if w in removed]
+        added_positions = [(j, w) for j, w in enumerate(tgt_words) if w in added]
+        
+        # Greedy matching: pair each removed word with closest unmatched added word
+        used_added = set()
+        
+        for src_idx, src_word in removed_positions:
+            # Normalize position to account for different sentence lengths
+            src_ratio = src_idx / max(len(src_words), 1)
+            
+            best_match = None
+            best_distance = float('inf')
+            
+            for tgt_idx, tgt_word in added_positions:
+                if tgt_idx in used_added:
+                    continue
+                
+                # Use ratio-based distance for better alignment
+                tgt_ratio = tgt_idx / max(len(tgt_words), 1)
+                distance = abs(src_ratio - tgt_ratio)
+                
+                if distance < best_distance:
+                    best_distance = distance
+                    best_match = (tgt_idx, tgt_word)
+            
+            # Only match if reasonably close (within 30% of sentence)
+            if best_match and best_distance < 0.3:
+                tgt_idx, tgt_word = best_match
+                mappings[src_word] = tgt_word
+                used_added.add(tgt_idx)
         
         return mappings
     
