@@ -46,6 +46,7 @@ from .ollama_space import OllamaSpace
 from .bootstrap_knowledge import get_bootstrap_knowledge, get_bootstrap_synonyms
 from .quaternion_encoder import QuaternionEncoder, QuaternionPosition
 from .dynamic_dimensions import DynamicDimensionRegistry
+from .learned_knowledge import LearnedKnowledge, extract_llm_response
 
 
 class Intent(Enum):
@@ -369,6 +370,10 @@ class ChatPipeline:
             self._quaternion_encoder = QuaternionEncoder(self._dimension_registry)
             if self.config.debug:
                 print(f"[DEBUG] Quaternion encoder: {self._quaternion_encoder.summary()}")
+        
+        # Learned knowledge - separate from bootstrap, grows through conversation
+        self._learned_knowledge = LearnedKnowledge()
+        self._load_learned_into_knowledge_space()
     
     def _bootstrap_responses(self) -> None:
         """Bootstrap response templates."""
@@ -438,6 +443,74 @@ class ChatPipeline:
             if self.config.use_phi_lattice:
                 stats = self.knowledge_space._primitive_registry.stats
                 print(f"[DEBUG] Registered {stats['total_count']} primitives ({stats['single_word_count']} single, {stats['multi_word_count']} multi)")
+    
+    def _load_learned_into_knowledge_space(self) -> None:
+        """Load learned facts into the knowledge space."""
+        for fact in self._learned_knowledge.all_facts():
+            self.knowledge_space.add_text(
+                fact.content,
+                source="learned",
+                reproject=False  # Don't reproject for each - do once at end
+            )
+        
+        # Reproject once after loading all
+        if len(self._learned_knowledge) > 0 and len(self.knowledge_space) > 1:
+            self.knowledge_space.reproject()
+        
+        if self.config.debug and len(self._learned_knowledge) > 0:
+            print(f"[DEBUG] Loaded {len(self._learned_knowledge)} learned facts")
+    
+    def learn_from_response(self, query: str, response: str) -> Optional[str]:
+        """
+        Auto-learn from an LLM response.
+        
+        Extracts the content from the response and adds it to learned knowledge.
+        
+        Args:
+            query: The original query
+            response: The LLM response
+            
+        Returns:
+            The topic learned, or None if nothing was learned
+        """
+        content = extract_llm_response(response)
+        if not content:
+            return None
+        
+        topic = self._extract_topic(query)
+        if not topic:
+            return None
+        
+        # Learn the fact
+        self._learned_knowledge.learn(topic, content, query)
+        
+        # Also add to knowledge space for immediate use
+        self.knowledge_space.add_text(content, source="learned")
+        
+        if self.config.debug:
+            print(f"[DEBUG] Learned about '{topic}' ({len(content)} chars)")
+        
+        return topic
+    
+    def forget_topic(self, topic: str) -> bool:
+        """
+        Forget a learned topic.
+        
+        Args:
+            topic: The topic to forget
+            
+        Returns:
+            True if topic was forgotten, False if not found
+        """
+        return self._learned_knowledge.forget(topic)
+    
+    def learned_topics(self) -> List[str]:
+        """Get list of learned topics."""
+        return self._learned_knowledge.topics()
+    
+    def learned_stats(self) -> Dict[str, Any]:
+        """Get statistics about learned knowledge."""
+        return self._learned_knowledge.stats()
     
     def chat(self, query: str) -> str:
         """

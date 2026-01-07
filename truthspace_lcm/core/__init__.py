@@ -52,6 +52,7 @@ from .quaternion_encoder import (
     GrammaticalDim,
     ContextualDim,
 )
+from .learned_knowledge import LearnedKnowledge, LearnedFact, extract_llm_response
 
 # =============================================================================
 # LEGACY GEAR-BASED ARCHITECTURE (for backwards compatibility)
@@ -132,6 +133,11 @@ __all__ = [
     'SemanticDim',
     'GrammaticalDim',
     'ContextualDim',
+    
+    # Learned Knowledge
+    'LearnedKnowledge',
+    'LearnedFact',
+    'extract_llm_response',
     
     # ==========================================================================
     # LEGACY GEAR-BASED ARCHITECTURE (backwards compatibility)

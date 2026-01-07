@@ -217,7 +217,23 @@ class HyperChatEngine:
         if messages and messages[-1].role == "tool":
             tool_result = messages[-1].get_text_content()
             if tool_result:
-                return f"Here's what I found:\n\n{tool_result}", None
+                # Find the original user query for auto-learning
+                original_query = None
+                for msg in messages:
+                    if msg.role == "user":
+                        content = msg.get_text_content()
+                        # Skip Goose system prompts
+                        if not content.startswith("You are a general-purpose AI agent"):
+                            original_query = content
+                
+                # Auto-learn from LLM response
+                response = f"Here's what I found:\n\n{tool_result}"
+                if original_query:
+                    topic = self.pipeline.learn_from_response(original_query, response)
+                    if topic:
+                        logger.info(f"Auto-learned about '{topic}'")
+                
+                return response, None
             return "The tool completed but returned no output.", None
         
         # Get the last user message
@@ -263,6 +279,13 @@ class HyperChatEngine:
         if user_message.lower().startswith("/learn "):
             topic = user_message[7:].strip()
             return self._learn_topic(topic), None
+        
+        if user_message.lower() == "/learned":
+            return self._show_learned(), None
+        
+        if user_message.lower().startswith("/forget "):
+            topic = user_message[8:].strip()
+            return self._forget_topic(topic), None
         
         # Detect intent
         intent_result = self.pipeline.intent_space.detect(user_message)
@@ -411,13 +434,40 @@ class HyperChatEngine:
         stats = self.pipeline.get_stats()
         return f"Saved {stats['knowledge']['total_mappings']} concepts to {path}"
     
+    def _show_learned(self) -> str:
+        """Show learned topics and stats."""
+        topics = self.pipeline.learned_topics()
+        stats = self.pipeline.learned_stats()
+        
+        if not topics:
+            return "No topics learned yet. Ask questions and I'll auto-learn from LLM responses."
+        
+        lines = [f"**Learned Knowledge** ({stats['total_facts']} facts, {stats['total_uses']} total uses)"]
+        lines.append("")
+        for topic in sorted(topics):
+            lines.append(f"  - {topic}")
+        
+        if stats.get('most_used'):
+            lines.append("")
+            lines.append(f"Most used: {stats['most_used']} ({stats['most_used_count']} times)")
+        
+        return "\n".join(lines)
+    
+    def _forget_topic(self, topic: str) -> str:
+        """Forget a learned topic."""
+        if self.pipeline.forget_topic(topic):
+            return f"Forgot about '{topic}'."
+        return f"I don't have '{topic}' in my learned knowledge."
+    
     def _help_text(self) -> str:
         return """HyperChat API - Commands:
-/learn <topic> - Learn about a topic using LLM
-/save          - Save knowledge to file
-/stats         - Show statistics
-/dim           - Show dimension demo (before/after)
-/help          - Show this help
+/learn <topic>  - Learn about a topic using LLM
+/learned        - Show learned topics
+/forget <topic> - Forget a learned topic
+/save           - Save knowledge to file
+/stats          - Show statistics
+/dim            - Show dimension demo (before/after)
+/help           - Show this help
 
 Ask questions like:
   What is machine learning?
@@ -431,7 +481,10 @@ Request plots like:
 Modifiers for plots:
   with amplitude 2.0
   with red line
-  with dashed line"""
+  with dashed line
+
+Note: I auto-learn from LLM responses. Ask a question I don't know,
+and next time I'll answer without calling the LLM."""
     
     def get_stats(self) -> Dict[str, Any]:
         """Get engine statistics."""
