@@ -286,13 +286,21 @@ class HyperChatEngine:
         
         # Handle knowledge with potential LLM lookup via tools
         if intent_result.intent == Intent.KNOWLEDGE:
-            # First try local knowledge
+            # Extract the topic being asked about
+            topic = self.pipeline._extract_topic(user_message).lower()
+            
+            # First try local knowledge - but only if topic appears in the result
             results = self.pipeline.knowledge_space.query_text(user_message, top_k=3)
             
-            if results and results[0].similarity > 0.3:
-                return results[0].output, None
+            if results and results[0].similarity > 0.5:
+                # Check if the topic actually appears in the matched content
+                matched_content = results[0].output.lower()
+                topic_words = topic.split()
+                # At least one significant word from topic should appear in result
+                if any(word in matched_content for word in topic_words if len(word) > 3):
+                    return results[0].output, None
             
-            # No local knowledge - try LLM via tools if available
+            # No relevant local knowledge - try LLM via tools if available
             if tools:
                 shell_tool = next((t for t in tools if t.function.name == 'developer__shell'), None)
                 if shell_tool:
