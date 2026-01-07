@@ -127,6 +127,72 @@ Unless we build a geometric decoder that generates tokens, not retrieves sentenc
 
 ---
 
+## EXPERIMENTAL RESULTS: Additional Approaches (Jan 7, 2025)
+
+### Approaches Tested
+
+| Approach | Accuracy | Issue |
+|----------|----------|-------|
+| QuaternionEncoder | 21.1% | All sentences encode to same position |
+| HolographicTransformer (word overlap) | 8.2% | Similar sentences compete |
+| Holographic + pair boost | 0% | Boosting doesn't create right structure |
+| Probe extraction (W = Y @ X @ inv(X'X)) | 21.1% | Low MSE but nearest neighbor fails |
+| Laplacian embedding (graph-based) | 0% | Deltas not self-similar |
+
+### Probe Extraction Details
+
+Used the exact formula from memory: `W = Y @ X @ (X^T X)^(-1)`
+
+- MSE: 0.0026 (very low - good fit to training data)
+- But nearest neighbor still finds wrong sentence
+- The transformation matrix is correct, but decoding fails
+
+### Laplacian Embedding Details
+
+Treated transformation pairs as graph edges:
+- Built adjacency matrix from transformation relationships
+- Used normalized Laplacian eigenvectors as positions
+- Result: Deltas NOT self-similar (deviation 0.45 vs norm 0.14)
+
+### The Core Issue
+
+**Geometric transformation requires unique decoding.**
+
+For `position + delta → text` to work:
+- The target must be the ONLY point at `position + delta`
+- Or at least the NEAREST point
+
+But with 169 sentences and high word overlap:
+- Many sentences cluster together
+- Nearest neighbor is ambiguous
+
+### What Works vs What Doesn't
+
+**Works geometrically:**
+- Classification/retrieval (100% with keyword boost - Design 101)
+- Concept-level transformations (king→queen, self-similar)
+- Intent detection, similarity search
+
+**Doesn't work geometrically:**
+- Sentence-level transformation
+- Text generation
+
+### Connection to Design 084
+
+Design 084 says: "We can construct the geometry we need."
+
+For retrieval, we construct geometry where similar things are close.
+For transformation, we'd need geometry where each source has EXACTLY ONE target nearby.
+
+This is possible in principle but requires:
+1. Each sentence has a unique position (not just based on word overlap)
+2. Transformation pairs are explicitly encoded in the structure
+3. No other sentences are nearby
+
+With a small corpus (169 sentences) and high overlap, this isn't achievable.
+
+---
+
 ## The Problem
 
 The current `TransformationSpace` violates core philosophy:
