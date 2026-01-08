@@ -43,6 +43,9 @@ logger = logging.getLogger(__name__)
 # =============================================================================
 
 DIMENSION_PROMPTS = {
+    # ==========================================================================
+    # GRAMMATICAL DIMENSIONS
+    # ==========================================================================
     "tense": {
         "values": ["past", "present", "future"],
         "prompt": """For the word/phrase "{concept}", provide its forms in different tenses.
@@ -50,24 +53,6 @@ Format your response as JSON only, no explanation:
 {{"past": "<past tense>", "present": "<present tense>", "future": "<future tense>"}}
 
 Example for "go": {{"past": "went", "present": "go", "future": "will go"}}
-
-Now for "{concept}":""",
-    },
-    "formality": {
-        "values": ["casual", "formal"],
-        "prompt": """For "{concept}", provide casual and formal equivalents.
-Format as JSON only: {{"casual": "<casual form>", "formal": "<formal form>"}}
-
-Example for "hello": {{"casual": "hi", "formal": "greetings"}}
-
-Now for "{concept}":""",
-    },
-    "regality": {
-        "values": ["common", "noble", "royal"],
-        "prompt": """For "{concept}", provide forms at different regality levels.
-Format as JSON only: {{"common": "<common>", "noble": "<noble>", "royal": "<royal>"}}
-
-Example for "house": {{"common": "house", "noble": "manor", "royal": "palace"}}
 
 Now for "{concept}":""",
     },
@@ -80,12 +65,77 @@ Example for "wrote": {{"active": "wrote", "passive": "was written"}}
 
 Now for "{concept}":""",
     },
-    "emotion": {
-        "values": ["sad", "neutral", "happy"],
-        "prompt": """For "{concept}", provide emotionally varied forms.
-Format as JSON only: {{"sad": "<sad version>", "neutral": "<neutral>", "happy": "<happy version>"}}
+    "number": {
+        "values": ["singular", "plural"],
+        "prompt": """For the noun "{concept}", provide singular and plural forms.
+Format as JSON only: {{"singular": "<singular>", "plural": "<plural>"}}
 
-Example for "said": {{"sad": "sighed", "neutral": "said", "happy": "exclaimed"}}
+Example for "dog": {{"singular": "dog", "plural": "dogs"}}
+Example for "child": {{"singular": "child", "plural": "children"}}
+
+Now for "{concept}":""",
+    },
+    "degree": {
+        "values": ["positive", "comparative", "superlative"],
+        "prompt": """For the adjective/adverb "{concept}", provide degree forms.
+Format as JSON only: {{"positive": "<base>", "comparative": "<more>", "superlative": "<most>"}}
+
+Example for "fast": {{"positive": "fast", "comparative": "faster", "superlative": "fastest"}}
+Example for "beautiful": {{"positive": "beautiful", "comparative": "more beautiful", "superlative": "most beautiful"}}
+
+Now for "{concept}":""",
+    },
+    
+    # ==========================================================================
+    # SEMANTIC DIMENSIONS
+    # ==========================================================================
+    "formality": {
+        "values": ["casual", "neutral", "formal"],
+        "prompt": """For "{concept}", provide forms at different formality levels.
+Format as JSON only: {{"casual": "<casual>", "neutral": "<neutral>", "formal": "<formal>"}}
+
+Example for "hello": {{"casual": "hi", "neutral": "hello", "formal": "greetings"}}
+Example for "child": {{"casual": "kid", "neutral": "child", "formal": "youth"}}
+
+Now for "{concept}":""",
+    },
+    "regality": {
+        "values": ["common", "noble", "royal"],
+        "prompt": """For "{concept}", provide forms at different social status levels.
+Format as JSON only: {{"common": "<common>", "noble": "<noble>", "royal": "<royal>"}}
+
+Example for "house": {{"common": "house", "noble": "manor", "royal": "palace"}}
+Example for "man": {{"common": "man", "noble": "gentleman", "royal": "king"}}
+
+Now for "{concept}":""",
+    },
+    "intensity": {
+        "values": ["mild", "moderate", "intense"],
+        "prompt": """For "{concept}", provide forms at different intensity levels.
+Format as JSON only: {{"mild": "<mild>", "moderate": "<moderate>", "intense": "<intense>"}}
+
+Example for "hot": {{"mild": "warm", "moderate": "hot", "intense": "scorching"}}
+Example for "happy": {{"mild": "content", "moderate": "happy", "intense": "ecstatic"}}
+
+Now for "{concept}":""",
+    },
+    "polarity": {
+        "values": ["negative", "neutral", "positive"],
+        "prompt": """For the concept "{concept}", provide forms with different sentiment.
+Format as JSON only: {{"negative": "<negative>", "neutral": "<neutral>", "positive": "<positive>"}}
+
+Example for "quality": {{"negative": "terrible", "neutral": "okay", "positive": "excellent"}}
+Example for "feeling": {{"negative": "hate", "neutral": "indifferent", "positive": "love"}}
+
+Now for "{concept}":""",
+    },
+    "specificity": {
+        "values": ["general", "specific", "precise"],
+        "prompt": """For "{concept}", provide forms at different specificity levels.
+Format as JSON only: {{"general": "<broad category>", "specific": "<specific>", "precise": "<very precise>"}}
+
+Example for "dog": {{"general": "animal", "specific": "dog", "precise": "golden retriever"}}
+Example for "car": {{"general": "vehicle", "specific": "car", "precise": "sedan"}}
 
 Now for "{concept}":""",
     },
@@ -95,6 +145,47 @@ Now for "{concept}":""",
 Format as JSON only: {{"uncertain": "<uncertain>", "neutral": "<neutral>", "certain": "<certain>"}}
 
 Example for "think": {{"uncertain": "might think", "neutral": "think", "certain": "know"}}
+Example for "probably": {{"uncertain": "perhaps", "neutral": "probably", "certain": "definitely"}}
+
+Now for "{concept}":""",
+    },
+    "emotion": {
+        "values": ["sad", "neutral", "happy"],
+        "prompt": """For "{concept}", provide emotionally varied forms.
+Format as JSON only: {{"sad": "<sad version>", "neutral": "<neutral>", "happy": "<happy version>"}}
+
+Example for "said": {{"sad": "sighed", "neutral": "said", "happy": "exclaimed"}}
+Example for "expression": {{"sad": "frown", "neutral": "neutral face", "happy": "smile"}}
+
+Now for "{concept}":""",
+    },
+    "size": {
+        "values": ["small", "medium", "large"],
+        "prompt": """For "{concept}", provide forms at different size scales.
+Format as JSON only: {{"small": "<small>", "medium": "<medium>", "large": "<large>"}}
+
+Example for "house": {{"small": "cottage", "medium": "house", "large": "mansion"}}
+Example for "dog": {{"small": "puppy", "medium": "dog", "large": "hound"}}
+
+Now for "{concept}":""",
+    },
+    "speed": {
+        "values": ["slow", "medium", "fast"],
+        "prompt": """For "{concept}", provide forms at different speed levels.
+Format as JSON only: {{"slow": "<slow>", "medium": "<medium>", "fast": "<fast>"}}
+
+Example for "walk": {{"slow": "stroll", "medium": "walk", "fast": "stride"}}
+Example for "run": {{"slow": "jog", "medium": "run", "fast": "sprint"}}
+
+Now for "{concept}":""",
+    },
+    "age": {
+        "values": ["young", "adult", "old"],
+        "prompt": """For "{concept}", provide forms at different life stages.
+Format as JSON only: {{"young": "<young>", "adult": "<adult>", "old": "<old>"}}
+
+Example for "person": {{"young": "child", "adult": "adult", "old": "elder"}}
+Example for "dog": {{"young": "puppy", "adult": "dog", "old": "old dog"}}
 
 Now for "{concept}":""",
     },
@@ -411,6 +502,47 @@ class LearningConceptTransformer(ConceptTransformer):
             forms=forms
         )
     
+    def learn_concept_multi(self, 
+                            concept: str, 
+                            dimensions: List[str] = None) -> Dict[str, LearningResult]:
+        """
+        Learn a concept across multiple dimensions.
+        
+        Args:
+            concept: The concept to learn
+            dimensions: List of dimensions to learn (default: all applicable)
+            
+        Returns:
+            Dict mapping dimension -> LearningResult
+        """
+        if dimensions is None:
+            dimensions = list(DIMENSION_PROMPTS.keys())
+        
+        results = {}
+        for dim in dimensions:
+            if dim in DIMENSION_PROMPTS:
+                results[dim] = self.learn_concept(concept, dim)
+        
+        return results
+    
+    @staticmethod
+    def available_dimensions() -> Dict[str, List[str]]:
+        """Get all available dimensions and their values."""
+        return {
+            dim: config["values"] 
+            for dim, config in DIMENSION_PROMPTS.items()
+        }
+    
+    @staticmethod
+    def dimension_info(dimension: str) -> Optional[Dict]:
+        """Get info about a specific dimension."""
+        if dimension in DIMENSION_PROMPTS:
+            return {
+                "name": dimension,
+                "values": DIMENSION_PROMPTS[dimension]["values"],
+            }
+        return None
+    
     # =========================================================================
     # AUTO-LEARNING TRANSFORM
     # =========================================================================
@@ -670,6 +802,8 @@ class LearningConceptTransformer(ConceptTransformer):
         base_stats["learned_concepts"] = len(self._learned_concepts)
         base_stats["learning_attempts"] = len(self._learning_attempts)
         base_stats["llm_available"] = self.is_llm_available()
+        base_stats["available_dimensions"] = list(DIMENSION_PROMPTS.keys())
+        base_stats["dimension_count"] = len(DIMENSION_PROMPTS)
         return base_stats
     
     def learned_concepts_list(self) -> List[Dict]:

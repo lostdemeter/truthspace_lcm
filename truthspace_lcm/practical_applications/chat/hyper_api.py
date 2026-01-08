@@ -221,7 +221,10 @@ class HyperChatEngine:
         if user_message.lower() == "/help":
             return self._help_text()
         
-        if user_message.lower() == "/dimension_demo" or user_message.lower().startswith("/dim"):
+        if user_message.lower() == "/dimensions":
+            return self._handle_dimensions()
+        
+        if user_message.lower() == "/dimension_demo" or user_message.lower() == "/dim":
             return self._dimension_demo()
         
         if user_message.lower().startswith("/transform_geo"):
@@ -324,6 +327,9 @@ class HyperChatEngine:
         
         if user_message.lower().startswith("/transform "):
             return self._handle_transform(user_message[11:].strip()), None
+        
+        if user_message.lower() == "/dimensions":
+            return self._handle_dimensions(), None
         
         if user_message.lower().startswith("/transform_geo"):
             return self._handle_transform_geo(user_message[14:].strip()), None
@@ -865,18 +871,44 @@ use /transform_geo which auto-learns unknown concepts."""
         else:
             return f"'{concept}' was not in learned concepts"
     
+    def _handle_dimensions(self) -> str:
+        """Handle /dimensions command - list all available dimensions."""
+        dims = self.concept_transformer.available_dimensions()
+        
+        lines = ["**Available Dimensions** (14 total)\n"]
+        
+        # Group by type
+        grammatical = ["tense", "voice", "number", "degree"]
+        semantic = ["formality", "regality", "intensity", "polarity", 
+                    "specificity", "certainty", "emotion", "size", "speed", "age"]
+        
+        lines.append("**Grammatical:**")
+        for dim in grammatical:
+            if dim in dims:
+                values = " → ".join(dims[dim])
+                lines.append(f"  - **{dim}**: {values}")
+        
+        lines.append("\n**Semantic:**")
+        for dim in semantic:
+            if dim in dims:
+                values = " → ".join(dims[dim])
+                lines.append(f"  - **{dim}**: {values}")
+        
+        lines.append("\n**Usage:** `/transform_geo <dimension>=<value>: <sentence>`")
+        lines.append("**Example:** `/transform_geo intensity=intense: I am happy`")
+        
+        return "\n".join(lines)
+    
     def _infer_source_value(self, sentence: str, dimension: str) -> str:
         """Infer the source value for a dimension from the sentence."""
         sentence_lower = sentence.lower()
         
+        # Grammatical dimensions
         if dimension == 'tense':
-            # Check for future markers
             if 'will ' in sentence_lower or 'shall ' in sentence_lower:
                 return 'future'
-            # Check for present markers
             if any(w in sentence_lower for w in ['is ', 'are ', 'goes ', 'sits ', 'stands ']):
                 return 'present'
-            # Default to past
             return 'past'
         
         if dimension == 'voice':
@@ -884,19 +916,52 @@ use /transform_geo which auto-learns unknown concepts."""
                 return 'passive'
             return 'active'
         
+        if dimension == 'number':
+            return 'singular'  # Default assumption
+        
+        if dimension == 'degree':
+            return 'positive'  # Base form
+        
+        # Semantic dimensions
         if dimension == 'regality':
-            if any(w in sentence_lower for w in ['majesty', 'royal', 'decree']):
+            if any(w in sentence_lower for w in ['majesty', 'royal', 'decree', 'king', 'queen']):
                 return 'royal'
-            if any(w in sentence_lower for w in ['sir ', 'lady ', 'lord ']):
+            if any(w in sentence_lower for w in ['sir ', 'lady ', 'lord ', 'noble']):
                 return 'noble'
             return 'common'
         
         if dimension == 'formality':
-            if any(w in sentence_lower for w in ['obtained', 'proceeded', 'inquired']):
+            if any(w in sentence_lower for w in ['obtained', 'proceeded', 'inquired', 'greetings']):
                 return 'formal'
-            return 'casual'
+            if any(w in sentence_lower for w in ['hi ', 'hey ', 'yeah', 'gonna', 'wanna']):
+                return 'casual'
+            return 'neutral'
         
-        # Default to neutral for other dimensions
+        if dimension == 'intensity':
+            return 'moderate'  # Default to middle
+        
+        if dimension == 'polarity':
+            return 'neutral'
+        
+        if dimension == 'specificity':
+            return 'specific'  # Default to middle
+        
+        if dimension == 'certainty':
+            return 'neutral'
+        
+        if dimension == 'emotion':
+            return 'neutral'
+        
+        if dimension == 'size':
+            return 'medium'
+        
+        if dimension == 'speed':
+            return 'medium'
+        
+        if dimension == 'age':
+            return 'adult'
+        
+        # Default fallback
         return 'neutral'
     
     def _help_text(self) -> str:
@@ -922,10 +987,15 @@ use /transform_geo which auto-learns unknown concepts."""
 
 **Examples:**
   /transform_geo tense=future: The dog jumped over the fence
+  /transform_geo intensity=intense: I am happy
+  /transform_geo regality=royal: The man walked to his house
   /learn_concept swimming tense
   /learned_concepts
+  /dimensions
 
-**Dimensions:** tense, regality, formality, voice, certainty, emotion
+**Grammatical Dimensions:** tense, voice, number, degree
+**Semantic Dimensions:** formality, regality, intensity, polarity, specificity, 
+                        certainty, emotion, size, speed, age
 
 The geometric transformer auto-learns unknown concepts via LLM!
 Learned concepts are persisted to ~/.truthspace/learned_concepts.json"""
