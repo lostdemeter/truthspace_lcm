@@ -454,7 +454,7 @@ class LearningConceptTransformer(ConceptTransformer):
         Returns:
             LearningResult
         """
-        if dimension not in DIMENSION_LEVELS:
+        if dimension not in DIMENSION_PROMPTS:
             return LearningResult(
                 concept=concept_name or "unknown",
                 dimension=dimension,
@@ -462,7 +462,7 @@ class LearningConceptTransformer(ConceptTransformer):
                 error=f"Unknown dimension: {dimension}"
             )
         
-        values = list(DIMENSION_LEVELS[dimension].keys())
+        values = DIMENSION_PROMPTS[dimension]["values"]
         pairs_learned = 0
         
         for i in range(len(values)):
@@ -717,8 +717,9 @@ class LearningConceptTransformer(ConceptTransformer):
                 dimension = item["dimension"]
                 forms = item["forms"]
                 
-                # Re-learn the pairs
-                values = list(DIMENSION_LEVELS.get(dimension, {}).keys())
+                # Re-learn the pairs - use DIMENSION_PROMPTS for values
+                dim_config = DIMENSION_PROMPTS.get(dimension, {})
+                values = dim_config.get("values", [])
                 for i in range(len(values)):
                     for j in range(i + 1, len(values)):
                         src_val = values[i]

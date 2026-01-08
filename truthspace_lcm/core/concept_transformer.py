@@ -230,7 +230,7 @@ class ConceptTransformer:
         return len(transformations)
     
     def _compute_deltas(self):
-        """Compute canonical delta for each transformation type."""
+        """Compute canonical delta for each transformation type (both directions)."""
         for dim, pairs in self._pairs.items():
             # Group by (source_value, target_value)
             grouped = defaultdict(list)
@@ -248,7 +248,11 @@ class ConceptTransformer:
                         deltas.append(delta)
                 
                 if deltas:
-                    self._deltas[(dim, src_val, tgt_val)] = np.mean(deltas, axis=0)
+                    mean_delta = np.mean(deltas, axis=0)
+                    # Store forward delta
+                    self._deltas[(dim, src_val, tgt_val)] = mean_delta
+                    # Store reverse delta (negative of forward)
+                    self._deltas[(dim, tgt_val, src_val)] = -mean_delta
     
     def transform_phrase(self, phrase: str, dimension: str, 
                          source_value: str, target_value: str,
