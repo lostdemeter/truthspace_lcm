@@ -758,7 +758,7 @@ Related commands:
             lines.append(f"**Failed:** {result.failure_reason}")
             if auto_learn:
                 lines.append(f"**Note:** Auto-learning was attempted but failed")
-            lines.append(f"**Tip:** Try /learn_concept <word> to manually teach it")
+            lines.append(f"**Tip:** Try `/learn_concept <word> <dimension>` to manually teach it")
         
         return "\n".join(lines)
     
