@@ -50,6 +50,9 @@ from truthspace_lcm.core.transformation_space import (
 from truthspace_lcm.core.concept_transformer import (
     ConceptTransformer, load_concept_transformer, ConceptTransformResult
 )
+from truthspace_lcm.core.learning_transformer import (
+    LearningConceptTransformer, load_learning_transformer, LearningResult
+)
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -176,9 +179,9 @@ class HyperChatEngine:
         self.transformation_space = load_transformation_space()
         logger.info(f"Loaded transformation space: {self.transformation_space.stats()}")
         
-        # Load concept transformer (pure geometric)
-        self.concept_transformer = load_concept_transformer()
-        logger.info(f"Loaded concept transformer: {self.concept_transformer.stats()}")
+        # Load learning concept transformer (pure geometric with auto-learning)
+        self.concept_transformer = load_learning_transformer()
+        logger.info(f"Loaded learning transformer: {self.concept_transformer.stats()}")
     
     def generate(self, messages: List[Message]) -> str:
         """Generate a response from messages."""
@@ -227,6 +230,17 @@ class HyperChatEngine:
         
         if user_message.lower().startswith("/transform "):
             return self._handle_transform(user_message[11:].strip())
+        
+        if user_message.lower().startswith("/learn_concept"):
+            args = user_message[14:].strip()
+            return self._handle_learn_concept(args)
+        
+        if user_message.lower() == "/learned_concepts":
+            return self._handle_learned_concepts()
+        
+        if user_message.lower().startswith("/forget_concept"):
+            args = user_message[15:].strip()
+            return self._handle_forget_concept(args)
         
         # Process through pipeline
         return self.pipeline.chat(user_message)
@@ -311,8 +325,17 @@ class HyperChatEngine:
         if user_message.lower().startswith("/transform "):
             return self._handle_transform(user_message[11:].strip()), None
         
-        if user_message.lower().startswith("/transform_geo "):
-            return self._handle_transform_geo(user_message[15:].strip()), None
+        if user_message.lower().startswith("/transform_geo"):
+            return self._handle_transform_geo(user_message[14:].strip()), None
+        
+        if user_message.lower().startswith("/learn_concept"):
+            return self._handle_learn_concept(user_message[14:].strip()), None
+        
+        if user_message.lower() == "/learned_concepts":
+            return self._handle_learned_concepts(), None
+        
+        if user_message.lower().startswith("/forget_concept"):
+            return self._handle_forget_concept(user_message[15:].strip()), None
         
         # Detect intent
         intent_result = self.pipeline.intent_space.detect(user_message)
@@ -638,21 +661,24 @@ class HyperChatEngine:
         
         return None
     
-    def _handle_transform_geo(self, args: str) -> str:
+    def _handle_transform_geo(self, args: str, auto_learn: bool = True) -> str:
         """
-        Handle /transform_geo command - PURE GEOMETRIC transformation.
+        Handle /transform_geo command - PURE GEOMETRIC transformation with auto-learning.
         
-        Uses ConceptTransformer (Design 108 breakthrough):
+        Uses LearningConceptTransformer (Design 108 + 109):
         - No regex patterns
-        - No LLM fallback
         - Pure geometric: position + delta = transformed position
+        - Auto-learns unknown concepts via LLM
         
         Format: /transform_geo dimension=value: sentence
         """
         if not args:
             stats = self.concept_transformer.stats()
             dims = list(self.concept_transformer._pairs.keys())
-            return f"""**Pure Geometric Transformation** (Design 108)
+            learned = stats.get('learned_concepts', 0)
+            llm_status = "✓ available" if stats.get('llm_available', False) else "✗ unavailable"
+            
+            return f"""**Pure Geometric Transformation** (Design 108 + Auto-Learning)
 
 Usage: /transform_geo <dimension>=<value>: <sentence>
 
@@ -661,17 +687,23 @@ Available dimensions: {', '.join(dims)}
 Stats:
 - Concepts: {stats['concepts']}
 - Phrases: {stats['phrases']}
-- Accuracy: 85.1%
+- Learned concepts: {learned}
+- LLM: {llm_status}
 
 Example:
   /transform_geo tense=future: Jack went up the hill
 
-This uses ONLY geometric operations:
+How it works:
 1. Find phrase in sentence
 2. Look up position in concept space
 3. Add transformation delta (φ-based)
 4. Find nearest phrase at new position
-5. Replace in sentence"""
+5. **If unknown: auto-learn via LLM!**
+
+Related commands:
+  /learn_concept <word>     - Manually learn a concept
+  /learned_concepts         - Show learned concepts
+  /forget_concept <word>    - Forget a learned concept"""
         
         if ':' not in args:
             return "Format: /transform_geo <dimension>=<value>: <sentence>"
@@ -695,10 +727,15 @@ This uses ONLY geometric operations:
         # Detect source value (for tense, try to infer from sentence)
         source_value = self._infer_source_value(sentence, dim)
         
-        # Transform using ConceptTransformer
-        result = self.concept_transformer.transform_sentence(
-            sentence, dim, source_value, val
-        )
+        # Transform using LearningConceptTransformer with auto-learning
+        if auto_learn and hasattr(self.concept_transformer, 'transform_sentence_auto'):
+            result = self.concept_transformer.transform_sentence_auto(
+                sentence, dim, source_value, val
+            )
+        else:
+            result = self.concept_transformer.transform_sentence(
+                sentence, dim, source_value, val
+            )
         
         # Format response
         lines = [
@@ -710,12 +747,123 @@ This uses ONLY geometric operations:
             lines.append(f"**Change:** '{result.source_phrase}' → '{result.target_phrase}'")
             lines.append(f"**Method:** Pure geometric (position + Δ = new position)")
             if result.was_injected:
-                lines.append(f"**Note:** Used temporary injection for unknown phrase")
+                lines.append(f"**Note:** Auto-learned via LLM!")
         else:
             lines.append(f"**Failed:** {result.failure_reason}")
-            lines.append(f"**Tip:** The phrase may not be in the geometric vocabulary")
+            if auto_learn:
+                lines.append(f"**Note:** Auto-learning was attempted but failed")
+            lines.append(f"**Tip:** Try /learn_concept <word> to manually teach it")
         
         return "\n".join(lines)
+    
+    def _handle_learn_concept(self, args: str) -> str:
+        """
+        Handle /learn_concept command - manually learn a concept via LLM.
+        
+        Format: /learn_concept <word> [dimension]
+        """
+        if not args:
+            return """**Learn Concept**
+
+Usage: /learn_concept <word> [dimension]
+
+Examples:
+  /learn_concept jumped           - Learn all dimensions for "jumped"
+  /learn_concept jumped tense     - Learn only tense forms
+  /learn_concept happy emotion    - Learn emotion forms for "happy"
+
+Available dimensions: tense, formality, regality, voice, emotion, certainty"""
+        
+        parts = args.strip().split()
+        concept = parts[0]
+        dimension = parts[1] if len(parts) > 1 else None
+        
+        # Check if LLM is available
+        if not self.concept_transformer.is_llm_available():
+            return "**Error:** LLM is not available. Cannot learn new concepts."
+        
+        # Learn the concept
+        if dimension:
+            result = self.concept_transformer.learn_concept(concept, dimension)
+            if result.success:
+                forms_str = ", ".join(f"{k}='{v}'" for k, v in result.forms.items())
+                return f"""**Learned '{concept}' ({dimension})**
+
+Forms: {forms_str}
+Pairs learned: {result.pairs_learned}
+
+The concept is now in the geometric vocabulary!"""
+            else:
+                return f"**Failed to learn '{concept}':** {result.error}"
+        else:
+            # Learn all dimensions
+            dimensions = ['tense', 'formality', 'regality']
+            total_pairs = 0
+            results_text = []
+            
+            for dim in dimensions:
+                result = self.concept_transformer.learn_concept(concept, dim)
+                if result.success:
+                    forms_str = ", ".join(f"{k}='{v}'" for k, v in result.forms.items())
+                    results_text.append(f"  **{dim}:** {forms_str} ({result.pairs_learned} pairs)")
+                    total_pairs += result.pairs_learned
+            
+            if total_pairs > 0:
+                return f"""**Learned '{concept}'**
+
+{chr(10).join(results_text)}
+
+Total pairs learned: {total_pairs}
+The concept is now in the geometric vocabulary!"""
+            else:
+                return f"**Failed to learn '{concept}'** - LLM could not generate valid forms"
+    
+    def _handle_learned_concepts(self) -> str:
+        """Show all learned concepts."""
+        learned = self.concept_transformer.learned_concepts_list()
+        
+        if not learned:
+            return """**No learned concepts yet**
+
+Use /learn_concept <word> to teach new concepts, or
+use /transform_geo which auto-learns unknown concepts."""
+        
+        lines = [f"**Learned Concepts** ({len(learned)} total)", ""]
+        
+        # Group by dimension
+        by_dim = {}
+        for item in learned:
+            dim = item['dimension']
+            if dim not in by_dim:
+                by_dim[dim] = []
+            by_dim[dim].append(item)
+        
+        for dim, items in sorted(by_dim.items()):
+            lines.append(f"**{dim}:**")
+            for item in items:
+                forms = item['forms']
+                forms_str = " → ".join(forms.values())
+                lines.append(f"  - {item['concept']}: {forms_str}")
+            lines.append("")
+        
+        return "\n".join(lines)
+    
+    def _handle_forget_concept(self, args: str) -> str:
+        """Forget a learned concept."""
+        if not args:
+            return "Usage: /forget_concept <word> [dimension]"
+        
+        parts = args.strip().split()
+        concept = parts[0]
+        dimension = parts[1] if len(parts) > 1 else None
+        
+        if self.concept_transformer.forget_concept(concept, dimension):
+            if dimension:
+                return f"Forgot '{concept}' ({dimension})"
+            else:
+                return f"Forgot all forms of '{concept}'"
+        else:
+            return f"'{concept}' was not in learned concepts"
     
     def _infer_source_value(self, sentence: str, dimension: str) -> str:
         """Infer the source value for a dimension from the sentence."""
@@ -753,33 +901,34 @@ This uses ONLY geometric operations:
     
     def _help_text(self) -> str:
         return """HyperChat API - Commands:
-/learn <topic>  - Learn about a topic using LLM
-/learned        - Show learned topics
-/forget <topic> - Forget a learned topic
-/transform      - Transform sentences (regex + LLM fallback)
-/transform_geo  - Transform sentences (PURE GEOMETRIC)
-/save           - Save knowledge to file
-/stats          - Show statistics
-/dim            - Show dimension demo (before/after)
-/help           - Show this help
 
-Transform sentences:
-  /transform tense=future: Jack went home  (uses regex patterns)
-  /transform_geo tense=future: Jack went home  (pure geometric!)
+**Knowledge:**
+/learn <topic>      - Learn about a topic using LLM
+/learned            - Show learned topics
+/forget <topic>     - Forget a learned topic
+/save               - Save knowledge to file
 
-Available dimensions: tense, regality, formality, voice, certainty, emotion
+**Geometric Transformation:**
+/transform_geo      - Transform sentences (PURE GEOMETRIC + auto-learn!)
+/learn_concept      - Manually teach a concept via LLM
+/learned_concepts   - Show geometrically learned concepts
+/forget_concept     - Forget a learned concept
 
-Ask questions like:
-  What is machine learning?
-  Tell me about Python
+**Other:**
+/transform          - Transform sentences (regex + LLM fallback)
+/stats              - Show statistics
+/dim                - Show dimension demo
+/help               - Show this help
 
-Request plots like:
-  Create a sine wave plot
-  Make a bar chart
-  Plot a histogram with 50 bins
+**Examples:**
+  /transform_geo tense=future: The dog jumped over the fence
+  /learn_concept swimming tense
+  /learned_concepts
 
-Note: I auto-learn from LLM responses. Ask a question I don't know,
-and next time I'll answer without calling the LLM."""
+**Dimensions:** tense, regality, formality, voice, certainty, emotion
+
+The geometric transformer auto-learns unknown concepts via LLM!
+Learned concepts are persisted to ~/.truthspace/learned_concepts.json"""
     
     def get_stats(self) -> Dict[str, Any]:
         """Get engine statistics."""
