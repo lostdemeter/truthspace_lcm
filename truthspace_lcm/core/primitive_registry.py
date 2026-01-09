@@ -243,11 +243,17 @@ class PrimitiveRegistry:
                 if word in self._single_word:
                     prim = self._single_word[word]
                     # Single-word primitives use MAX aggregation
+                    # For intrinsic_functional (dim 4), use largest absolute value
                     for dim, level in enumerate(prim.levels):
                         if dim < self.lattice.ndim:
-                            if not activated[dim] or level > levels[dim]:
+                            if not activated[dim]:
                                 levels[dim] = level
                                 activated[dim] = True
+                            elif dim == 4:  # intrinsic_functional: use largest |value|
+                                if abs(level) > abs(levels[dim]):
+                                    levels[dim] = level
+                            elif level > levels[dim]:
+                                levels[dim] = level
                 i += 1
         
         position = self.lattice.levels_to_position(levels)
@@ -334,6 +340,52 @@ class PrimitiveRegistry:
     def __repr__(self) -> str:
         stats = self.stats
         return f"PrimitiveRegistry(single={stats['single_word_count']}, multi={stats['multi_word_count']})"
+
+
+def create_registry_from_primitives(lattice: Optional[PhiLattice] = None) -> PrimitiveRegistry:
+    """
+    Create a PrimitiveRegistry seeded from static primitives.
+    
+    Uses ALL_PRIMITIVES from primitives.py to populate the registry.
+    Each primitive defines a (dimension, level) mapping for its keywords.
+    
+    Keywords that appear in multiple primitives get COMBINED levels
+    (one keyword can activate multiple dimensions).
+    
+    Args:
+        lattice: Optional PhiLattice instance
+        
+    Returns:
+        Populated PrimitiveRegistry
+    """
+    from .primitives import ALL_PRIMITIVES
+    from collections import defaultdict
+    
+    registry = PrimitiveRegistry(lattice)
+    ndim = registry.lattice.ndim
+    
+    # First pass: collect all dimension activations per keyword
+    keyword_levels: Dict[str, List[int]] = defaultdict(lambda: [0] * ndim)
+    
+    for prim in ALL_PRIMITIVES:
+        if prim.dimension < ndim:
+            for kw in prim.keywords:
+                kw_lower = kw.lower()
+                # Use MAX per dimension (Sierpinski property)
+                current = keyword_levels[kw_lower][prim.dimension]
+                # For intrinsic_functional (dim 4), negative levels are meaningful
+                # Use the level with larger absolute value, preserving sign
+                if prim.dimension == 4:  # intrinsic_functional
+                    if abs(prim.level) > abs(current):
+                        keyword_levels[kw_lower][prim.dimension] = prim.level
+                else:
+                    keyword_levels[kw_lower][prim.dimension] = max(current, prim.level)
+    
+    # Second pass: register combined levels
+    for kw, levels in keyword_levels.items():
+        registry.register(kw, levels, source="primitives", confidence=1.0)
+    
+    return registry
 
 
 def create_registry_from_bootstrap(knowledge_items: List[dict], 

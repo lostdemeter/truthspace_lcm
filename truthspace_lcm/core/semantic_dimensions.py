@@ -100,10 +100,30 @@ FORMALITY = SemanticDimension(
 )
 
 # =============================================================================
+# INTRINSIC/FUNCTIONAL DIMENSION (index 4)
+# What type of knowledge: structural properties vs relational/purpose
+# Design 047: Discovered through pure geometric matching
+# =============================================================================
+
+INTRINSIC_FUNCTIONAL = SemanticDimension(
+    index=4,
+    name='intrinsic_functional',
+    description='Intrinsic properties vs functional/relational description',
+    level_meanings={
+        2: 'strongly_functional',    # Context, history, created by, used for
+        1: 'functional',             # Purpose, known as, designed to
+        0: 'balanced',               # Mix of both
+        -1: 'intrinsic',             # Properties, structure, contains, has
+        -2: 'strongly_intrinsic',    # Raw structure, made of, consists of
+    },
+    weight=PHI  # Same weight as specificity - this is important for matching
+)
+
+# =============================================================================
 # DEFAULT CONFIGURATION
 # =============================================================================
 
-DEFAULT_DIMENSIONS = [DOMAIN, SPECIFICITY, INTENT, FORMALITY]
+DEFAULT_DIMENSIONS = [DOMAIN, SPECIFICITY, INTENT, FORMALITY, INTRINSIC_FUNCTIONAL]
 
 DEFAULT_DIMENSION_COUNT = len(DEFAULT_DIMENSIONS)
 

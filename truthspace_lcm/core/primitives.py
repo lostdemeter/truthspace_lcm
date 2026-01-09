@@ -216,6 +216,43 @@ FORMALITY_PRIMITIVES = [
 ]
 
 # =============================================================================
+# INTRINSIC/FUNCTIONAL PRIMITIVES (dimension 4)
+# What type of knowledge: structural properties vs relational/purpose
+# Design 047: Discovered through pure geometric matching
+# =============================================================================
+
+INTRINSIC_FUNCTIONAL_PRIMITIVES = [
+    # Strongly functional (level 2) - context, history, purpose
+    Primitive("STRONGLY_FUNCTIONAL", 4, 2, [
+        "created", "invented", "founded", "developed", "designed",
+        "history", "origin", "background", "context"
+    ]),
+    
+    # Functional (level 1) - purpose, known as, used for
+    Primitive("FUNCTIONAL", 4, 1, [
+        "known", "called", "named", "purpose", "used", "for",
+        "designed", "meant", "intended", "serves"
+    ]),
+    
+    # Balanced (level 0) - neutral
+    Primitive("BALANCED", 4, 0, [
+        "about", "regarding", "concerning"
+    ]),
+    
+    # Intrinsic (level -1) - properties, structure
+    Primitive("INTRINSIC", 4, -1, [
+        "is", "has", "contains", "includes", "features",
+        "properties", "characteristics", "attributes"
+    ]),
+    
+    # Strongly intrinsic (level -2) - raw structure, composition
+    Primitive("STRONGLY_INTRINSIC", 4, -2, [
+        "made", "consists", "composed", "built", "comprises",
+        "structure", "components", "parts"
+    ]),
+]
+
+# =============================================================================
 # ALL PRIMITIVES
 # =============================================================================
 
@@ -223,7 +260,8 @@ ALL_PRIMITIVES = (
     DOMAIN_PRIMITIVES +
     SPECIFICITY_PRIMITIVES +
     INTENT_PRIMITIVES +
-    FORMALITY_PRIMITIVES
+    FORMALITY_PRIMITIVES +
+    INTRINSIC_FUNCTIONAL_PRIMITIVES
 )
 
 
