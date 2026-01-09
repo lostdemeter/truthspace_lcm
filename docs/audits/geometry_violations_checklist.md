@@ -10,7 +10,7 @@
 | # | File | Issue | Status | Notes |
 |---|------|-------|--------|-------|
 | 1 | `holographic_transformer.py:64-68` | Hard-coded FILLER_WORDS | ✅ DONE | Derived via φ-Zipf duality |
-| 2 | `chat_pipeline.py:212-233` | Keyword shortcuts bypass geometry | ⬜ TODO | Remove knowledge_prefixes and plot_keywords |
+| 2 | `chat_pipeline.py:212-233` | Keyword shortcuts bypass geometry | ✅ DONE | Replaced with ACTION dimension (Design 048) |
 | 3 | `knowledge_space.py:560-579` | Keyword boost on top of geometry | ✅ DONE | Removed keyword boost, pure geometric |
 | 4 | `intent_classifier.py:46-132` | Regex patterns as primary classifier | ✅ DONE | Replaced with GeometricIntentClassifier |
 | 5 | `geometric_intent_classifier.py:104-107` | Hard-coded FILLER set | ✅ DONE | Derived from module intent spread |
@@ -146,6 +146,7 @@ for name, pattern in self.patterns.items():
 | 2026-01-09 | chat.py, api_server.py | Replaced IntentClassifier with GeometricIntentClassifier | pending |
 | 2026-01-09 | geometric_intent_classifier.py | Derived filler via φ-Zipf duality | pending |
 | 2026-01-09 | knowledge_space.py | Removed keyword boost, pure geometric similarity | pending |
+| 2026-01-09 | chat_pipeline.py | Replaced keyword shortcuts with ACTION dimension (Design 048) | 8deb3a6 |
 
 ---
 
