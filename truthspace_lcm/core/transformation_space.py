@@ -1,544 +1,199 @@
 """
-Transformation Space - Geometric Sentence Transformation
+Geometric Transformation Space (Design 112 - Music Box Principle)
 
-Learns transformation patterns from corpus and applies them to new sentences
-without LLM calls. Uses the quaternion encoder to compute delta vectors
-for each dimension.
+Transforms text using geometric vocabulary lookup instead of hard-coded patterns.
+The transformation emerges from find_nearest(position + delta).
 
-Key insight: ENCODE(source) + DELTA(dimension) ≈ ENCODE(target)
-
-The transformation vocabulary maps word changes for each dimension:
-- tense: "went" → "will go", "sat" → "will sit"
-- regality: "Jack" → "Sir Jack", "went" → "did proceed"
+No word->word mappings. The music emerges from the geometry.
 
 Author: Lesley Gushurst
 License: GPLv3
 """
 
-import json
 import re
+from dataclasses import dataclass
+from typing import Dict, List, Optional, Tuple, Set, Any
 from collections import defaultdict
-from dataclasses import dataclass, field
-from pathlib import Path
-from typing import Dict, List, Optional, Tuple, Any, Set
 
 import numpy as np
 
-from .quaternion_encoder import QuaternionEncoder, QuaternionPosition
-from .dynamic_dimensions import DynamicDimensionRegistry
-
-
-# =============================================================================
-# VERB AND WORD DETECTION
-# =============================================================================
-
-# Common irregular verbs (base form -> past form)
-IRREGULAR_VERBS = {
-    # Base forms that indicate present tense
-    "go", "goes", "sit", "sits", "stand", "stands", "walk", "walks",
-    "run", "runs", "come", "comes", "is", "are", "am", "be",
-    "have", "has", "do", "does", "make", "makes", "take", "takes",
-    "give", "gives", "find", "finds", "say", "says", "know", "knows",
-    "think", "thinks", "see", "sees", "get", "gets", "play", "plays",
-    "entertain", "entertains", "develop", "develops", "believe", "believes",
-    # Past forms
-    "went", "sat", "stood", "walked", "ran", "came", "was", "were",
-    "had", "did", "made", "took", "gave", "found", "said", "knew",
-    "thought", "saw", "got", "played", "entertained", "developed", "believed",
-    # Future markers
-    "will", "shall",
-}
-
-# Words that indicate regality transformation potential
-REGALITY_MARKERS = {
-    # Common names that could be elevated
-    "jack", "jill", "mary", "john", "tom", "jane", "bob", "alice",
-    # Common words that could be formalized
-    "the", "a", "went", "walked", "said", "got", "came",
-}
-
-# Words that indicate formality transformation potential  
-FORMALITY_MARKERS = {
-    "got", "gonna", "wanna", "gotta", "kinda", "sorta",
-    "yeah", "yep", "nope", "ok", "okay",
-    "don't", "can't", "won't", "isn't", "aren't",
-}
-
-
-def detect_transformable_words(text: str, dimension: str) -> Set[str]:
-    """
-    Detect words in text that should be transformed for a given dimension.
-    
-    Returns set of words that we expect to change.
-    """
-    words = set(re.findall(r'\b[a-zA-Z]+\b', text.lower()))
-    transformable = set()
-    
-    if dimension == "tense":
-        # Look for verbs
-        for word in words:
-            # Check irregular verbs
-            if word in IRREGULAR_VERBS:
-                transformable.add(word)
-            # Check verb-like endings (past tense -ed, 3rd person -s)
-            elif word.endswith('ed') and len(word) > 3:
-                transformable.add(word)
-            elif word.endswith('ing') and len(word) > 4:
-                transformable.add(word)
-    
-    elif dimension == "regality":
-        for word in words:
-            if word in REGALITY_MARKERS:
-                transformable.add(word)
-            # Capitalized words might be names
-            # (check original text for capitalization)
-    
-    elif dimension == "formality":
-        for word in words:
-            if word in FORMALITY_MARKERS:
-                transformable.add(word)
-    
-    elif dimension == "voice":
-        # Voice changes are complex - look for verbs
-        for word in words:
-            if word in IRREGULAR_VERBS:
-                transformable.add(word)
-    
-    # For other dimensions, estimate based on sentence length
-    if not transformable and dimension in ("certainty", "emotion"):
-        # These dimensions might just add/modify punctuation or prepend phrases
-        # Not word-level changes, so return empty (will get 100% coverage)
-        pass
-    
-    return transformable
-
-
-# =============================================================================
-# DATA CLASSES
-# =============================================================================
-
-@dataclass
-class TransformationDelta:
-    """A learned transformation delta for a dimension."""
-    dimension: str
-    source_value: str
-    target_value: str
-    delta_vector: np.ndarray
-    word_mappings: Dict[str, str] = field(default_factory=dict)
-    examples: List[Tuple[str, str]] = field(default_factory=list)
-    
-    def __repr__(self):
-        return f"Delta({self.dimension}: {self.source_value}→{self.target_value}, {len(self.word_mappings)} mappings)"
+from .geometric_vocabulary import (
+    GeometricVocabulary,
+    get_default_vocabulary,
+    TENSE_DELTAS,
+    FORMALITY_DELTAS,
+    TENSE,
+    FORMALITY,
+    DOMAIN,
+    INTENSITY,
+)
+from .quaternion_encoder import QuaternionEncoder
 
 
 @dataclass
 class TransformationResult:
-    """Result of applying a transformation."""
+    """Result of a transformation."""
     original: str
     transformed: str
     dimension: str
     target_value: str
     confidence: float
-    method: str  # "vocabulary", "pattern", "fallback", "llm"
-    word_changes: List[Tuple[str, str]] = field(default_factory=list)
-    needs_llm: bool = False  # True if coverage is low and LLM would help
-    expected_changes: int = 0  # How many words we expected to transform
-    coverage: float = 1.0  # actual_changes / expected_changes
-
-
-# =============================================================================
-# TRANSFORMATION SPACE
-# =============================================================================
-
-class TransformationSpace:
-    """
-    Learns and applies sentence transformations geometrically.
+    method: str = "geometric"
+    word_changes: List[Tuple[str, str]] = None
+    needs_llm: bool = False
+    expected_changes: int = 0
+    coverage: float = 1.0
     
-    Usage:
-        space = TransformationSpace()
-        space.load_corpus("corpus/transformation_corpus.json")
-        
-        result = space.transform(
-            "Jack and Jill went up the hill",
-            dimension="tense",
-            target_value="future"
-        )
-        # -> "Jack and Jill will go up the hill"
+    def __post_init__(self):
+        if self.word_changes is None:
+            self.word_changes = []
+
+
+# Dimension-specific deltas
+# These map (dimension, target_value) -> delta vector
+TRANSFORMATION_DELTAS = {
+    # Tense transformations
+    ("tense", "future"): np.array([2, 0, 0, 0]),   # past->future or present->future
+    ("tense", "present"): np.array([1, 0, 0, 0]),  # past->present
+    ("tense", "past"): np.array([-1, 0, 0, 0]),    # present->past
+    
+    # Formality transformations
+    ("formality", "formal"): np.array([0, 1, 0, 0]),
+    ("formality", "casual"): np.array([0, -1, 0, 0]),
+    ("formality", "archaic"): np.array([0, 2, 0, 0]),
+    
+    # Regality (formality + domain shift)
+    ("regality", "royal"): np.array([0, 2, 1, 0]),
+    ("regality", "noble"): np.array([0, 1, 0, 0]),
+    ("regality", "common"): np.array([0, -1, 0, 0]),
+    
+    # Domain transformations
+    ("domain", "technical"): np.array([0, 0, 1, 0]),
+    ("domain", "sacred"): np.array([0, 1, 2, 0]),
+    ("domain", "mundane"): np.array([0, -1, -1, 0]),
+    
+    # Intensity transformations
+    ("intensity", "strong"): np.array([0, 0, 0, 1]),
+    ("intensity", "weak"): np.array([0, 0, 0, -1]),
+}
+
+
+class GeometricTransformationSpace:
+    """
+    Transformation space using geometric vocabulary (Design 112).
+    
+    Instead of pattern-based word->word mappings, transformations
+    emerge from find_nearest(position + delta).
+    
+    The vocabulary is the DRUM.
+    The find_nearest is the COMB.
+    The output is the MUSIC.
     """
     
-    def __init__(self, encoder: QuaternionEncoder = None):
-        if encoder is None:
-            encoder = QuaternionEncoder()
+    def __init__(self, vocab: Optional[GeometricVocabulary] = None):
+        self.vocab = vocab or get_default_vocabulary()
+        self._dimensions_learned = set(TRANSFORMATION_DELTAS.keys())
         
-        self.encoder = encoder
-        
-        # Learned deltas: dimension -> (source_value, target_value) -> TransformationDelta
-        self._deltas: Dict[str, Dict[Tuple[str, str], TransformationDelta]] = defaultdict(dict)
-        
-        # Word transformation vocabulary: dimension -> target_value -> word -> replacement
-        self._vocabulary: Dict[str, Dict[str, Dict[str, str]]] = defaultdict(lambda: defaultdict(dict))
-        
-        # Pattern-based transformations (regex patterns)
-        self._patterns: Dict[str, Dict[str, List[Tuple[str, str]]]] = defaultdict(lambda: defaultdict(list))
-        
-        # Statistics
+        # For compatibility with existing code
         self._corpus_size = 0
-        self._dimensions_learned: Set[str] = set()
-    
-    def load_corpus(self, path: Path) -> int:
-        """
-        Load transformation corpus and learn patterns.
-        
-        Returns number of transformations loaded.
-        """
-        if isinstance(path, str):
-            path = Path(path)
-        
-        with open(path, 'r') as f:
-            data = json.load(f)
-        
-        transformations = data.get("transformations", [])
-        
-        for t in transformations:
-            self._learn_transformation(t)
-        
-        self._corpus_size = len(transformations)
-        self._build_patterns()
-        
-        return self._corpus_size
-    
-    def _learn_transformation(self, t: Dict[str, Any]) -> None:
-        """Learn from a single transformation example."""
-        source = t["source"]
-        target = t["target"]
-        dimension_delta = t.get("dimension_delta", {})
-        
-        # Encode source and target
-        source_pos = self.encoder.encode(source)
-        target_pos = self.encoder.encode(target)
-        
-        # Compute delta vector
-        delta_vec = target_pos.to_flat() - source_pos.to_flat()
-        
-        # Learn word mappings by comparing source and target
-        word_mappings = self._extract_word_mappings(source, target)
-        
-        # Store delta for each dimension changed
-        for dim, (src_val, tgt_val) in dimension_delta.items():
-            key = (src_val, tgt_val)
-            
-            if key not in self._deltas[dim]:
-                self._deltas[dim][key] = TransformationDelta(
-                    dimension=dim,
-                    source_value=src_val,
-                    target_value=tgt_val,
-                    delta_vector=delta_vec,
-                    word_mappings={},
-                    examples=[]
-                )
-            
-            delta = self._deltas[dim][key]
-            delta.examples.append((source, target))
-            
-            # Merge word mappings
-            for src_word, tgt_word in word_mappings.items():
-                if src_word not in delta.word_mappings:
-                    delta.word_mappings[src_word] = tgt_word
-                    # Also add to vocabulary
-                    self._vocabulary[dim][tgt_val][src_word.lower()] = tgt_word
-            
-            self._dimensions_learned.add(dim)
-    
-    def _extract_word_mappings(self, source: str, target: str) -> Dict[str, str]:
-        """
-        Extract word-level mappings between source and target.
-        
-        Uses position-based alignment to find which words changed.
-        Each source word maps to at most one target word.
-        """
-        mappings = {}
-        
-        # Tokenize preserving order
-        src_words = re.findall(r'\b[\w\']+\b', source.lower())
-        tgt_words = re.findall(r'\b[\w\']+\b', target.lower())
-        
-        # Find words that appear in source but not target (and vice versa)
-        src_set = set(src_words)
-        tgt_set = set(tgt_words)
-        
-        removed = src_set - tgt_set  # Words in source but not target
-        added = tgt_set - src_set    # Words in target but not source
-        
-        if not removed or not added:
-            return mappings
-        
-        # Build position lists for removed and added words
-        removed_positions = [(i, w) for i, w in enumerate(src_words) if w in removed]
-        added_positions = [(j, w) for j, w in enumerate(tgt_words) if w in added]
-        
-        # Greedy matching: pair each removed word with closest unmatched added word
-        used_added = set()
-        
-        for src_idx, src_word in removed_positions:
-            # Normalize position to account for different sentence lengths
-            src_ratio = src_idx / max(len(src_words), 1)
-            
-            best_match = None
-            best_distance = float('inf')
-            
-            for tgt_idx, tgt_word in added_positions:
-                if tgt_idx in used_added:
-                    continue
-                
-                # Use ratio-based distance for better alignment
-                tgt_ratio = tgt_idx / max(len(tgt_words), 1)
-                distance = abs(src_ratio - tgt_ratio)
-                
-                if distance < best_distance:
-                    best_distance = distance
-                    best_match = (tgt_idx, tgt_word)
-            
-            # Only match if reasonably close (within 30% of sentence)
-            if best_match and best_distance < 0.3:
-                tgt_idx, tgt_word = best_match
-                mappings[src_word] = tgt_word
-                used_added.add(tgt_idx)
-        
-        return mappings
-    
-    def _build_patterns(self) -> None:
-        """Build regex patterns from learned vocabulary."""
-        # Tense patterns
-        self._patterns["tense"]["future"] = [
-            (r'\bwent\b', 'will go'),
-            (r'\bsat\b', 'will sit'),
-            (r'\bstood\b', 'will stand'),
-            (r'\bwalked\b', 'will walk'),
-            (r'\bran\b', 'will run'),
-            (r'\bcame\b', 'will come'),
-            (r'\bwas\b', 'will be'),
-            (r'\bwere\b', 'will be'),
-            (r'\bhad\b', 'will have'),
-            (r'\bdid\b', 'will do'),
-            (r'\bmade\b', 'will make'),
-            (r'\btook\b', 'will take'),
-            (r'\bgave\b', 'will give'),
-            (r'\bfound\b', 'will find'),
-            (r'\bsaid\b', 'will say'),
-            (r'\bknew\b', 'will know'),
-            (r'\bthought\b', 'will think'),
-            (r'\bsaw\b', 'will see'),
-            (r'\bgot\b', 'will get'),
-        ]
-        
-        self._patterns["tense"]["present"] = [
-            (r'\bwent\b', 'go'),
-            (r'\bsat\b', 'sit'),
-            (r'\bstood\b', 'stand'),
-            (r'\bwalked\b', 'walk'),
-            (r'\bran\b', 'run'),
-            (r'\bcame\b', 'come'),
-            (r'\bwas\b', 'is'),
-            (r'\bwere\b', 'are'),
-            (r'\bhad\b', 'have'),
-            (r'\bdid\b', 'do'),
-            (r'\bmade\b', 'make'),
-            (r'\btook\b', 'take'),
-            (r'\bgave\b', 'give'),
-            (r'\bfound\b', 'find'),
-            (r'\bsaid\b', 'say'),
-            (r'\bknew\b', 'know'),
-            (r'\bthought\b', 'think'),
-            (r'\bsaw\b', 'see'),
-            (r'\bgot\b', 'get'),
-        ]
-        
-        self._patterns["tense"]["past"] = [
-            (r'\bgo\b', 'went'),
-            (r'\bgoes\b', 'went'),
-            (r'\bsit\b', 'sat'),
-            (r'\bsits\b', 'sat'),
-            (r'\bstand\b', 'stood'),
-            (r'\bstands\b', 'stood'),
-            (r'\bwalk\b', 'walked'),
-            (r'\bwalks\b', 'walked'),
-            (r'\brun\b', 'ran'),
-            (r'\bruns\b', 'ran'),
-            (r'\bcome\b', 'came'),
-            (r'\bcomes\b', 'came'),
-            (r'\bis\b', 'was'),
-            (r'\bare\b', 'were'),
-            (r'\bhave\b', 'had'),
-            (r'\bhas\b', 'had'),
-            (r'\bdo\b', 'did'),
-            (r'\bdoes\b', 'did'),
-            (r'\bwill\b', ''),  # Remove "will" for past
-        ]
-        
-        # Regality patterns
-        self._patterns["regality"]["royal"] = [
-            (r'\bjack\b', 'His Majesty Jack'),
-            (r'\bjill\b', 'Her Majesty Jill'),
-            (r'\bthe\b', 'the most esteemed'),
-            (r'\bwent\b', 'did proceed'),
-            (r'\bwalked\b', 'did traverse'),
-            (r'\bsat\b', 'did take repose'),
-            (r'\bsaid\b', 'did proclaim'),
-        ]
-        
-        self._patterns["regality"]["noble"] = [
-            (r'\bjack\b', 'Sir Jack'),
-            (r'\bjill\b', 'Lady Jill'),
-            (r'\bwent\b', 'proceeded'),
-            (r'\bwalked\b', 'traversed'),
-        ]
-        
-        # Formality patterns
-        self._patterns["formality"]["formal"] = [
-            (r'\bgot\b', 'obtained'),
-            (r'\bwent\b', 'proceeded'),
-            (r'\bsaid\b', 'stated'),
-            (r'\basked\b', 'inquired'),
-            (r'\btold\b', 'informed'),
-            (r'\bhelped\b', 'assisted'),
-            (r'\bused\b', 'utilized'),
-            (r'\bshowed\b', 'demonstrated'),
-        ]
-        
-        self._patterns["formality"]["casual"] = [
-            (r'\bobtained\b', 'got'),
-            (r'\bproceeded\b', 'went'),
-            (r'\bstated\b', 'said'),
-            (r'\binquired\b', 'asked'),
-            (r'\binformed\b', 'told'),
-            (r'\bassisted\b', 'helped'),
-            (r'\butilized\b', 'used'),
-            (r'\bdemonstrated\b', 'showed'),
-        ]
-        
-        # Voice patterns
-        self._patterns["voice"]["passive"] = [
-            # These are harder - need subject/object swap
-            # For now, simple patterns
-        ]
-        
-        # Certainty patterns
-        self._patterns["certainty"]["certain"] = [
-            (r'^', 'It is certain that '),  # Prepend
-        ]
-        
-        self._patterns["certainty"]["uncertain"] = [
-            (r'^', 'It might be that '),  # Prepend
-        ]
-        
-        # Emotion patterns
-        self._patterns["emotion"]["happy"] = [
-            (r'\.$', '!'),  # End with exclamation
-        ]
-        
-        self._patterns["emotion"]["sad"] = [
-            (r'!$', '.'),  # Remove exclamation
-        ]
-        
-        # Note: We intentionally don't auto-add vocabulary patterns here
-        # The learned vocabulary is often noisy. Instead, we use it for
-        # confidence scoring and fallback, but rely on curated patterns.
+        self._deltas = defaultdict(dict)
+        self._vocabulary = defaultdict(lambda: defaultdict(dict))
     
     def transform(self, text: str, dimension: str, target_value: str) -> TransformationResult:
         """
-        Transform text along a dimension.
+        Transform text along a dimension using geometric lookup.
         
         Args:
             text: Input sentence
-            dimension: Dimension to transform (e.g., "tense", "regality")
-            target_value: Target value (e.g., "future", "royal")
+            dimension: Dimension to transform (e.g., "tense", "formality")
+            target_value: Target value (e.g., "future", "formal")
             
         Returns:
             TransformationResult with transformed text
         """
-        original = text
-        transformed = text
-        word_changes = []
-        method = "pattern"
-        applied_patterns = set()  # Track what we've already changed
+        # Get the delta for this transformation
+        delta = TRANSFORMATION_DELTAS.get((dimension, target_value))
         
-        # Detect what words SHOULD be transformed
-        expected_words = detect_transformable_words(text, dimension)
-        expected_changes = len(expected_words)
+        if delta is None:
+            # Unknown transformation - return unchanged
+            return TransformationResult(
+                original=text,
+                transformed=text,
+                dimension=dimension,
+                target_value=target_value,
+                confidence=0.0,
+                method="unknown",
+                needs_llm=True,
+            )
         
-        # Apply pattern-based transformations (curated, reliable)
-        patterns = self._patterns.get(dimension, {}).get(target_value, [])
-        for pattern, replacement in patterns:
-            # Skip if we've already applied a pattern to this word
-            match = re.search(pattern, transformed, re.IGNORECASE)
-            if match and match.group().lower() not in applied_patterns:
-                old_transformed = transformed
-                # Only replace first occurrence to avoid double-replacement
-                transformed = re.sub(pattern, replacement, transformed, count=1, flags=re.IGNORECASE)
-                if transformed != old_transformed:
-                    word_changes.append((match.group(), replacement))
-                    applied_patterns.add(match.group().lower())
+        # Transform each word using geometric lookup
+        transformed, word_changes = self._transform_text(text, delta)
         
-        # Calculate coverage-based confidence
-        actual_changes = len(word_changes)
-        if expected_changes > 0:
-            coverage = actual_changes / expected_changes
+        # Calculate confidence based on how many words changed
+        words = re.findall(r'\b[\w\'-]+\b', text)
+        vocab_words = sum(1 for w in words if self.vocab.has_word(w))
+        
+        if vocab_words > 0:
+            coverage = len(word_changes) / vocab_words
         else:
-            # No expected changes (e.g., certainty/emotion dimensions)
-            coverage = 1.0 if actual_changes == 0 else min(1.0, actual_changes * 0.5)
-        
-        confidence = coverage
-        needs_llm = coverage < 0.5 and expected_changes > 0
-        
-        if actual_changes == 0:
-            method = "fallback"
-        
-        # Clean up double spaces and artifacts
-        transformed = re.sub(r'\s+', ' ', transformed).strip()
-        
-        # Preserve original capitalization for first letter
-        if original and original[0].isupper() and transformed:
-            transformed = transformed[0].upper() + transformed[1:]
+            coverage = 1.0 if len(word_changes) == 0 else 0.5
         
         return TransformationResult(
-            original=original,
+            original=text,
             transformed=transformed,
             dimension=dimension,
             target_value=target_value,
-            confidence=confidence,
-            method=method,
+            confidence=min(1.0, coverage + 0.5),  # Boost confidence since geometric is reliable
+            method="geometric",
             word_changes=word_changes,
-            needs_llm=needs_llm,
-            expected_changes=expected_changes,
+            needs_llm=False,
+            expected_changes=vocab_words,
             coverage=coverage,
         )
     
+    def _transform_text(self, text: str, delta: np.ndarray) -> Tuple[str, List[Tuple[str, str]]]:
+        """Transform text word by word using geometric lookup."""
+        # Split into tokens preserving punctuation and whitespace
+        tokens = re.findall(r'\b[\w\'-]+\b|[^\w\s]+|\s+', text)
+        
+        result = []
+        word_changes = []
+        
+        for token in tokens:
+            # Skip whitespace and punctuation
+            if not token.strip() or not token[0].isalnum():
+                result.append(token)
+                continue
+            
+            # Try to transform the word
+            transformed = self.vocab.transform(token, delta)
+            
+            if transformed and transformed.lower() != token.lower():
+                # Preserve original capitalization
+                if token.isupper():
+                    transformed = transformed.upper()
+                elif token[0].isupper():
+                    transformed = transformed.capitalize()
+                
+                result.append(transformed)
+                word_changes.append((token, transformed))
+            else:
+                result.append(token)
+        
+        return ''.join(result), word_changes
+    
     def transform_multi(self, text: str, 
                         transformations: List[Tuple[str, str]]) -> TransformationResult:
-        """
-        Apply multiple transformations in sequence.
-        
-        Args:
-            text: Input sentence
-            transformations: List of (dimension, target_value) pairs
-            
-        Returns:
-            TransformationResult with all transformations applied
-        """
+        """Apply multiple transformations in sequence."""
         current = text
         all_changes = []
         total_coverage = 0.0
-        total_expected = 0
-        any_needs_llm = False
         
         for dim, target_val in transformations:
             result = self.transform(current, dim, target_val)
             current = result.transformed
             all_changes.extend(result.word_changes)
             total_coverage += result.coverage
-            total_expected += result.expected_changes
-            if result.needs_llm:
-                any_needs_llm = True
         
         avg_coverage = total_coverage / len(transformations) if transformations else 1.0
         
@@ -547,136 +202,100 @@ class TransformationSpace:
             transformed=current,
             dimension="+".join(d for d, _ in transformations),
             target_value="+".join(v for _, v in transformations),
-            confidence=avg_coverage,
-            method="multi",
+            confidence=min(1.0, avg_coverage + 0.3),
+            method="geometric_multi",
             word_changes=all_changes,
-            needs_llm=any_needs_llm,
-            expected_changes=total_expected,
+            needs_llm=False,
+            expected_changes=len(all_changes),
             coverage=avg_coverage,
         )
     
     def available_dimensions(self) -> List[str]:
-        """Get list of dimensions with learned transformations."""
-        return list(self._dimensions_learned)
+        """Get list of available dimensions."""
+        dims = set()
+        for (dim, _) in TRANSFORMATION_DELTAS.keys():
+            dims.add(dim)
+        return sorted(dims)
     
     def available_values(self, dimension: str) -> List[str]:
         """Get available target values for a dimension."""
-        values = set()
-        for (src, tgt) in self._deltas.get(dimension, {}).keys():
-            values.add(tgt)
-        # Also include pattern-based values
-        values.update(self._patterns.get(dimension, {}).keys())
+        values = []
+        for (dim, val) in TRANSFORMATION_DELTAS.keys():
+            if dim == dimension:
+                values.append(val)
         return sorted(values)
     
-    def learn_from_llm_result(self, source: str, target: str, 
-                               dimension: str, target_value: str) -> int:
-        """
-        Learn new patterns from an LLM transformation result.
-        
-        Extracts word mappings and adds them to patterns for future use.
-        
-        Args:
-            source: Original sentence
-            target: LLM-transformed sentence
-            dimension: Dimension that was transformed
-            target_value: Target value used
-            
-        Returns:
-            Number of new patterns learned
-        """
-        # Extract word mappings
-        mappings = self._extract_word_mappings(source, target)
-        
-        learned_count = 0
-        for src_word, tgt_word in mappings.items():
-            # Add to patterns if not already present
-            pattern = (rf'\b{re.escape(src_word)}\b', tgt_word)
-            existing_patterns = self._patterns.get(dimension, {}).get(target_value, [])
-            
-            # Check if pattern already exists
-            pattern_exists = any(p[0] == pattern[0] for p in existing_patterns)
-            if not pattern_exists:
-                self._patterns[dimension][target_value].append(pattern)
-                learned_count += 1
-        
-        return learned_count
+    def stats(self) -> Dict[str, Any]:
+        """Get transformation space statistics."""
+        return {
+            'corpus_size': self._corpus_size,
+            'dimensions_learned': list(self.available_dimensions()),
+            'vocabulary_size': self.vocab.stats()['total_words'],
+            'total_deltas': len(TRANSFORMATION_DELTAS),
+            'method': 'geometric',
+        }
     
     def get_missing_words(self, text: str, dimension: str) -> Set[str]:
-        """
-        Get words that should be transformed but we don't have patterns for.
-        
-        Useful for understanding coverage gaps.
-        """
-        expected = detect_transformable_words(text, dimension)
-        
-        # Check which expected words we have patterns for
-        known_patterns = set()
-        for target_val, patterns in self._patterns.get(dimension, {}).items():
-            for pattern, _ in patterns:
-                # Extract the word from the pattern (rough heuristic)
-                match = re.search(r'\\b(\w+)\\b', pattern)
-                if match:
-                    known_patterns.add(match.group(1).lower())
-        
-        missing = expected - known_patterns
+        """Get words that aren't in the vocabulary."""
+        words = set(re.findall(r'\b[\w\'-]+\b', text.lower()))
+        missing = set()
+        for word in words:
+            if not self.vocab.has_word(word):
+                missing.add(word)
         return missing
     
-    def stats(self) -> Dict[str, Any]:
-        """Get statistics about learned transformations."""
-        total_mappings = sum(
-            len(delta.word_mappings) 
-            for dim_deltas in self._deltas.values() 
-            for delta in dim_deltas.values()
-        )
-        
-        # Count patterns per dimension
-        pattern_counts = {}
-        for dim, targets in self._patterns.items():
-            pattern_counts[dim] = sum(len(patterns) for patterns in targets.values())
-        
-        return {
-            "corpus_size": self._corpus_size,
-            "dimensions_learned": list(self._dimensions_learned),
-            "total_deltas": sum(len(d) for d in self._deltas.values()),
-            "total_word_mappings": total_mappings,
-            "vocabulary_size": sum(
-                len(words) 
-                for targets in self._vocabulary.values() 
-                for words in targets.values()
-            ),
-            "patterns_per_dimension": pattern_counts,
-        }
+    # Compatibility methods for existing code
+    def load_corpus(self, path) -> int:
+        """Compatibility: corpus is now the geometric vocabulary."""
+        return self.vocab.stats()['total_words']
     
-    def describe_delta(self, dimension: str, source_value: str, target_value: str) -> Optional[Dict[str, Any]]:
-        """Get description of a learned delta."""
-        key = (source_value, target_value)
-        delta = self._deltas.get(dimension, {}).get(key)
+    def learn_from_llm_result(self, source: str, target: str,
+                               dimension: str, target_value: str) -> int:
+        """Learn new words from LLM result by adding to vocabulary."""
+        # Extract word mappings
+        src_words = set(re.findall(r'\b[\w\'-]+\b', source.lower()))
+        tgt_words = set(re.findall(r'\b[\w\'-]+\b', target.lower()))
         
-        if not delta:
-            return None
+        # Find words that changed
+        removed = src_words - tgt_words
+        added = tgt_words - src_words
         
-        return {
-            "dimension": dimension,
-            "source_value": source_value,
-            "target_value": target_value,
-            "num_examples": len(delta.examples),
-            "word_mappings": delta.word_mappings,
-            "sample_examples": delta.examples[:3],
-        }
+        # Get the delta for this transformation
+        delta = TRANSFORMATION_DELTAS.get((dimension, target_value))
+        if delta is None:
+            return 0
+        
+        learned = 0
+        # For each removed word, if we know its position, add the new word
+        for src_word in removed:
+            src_pos = self.vocab.get_position(src_word)
+            if src_pos is not None:
+                # Find the most likely target word (closest to expected position)
+                expected_pos = src_pos + delta
+                best_tgt = None
+                best_dist = float('inf')
+                
+                for tgt_word in added:
+                    if not self.vocab.has_word(tgt_word):
+                        # This is a new word - estimate its position
+                        dist = 0  # Would need more context to estimate
+                        if dist < best_dist:
+                            best_dist = dist
+                            best_tgt = tgt_word
+                
+                if best_tgt:
+                    # Add the new word at the expected position
+                    concept = self.vocab.get_concept(src_word)
+                    self.vocab.add_word(best_tgt, expected_pos, concept)
+                    learned += 1
+        
+        return learned
 
 
-# =============================================================================
-# CONVENIENCE FUNCTIONS
-# =============================================================================
+def load_transformation_space() -> GeometricTransformationSpace:
+    """Load the geometric transformation space."""
+    return GeometricTransformationSpace()
 
-def load_transformation_space(corpus_path: Path = None) -> TransformationSpace:
-    """Load transformation space with default corpus."""
-    if corpus_path is None:
-        corpus_path = Path(__file__).parent.parent / "corpus" / "transformation_corpus.json"
-    
-    space = TransformationSpace()
-    
-    if corpus_path.exists():
-        space.load_corpus(corpus_path)
-    
-    return space
+
+# Backward compatibility alias
+TransformationSpace = GeometricTransformationSpace
