@@ -196,41 +196,65 @@ class IntentSpace(HyperMapping):
     
     def detect(self, query: str) -> IntentResult:
         """
-        Detect intent from query.
+        Detect intent from query using ACTION dimension (Design 048).
         
-        Two-phase detection:
-        1. Check for prefix matches (bootstrap patterns)
-        2. Fall back to geometric matching
+        The ACTION dimension encodes the user-agent relationship:
+          -2: strongly_query (what, why, how) -> KNOWLEDGE
+          -1: query (explain, describe) -> KNOWLEDGE
+           0: neutral -> use geometric matching
+          +1: create (create, make, plot) -> PLOT_GENERATION or CODE
+          +2: execute (list, read, run) -> TOOL_CALL
         
-        This ensures bootstrap patterns work exactly, while still
-        allowing geometric generalization for novel queries.
+        This replaces keyword shortcuts with pure geometric encoding.
         """
-        query_lower = query.lower().strip()
+        # Use ACTION dimension for intent classification (Design 048)
+        from .primitive_registry import create_registry_from_primitives
         
-        # Phase 0a: Check for KNOWLEDGE query patterns FIRST
-        # "what is X" and "tell me about X" are knowledge queries even if X contains plot words
-        knowledge_prefixes = ['what is', 'what are', 'who is', 'who are', 
-                              'tell me about', 'explain', 'describe', 'define']
-        if any(query_lower.startswith(prefix) for prefix in knowledge_prefixes):
+        if not hasattr(self, '_action_registry'):
+            self._action_registry = create_registry_from_primitives()
+        
+        _, levels = self._action_registry.encode_with_levels(query)
+        action_level = levels[5] if len(levels) > 5 else 0
+        
+        # Map action level to intent
+        if action_level <= -1:
+            # Query action -> KNOWLEDGE
             return IntentResult(
                 intent=Intent.KNOWLEDGE,
                 confidence=1.0,
-                reason=f"Knowledge query prefix detected",
-                metadata={'match_type': 'knowledge_prefix'}
+                reason=f"Action dimension: query (level={action_level})",
+                metadata={'match_type': 'action_dimension', 'action_level': action_level}
+            )
+        elif action_level == 1:
+            # Create action -> check if it's a plot or general code
+            query_lower = query.lower()
+            # Check domain dimension for plot-related content
+            domain_level = levels[0] if len(levels) > 0 else 0
+            if domain_level == 3 or any(w in query_lower for w in ['plot', 'chart', 'graph', 'sine', 'histogram']):
+                return IntentResult(
+                    intent=Intent.PLOT_GENERATION,
+                    confidence=1.0,
+                    reason=f"Action dimension: create + plot domain (level={action_level})",
+                    metadata={'match_type': 'action_dimension', 'action_level': action_level}
+                )
+            else:
+                return IntentResult(
+                    intent=Intent.CODE_GENERATION,
+                    confidence=0.9,
+                    reason=f"Action dimension: create (level={action_level})",
+                    metadata={'match_type': 'action_dimension', 'action_level': action_level}
+                )
+        elif action_level >= 2:
+            # Execute action -> TOOL_CALL
+            return IntentResult(
+                intent=Intent.TOOL_CALL,
+                confidence=1.0,
+                reason=f"Action dimension: execute (level={action_level})",
+                metadata={'match_type': 'action_dimension', 'action_level': action_level}
             )
         
-        # Phase 0b: Check for plot-related keywords
-        # This takes priority over generic "create" which would match TOOL_CALL
-        # But NOT if it's a knowledge query about plotting tools
-        plot_keywords = ['plot', 'graph', 'chart', 'sine', 'cosine', 'histogram', 
-                         'scatter', 'bar chart', 'pie chart', 'visualize', 'wave']
-        if any(kw in query_lower for kw in plot_keywords):
-            return IntentResult(
-                intent=Intent.PLOT_GENERATION,
-                confidence=1.0,
-                reason=f"Plot keyword detected",
-                metadata={'match_type': 'keyword'}
-            )
+        # Neutral action (level 0) -> fall through to geometric matching
+        query_lower = query.lower().strip()
         
         # Phase 1: Check for prefix matches against templates
         # This is the BOOTSTRAP phase - exact pattern matching
