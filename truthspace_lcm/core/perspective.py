@@ -1,69 +1,71 @@
 """
-Perspective System for HyperChat (Design 111)
+Perspective System for HyperChat (Design 111 + 112)
 
-Perspectives are offset vectors that shift query positions in φ-space,
-plus style transformations that modify response output.
+Perspectives are delta vectors that shift word positions in semantic space.
+Output emerges from find_nearest(position + delta) - the Music Box Principle.
 
-The perspective encodes WHO is asking/answering, while the query
-encodes WHAT is being asked. Together they determine WHERE in the
-space we look and HOW we express the answer.
+No word->word mappings. The music emerges from the geometry.
 
 Usage:
-    from truthspace_lcm.core.perspective import PERSPECTIVES, apply_perspective
+    from truthspace_lcm.core.perspective_geometric import GeometricPerspective, PERSPECTIVES
     
-    # Set personality
     perspective = PERSPECTIVES['warhammer40k']
-    
-    # Transform response
     styled_response = perspective.transform_response(base_response)
+
+Author: Lesley Gushurst
+License: GPLv3
 """
 
 import numpy as np
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Dict, List, Optional
 import re
 
-
-PHI = (1 + np.sqrt(5)) / 2
+from .geometric_vocabulary import (
+    GeometricVocabulary, 
+    get_default_vocabulary, 
+    get_perspective_delta,
+    PERSPECTIVE_DELTAS
+)
 
 
 @dataclass
-class Perspective:
+class GeometricPerspective:
     """
-    A perspective combines:
-    1. An offset vector in phi-space (shifts query position)
-    2. A style transformation (modifies response text)
+    A perspective is a delta vector in semantic space (Design 112).
     
-    The offset affects WHAT knowledge is retrieved.
-    The style affects HOW the knowledge is expressed.
+    The delta shifts word positions. Output emerges from find_nearest.
+    No word->word mappings - the music emerges from the geometry.
+    
+    The prefix/suffix are kept for framing but could also be geometric
+    in a more complete implementation.
     """
     name: str
     description: str
-    offset: np.ndarray
-    style_rules: Dict[str, str] = field(default_factory=dict)
+    delta: np.ndarray  # [tense, formality, domain, intensity]
     prefix: str = ""
     suffix: str = ""
     
-    def apply_offset(self, query_position: np.ndarray) -> np.ndarray:
-        """Apply perspective offset to query position."""
-        if len(query_position) < len(self.offset):
-            padded = np.zeros(len(self.offset))
-            padded[:len(query_position)] = query_position
-            return padded + self.offset
-        elif len(query_position) > len(self.offset):
-            padded_offset = np.zeros(len(query_position))
-            padded_offset[:len(self.offset)] = self.offset
-            return query_position + padded_offset
-        return query_position + self.offset
-    
-    def transform_response(self, response: str) -> str:
-        """Transform response text according to perspective style."""
-        result = response
+    def transform_response(self, response: str, vocab: Optional[GeometricVocabulary] = None) -> str:
+        """
+        Transform response text using geometric vocabulary lookup.
         
-        # Apply word replacements (case-insensitive, preserve boundaries)
-        for original, replacement in self.style_rules.items():
-            pattern = re.compile(r'\b' + re.escape(original) + r'\b', re.IGNORECASE)
-            result = pattern.sub(replacement, result)
+        For each word:
+        1. Get word's position (read the drum)
+        2. Apply delta (rotation of the drum)
+        3. Find nearest word at new position (comb produces sound)
+        
+        The music emerges from the geometry.
+        """
+        if vocab is None:
+            vocab = get_default_vocabulary()
+        
+        # Skip transformation if delta is zero
+        if np.allclose(self.delta, 0):
+            result = response
+        else:
+            # Transform each word
+            result = self._transform_text(response, vocab)
         
         # Add prefix if specified
         if self.prefix:
@@ -74,185 +76,73 @@ class Perspective:
             result = f"{result}\n\n{self.suffix}"
         
         return result
+    
+    def _transform_text(self, text: str, vocab: GeometricVocabulary) -> str:
+        """Transform text word by word using geometric lookup."""
+        # Split into words while preserving punctuation and whitespace
+        tokens = re.findall(r'\b[\w\'-]+\b|[^\w\s]+|\s+', text)
+        
+        result = []
+        for token in tokens:
+            # Skip whitespace and punctuation
+            if not token.strip() or not token[0].isalnum():
+                result.append(token)
+                continue
+            
+            # Try to transform the word
+            transformed = vocab.transform(token, self.delta)
+            
+            if transformed and transformed.lower() != token.lower():
+                # Preserve original capitalization pattern
+                if token.isupper():
+                    transformed = transformed.upper()
+                elif token[0].isupper():
+                    transformed = transformed.capitalize()
+                result.append(transformed)
+            else:
+                result.append(token)
+        
+        return ''.join(result)
 
 
 # =============================================================================
-# PREDEFINED PERSPECTIVES
+# PREDEFINED PERSPECTIVES (using deltas, not word mappings)
 # =============================================================================
 
-DEFAULT_PERSPECTIVE = Perspective(
+DEFAULT_PERSPECTIVE = GeometricPerspective(
     name="default",
     description="Standard HyperChat assistant - helpful, clear, technical",
-    offset=np.array([2, 1, 0, 0, 0, 0]),
-    style_rules={},
+    delta=np.array([0, 0, 0, 0]),
     prefix="",
     suffix="",
 )
 
-WARHAMMER_40K_PERSPECTIVE = Perspective(
+WARHAMMER_40K_PERSPECTIVE = GeometricPerspective(
     name="warhammer40k",
     description="Grimdark Warhammer 40,000 narrator - dramatic, gothic, zealous",
-    offset=np.array([0, 2, 0, 2, 0, 0]),
-    style_rules={
-        "programming language": "sacred machine tongue",
-        "programming": "sacred rites of the Machine God",
-        "code": "holy scripture",
-        "computer": "cogitator",
-        "software": "machine spirit",
-        "hardware": "blessed iron",
-        "data": "sacred data-hymns",
-        "algorithm": "divine computation",
-        "function": "sacred ritual",
-        "variable": "mutable essence",
-        "memory": "cogitator memory banks",
-        "processor": "logic engine",
-        "server": "data-shrine",
-        "network": "noospheric link",
-        "internet": "great noosphere",
-        "database": "data-vault",
-        "file": "data-scroll",
-        "folder": "data-reliquary",
-        "user": "supplicant",
-        "developer": "tech-adept",
-        "programmer": "code-priest",
-        "engineer": "enginseer",
-        "scientist": "magos",
-        "error": "machine spirit's displeasure",
-        "bug": "corruption of the machine spirit",
-        "debug": "perform the Rite of Cleansing",
-        "install": "perform the Rite of Installation",
-        "update": "apply sacred patches",
-        "download": "invoke data-transfer rites",
-        "upload": "offer data unto the machine spirit",
-        "execute": "invoke",
-        "run": "awaken",
-        "compile": "sanctify",
-        "syntax": "sacred grammar",
-        "library": "tome of ancient wisdom",
-        "framework": "blessed framework of the Omnissiah",
-        "Python": "the Serpent Tongue of the Omnissiah",
-        "JavaScript": "the Scribing Language of the Web-Spirits",
-        "Java": "the Ancient Tongue of Enterprise",
-        "simple": "elegantly wrought",
-        "easy": "blessed with clarity",
-        "difficult": "requiring great devotion",
-        "complex": "labyrinthine in its sacred complexity",
-        "powerful": "mighty in the sight of the Omnissiah",
-        "efficient": "pleasing to the machine spirits",
-        "popular": "favored by the Adeptus Mechanicus",
-        "modern": "of recent revelation",
-        "created": "forged",
-        "designed": "wrought by the ancients",
-        "developed": "brought forth",
-        "used": "employed in sacred service",
-        "learn": "receive the sacred knowledge",
-        "understand": "comprehend the mysteries",
-        "know": "possess the sacred lore",
-        "work": "function according to the Omnissiah's will",
-        "help": "serve",
-        "good": "blessed",
-        "great": "glorious",
-        "best": "most sacred",
-        "important": "of paramount significance to the Imperium",
-        "useful": "of great utility to the faithful",
-        "feature": "blessed capability",
-        "tool": "sacred instrument",
-        "system": "holy system",
-        "process": "sacred process",
-        "method": "rite",
-        "technique": "sacred technique",
-        "solution": "blessed resolution",
-        "problem": "heretical obstruction",
-        "issue": "vexation of the machine spirit",
-        "challenge": "trial set by the Omnissiah",
-        "readability": "clarity pleasing to the machine spirits",
-        "indentation": "sacred spacing",
-        "paradigms": "holy doctrines",
-        "procedural": "of the ancient rites",
-        "object-oriented": "of the blessed object-forms",
-        "functional": "of the pure function-prayers",
-    },
+    delta=np.array([0, 2, 2, 0.5]),  # archaic + sacred + intensity
     prefix="*In the grim darkness of the far future, there is only code...*\n\nHearken, supplicant, to the sacred knowledge:",
     suffix="*The Omnissiah protects. The Machine God provides.*",
 )
 
-PIRATE_PERSPECTIVE = Perspective(
+PIRATE_PERSPECTIVE = GeometricPerspective(
     name="pirate",
     description="Swashbuckling pirate captain - nautical, adventurous, colorful",
-    offset=np.array([0, 0, 0, -2, 0, 0]),
-    style_rules={
-        "you": "ye",
-        "your": "yer",
-        "my": "me",
-        "hello": "ahoy",
-        "yes": "aye",
-        "no": "nay",
-        "friend": "matey",
-        "money": "doubloons",
-        "good": "fine",
-        "great": "mighty fine",
-        "computer": "magic box",
-        "programming": "code-sailin'",
-        "code": "treasure map",
-        "data": "booty",
-        "error": "scurvy mistake",
-        "bug": "barnacle",
-        "understand": "savvy",
-        "work": "sail",
-        "help": "lend a hand",
-        "problem": "rough waters",
-        "solution": "safe harbor",
-    },
+    delta=np.array([0, -1, -1, 0]),  # casual + mundane
     prefix="Ahoy there, matey!",
     suffix="Now ye know, savvy? Fair winds to ye!",
 )
 
-SHAKESPEARE_PERSPECTIVE = Perspective(
+SHAKESPEARE_PERSPECTIVE = GeometricPerspective(
     name="shakespeare",
     description="Elizabethan playwright - poetic, dramatic, archaic",
-    offset=np.array([0, 2, 0, 2, 0, 0]),
-    style_rules={
-        "you": "thou",
-        "your": "thy",
-        "yours": "thine",
-        "have": "hast",
-        "has": "hath",
-        "do": "dost",
-        "does": "doth",
-        "will": "shall",
-        "would": "wouldst",
-        "can": "canst",
-        "see": "perceive",
-        "understand": "comprehend",
-        "think": "ponder",
-        "say": "speak",
-        "tell": "impart",
-        "ask": "beseech",
-        "want": "desire",
-        "need": "require",
-        "use": "employ",
-        "make": "fashion",
-        "create": "bring forth",
-        "good": "most excellent",
-        "great": "wondrous",
-        "bad": "most foul",
-        "important": "of great import",
-        "simple": "plain and true",
-        "complex": "most intricate",
-        "computer": "thinking engine",
-        "programming": "the art of instruction",
-        "very": "most",
-        "really": "verily",
-        "now": "anon",
-        "here": "hither",
-        "there": "thither",
-    },
+    delta=np.array([0, 2, 0, 0]),  # archaic formality
     prefix="Hark! Attend well to these words of wisdom:",
     suffix="*Exeunt*",
 )
 
 # Registry of all perspectives
-PERSPECTIVES: Dict[str, Perspective] = {
+PERSPECTIVES: Dict[str, GeometricPerspective] = {
     "default": DEFAULT_PERSPECTIVE,
     "warhammer40k": WARHAMMER_40K_PERSPECTIVE,
     "wh40k": WARHAMMER_40K_PERSPECTIVE,
@@ -263,7 +153,7 @@ PERSPECTIVES: Dict[str, Perspective] = {
 }
 
 
-def get_perspective(name: str) -> Perspective:
+def get_perspective(name: str) -> GeometricPerspective:
     """Get a perspective by name, defaulting to DEFAULT if not found."""
     return PERSPECTIVES.get(name.lower(), DEFAULT_PERSPECTIVE)
 

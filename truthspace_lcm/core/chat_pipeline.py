@@ -47,7 +47,7 @@ from .bootstrap_knowledge import get_bootstrap_knowledge, get_bootstrap_synonyms
 from .quaternion_encoder import QuaternionEncoder, QuaternionPosition
 from .dynamic_dimensions import DynamicDimensionRegistry
 from .learned_knowledge import LearnedKnowledge, extract_llm_response
-from .perspective import get_perspective, list_perspectives, Perspective, PERSPECTIVES
+from .perspective import get_perspective, list_perspectives, GeometricPerspective, PERSPECTIVES
 
 
 class Intent(Enum):
