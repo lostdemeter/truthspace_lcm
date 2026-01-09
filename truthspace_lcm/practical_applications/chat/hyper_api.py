@@ -343,6 +343,19 @@ class HyperChatEngine:
         if user_message.lower().startswith("/forget_concept"):
             return self._handle_forget_concept(user_message[15:].strip()), None
         
+        # Perspective commands (Design 111)
+        if user_message.lower() == "/perspectives":
+            perspectives = self.pipeline.available_perspectives()
+            current = self.pipeline.get_perspective()
+            return f"**Current perspective:** {current}\n\n**Available perspectives:**\n" + "\n".join(perspectives), None
+        
+        if user_message.lower().startswith("/perspective "):
+            name = user_message[13:].strip()
+            if self.pipeline.set_perspective(name):
+                return f"Perspective set to **{self.pipeline.get_perspective()}**. All responses will now be styled accordingly.", None
+            else:
+                return f"Unknown perspective '{name}'. Use /perspectives to see available options.", None
+        
         # Detect intent
         intent_result = self.pipeline.intent_space.detect(user_message)
         logger.info(f"Intent: {intent_result.intent.name}, confidence: {intent_result.confidence}")

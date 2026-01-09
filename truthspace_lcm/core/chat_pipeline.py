@@ -47,6 +47,7 @@ from .bootstrap_knowledge import get_bootstrap_knowledge, get_bootstrap_synonyms
 from .quaternion_encoder import QuaternionEncoder, QuaternionPosition
 from .dynamic_dimensions import DynamicDimensionRegistry
 from .learned_knowledge import LearnedKnowledge, extract_llm_response
+from .perspective import get_perspective, list_perspectives, Perspective, PERSPECTIVES
 
 
 class Intent(Enum):
@@ -78,6 +79,7 @@ class ChatConfig:
     dims: int = 8
     use_phi_lattice: bool = True   # Design 099, 047: Use φ-lattice coordinates with intrinsic/functional
     use_quaternion: bool = True    # Design 104-105: Use quaternion encoding
+    perspective: str = "default"   # Design 111: Perspective/personality for responses
 
 
 class IntentSpace(HyperMapping):
@@ -331,6 +333,9 @@ class ChatPipeline:
     def __init__(self, config: Optional[ChatConfig] = None):
         self.config = config or ChatConfig()
         
+        # Perspective/personality (Design 111)
+        self._perspective = get_perspective(self.config.perspective)
+        
         # Intent detection space
         self.intent_space = IntentSpace()
         
@@ -536,6 +541,29 @@ class ChatPipeline:
         """Get statistics about learned knowledge."""
         return self._learned_knowledge.stats()
     
+    def set_perspective(self, name: str) -> bool:
+        """
+        Set the perspective/personality (Design 111).
+        
+        Args:
+            name: Perspective name (e.g., 'default', 'warhammer40k', 'pirate')
+            
+        Returns:
+            True if perspective was set, False if not found
+        """
+        if name.lower() in PERSPECTIVES:
+            self._perspective = get_perspective(name)
+            return True
+        return False
+    
+    def get_perspective(self) -> str:
+        """Get current perspective name."""
+        return self._perspective.name
+    
+    def available_perspectives(self) -> List[str]:
+        """List available perspective names."""
+        return list_perspectives()
+    
     def chat(self, query: str) -> str:
         """
         Process a chat query.
@@ -583,6 +611,7 @@ class ChatPipeline:
         1. Try geometric matching in KnowledgeSpace
         2. If no match and Ollama available, query LLM
         3. If still no match, return "I don't know"
+        4. Apply perspective transformation to response (Design 111)
         """
         # Geometric matching in KnowledgeSpace
         results = self.knowledge_space.query_text(query, top_k=3)
@@ -594,8 +623,9 @@ class ChatPipeline:
             if self.config.debug:
                 print(f"[DEBUG] Knowledge match: {results[0].similarity:.3f}")
             
-            # Return the matched knowledge
-            return results[0].output
+            # Apply perspective transformation (Design 111)
+            response = self._perspective.transform_response(results[0].output)
+            return response
         
         # No good match - try LLM if available
         if use_llm and self.ollama_space and self.ollama_space.is_available():
@@ -614,7 +644,9 @@ class ChatPipeline:
                 if self.config.debug:
                     print(f"[DEBUG] LLM response added to knowledge")
                 
-                return llm_result.content
+                # Apply perspective transformation (Design 111)
+                response = self._perspective.transform_response(llm_result.content)
+                return response
         
         # No match and no LLM - return "I don't know"
         topic = self._extract_topic(query)
