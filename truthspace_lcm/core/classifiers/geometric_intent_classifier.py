@@ -85,6 +85,8 @@ class IntentMatch:
     reason: str
     module: Optional[IntentModule] = None
     was_injected: bool = False
+    tool_name: Optional[str] = None  # For TOOL_CALL: which tool type
+    tool_args: Dict[str, Any] = field(default_factory=dict)  # Extracted arguments
 
 
 class GeometricIntentClassifier:
@@ -269,12 +271,17 @@ class GeometricIntentClassifier:
         # Good match
         best_module.use_count += 1
         
+        # Extract tool info if this is a TOOL_CALL intent
+        tool_name, tool_args = self._extract_tool_info(query, best_module)
+        
         return IntentMatch(
             intent=best_module.intent,
             confidence=best_sim,
             reason=f"matched {best_module.name} (overlap={best_sim:.2f})",
             module=best_module,
             was_injected=False,
+            tool_name=tool_name,
+            tool_args=tool_args,
         )
     
     def _handle_unknown(self, query: str, query_words: Set[str],
@@ -307,6 +314,66 @@ class GeometricIntentClassifier:
             module=temp_module,
             was_injected=True,
         )
+    
+    def _extract_tool_info(self, query: str, module: IntentModule) -> Tuple[Optional[str], Dict[str, Any]]:
+        """
+        Extract tool name and arguments from query based on matched module.
+        
+        Uses geometric matching via module name patterns, not regex.
+        The module name encodes the tool type (e.g., tool_list -> Glob, tool_read -> Read).
+        Arguments are extracted by finding non-filler words not in the module template.
+        """
+        if module.intent != Intent.TOOL_CALL:
+            return None, {}
+        
+        # Map module names to tool types (geometric: module name IS the tool type)
+        MODULE_TO_TOOL = {
+            'tool_list': 'Glob',
+            'tool_ls': 'Glob',
+            'tool_find': 'Glob',
+            'tool_read': 'Read',
+            'tool_show': 'Read',
+            'tool_cat': 'Read',
+            'tool_run': 'Bash',
+            'tool_execute': 'Bash',
+            'tool_search': 'Grep',
+            'tool_edit': 'Edit',
+            'tool_create': 'Write',
+            'tool_delete': 'Bash',
+            'tool_mkdir': 'Bash',
+        }
+        
+        tool_name = MODULE_TO_TOOL.get(module.name, 'Bash')  # Default to Bash
+        
+        # Extract arguments geometrically: words in query but not in module template
+        query_words = self.extract_words(query)
+        template_words = module.words
+        arg_words = query_words - template_words - self.FILLER
+        
+        # Build arguments based on tool type
+        tool_args = {}
+        if tool_name == 'Glob':
+            # Path argument - join remaining words
+            path = ' '.join(sorted(arg_words)) if arg_words else '.'
+            tool_args = {'pattern': path}
+        elif tool_name == 'Read':
+            # File path argument
+            path = ' '.join(sorted(arg_words)) if arg_words else ''
+            tool_args = {'file_path': path}
+        elif tool_name == 'Grep':
+            # Search query
+            search = ' '.join(sorted(arg_words)) if arg_words else ''
+            tool_args = {'query': search}
+        elif tool_name == 'Bash':
+            # Command - use full query minus common words
+            cmd = ' '.join(sorted(arg_words)) if arg_words else ''
+            tool_args = {'command': cmd}
+        elif tool_name in ('Write', 'Edit'):
+            # File path
+            path = ' '.join(sorted(arg_words)) if arg_words else ''
+            tool_args = {'file_path': path}
+        
+        return tool_name, tool_args
     
     def feedback(self, module: IntentModule, success: bool, 
                  correct_intent: Intent = None):

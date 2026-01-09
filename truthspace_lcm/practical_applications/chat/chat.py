@@ -21,7 +21,9 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent.parent))
 
 from truthspace_lcm.core import ConversationalChain
-from truthspace_lcm.core.classifiers.intent_classifier import IntentClassifier, Intent, IntentMatch
+from truthspace_lcm.core.classifiers.geometric_intent_classifier import (
+    GeometricIntentClassifier, Intent, IntentMatch, create_geometric_classifier
+)
 from truthspace_lcm.core.orchestrators.gear_orchestrator import GearOrchestrator
 
 
@@ -65,8 +67,8 @@ class EmergentChat:
         self.chain = ConversationalChain()
         self.chain.configure_llm(llm_url, llm_model)
         
-        # Emergent intent classifier (fail-fast: no legacy fallback)
-        self.intent_classifier = IntentClassifier()
+        # Geometric intent classifier (pure geometry, no regex)
+        self.intent_classifier = create_geometric_classifier()
         
         # Gear orchestrator for tool calls
         self.orchestrator: Optional[GearOrchestrator] = None

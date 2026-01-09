@@ -9,10 +9,10 @@
 
 | # | File | Issue | Status | Notes |
 |---|------|-------|--------|-------|
-| 1 | `holographic_transformer.py:64-68` | Hard-coded FILLER_WORDS | ✅ DONE | Derived from document frequency |
+| 1 | `holographic_transformer.py:64-68` | Hard-coded FILLER_WORDS | ✅ DONE | Derived via φ-Zipf duality |
 | 2 | `chat_pipeline.py:212-233` | Keyword shortcuts bypass geometry | ⬜ TODO | Remove knowledge_prefixes and plot_keywords |
 | 3 | `knowledge_space.py:560-579` | Keyword boost on top of geometry | ⬜ TODO | Use PrimitiveRegistry.encode() instead |
-| 4 | `intent_classifier.py:46-132` | Regex patterns as primary classifier | ⬜ TODO | Replace with GeometricIntentClassifier |
+| 4 | `intent_classifier.py:46-132` | Regex patterns as primary classifier | ✅ DONE | Replaced with GeometricIntentClassifier |
 | 5 | `geometric_intent_classifier.py:104-107` | Hard-coded FILLER set | ⬜ TODO | Derive from frequency distribution |
 | 6 | `plot_space.py:499-502` | Keyword matching for plots | ⬜ TODO | Transform keywords to primitives |
 
@@ -143,6 +143,7 @@ for name, pattern in self.patterns.items():
 | Date | Item | Change | Commit |
 |------|------|--------|--------|
 | 2026-01-09 | holographic_transformer.py | Replaced FILLER_WORDS with φ-Zipf duality (Design 039) | pending |
+| 2026-01-09 | chat.py, api_server.py | Replaced IntentClassifier with GeometricIntentClassifier | pending |
 
 ---
 
