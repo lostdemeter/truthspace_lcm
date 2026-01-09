@@ -271,6 +271,8 @@ class HyperChatEngine:
                     if topic:
                         logger.info(f"Auto-learned about '{topic}'")
                 
+                # Apply perspective transformation (Design 112)
+                response = self.pipeline._perspective.transform_response(response)
                 return response, None
             return "The tool completed but returned no output.", None
         
@@ -390,7 +392,9 @@ class HyperChatEngine:
                 topic_words = topic.split()
                 # At least one significant word from topic should appear in result
                 if any(word in matched_content for word in topic_words if len(word) > 3):
-                    return results[0].output, None
+                    # Apply perspective transformation (Design 112)
+                    response = self.pipeline._perspective.transform_response(results[0].output)
+                    return response, None
             
             # No relevant local knowledge - try LLM via tools if available
             if tools:
