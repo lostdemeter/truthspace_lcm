@@ -3,176 +3,521 @@
     {
       "text": "What can I do for you? I am HyperChat, a conversational AI built on the HyperMapping architecture. I can help you with questions about science, programming, physics, and more. I can also generate matplotlib plots for you. Just ask me what you want to know!",
       "topic": "about",
-      "keywords": ["who are you", "what are you", "about yourself", "introduce yourself", "what can you do"],
-      "phi_levels": [0, 0, 1, 0]
+      "keywords": [
+        "who are you",
+        "what are you",
+        "about yourself",
+        "introduce yourself",
+        "what can you do"
+      ],
+      "phi_levels": [
+        0,
+        0,
+        1,
+        0,
+        0
+      ]
     },
     {
       "text": "I know about several topics including: Python programming, physics, the Riemann zeta function, machine learning, artificial intelligence, and general science. I can also create matplotlib plots like sine waves, bar charts, and histograms. Ask me anything!",
       "topic": "help",
-      "keywords": ["help", "what do you know", "topics", "what can you help with", "capabilities"],
-      "phi_levels": [0, 1, 1, 0]
+      "keywords": [
+        "help",
+        "what do you know",
+        "topics",
+        "what can you help with",
+        "capabilities"
+      ],
+      "phi_levels": [
+        0,
+        1,
+        1,
+        0,
+        0
+      ]
     },
     {
       "text": "To create a plot, just ask me something like 'create a sine wave plot' or 'make a bar chart'. You can add modifiers like 'with amplitude 2.0' or 'with a red line'. I'll generate the Python code for you.",
       "topic": "help_plots",
-      "keywords": ["how to plot", "how to create plot", "plot help", "make a graph"],
-      "phi_levels": [2, 1, 2, 0]
+      "keywords": [
+        "how to plot",
+        "how to create plot",
+        "plot help",
+        "make a graph"
+      ],
+      "phi_levels": [
+        2,
+        1,
+        2,
+        0,
+        0
+      ]
     },
     {
       "text": "Hello! I'm HyperChat. How can I help you today? I can answer questions about science, programming, physics, or create plots for you.",
       "topic": "greeting",
-      "keywords": ["hello", "hi", "hey", "greetings", "good morning", "good afternoon", "good evening"],
-      "phi_levels": [-1, -1, -1, -1]
+      "keywords": [
+        "hello",
+        "hi",
+        "hey",
+        "greetings",
+        "good morning",
+        "good afternoon",
+        "good evening"
+      ],
+      "phi_levels": [
+        -1,
+        -1,
+        -1,
+        -1,
+        0
+      ]
     },
     {
       "text": "Thanks for saying that! Is there anything else I need to help with?",
       "topic": "thanks",
-      "keywords": ["thank you", "thanks", "thx", "appreciate it"],
-      "phi_levels": [-1, 0, 0, 0]
+      "keywords": [
+        "thank you",
+        "thanks",
+        "thx",
+        "appreciate it"
+      ],
+      "phi_levels": [
+        -1,
+        0,
+        0,
+        0,
+        0
+      ]
     },
     {
       "text": "Goodbye! Feel free to come back anytime you have questions.",
       "topic": "farewell",
-      "keywords": ["bye", "goodbye", "see you", "farewell", "later"],
-      "phi_levels": [-1, -1, -1, -1]
+      "keywords": [
+        "bye",
+        "goodbye",
+        "see you",
+        "farewell",
+        "later"
+      ],
+      "phi_levels": [
+        -1,
+        -1,
+        -1,
+        -1,
+        0
+      ]
     },
     {
       "text": "I'm doing well, thank you for asking! I'm ready to help with any questions you have.",
       "topic": "wellbeing",
-      "keywords": ["how are you", "how do you feel", "are you okay"],
-      "phi_levels": [0, 0, 0, -1]
+      "keywords": [
+        "how are you",
+        "how do you feel",
+        "are you okay"
+      ],
+      "phi_levels": [
+        0,
+        0,
+        0,
+        -1,
+        0
+      ]
     },
     {
       "text": "Python is a high-level, interpreted programming language known for its clear syntax and readability. Created by Guido van Rossum and first released in 1991, Python emphasizes code readability with its use of significant indentation. It supports multiple programming paradigms including procedural, object-oriented, and functional programming.",
       "topic": "python",
-      "keywords": ["python", "python programming", "what is python"],
-      "phi_levels": [2, 2, 1, 0]
+      "keywords": [
+        "python",
+        "python programming",
+        "define python"
+      ],
+      "phi_levels": [
+        2,
+        2,
+        1,
+        0,
+        1
+      ]
     },
     {
       "text": "Python's key features include dynamic typing, automatic memory management (garbage collection), and a comprehensive standard library. It's widely used in web development (Django, Flask), data science (NumPy, Pandas), machine learning (TensorFlow, PyTorch), automation, and scientific computing.",
       "topic": "python_features",
-      "keywords": ["python features", "why python", "python uses"],
-      "phi_levels": [2, 2, 1, 0]
+      "keywords": [
+        "python features",
+        "why python",
+        "python used for"
+      ],
+      "phi_levels": [
+        2,
+        2,
+        1,
+        0,
+        2
+      ]
     },
     {
       "text": "Python uses indentation to define code blocks instead of braces. Variables don't need type declarations. Lists, dictionaries, and tuples are built-in data structures. The 'def' keyword defines functions, and 'class' defines classes. Python 3 is the current major version.",
       "topic": "python_basics",
-      "keywords": ["python syntax", "python basics", "how python works"],
-      "phi_levels": [2, 2, 2, 0]
+      "keywords": [
+        "python syntax",
+        "python basics",
+        "what is python"
+      ],
+      "phi_levels": [
+        2,
+        2,
+        2,
+        0,
+        -1
+      ]
     },
     {
       "text": "Physics is the natural science that studies matter, energy, and their interactions. It encompasses mechanics, thermodynamics, electromagnetism, optics, quantum mechanics, and relativity. Physics seeks to understand the fundamental laws governing the universe from subatomic particles to galaxies.",
       "topic": "physics",
-      "keywords": ["physics", "what is physics", "study of physics"],
-      "phi_levels": [3, 2, 1, 1]
+      "keywords": [
+        "physics",
+        "what is physics",
+        "study of physics"
+      ],
+      "phi_levels": [
+        3,
+        2,
+        1,
+        1,
+        0
+      ]
     },
     {
       "text": "Classical mechanics, developed by Newton, describes the motion of macroscopic objects. Key concepts include force (F=ma), momentum, energy conservation, and gravity. It works well for everyday objects but breaks down at very small scales (quantum) or very high speeds (relativistic).",
       "topic": "classical_mechanics",
-      "keywords": ["classical mechanics", "newton", "newtonian physics", "force", "momentum"],
-      "phi_levels": [3, 3, 2, 2]
+      "keywords": [
+        "classical mechanics",
+        "newton",
+        "newtonian physics",
+        "force",
+        "momentum"
+      ],
+      "phi_levels": [
+        3,
+        3,
+        2,
+        2,
+        0
+      ]
     },
     {
-      "text": "Quantum mechanics describes physics at atomic and subatomic scales. Key principles include wave-particle duality, the uncertainty principle (Heisenberg), superposition, and entanglement. The Schrödinger equation governs quantum systems. Quantum effects are essential for understanding atoms, molecules, and modern electronics.",
+      "text": "Quantum mechanics describes physics at atomic and subatomic scales. Key principles include wave-particle duality, the uncertainty principle (Heisenberg), superposition, and entanglement. The Schr\u00f6dinger equation governs quantum systems. Quantum effects are essential for understanding atoms, molecules, and modern electronics.",
       "topic": "quantum_mechanics",
-      "keywords": ["quantum", "quantum mechanics", "quantum physics", "heisenberg", "schrodinger"],
-      "phi_levels": [3, 3, 2, 2]
+      "keywords": [
+        "quantum",
+        "quantum mechanics",
+        "quantum physics",
+        "heisenberg",
+        "schrodinger"
+      ],
+      "phi_levels": [
+        3,
+        3,
+        2,
+        2,
+        0
+      ]
     },
     {
       "text": "Einstein's theory of relativity includes Special Relativity (1905) and General Relativity (1915). Special relativity shows that the speed of light is constant and introduces time dilation and length contraction. General relativity describes gravity as the curvature of spacetime caused by mass and energy.",
       "topic": "relativity",
-      "keywords": ["relativity", "einstein", "special relativity", "general relativity", "spacetime"],
-      "phi_levels": [3, 3, 2, 2]
+      "keywords": [
+        "relativity",
+        "einstein",
+        "special relativity",
+        "general relativity",
+        "spacetime"
+      ],
+      "phi_levels": [
+        3,
+        3,
+        2,
+        2,
+        0
+      ]
     },
     {
-      "text": "The Riemann zeta function ζ(s) is defined as the sum of 1/n^s for n from 1 to infinity, initially for complex numbers s with real part greater than 1. It can be analytically continued to the entire complex plane except s=1. The function connects number theory, complex analysis, and physics.",
+      "text": "The Riemann zeta function \u03b6(s) is defined as the sum of 1/n^s for n from 1 to infinity, initially for complex numbers s with real part greater than 1. It can be analytically continued to the entire complex plane except s=1. The function connects number theory, complex analysis, and physics.",
       "topic": "zeta_function",
-      "keywords": ["zeta function", "riemann zeta", "zeta", "ζ(s)"],
-      "phi_levels": [3, 3, 2, 2]
+      "keywords": [
+        "zeta function",
+        "riemann zeta",
+        "zeta",
+        "\u03b6(s)"
+      ],
+      "phi_levels": [
+        3,
+        3,
+        2,
+        2,
+        0
+      ]
     },
     {
       "text": "The Riemann Hypothesis, proposed in 1859, states that all non-trivial zeros of the zeta function have real part equal to 1/2 (the 'critical line'). It remains one of the most important unsolved problems in mathematics, with a $1 million Millennium Prize for its proof.",
       "topic": "riemann_hypothesis",
-      "keywords": ["riemann hypothesis", "critical line", "zeta zeros", "millennium problem"],
-      "phi_levels": [3, 4, 2, 2]
+      "keywords": [
+        "riemann hypothesis",
+        "critical line",
+        "zeta zeros",
+        "millennium problem"
+      ],
+      "phi_levels": [
+        3,
+        4,
+        2,
+        2,
+        0
+      ]
     },
     {
-      "text": "The zeta function has deep connections to prime numbers through Euler's product formula: ζ(s) = Π(1 - p^(-s))^(-1) over all primes p. The distribution of primes is encoded in the zeros of the zeta function. This connection is fundamental to analytic number theory.",
+      "text": "The zeta function has deep connections to prime numbers through Euler's product formula: \u03b6(s) = \u03a0(1 - p^(-s))^(-1) over all primes p. The distribution of primes is encoded in the zeros of the zeta function. This connection is fundamental to analytic number theory.",
       "topic": "zeta_primes",
-      "keywords": ["zeta primes", "euler product", "prime distribution", "analytic number theory"],
-      "phi_levels": [3, 4, 2, 2]
+      "keywords": [
+        "zeta primes",
+        "euler product",
+        "prime distribution",
+        "analytic number theory"
+      ],
+      "phi_levels": [
+        3,
+        4,
+        2,
+        2,
+        0
+      ]
     },
     {
       "text": "Machine learning is a subset of artificial intelligence where systems learn patterns from data rather than being explicitly programmed. The three main types are supervised learning (labeled data), unsupervised learning (finding patterns), and reinforcement learning (learning from rewards).",
       "topic": "machine_learning",
-      "keywords": ["machine learning", "ml", "what is machine learning"],
-      "phi_levels": [2, 2, 1, 1]
+      "keywords": [
+        "machine learning",
+        "ml",
+        "what is machine learning"
+      ],
+      "phi_levels": [
+        2,
+        2,
+        1,
+        1,
+        0
+      ]
     },
     {
       "text": "Supervised learning uses labeled training data to learn a mapping from inputs to outputs. Common algorithms include linear regression, logistic regression, decision trees, random forests, support vector machines (SVM), and neural networks. It's used for classification and regression tasks.",
       "topic": "supervised_learning",
-      "keywords": ["supervised learning", "classification", "regression", "labeled data"],
-      "phi_levels": [2, 3, 2, 1]
+      "keywords": [
+        "supervised learning",
+        "classification",
+        "regression",
+        "labeled data"
+      ],
+      "phi_levels": [
+        2,
+        3,
+        2,
+        1,
+        0
+      ]
     },
     {
       "text": "Neural networks are computing systems inspired by biological neural networks. They consist of layers of interconnected nodes (neurons) that process information. Deep learning uses neural networks with many layers. Key architectures include CNNs (images), RNNs/LSTMs (sequences), and Transformers (language).",
       "topic": "neural_networks",
-      "keywords": ["neural network", "deep learning", "cnn", "rnn", "transformer"],
-      "phi_levels": [2, 3, 2, 1]
+      "keywords": [
+        "neural network",
+        "deep learning",
+        "cnn",
+        "rnn",
+        "transformer"
+      ],
+      "phi_levels": [
+        2,
+        3,
+        2,
+        1,
+        0
+      ]
     },
     {
       "text": "Training a machine learning model involves: 1) Preparing data (cleaning, splitting into train/test), 2) Choosing a model architecture, 3) Defining a loss function, 4) Optimizing with gradient descent, 5) Evaluating on test data, 6) Tuning hyperparameters. Overfitting and underfitting are common challenges.",
       "topic": "ml_training",
-      "keywords": ["training", "gradient descent", "loss function", "overfitting", "hyperparameters"],
-      "phi_levels": [2, 3, 2, 1]
+      "keywords": [
+        "training",
+        "gradient descent",
+        "loss function",
+        "overfitting",
+        "hyperparameters"
+      ],
+      "phi_levels": [
+        2,
+        3,
+        2,
+        1,
+        0
+      ]
     },
     {
       "text": "Artificial Intelligence (AI) is the simulation of human intelligence by machines. It encompasses machine learning, natural language processing, computer vision, robotics, and expert systems. AI can be narrow (specific tasks) or general (human-level reasoning across domains).",
       "topic": "artificial_intelligence",
-      "keywords": ["artificial intelligence", "ai", "what is ai"],
-      "phi_levels": [2, 2, 1, 1]
+      "keywords": [
+        "artificial intelligence",
+        "ai",
+        "what is ai"
+      ],
+      "phi_levels": [
+        2,
+        2,
+        1,
+        1,
+        0
+      ]
     },
     {
       "text": "Large Language Models (LLMs) like GPT, Claude, and LLaMA are AI systems trained on vast text corpora to understand and generate human language. They use the Transformer architecture with attention mechanisms. LLMs can perform translation, summarization, coding, and reasoning tasks.",
       "topic": "llm",
-      "keywords": ["llm", "large language model", "gpt", "claude", "transformer", "language model"],
-      "phi_levels": [2, 3, 2, 1]
+      "keywords": [
+        "llm",
+        "large language model",
+        "gpt",
+        "claude",
+        "transformer",
+        "language model"
+      ],
+      "phi_levels": [
+        2,
+        3,
+        2,
+        1,
+        0
+      ]
     },
     {
       "text": "Natural Language Processing (NLP) enables computers to understand, interpret, and generate human language. Key tasks include tokenization, part-of-speech tagging, named entity recognition, sentiment analysis, machine translation, and question answering. Modern NLP heavily uses deep learning.",
       "topic": "nlp",
-      "keywords": ["nlp", "natural language processing", "text processing", "language understanding"],
-      "phi_levels": [2, 2, 2, 1]
+      "keywords": [
+        "nlp",
+        "natural language processing",
+        "text processing",
+        "language understanding"
+      ],
+      "phi_levels": [
+        2,
+        2,
+        2,
+        1,
+        0
+      ]
     },
     {
       "text": "Science is the systematic study of the natural world through observation and experimentation. The scientific method involves: observation, hypothesis formation, experimentation, analysis, and conclusion. Key branches include physics, chemistry, biology, astronomy, and earth sciences.",
       "topic": "science",
-      "keywords": ["science", "what is science", "scientific method"],
-      "phi_levels": [1, 1, 1, 1]
+      "keywords": [
+        "science",
+        "what is science",
+        "scientific method"
+      ],
+      "phi_levels": [
+        1,
+        1,
+        1,
+        1,
+        0
+      ]
     },
     {
       "text": "The scientific method is a systematic approach to understanding phenomena: 1) Observe and question, 2) Form a hypothesis, 3) Design experiments, 4) Collect data, 5) Analyze results, 6) Draw conclusions, 7) Peer review and replicate. It emphasizes falsifiability and reproducibility.",
       "topic": "scientific_method",
-      "keywords": ["scientific method", "hypothesis", "experiment", "research"],
-      "phi_levels": [1, 2, 2, 1]
+      "keywords": [
+        "scientific method",
+        "hypothesis",
+        "experiment",
+        "research"
+      ],
+      "phi_levels": [
+        1,
+        2,
+        2,
+        1,
+        0
+      ]
     },
     {
       "text": "Mathematics is the language of science, providing tools for modeling and analysis. Key areas include algebra, calculus, statistics, linear algebra, and differential equations. Mathematical models help predict phenomena from planetary motion to population dynamics to financial markets.",
       "topic": "mathematics",
-      "keywords": ["mathematics", "math", "calculus", "algebra", "statistics"],
-      "phi_levels": [3, 2, 1, 1]
+      "keywords": [
+        "mathematics",
+        "math",
+        "calculus",
+        "algebra",
+        "statistics"
+      ],
+      "phi_levels": [
+        3,
+        2,
+        1,
+        1,
+        0
+      ]
     }
   ],
   "synonyms": [
-    ["hello", "hi", "hey", "greetings"],
-    ["thanks", "thank you", "thx", "appreciate"],
-    ["bye", "goodbye", "farewell", "later"],
-    ["python", "py", "python3"],
-    ["machine learning", "ml", "deep learning"],
-    ["artificial intelligence", "ai"],
-    ["zeta function", "riemann zeta", "zeta"],
-    ["physics", "physical science"],
-    ["what is", "explain", "tell me about", "describe"],
-    ["help", "assist", "support"]
+    [
+      "hello",
+      "hi",
+      "hey",
+      "greetings"
+    ],
+    [
+      "thanks",
+      "thank you",
+      "thx",
+      "appreciate"
+    ],
+    [
+      "bye",
+      "goodbye",
+      "farewell",
+      "later"
+    ],
+    [
+      "python",
+      "py",
+      "python3"
+    ],
+    [
+      "machine learning",
+      "ml",
+      "deep learning"
+    ],
+    [
+      "artificial intelligence",
+      "ai"
+    ],
+    [
+      "zeta function",
+      "riemann zeta",
+      "zeta"
+    ],
+    [
+      "physics",
+      "physical science"
+    ],
+    [
+      "what is",
+      "explain",
+      "tell me about",
+      "describe"
+    ],
+    [
+      "help",
+      "assist",
+      "support"
+    ]
   ]
 }

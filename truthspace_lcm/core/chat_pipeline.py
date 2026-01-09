@@ -76,7 +76,7 @@ class ChatConfig:
     prune_on_save: bool = True
     debug: bool = False
     dims: int = 8
-    use_phi_lattice: bool = False  # Design 099: Use φ-lattice coordinates
+    use_phi_lattice: bool = True   # Design 099, 047: Use φ-lattice coordinates with intrinsic/functional
     use_quaternion: bool = True    # Design 104-105: Use quaternion encoding
 
 
