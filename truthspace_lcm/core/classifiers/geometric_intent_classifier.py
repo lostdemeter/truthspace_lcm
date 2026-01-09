@@ -89,6 +89,11 @@ class IntentMatch:
     tool_args: Dict[str, Any] = field(default_factory=dict)  # Extracted arguments
 
 
+# Bootstrap filler - minimal set used until modules are seeded
+# After seeding, filler is derived emergently from module statistics
+BOOTSTRAP_FILLER = {'a', 'an', 'the', 'is', 'are', 'to', 'of', 'and', 'or', 'in'}
+
+
 class GeometricIntentClassifier:
     """
     Classifies queries using holographic pattern space.
@@ -99,14 +104,14 @@ class GeometricIntentClassifier:
     constructed via eigendecomposition of the word overlap matrix.
     Queries are classified by finding the nearest module.
     
+    Filler words are derived EMERGENTLY from module statistics:
+    - Words appearing across ALL intent categories equally = filler
+    - Words appearing in specific intents = content (distinguishing)
+    - This follows the principle: Structure IS information
+    
     Unknown queries trigger temporary module injection, which can
     be promoted to permanent on success (learning).
     """
-    
-    # Filler words to exclude from word extraction
-    FILLER = {'a', 'an', 'the', 'of', 'with', 'for', 'to', 'and', 'or', 'in',
-              'that', 'this', 'is', 'are', 'it', 'be', 'can', 'you', 'i', 'me',
-              'my', 'your', 'please', 'could', 'would', 'should'}
     
     def __init__(self, dims: int = 8):
         self.dims = dims
@@ -114,12 +119,83 @@ class GeometricIntentClassifier:
         self.positions: Optional[np.ndarray] = None
         self.similarity_matrix: Optional[np.ndarray] = None
         self._seeded = False
+        
+        # Emergent filler - derived from module statistics after seeding
+        self._filler: Set[str] = BOOTSTRAP_FILLER.copy()
+        self._word_intent_spread: Dict[str, float] = {}  # word -> spread across intents
     
-    @classmethod
-    def extract_words(cls, text: str) -> Set[str]:
-        """Extract content words from text."""
-        words = text.lower().split()
-        return {w for w in words if w not in cls.FILLER and len(w) > 1}
+    def _extract_all_words(self, text: str) -> Set[str]:
+        """Extract ALL words from text (no filtering)."""
+        return {w for w in text.lower().split() if len(w) > 1}
+    
+    def extract_words(self, text: str) -> Set[str]:
+        """Extract content words from text (filler removed)."""
+        words = self._extract_all_words(text)
+        return words - self._filler
+    
+    def _derive_filler_words(self):
+        """
+        Derive filler words EMERGENTLY from module statistics.
+        
+        Filler words are those that appear across ALL intent categories equally.
+        They don't help distinguish between intents, so they're noise.
+        
+        Algorithm:
+        1. For each word, count how many intent categories it appears in
+        2. Words appearing in ALL categories = filler (no discriminative power)
+        3. Words appearing in only some categories = content (distinguishing)
+        
+        This follows the principle: Structure IS information.
+        The module structure tells us what words are filler.
+        """
+        from collections import defaultdict
+        
+        if not self.modules:
+            return
+        
+        # Count which intents each word appears in
+        word_intents: Dict[str, Set[Intent]] = defaultdict(set)
+        all_intents = set()
+        
+        for module in self.modules:
+            if module.temporary:
+                continue
+            all_intents.add(module.intent)
+            # Use _extract_all_words to get raw words (before filler filtering)
+            words = self._extract_all_words(module.text)
+            for word in words:
+                word_intents[word].add(module.intent)
+        
+        num_intents = len(all_intents)
+        if num_intents == 0:
+            return
+        
+        # Words appearing in ALL intents are filler (no discriminative power)
+        filler = set()
+        for word, intents in word_intents.items():
+            spread = len(intents) / num_intents
+            self._word_intent_spread[word] = spread
+            
+            # If word appears in ALL intent categories, it's filler
+            if spread >= 1.0:
+                filler.add(word)
+        
+        # Combine with bootstrap filler
+        self._filler = filler | BOOTSTRAP_FILLER
+    
+    def get_filler_info(self) -> Dict[str, Any]:
+        """Get information about filler words (for debugging)."""
+        emergent = self._filler - BOOTSTRAP_FILLER
+        return {
+            "bootstrap": sorted(BOOTSTRAP_FILLER),
+            "emergent": sorted(emergent),
+            "all": sorted(self._filler),
+            "total": len(self._filler),
+            "word_spread": sorted(
+                [(w, s) for w, s in self._word_intent_spread.items()],
+                key=lambda x: -x[1]
+            )[:20],
+        }
     
     @classmethod
     def word_overlap(cls, words1: Set[str], words2: Set[str]) -> float:
@@ -228,6 +304,9 @@ class GeometricIntentClassifier:
         ]
         for name, text in knowledge_examples:
             self.add_module(name, text, Intent.KNOWLEDGE)
+        
+        # Derive filler words emergently from module statistics
+        self._derive_filler_words()
         
         self._seeded = True
     
@@ -348,7 +427,7 @@ class GeometricIntentClassifier:
         # Extract arguments geometrically: words in query but not in module template
         query_words = self.extract_words(query)
         template_words = module.words
-        arg_words = query_words - template_words - self.FILLER
+        arg_words = query_words - template_words - self._filler
         
         # Build arguments based on tool type
         tool_args = {}
