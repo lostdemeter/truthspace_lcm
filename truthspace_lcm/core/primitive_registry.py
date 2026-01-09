@@ -243,13 +243,14 @@ class PrimitiveRegistry:
                 if word in self._single_word:
                     prim = self._single_word[word]
                     # Single-word primitives use MAX aggregation
-                    # For intrinsic_functional (dim 4), use largest absolute value
+                    # For dimensions with negative levels (4=intrinsic_functional, 5=action),
+                    # use largest absolute value
                     for dim, level in enumerate(prim.levels):
                         if dim < self.lattice.ndim:
                             if not activated[dim]:
                                 levels[dim] = level
                                 activated[dim] = True
-                            elif dim == 4:  # intrinsic_functional: use largest |value|
+                            elif dim in (4, 5):  # intrinsic_functional, action: use largest |value|
                                 if abs(level) > abs(levels[dim]):
                                     levels[dim] = level
                             elif level > levels[dim]:
@@ -373,9 +374,9 @@ def create_registry_from_primitives(lattice: Optional[PhiLattice] = None) -> Pri
                 kw_lower = kw.lower()
                 # Use MAX per dimension (Sierpinski property)
                 current = keyword_levels[kw_lower][prim.dimension]
-                # For intrinsic_functional (dim 4), negative levels are meaningful
-                # Use the level with larger absolute value, preserving sign
-                if prim.dimension == 4:  # intrinsic_functional
+                # For dimensions with negative levels (intrinsic_functional=4, action=5),
+                # use the level with larger absolute value, preserving sign
+                if prim.dimension in (4, 5):  # intrinsic_functional, action
                     if abs(prim.level) > abs(current):
                         keyword_levels[kw_lower][prim.dimension] = prim.level
                 else:

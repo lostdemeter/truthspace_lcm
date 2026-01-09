@@ -310,13 +310,21 @@ class GeometricIntentClassifier:
             self.add_module(name, text, Intent.TOOL_CALL)
         
         # Knowledge query examples
+        # Include domain words (histogram, python, chart) so "what is X" matches KNOWLEDGE
+        # even when X is a plot-related word
         knowledge_examples = [
             ("know_what", "what is a sine wave"),
+            ("know_what_histogram", "what is a histogram"),
+            ("know_what_chart", "what is a bar chart"),
+            ("know_what_python", "what is python"),
+            ("know_what_scatter", "what is a scatter plot"),
             ("know_how", "how does matplotlib work"),
             ("know_explain", "explain the difference between bar and histogram"),
             ("know_params", "what are the parameters for scatter plot"),
             ("know_describe", "describe numpy arrays"),
+            ("know_describe_chart", "describe a bar chart"),
             ("know_tell", "tell me about python decorators"),
+            ("know_tell_plot", "tell me about plotting"),
             ("know_why", "why use virtual environments"),
             ("know_who", "who is george washington"),
             ("know_define", "define machine learning"),

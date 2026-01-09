@@ -253,6 +253,38 @@ INTRINSIC_FUNCTIONAL_PRIMITIVES = [
 ]
 
 # =============================================================================
+# ACTION PRIMITIVES (dimension 5)
+# User-agent relationship: query vs create vs execute
+# Design 048: Agent-grounded interpretation
+# =============================================================================
+
+ACTION_PRIMITIVES = [
+    # Strongly query (level -2) - deep questions about concepts
+    Primitive("STRONGLY_QUERY", 5, -2, [
+        "what", "why", "how", "when", "where", "who"
+    ]),
+    
+    # Query (level -1) - requests for explanation/description
+    Primitive("QUERY", 5, -1, [
+        "explain", "describe", "tell", "define", "meaning",
+        "understand", "clarify", "elaborate"
+    ]),
+    
+    # Create (level +1) - requests to generate output
+    Primitive("CREATE", 5, 1, [
+        "create", "make", "generate", "plot", "draw", "build",
+        "write", "produce", "design", "construct"
+    ]),
+    
+    # Execute (level +2) - requests to perform tool actions
+    Primitive("EXECUTE", 5, 2, [
+        "list", "read", "show", "find", "search", "run",
+        "execute", "delete", "remove", "open", "close",
+        "start", "stop", "install", "update"
+    ]),
+]
+
+# =============================================================================
 # ALL PRIMITIVES
 # =============================================================================
 
@@ -261,7 +293,8 @@ ALL_PRIMITIVES = (
     SPECIFICITY_PRIMITIVES +
     INTENT_PRIMITIVES +
     FORMALITY_PRIMITIVES +
-    INTRINSIC_FUNCTIONAL_PRIMITIVES
+    INTRINSIC_FUNCTIONAL_PRIMITIVES +
+    ACTION_PRIMITIVES
 )
 
 

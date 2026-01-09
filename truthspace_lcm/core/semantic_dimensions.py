@@ -120,10 +120,30 @@ INTRINSIC_FUNCTIONAL = SemanticDimension(
 )
 
 # =============================================================================
+# ACTION DIMENSION (index 5)
+# What the user wants the agent to DO: query vs create vs execute
+# Design 048: Agent-grounded interpretation
+# =============================================================================
+
+ACTION = SemanticDimension(
+    index=5,
+    name='action',
+    description='User-agent relationship: query knowledge vs create output vs execute tool',
+    level_meanings={
+        -2: 'strongly_query',     # what, why, how (deep questions)
+        -1: 'query',              # explain, describe, tell me about
+         0: 'neutral',            # ambiguous or conversational
+        +1: 'create',             # create, make, generate, plot, draw
+        +2: 'execute',            # list, read, run, delete, execute (tool actions)
+    },
+    weight=PHI * PHI  # Higher weight - action is crucial for intent
+)
+
+# =============================================================================
 # DEFAULT CONFIGURATION
 # =============================================================================
 
-DEFAULT_DIMENSIONS = [DOMAIN, SPECIFICITY, INTENT, FORMALITY, INTRINSIC_FUNCTIONAL]
+DEFAULT_DIMENSIONS = [DOMAIN, SPECIFICITY, INTENT, FORMALITY, INTRINSIC_FUNCTIONAL, ACTION]
 
 DEFAULT_DIMENSION_COUNT = len(DEFAULT_DIMENSIONS)
 
