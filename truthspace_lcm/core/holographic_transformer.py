@@ -61,18 +61,12 @@ class HolographicTransformResult:
 # HOLOGRAPHIC TRANSFORMER
 # =============================================================================
 
-FILLER_WORDS = {
-    'a', 'an', 'the', 'of', 'with', 'for', 'to', 'and', 'or', 'in',
-    'that', 'this', 'is', 'are', 'was', 'were', 'be', 'been', 'being',
-    'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'could',
-    'should', 'may', 'might', 'must', 'shall', 'can', 'need', 'dare',
-    'ought', 'used', 'on', 'at', 'by', 'from', 'up', 'about', 'into',
-    'through', 'during', 'before', 'after', 'above', 'below', 'between',
-    'under', 'again', 'further', 'then', 'once', 'here', 'there', 'when',
-    'where', 'why', 'how', 'all', 'each', 'few', 'more', 'most', 'other',
-    'some', 'such', 'no', 'nor', 'not', 'only', 'own', 'same', 'so',
-    'than', 'too', 'very', 's', 't', 'just', 'don', 'now',
-}
+# Bootstrap filler words - used only until corpus is loaded
+# After load_corpus(), filler words are derived emergently from document frequency
+BOOTSTRAP_FILLER = {'a', 'an', 'the', 'is', 'are', 'was', 'were', 'be', 'to', 'of', 'and', 'or', 'in'}
+
+# Threshold: words appearing in >50% of sentences are considered filler
+FILLER_DOCUMENT_FREQUENCY_THRESHOLD = 0.5
 
 
 class HolographicTransformer:
@@ -82,6 +76,10 @@ class HolographicTransformer:
     Positions are constructed from word overlap similarity.
     Transformations are vector additions.
     Decoding is nearest neighbor search.
+    
+    Filler words are derived EMERGENTLY from corpus statistics:
+    - Words appearing in >50% of sentences are filler
+    - This follows the principle: Structure IS information
     """
     
     def __init__(self, dims: int = 32):
@@ -101,12 +99,19 @@ class HolographicTransformer:
         self._similarity_matrix: Optional[np.ndarray] = None
         self._positions: Optional[np.ndarray] = None
         self._sentence_list: List[str] = []  # Ordered list for indexing
+        
+        # Emergent filler words - derived from corpus document frequency
+        self._filler_words: Set[str] = BOOTSTRAP_FILLER.copy()
+        self._word_doc_freq: Dict[str, float] = {}  # word -> document frequency
     
-    @staticmethod
-    def extract_words(text: str) -> Set[str]:
-        """Extract content words from text."""
-        words = set(re.findall(r'\b[a-z]+\b', text.lower()))
-        return words - FILLER_WORDS
+    def _extract_all_words(self, text: str) -> Set[str]:
+        """Extract ALL words from text (no filtering)."""
+        return set(re.findall(r'\b[a-z]+\b', text.lower()))
+    
+    def extract_words(self, text: str) -> Set[str]:
+        """Extract content words from text (filler removed)."""
+        words = self._extract_all_words(text)
+        return words - self._filler_words
     
     @staticmethod
     def word_overlap(words1: Set[str], words2: Set[str]) -> float:
@@ -117,9 +122,50 @@ class HolographicTransformer:
         union = words1 | words2
         return len(intersection) / len(union)
     
+    def _derive_filler_words(self, sentences: List[str]) -> Set[str]:
+        """
+        Derive filler words EMERGENTLY from corpus statistics.
+        
+        Filler words are those that appear in many sentences but don't
+        help distinguish between them. We identify them by document frequency:
+        words appearing in >50% of sentences are considered filler.
+        
+        This follows the principle: Structure IS information.
+        The corpus structure tells us what words are filler.
+        """
+        from collections import Counter
+        
+        if not sentences:
+            return BOOTSTRAP_FILLER.copy()
+        
+        # Count how many sentences contain each word
+        word_doc_count: Counter = Counter()
+        total_sentences = len(sentences)
+        
+        for sentence in sentences:
+            words = self._extract_all_words(sentence)
+            for word in words:
+                word_doc_count[word] += 1
+        
+        # Calculate document frequency and identify filler
+        filler = set()
+        for word, count in word_doc_count.items():
+            doc_freq = count / total_sentences
+            self._word_doc_freq[word] = doc_freq
+            
+            if doc_freq >= FILLER_DOCUMENT_FREQUENCY_THRESHOLD:
+                filler.add(word)
+        
+        # Always include bootstrap filler (structural words)
+        filler.update(BOOTSTRAP_FILLER)
+        
+        return filler
+    
     def load_corpus(self, path: Path) -> int:
         """
         Load transformation corpus and construct geometric space.
+        
+        Filler words are derived emergently from corpus document frequency.
         
         Returns number of transformations loaded.
         """
@@ -131,7 +177,16 @@ class HolographicTransformer:
         
         transformations = data.get("transformations", [])
         
-        # Collect all sentences and their words
+        # First pass: collect all sentences to derive filler words
+        all_sentences = []
+        for t in transformations:
+            all_sentences.append(t["source"])
+            all_sentences.append(t["target"])
+        
+        # Derive filler words from corpus statistics (emergent, not hard-coded)
+        self._filler_words = self._derive_filler_words(all_sentences)
+        
+        # Second pass: collect sentences with filler-filtered words
         for t in transformations:
             source = t["source"]
             target = t["target"]
@@ -328,6 +383,31 @@ class HolographicTransformer:
             "examples_per_transform": {
                 f"{d}={v}": len(ex) for (d, v), ex in self._examples.items()
             },
+            "filler_words": len(self._filler_words),
+            "filler_words_emergent": len(self._filler_words - BOOTSTRAP_FILLER),
+        }
+    
+    def get_filler_words(self) -> Dict[str, any]:
+        """
+        Get information about filler words (for debugging/inspection).
+        
+        Returns dict with:
+        - bootstrap: words from bootstrap set
+        - emergent: words derived from corpus statistics
+        - all: combined set
+        - doc_freq: document frequency for each word
+        """
+        emergent = self._filler_words - BOOTSTRAP_FILLER
+        return {
+            "bootstrap": sorted(BOOTSTRAP_FILLER),
+            "emergent": sorted(emergent),
+            "all": sorted(self._filler_words),
+            "total": len(self._filler_words),
+            "doc_freq_threshold": FILLER_DOCUMENT_FREQUENCY_THRESHOLD,
+            "high_freq_words": sorted(
+                [(w, f) for w, f in self._word_doc_freq.items() if f >= FILLER_DOCUMENT_FREQUENCY_THRESHOLD],
+                key=lambda x: -x[1]
+            )[:20],  # Top 20 by frequency
         }
     
     def test_accuracy(self) -> Dict:
