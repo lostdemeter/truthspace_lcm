@@ -142,7 +142,7 @@ for name, pattern in self.patterns.items():
 
 | Date | Item | Change | Commit |
 |------|------|--------|--------|
-| 2026-01-09 | holographic_transformer.py | Replaced FILLER_WORDS with emergent detection via document frequency | pending |
+| 2026-01-09 | holographic_transformer.py | Replaced FILLER_WORDS with φ-Zipf duality (Design 039) | pending |
 
 ---
 

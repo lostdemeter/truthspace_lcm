@@ -61,12 +61,20 @@ class HolographicTransformResult:
 # HOLOGRAPHIC TRANSFORMER
 # =============================================================================
 
+# Golden ratio for φ-Zipf duality (Design 039)
+PHI = (1 + np.sqrt(5)) / 2
+
 # Bootstrap filler words - used only until corpus is loaded
-# After load_corpus(), filler words are derived emergently from document frequency
+# After load_corpus(), filler words are derived via φ-Zipf duality
 BOOTSTRAP_FILLER = {'a', 'an', 'the', 'is', 'are', 'was', 'were', 'be', 'to', 'of', 'and', 'or', 'in'}
 
-# Threshold: words appearing in >50% of sentences are considered filler
-FILLER_DOCUMENT_FREQUENCY_THRESHOLD = 0.5
+# φ-weight threshold: words with φ^(-rank) below this are filler
+# This replaces statistical document frequency with geometric φ-based weighting
+# High frequency words have LOW rank (rank 1 = most frequent) → HIGH φ weight
+# So we mark words with HIGH φ-weight as filler (they're the most frequent)
+# φ^(-1) = 0.618, φ^(-5) = 0.09, φ^(-10) = 0.008
+# Threshold 0.1 means top ~5 most frequent words are filler
+PHI_FILLER_WEIGHT_THRESHOLD = 0.1
 
 
 class HolographicTransformer:
@@ -77,9 +85,12 @@ class HolographicTransformer:
     Transformations are vector additions.
     Decoding is nearest neighbor search.
     
-    Filler words are derived EMERGENTLY from corpus statistics:
-    - Words appearing in >50% of sentences are filler
+    Filler words are derived via φ-Zipf duality (Design 039):
+    - Words are ranked by frequency
+    - φ^(-rank) gives geometric weight
+    - Low weight words (high frequency) are filler
     - This follows the principle: Structure IS information
+    - The geometry IS the weighting (not statistics)
     """
     
     def __init__(self, dims: int = 32):
@@ -100,9 +111,10 @@ class HolographicTransformer:
         self._positions: Optional[np.ndarray] = None
         self._sentence_list: List[str] = []  # Ordered list for indexing
         
-        # Emergent filler words - derived from corpus document frequency
+        # Emergent filler words - derived via φ-Zipf duality
         self._filler_words: Set[str] = BOOTSTRAP_FILLER.copy()
-        self._word_doc_freq: Dict[str, float] = {}  # word -> document frequency
+        self._word_phi_weight: Dict[str, float] = {}  # word -> φ^(-rank) weight
+        self._word_frequency: Dict[str, int] = {}  # word -> raw frequency
     
     def _extract_all_words(self, text: str) -> Set[str]:
         """Extract ALL words from text (no filtering)."""
@@ -124,36 +136,47 @@ class HolographicTransformer:
     
     def _derive_filler_words(self, sentences: List[str]) -> Set[str]:
         """
-        Derive filler words EMERGENTLY from corpus statistics.
+        Derive filler words via φ-Zipf duality (Design 039).
         
-        Filler words are those that appear in many sentences but don't
-        help distinguish between them. We identify them by document frequency:
-        words appearing in >50% of sentences are considered filler.
+        Instead of statistical document frequency, we use geometric φ-weighting:
+        1. Count word frequencies across corpus
+        2. Rank words by frequency (most frequent = rank 1)
+        3. Compute φ^(-rank) weight for each word
+        4. Words with weight below threshold are filler
         
-        This follows the principle: Structure IS information.
-        The corpus structure tells us what words are filler.
+        This follows the principle: The geometry IS the weighting.
+        φ^n for encoding (outward), φ^(-n) for weighting (inward).
+        Same fractal, opposite directions.
         """
         from collections import Counter
         
         if not sentences:
             return BOOTSTRAP_FILLER.copy()
         
-        # Count how many sentences contain each word
-        word_doc_count: Counter = Counter()
-        total_sentences = len(sentences)
-        
+        # Count total word occurrences (not document frequency)
+        word_freq: Counter = Counter()
         for sentence in sentences:
             words = self._extract_all_words(sentence)
-            for word in words:
-                word_doc_count[word] += 1
+            word_freq.update(words)
         
-        # Calculate document frequency and identify filler
+        # Store raw frequencies
+        self._word_frequency = dict(word_freq)
+        
+        # Rank words by frequency (most frequent = rank 1)
+        sorted_words = sorted(word_freq.items(), key=lambda x: -x[1])
+        
+        # Compute φ^(-rank) weight and identify filler
         filler = set()
-        for word, count in word_doc_count.items():
-            doc_freq = count / total_sentences
-            self._word_doc_freq[word] = doc_freq
+        for rank, (word, freq) in enumerate(sorted_words, 1):
+            # φ-Zipf duality: weight = φ^(-rank)
+            # Rank 1 (most frequent) → φ^(-1) = 0.618 (high weight)
+            # Rank 100 (rare) → φ^(-100) ≈ 0 (low weight)
+            phi_weight = PHI ** (-rank)
+            self._word_phi_weight[word] = phi_weight
             
-            if doc_freq >= FILLER_DOCUMENT_FREQUENCY_THRESHOLD:
+            # HIGH weight = HIGH frequency = filler
+            # Words with φ-weight >= threshold are the most frequent → filler
+            if phi_weight >= PHI_FILLER_WEIGHT_THRESHOLD:
                 filler.add(word)
         
         # Always include bootstrap filler (structural words)
@@ -393,9 +416,9 @@ class HolographicTransformer:
         
         Returns dict with:
         - bootstrap: words from bootstrap set
-        - emergent: words derived from corpus statistics
+        - emergent: words derived via φ-Zipf duality
         - all: combined set
-        - doc_freq: document frequency for each word
+        - phi_weights: φ^(-rank) weight for each word
         """
         emergent = self._filler_words - BOOTSTRAP_FILLER
         return {
@@ -403,11 +426,18 @@ class HolographicTransformer:
             "emergent": sorted(emergent),
             "all": sorted(self._filler_words),
             "total": len(self._filler_words),
-            "doc_freq_threshold": FILLER_DOCUMENT_FREQUENCY_THRESHOLD,
-            "high_freq_words": sorted(
-                [(w, f) for w, f in self._word_doc_freq.items() if f >= FILLER_DOCUMENT_FREQUENCY_THRESHOLD],
-                key=lambda x: -x[1]
-            )[:20],  # Top 20 by frequency
+            "phi_weight_threshold": PHI_FILLER_WEIGHT_THRESHOLD,
+            "phi_weights": sorted(
+                [(w, self._word_phi_weight.get(w, 0), self._word_frequency.get(w, 0)) 
+                 for w in self._filler_words if w in self._word_phi_weight],
+                key=lambda x: -x[2]  # Sort by frequency
+            )[:20],  # Top 20 filler words by frequency
+            "low_weight_words": sorted(
+                [(w, weight, self._word_frequency.get(w, 0)) 
+                 for w, weight in self._word_phi_weight.items() 
+                 if weight < PHI_FILLER_WEIGHT_THRESHOLD],
+                key=lambda x: -x[1]  # Sort by φ-weight (highest first)
+            )[:10],  # Top 10 content words (low φ-weight = rare = meaningful)
         }
     
     def test_accuracy(self) -> Dict:
