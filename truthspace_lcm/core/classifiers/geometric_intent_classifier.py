@@ -89,9 +89,17 @@ class IntentMatch:
     tool_args: Dict[str, Any] = field(default_factory=dict)  # Extracted arguments
 
 
+# Golden ratio for φ-Zipf duality (Design 039)
+PHI = (1 + np.sqrt(5)) / 2
+
 # Bootstrap filler - minimal set used until modules are seeded
-# After seeding, filler is derived emergently from module statistics
+# After seeding, filler is derived via φ-Zipf duality
 BOOTSTRAP_FILLER = {'a', 'an', 'the', 'is', 'are', 'to', 'of', 'and', 'or', 'in'}
+
+# φ-weight threshold: words with φ^(-rank) >= this are filler (most frequent)
+# φ^(-1) = 0.618, φ^(-2) = 0.382, φ^(-3) = 0.236
+# Only the top 2 most frequent words are filler (threshold > φ^(-3))
+PHI_FILLER_WEIGHT_THRESHOLD = 0.25
 
 
 class GeometricIntentClassifier:
@@ -104,10 +112,11 @@ class GeometricIntentClassifier:
     constructed via eigendecomposition of the word overlap matrix.
     Queries are classified by finding the nearest module.
     
-    Filler words are derived EMERGENTLY from module statistics:
-    - Words appearing across ALL intent categories equally = filler
-    - Words appearing in specific intents = content (distinguishing)
-    - This follows the principle: Structure IS information
+    Filler words are derived via φ-Zipf duality (Design 039):
+    - Words are ranked by frequency across modules
+    - φ^(-rank) gives geometric weight
+    - High weight (high frequency) words are filler
+    - This follows the principle: The geometry IS the weighting
     
     Unknown queries trigger temporary module injection, which can
     be promoted to permanent on success (learning).
@@ -120,9 +129,10 @@ class GeometricIntentClassifier:
         self.similarity_matrix: Optional[np.ndarray] = None
         self._seeded = False
         
-        # Emergent filler - derived from module statistics after seeding
+        # Emergent filler - derived via φ-Zipf duality after seeding
         self._filler: Set[str] = BOOTSTRAP_FILLER.copy()
-        self._word_intent_spread: Dict[str, float] = {}  # word -> spread across intents
+        self._word_phi_weight: Dict[str, float] = {}  # word -> φ^(-rank) weight
+        self._word_frequency: Dict[str, int] = {}  # word -> raw frequency
     
     def _extract_all_words(self, text: str) -> Set[str]:
         """Extract ALL words from text (no filtering)."""
@@ -135,49 +145,51 @@ class GeometricIntentClassifier:
     
     def _derive_filler_words(self):
         """
-        Derive filler words EMERGENTLY from module statistics.
+        Derive filler words via φ-Zipf duality (Design 039).
         
-        Filler words are those that appear across ALL intent categories equally.
-        They don't help distinguish between intents, so they're noise.
+        Instead of statistical analysis, we use geometric φ-weighting:
+        1. Count word frequencies across all modules
+        2. Rank words by frequency (most frequent = rank 1)
+        3. Compute φ^(-rank) weight for each word
+        4. Words with high φ-weight (high frequency) are filler
         
-        Algorithm:
-        1. For each word, count how many intent categories it appears in
-        2. Words appearing in ALL categories = filler (no discriminative power)
-        3. Words appearing in only some categories = content (distinguishing)
-        
-        This follows the principle: Structure IS information.
-        The module structure tells us what words are filler.
+        This follows the principle: The geometry IS the weighting.
+        φ^n for encoding (outward), φ^(-n) for weighting (inward).
+        Same fractal, opposite directions.
         """
-        from collections import defaultdict
+        from collections import Counter
         
         if not self.modules:
             return
         
-        # Count which intents each word appears in
-        word_intents: Dict[str, Set[Intent]] = defaultdict(set)
-        all_intents = set()
-        
+        # Count total word occurrences across all modules
+        word_freq: Counter = Counter()
         for module in self.modules:
             if module.temporary:
                 continue
-            all_intents.add(module.intent)
-            # Use _extract_all_words to get raw words (before filler filtering)
             words = self._extract_all_words(module.text)
-            for word in words:
-                word_intents[word].add(module.intent)
+            word_freq.update(words)
         
-        num_intents = len(all_intents)
-        if num_intents == 0:
+        if not word_freq:
             return
         
-        # Words appearing in ALL intents are filler (no discriminative power)
+        # Store raw frequencies
+        self._word_frequency = dict(word_freq)
+        
+        # Rank words by frequency (most frequent = rank 1)
+        sorted_words = sorted(word_freq.items(), key=lambda x: -x[1])
+        
+        # Compute φ^(-rank) weight and identify filler
         filler = set()
-        for word, intents in word_intents.items():
-            spread = len(intents) / num_intents
-            self._word_intent_spread[word] = spread
+        for rank, (word, freq) in enumerate(sorted_words, 1):
+            # φ-Zipf duality: weight = φ^(-rank)
+            # Rank 1 (most frequent) → φ^(-1) = 0.618 (high weight)
+            # Rank 100 (rare) → φ^(-100) ≈ 0 (low weight)
+            phi_weight = PHI ** (-rank)
+            self._word_phi_weight[word] = phi_weight
             
-            # If word appears in ALL intent categories, it's filler
-            if spread >= 1.0:
+            # HIGH weight = HIGH frequency = filler
+            if phi_weight >= PHI_FILLER_WEIGHT_THRESHOLD:
                 filler.add(word)
         
         # Combine with bootstrap filler
@@ -191,10 +203,18 @@ class GeometricIntentClassifier:
             "emergent": sorted(emergent),
             "all": sorted(self._filler),
             "total": len(self._filler),
-            "word_spread": sorted(
-                [(w, s) for w, s in self._word_intent_spread.items()],
-                key=lambda x: -x[1]
+            "phi_weight_threshold": PHI_FILLER_WEIGHT_THRESHOLD,
+            "phi_weights": sorted(
+                [(w, self._word_phi_weight.get(w, 0), self._word_frequency.get(w, 0))
+                 for w in self._filler if w in self._word_phi_weight],
+                key=lambda x: -x[2]  # Sort by frequency
             )[:20],
+            "content_words": sorted(
+                [(w, weight, self._word_frequency.get(w, 0))
+                 for w, weight in self._word_phi_weight.items()
+                 if weight < PHI_FILLER_WEIGHT_THRESHOLD],
+                key=lambda x: -x[1]  # Sort by φ-weight
+            )[:10],
         }
     
     @classmethod
