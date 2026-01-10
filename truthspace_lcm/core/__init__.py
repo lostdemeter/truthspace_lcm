@@ -34,7 +34,7 @@ Usage (Legacy - for backwards compatibility):
 from .chat_pipeline import ChatPipeline, ChatConfig, Intent, IntentResult, IntentSpace
 from .knowledge_space import KnowledgeSpace
 from .code_space import CodeSpace, CodeResult, CodeVerifier
-from .plot_space import PlotSpace, PlotResult, PlotPattern
+from .plot_space import PlotSpace, PlotResult, GeometricPlotSpace
 from .ollama_space import OllamaSpace, KnowledgeResult
 
 # Dynamic Quaternion Layers (Design 104-105)
