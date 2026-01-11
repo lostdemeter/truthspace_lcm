@@ -283,7 +283,7 @@ class SelfAssemblingCorpus:
         return result
     
     # =========================================================================
-    # PLATONIC IDEAL DETECTION
+    # PLATONIC IDEAL DETECTION (Phase 4)
     # =========================================================================
     
     def _detect_ideals(self):
@@ -316,6 +316,162 @@ class SelfAssemblingCorpus:
                     confidence=len(dims) / len(self.dimensions) if self.dimensions else 0
                 )
                 self.ideals[word] = ideal
+    
+    def get_ideal_hierarchy(self) -> Dict[int, List[str]]:
+        """
+        Get Platonic Ideals organized by hierarchy level.
+        
+        Hierarchy levels (based on dimensions anchored):
+        - Level 0: Universal ideals (5+ dimensions) - most fundamental
+        - Level 1: Domain ideals (3-4 dimensions)
+        - Level 2: Category ideals (2 dimensions)
+        - Level 3: Specific ideals (1 dimension) - not true ideals, but tracked
+        
+        Returns dict mapping level → list of words.
+        """
+        self.recompute()
+        
+        hierarchy = {0: [], 1: [], 2: [], 3: []}
+        
+        # Count dimensions for all source words
+        anchor_counts: Dict[str, int] = {}
+        for pair in self.pairs:
+            if pair.source not in anchor_counts:
+                anchor_counts[pair.source] = 0
+            anchor_counts[pair.source] += 1
+        
+        for word, count in anchor_counts.items():
+            if count >= 5:
+                hierarchy[0].append(word)
+            elif count >= 3:
+                hierarchy[1].append(word)
+            elif count >= 2:
+                hierarchy[2].append(word)
+            else:
+                hierarchy[3].append(word)
+        
+        # Sort each level by count (descending)
+        for level in hierarchy:
+            hierarchy[level].sort(key=lambda w: anchor_counts.get(w, 0), reverse=True)
+        
+        return hierarchy
+    
+    def analyze_ideal(self, word: str) -> Optional[Dict[str, any]]:
+        """
+        Deep analysis of a Platonic Ideal.
+        
+        Returns detailed information about:
+        - Dimensions it anchors
+        - Variations in each dimension
+        - Position (should be at origin)
+        - Hierarchy level
+        - Related ideals (share dimensions)
+        """
+        self.recompute()
+        
+        ideal = self.ideals.get(word.lower().strip())
+        if not ideal:
+            return None
+        
+        # Get position
+        pos = self.get_position(word)
+        
+        # Check if at origin (all zeros)
+        at_origin = pos is not None and np.allclose(pos, 0, atol=0.1)
+        
+        # Determine hierarchy level
+        dim_count = len(ideal.dimensions_anchored)
+        if dim_count >= 5:
+            level = 0
+            level_name = "Universal"
+        elif dim_count >= 3:
+            level = 1
+            level_name = "Domain"
+        else:
+            level = 2
+            level_name = "Category"
+        
+        # Find related ideals (share at least one dimension)
+        related = []
+        for other_word, other_ideal in self.ideals.items():
+            if other_word != word:
+                shared = set(ideal.dimensions_anchored) & set(other_ideal.dimensions_anchored)
+                if shared:
+                    related.append((other_word, list(shared)))
+        
+        # Count total variations
+        total_variations = sum(len(v) for v in ideal.variations.values())
+        
+        return {
+            "word": word,
+            "dimensions_anchored": ideal.dimensions_anchored,
+            "dimension_count": dim_count,
+            "variations": ideal.variations,
+            "total_variations": total_variations,
+            "position": pos.tolist() if pos is not None else None,
+            "at_origin": at_origin,
+            "hierarchy_level": level,
+            "hierarchy_name": level_name,
+            "confidence": ideal.confidence,
+            "related_ideals": related
+        }
+    
+    def discover_potential_ideals(self) -> List[Dict[str, any]]:
+        """
+        Discover concepts that COULD become Platonic Ideals.
+        
+        These are words that:
+        - Currently anchor only 1 dimension
+        - But have high variation count
+        - Suggesting they might anchor more dimensions with more data
+        """
+        self.recompute()
+        
+        # Find words anchoring exactly 1 dimension
+        anchor_counts: Dict[str, Set[str]] = {}
+        variation_counts: Dict[str, int] = {}
+        
+        for pair in self.pairs:
+            source = pair.source
+            if source not in anchor_counts:
+                anchor_counts[source] = set()
+                variation_counts[source] = 0
+            anchor_counts[source].add(pair.relationship)
+            variation_counts[source] += 1
+        
+        potential = []
+        for word, dims in anchor_counts.items():
+            if len(dims) == 1 and variation_counts[word] >= 2:
+                # High variation count on single dimension - potential ideal
+                potential.append({
+                    "word": word,
+                    "current_dimension": list(dims)[0],
+                    "variation_count": variation_counts[word],
+                    "suggestion": f"Add pairs for {word} in other dimensions"
+                })
+        
+        # Sort by variation count
+        potential.sort(key=lambda x: x["variation_count"], reverse=True)
+        return potential
+    
+    def find_dimension_gaps_for_ideal(self, word: str) -> List[str]:
+        """
+        Find dimensions that an ideal doesn't yet have variations for.
+        
+        This helps identify where to expand the ideal's coverage.
+        """
+        self.recompute()
+        
+        ideal = self.ideals.get(word.lower().strip())
+        if not ideal:
+            return []
+        
+        # Find dimensions this ideal doesn't anchor
+        all_dims = set(self.dimensions.keys())
+        anchored_dims = set(ideal.dimensions_anchored)
+        missing_dims = all_dims - anchored_dims
+        
+        return list(missing_dims)
     
     def get_ideal(self, word: str) -> Optional[PlatonicIdeal]:
         """Get a Platonic Ideal by word."""
@@ -1908,6 +2064,119 @@ def demo_full_llm_pipeline():
     return corpus, pipeline
 
 
+def demo_platonic_ideal_discovery():
+    """Demonstrate Phase 4: Platonic Ideal Discovery."""
+    print("=" * 60)
+    print("DEMO: Platonic Ideal Discovery (Phase 4)")
+    print("=" * 60)
+    print()
+    
+    corpus = SelfAssemblingCorpus()
+    
+    # Build a rich corpus with multiple ideals
+    print("Building corpus with multiple Platonic Ideals...")
+    print("-" * 60)
+    
+    # House - anchors size, regality, age
+    corpus.add_pair("house", "cottage", "size_decrease")
+    corpus.add_pair("house", "mansion", "size_increase")
+    corpus.add_pair("house", "palace", "regality_increase")
+    corpus.add_pair("house", "hovel", "regality_decrease")
+    corpus.add_pair("house", "ruin", "age_increase")
+    
+    # Person - anchors age, status, familiarity, size
+    corpus.add_pair("person", "child", "age_decrease")
+    corpus.add_pair("person", "elder", "age_increase")
+    corpus.add_pair("person", "noble", "status_increase")
+    corpus.add_pair("person", "peasant", "status_decrease")
+    corpus.add_pair("person", "friend", "familiarity_increase")
+    corpus.add_pair("person", "stranger", "familiarity_decrease")
+    
+    # Dog - anchors size, age
+    corpus.add_pair("dog", "puppy", "age_decrease")
+    corpus.add_pair("dog", "lapdog", "size_decrease")
+    corpus.add_pair("dog", "hound", "size_increase")
+    
+    # Vehicle - anchors size, speed
+    corpus.add_pair("vehicle", "bicycle", "size_decrease")
+    corpus.add_pair("vehicle", "truck", "size_increase")
+    corpus.add_pair("vehicle", "racecar", "speed_increase")
+    
+    # Food - anchors size, quality
+    corpus.add_pair("food", "snack", "size_decrease")
+    corpus.add_pair("food", "feast", "size_increase")
+    corpus.add_pair("food", "delicacy", "quality_increase")
+    
+    corpus.recompute()
+    
+    print(f"  Total pairs: {len(corpus.pairs)}")
+    print(f"  Dimensions: {len(corpus.dimensions)}")
+    print(f"  Platonic Ideals detected: {len(corpus.ideals)}")
+    print()
+    
+    # Show hierarchy
+    print("Ideal Hierarchy:")
+    print("-" * 60)
+    hierarchy = corpus.get_ideal_hierarchy()
+    
+    level_names = {
+        0: "Universal (5+ dims)",
+        1: "Domain (3-4 dims)",
+        2: "Category (2 dims)",
+        3: "Specific (1 dim)"
+    }
+    
+    for level, words in hierarchy.items():
+        if words:
+            print(f"  Level {level} - {level_names[level]}:")
+            for word in words[:5]:  # Show top 5
+                ideal = corpus.get_ideal(word)
+                if ideal:
+                    dims = len(ideal.dimensions_anchored)
+                    print(f"    {word}: {dims} dimensions")
+            if len(words) > 5:
+                print(f"    ... and {len(words) - 5} more")
+    print()
+    
+    # Deep analysis of top ideal
+    print("Deep Analysis of 'person' (highest dimension count):")
+    print("-" * 60)
+    analysis = corpus.analyze_ideal("person")
+    if analysis:
+        print(f"  Word: {analysis['word']}")
+        print(f"  Hierarchy: Level {analysis['hierarchy_level']} ({analysis['hierarchy_name']})")
+        print(f"  Dimensions anchored: {analysis['dimension_count']}")
+        for dim in analysis['dimensions_anchored']:
+            vars = analysis['variations'].get(dim, [])
+            print(f"    {dim}: {vars}")
+        print(f"  At origin: {analysis['at_origin']}")
+        print(f"  Confidence: {analysis['confidence']:.2f}")
+        print(f"  Related ideals: {[r[0] for r in analysis['related_ideals']]}")
+    print()
+    
+    # Find potential ideals
+    print("Potential Ideals (could become ideals with more data):")
+    print("-" * 60)
+    potential = corpus.discover_potential_ideals()
+    for p in potential[:5]:
+        print(f"  {p['word']}: {p['variation_count']} variations on {p['current_dimension']}")
+        print(f"    → {p['suggestion']}")
+    print()
+    
+    # Find gaps for an ideal
+    print("Dimension Gaps for 'house':")
+    print("-" * 60)
+    gaps = corpus.find_dimension_gaps_for_ideal("house")
+    if gaps:
+        print(f"  Missing dimensions: {gaps[:5]}")
+        print("  These could be filled with LLM queries")
+    else:
+        print("  No gaps - house covers all dimensions!")
+    print()
+    
+    return corpus
+
+
 def demo_specificity():
     """Demonstrate specificity-aware querying."""
     print("=" * 60)
@@ -2010,7 +2279,9 @@ if __name__ == "__main__":
     # Check for phase-specific run
     run_phase = None
     if len(sys.argv) > 1:
-        if sys.argv[1] == "--phase3":
+        if sys.argv[1] == "--phase4":
+            run_phase = 4
+        elif sys.argv[1] == "--phase3":
             run_phase = 3
         elif sys.argv[1] == "--phase2":
             run_phase = 2
@@ -2019,7 +2290,7 @@ if __name__ == "__main__":
     
     print()
     print("=" * 60)
-    print("SELF-ASSEMBLING CORPUS EXPERIMENT - PHASE 1, 2 & 3")
+    print("SELF-ASSEMBLING CORPUS EXPERIMENT - PHASE 1, 2, 3 & 4")
     print("=" * 60)
     print()
     print("This experiment demonstrates the core infrastructure for")
@@ -2038,14 +2309,29 @@ if __name__ == "__main__":
     print("  8. Detect gaps and generate LLM queries")
     print("  9. Handle dynamic dimension discovery")
     print()
-    print("PHASE 3: LLM Integration")
+    print("PHASE 3: LLM Integration + Specificity")
     print("  10. Connect to local LLM (Ollama)")
     print("  11. Fill gaps with LLM-generated variations")
     print("  12. Validate instance vs category with LLM")
-    print("  13. Automated corpus expansion")
+    print("  13. Specificity dimension (ideal=0, category=φ, instance=2φ)")
+    print()
+    print("PHASE 4: Platonic Ideal Discovery")
+    print("  14. Automatic ideal detection from corpus")
+    print("  15. Ideal hierarchy (universal, domain, category)")
+    print("  16. Deep analysis and gap detection")
+    print("  17. Potential ideal discovery")
     print()
     
-    if run_phase == 3:
+    if run_phase == 4:
+        # Run only Phase 4 demos
+        print("=" * 60)
+        print("PHASE 4 DEMOS ONLY")
+        print("=" * 60)
+        print()
+        
+        demo_platonic_ideal_discovery()
+        
+    elif run_phase == 3:
         # Run only Phase 3 demos
         print("=" * 60)
         print("PHASE 3 DEMOS ONLY")
@@ -2190,10 +2476,17 @@ if __name__ == "__main__":
     print("  10. LLM can fill gaps with appropriate variations")
     print("  11. LLM validates instance vs category (solves mastiff problem)")
     print("  12. Batch queries reduce LLM calls")
-    print("  13. Geometric structure guides LLM usage (not the other way around)")
+    print("  13. Specificity dimension preserves ALL knowledge (ideal=0, category=φ, instance=2φ)")
+    print()
+    print("Key findings - Phase 4:")
+    print("  14. Platonic Ideals detected by multi-dimension anchoring")
+    print("  15. Hierarchy: Universal (5+) > Domain (3-4) > Category (2)")
+    print("  16. Deep analysis reveals related ideals and gaps")
+    print("  17. Potential ideals discovered from high-variation single-dimension words")
     print()
     print("Usage:")
     print("  python -m experiments.self_assembling_corpus           # All phases")
     print("  python -m experiments.self_assembling_corpus --phase1  # Phase 1 only")
     print("  python -m experiments.self_assembling_corpus --phase2  # Phase 2 only")
     print("  python -m experiments.self_assembling_corpus --phase3  # Phase 3 only")
+    print("  python -m experiments.self_assembling_corpus --phase4  # Phase 4 only")
