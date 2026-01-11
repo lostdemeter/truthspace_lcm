@@ -1,7 +1,7 @@
 # Self-Assembling Corpus: Progress Tracker
 
 **Last Updated:** January 11, 2025
-**Status:** Phase 3 Complete, Phase 4-6 Pending
+**Status:** Phase 4 Complete, Phase 5-6 Pending
 
 ---
 
@@ -76,8 +76,8 @@ From the project philosophy:
 |-------|-------------|--------|
 | **Phase 1** | Core Infrastructure | ✅ Complete |
 | **Phase 2** | Ingestion Pipeline | ✅ Complete |
-| **Phase 3** | LLM Integration | ✅ Complete |
-| **Phase 4** | Platonic Ideal Discovery | ⏳ Pending |
+| **Phase 3** | LLM Integration + Specificity | ✅ Complete |
+| **Phase 4** | Platonic Ideal Discovery | ✅ Complete |
 | **Phase 5** | Self-Assembly Loop | ⏳ Pending |
 | **Phase 6** | Persistence & Versioning | ⏳ Pending |
 
@@ -309,26 +309,62 @@ find_at_specificity(large_dog_pos, SPECIFICITY_INSTANCE)  # → "mastiff"
 
 ---
 
-## Phase 4: Platonic Ideal Discovery ⏳
+## Phase 4: Platonic Ideal Discovery ✅
 
 **Goal:** Automatically identify fundamental concepts.
 
-### Planned Components
+### Completed Components
 
-1. **Ideal Detection Algorithm**
-   - Count dimensions each word anchors
-   - Words anchoring 2+ dimensions are candidates
-   - Verify position is at origin
+1. **`get_ideal_hierarchy()`** - Organize ideals by level
+   - Level 0: Universal (5+ dimensions)
+   - Level 1: Domain (3-4 dimensions)
+   - Level 2: Category (2 dimensions)
+   - Level 3: Specific (1 dimension)
 
-2. **Ideal Hierarchy**
-   - Level 0: Universal ideals (5+ dimensions)
-   - Level 1: Domain ideals (3-4 dimensions)
-   - Level 2: Category ideals (2 dimensions)
-   - Level 3: Specific ideals (1 dimension)
+2. **`analyze_ideal(word)`** - Deep analysis of an ideal
+   - Dimensions anchored
+   - Variations in each dimension
+   - Position verification (should be at origin)
+   - Related ideals (share dimensions)
+   - Hierarchy level and confidence
 
-3. **Cross-Domain Ideals**
-   - Are there universal Platonic Ideals?
-   - Do they appear across all domains?
+3. **`discover_potential_ideals()`** - Find future ideals
+   - Words with high variation count on single dimension
+   - Suggests adding pairs in other dimensions
+
+4. **`find_dimension_gaps_for_ideal(word)`** - Gap detection
+   - Find dimensions an ideal doesn't yet cover
+   - Enables targeted LLM queries
+
+### Demo Results
+
+```
+Ideal Hierarchy:
+  Level 0 - Universal (5+ dims):
+    person: 6 dimensions
+    house: 5 dimensions
+  Level 1 - Domain (3-4 dims):
+    dog: 3 dimensions
+    vehicle: 3 dimensions
+    food: 3 dimensions
+
+Deep Analysis of 'person':
+  Hierarchy: Level 0 (Universal)
+  Dimensions: age, status, familiarity (increase/decrease)
+  At origin: True
+  Related ideals: ['house', 'dog']
+
+Dimension Gaps for 'house':
+  Missing: quality, status, familiarity
+  → These could be filled with LLM queries
+```
+
+### Key Insights
+
+1. **Universal ideals** (5+ dims) are the most fundamental concepts
+2. **Related ideals** share dimensions (person ↔ house via age)
+3. **Gap detection** enables targeted corpus expansion
+4. **Potential ideals** guide where to add more pairs
 
 ---
 
