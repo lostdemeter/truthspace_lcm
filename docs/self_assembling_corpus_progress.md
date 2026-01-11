@@ -243,6 +243,72 @@ The LLM is a **tool** used by the geometric system, not the driver:
 
 ---
 
+## Specificity Dimension ✅ (Added Jan 11, 2025)
+
+**Key Insight:** Instances aren't "wrong" - they're valid knowledge at a different specificity level.
+
+### The Problem
+
+When LLM suggested "mastiff" for "large dog", we were rejecting it. But a mastiff IS a large dog - that's true knowledge! The issue was about **specificity level**, not validity.
+
+### The Solution: Specificity as a Dimension
+
+```
+                    SPECIFICITY
+                        ↑
+    mastiff ────────────┼──────────── 2φ (instance)
+    labrador            |
+    chihuahua           |
+                        |
+    "large dog" ────────┼──────────── φ  (category)
+    "small dog"         |
+    "hound"             |
+                        |
+    dog ────────────────┼──────────── 0  (ideal)
+```
+
+### Specificity Levels
+
+| Level | Value | Example | Description |
+|-------|-------|---------|-------------|
+| Ideal | 0 | dog | Platonic ideal, origin point |
+| Category | φ | large dog, hound | General category |
+| Instance | 2φ | mastiff, labrador | Specific example |
+
+### Specificity-Aware Querying
+
+```python
+# Query: "What is a large dog?"
+find_at_specificity(large_dog_pos, SPECIFICITY_CATEGORY)  # → "hound"
+find_at_specificity(large_dog_pos, SPECIFICITY_INSTANCE)  # → "mastiff"
+```
+
+### Use Cases
+
+| Query | Specificity | Result |
+|-------|-------------|--------|
+| "What kind of dog should I get?" | φ (category) | large dog, small dog, hunting dog |
+| "Tell me about large dog breeds" | 2φ (instance) | mastiff, great dane, saint bernard |
+
+### Implementation
+
+- `SPECIFICITY_IDEAL = 0.0`
+- `SPECIFICITY_CATEGORY = φ`
+- `SPECIFICITY_INSTANCE = 2φ`
+- `Concept.specificity` field
+- `corpus.register_concept()` with type
+- `corpus.find_at_specificity()` for filtered queries
+- LLM pipeline now KEEPS instances at 2φ instead of rejecting
+
+### Key Principle
+
+**All knowledge is preserved.** The specificity dimension allows us to:
+1. Keep ALL LLM suggestions (categories AND instances)
+2. Query at the appropriate specificity level
+3. Navigate between levels geometrically
+
+---
+
 ## Phase 4: Platonic Ideal Discovery ⏳
 
 **Goal:** Automatically identify fundamental concepts.
