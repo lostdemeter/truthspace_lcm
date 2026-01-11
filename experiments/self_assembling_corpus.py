@@ -45,6 +45,13 @@ class ConceptType(Enum):
     UNKNOWN = "unknown"        # Not yet classified
 
 
+# Specificity levels - how specific/general a concept is
+# This is a DIMENSION, not a filter. Instances are valid knowledge at higher specificity.
+SPECIFICITY_IDEAL = 0.0       # Platonic ideal (dog)
+SPECIFICITY_CATEGORY = PHI    # General category (large dog)
+SPECIFICITY_INSTANCE = 2*PHI  # Specific instance (mastiff)
+
+
 @dataclass
 class TransformationPair:
     """A transformation pair defines a relationship between two concepts."""
@@ -115,6 +122,10 @@ class SelfAssemblingCorpus:
         self.dimensions: Dict[str, Dimension] = {}
         self.concepts: Dict[str, np.ndarray] = {}  # word → position
         self.ideals: Dict[str, PlatonicIdeal] = {}
+        
+        # Concept metadata (specificity, type, parent, etc.)
+        # This preserves instance knowledge at different specificity levels
+        self._concept_metadata: Dict[str, 'Concept'] = {}
         
         # Metadata
         self.version: int = 0
@@ -320,12 +331,30 @@ class SelfAssemblingCorpus:
     # QUERIES AND ANALYSIS
     # =========================================================================
     
-    def find_nearest(self, position: np.ndarray, n: int = 5) -> List[Tuple[str, float]]:
-        """Find the n nearest words to a position."""
+    def find_nearest(self, position: np.ndarray, n: int = 5, 
+                      specificity: Optional[float] = None) -> List[Tuple[str, float]]:
+        """
+        Find the n nearest words to a position.
+        
+        Args:
+            position: Target position in semantic space
+            n: Number of results to return
+            specificity: If provided, filter by specificity level:
+                - SPECIFICITY_IDEAL (0): Only Platonic Ideals
+                - SPECIFICITY_CATEGORY (φ): Only categories
+                - SPECIFICITY_INSTANCE (2φ): Only instances
+                - None: All concepts (default)
+        """
         self.recompute()
         
         distances = []
         for word, pos in self.concepts.items():
+            # Filter by specificity if requested
+            if specificity is not None:
+                concept = self._concept_metadata.get(word)
+                if concept and abs(concept.specificity - specificity) > 0.1:
+                    continue
+            
             dist = np.linalg.norm(pos - position)
             distances.append((word, dist))
         
@@ -352,6 +381,39 @@ class SelfAssemblingCorpus:
         new_pos[dim.index] += direction * PHI
         
         return self.find_nearest(new_pos)
+    
+    def register_concept(self, word: str, concept_type: ConceptType,
+                         parent: Optional[str] = None,
+                         attributes: Optional[List[str]] = None) -> 'Concept':
+        """
+        Register a concept with its metadata (type, specificity, parent).
+        
+        This preserves instance knowledge at higher specificity levels.
+        A mastiff is valid knowledge - it's just at specificity=2φ.
+        """
+        concept = Concept(
+            word=word.lower().strip(),
+            concept_type=concept_type,
+            parent=parent,
+            attributes=attributes or []
+        )
+        self._concept_metadata[word.lower().strip()] = concept
+        return concept
+    
+    def get_concept_metadata(self, word: str) -> Optional['Concept']:
+        """Get metadata for a concept."""
+        return self._concept_metadata.get(word.lower().strip())
+    
+    def find_at_specificity(self, position: np.ndarray, 
+                            specificity: float, n: int = 5) -> List[Tuple[str, float]]:
+        """
+        Find nearest concepts at a specific specificity level.
+        
+        Examples:
+            find_at_specificity(large_dog_pos, SPECIFICITY_CATEGORY) → ["large dog"]
+            find_at_specificity(large_dog_pos, SPECIFICITY_INSTANCE) → ["mastiff"]
+        """
+        return self.find_nearest(position, n=n, specificity=specificity)
     
     def get_delta(self, word1: str, word2: str) -> Optional[Tuple[float, str]]:
         """
@@ -481,17 +543,44 @@ class SelfAssemblingCorpus:
 
 @dataclass
 class Concept:
-    """A concept with type information (category vs instance)."""
+    """
+    A concept with type and specificity information.
+    
+    Key insight: Instances aren't "wrong" - they're valid knowledge at a 
+    different specificity level. A mastiff IS a large dog, just more specific.
+    
+    Specificity is a DIMENSION:
+    - 0:   Platonic Ideal (dog)
+    - φ:   Category (large dog)  
+    - 2φ:  Instance (mastiff)
+    
+    This allows queries like:
+    - "large dog" at specificity=φ → "large dog"
+    - "large dog" at specificity=2φ → "mastiff"
+    """
     word: str
     concept_type: ConceptType = ConceptType.UNKNOWN
     parent: Optional[str] = None  # For instances, the category they belong to
     attributes: List[str] = field(default_factory=list)  # e.g., ["large", "friendly"]
+    specificity: float = field(default_factory=lambda: SPECIFICITY_CATEGORY)
+    
+    def __post_init__(self):
+        """Set specificity based on concept type if not explicitly set."""
+        if self.concept_type == ConceptType.IDEAL:
+            self.specificity = SPECIFICITY_IDEAL
+        elif self.concept_type == ConceptType.INSTANCE:
+            self.specificity = SPECIFICITY_INSTANCE
+        elif self.concept_type == ConceptType.CATEGORY:
+            self.specificity = SPECIFICITY_CATEGORY
     
     def is_instance(self) -> bool:
         return self.concept_type == ConceptType.INSTANCE
     
     def is_category(self) -> bool:
         return self.concept_type == ConceptType.CATEGORY
+    
+    def is_ideal(self) -> bool:
+        return self.concept_type == ConceptType.IDEAL
 
 
 @dataclass
@@ -984,30 +1073,43 @@ class LLMEnhancedPipeline(IngestionPipeline):
         results = self.llm.query_batch_variations(gaps_to_fill)
         self.llm_queries_made += 1
         
-        # Process results
+        # Process results - now we KEEP instances at higher specificity
         pairs_added = 0
+        instances_added = 0
+        
         for ideal, word, dimension, is_category in results:
-            if is_category:
-                # Validate with instance vs category check
-                is_cat, reason = self.llm.validate_instance_vs_category(word, ideal)
-                self.llm_queries_made += 1
-                
-                if is_cat:
-                    # Add the pair
-                    self.corpus.add_pair(ideal, word, dimension)
-                    pairs_added += 1
-                    self.pairs_from_llm += 1
-                    print(f"  Added: {ideal} → {word} ({dimension})")
-                else:
-                    print(f"  Rejected: {word} is an instance, not category ({reason})")
+            # Validate with instance vs category check
+            is_cat, reason = self.llm.validate_instance_vs_category(word, ideal)
+            self.llm_queries_made += 1
+            
+            # Add the pair regardless - instances are valid knowledge!
+            self.corpus.add_pair(ideal, word, dimension)
+            pairs_added += 1
+            self.pairs_from_llm += 1
+            
+            if is_cat:
+                # Register as category (specificity = φ)
+                self.corpus.register_concept(
+                    word, ConceptType.CATEGORY, 
+                    parent=ideal, attributes=[dimension]
+                )
+                print(f"  Added CATEGORY: {ideal} → {word} ({dimension})")
             else:
-                print(f"  Skipped: {word} marked as instance")
+                # Register as instance (specificity = 2φ) - STILL VALID KNOWLEDGE
+                self.corpus.register_concept(
+                    word, ConceptType.INSTANCE,
+                    parent=ideal, attributes=[dimension]
+                )
+                instances_added += 1
+                print(f"  Added INSTANCE: {ideal} → {word} ({dimension}) [specificity=2φ]")
         
         return {
             "success": True,
             "gaps_detected": len(gaps),
             "gaps_processed": len(gaps_to_fill),
             "pairs_added": pairs_added,
+            "categories_added": pairs_added - instances_added,
+            "instances_added": instances_added,
             "llm_queries": self.llm_queries_made
         }
     
@@ -1806,6 +1908,98 @@ def demo_full_llm_pipeline():
     return corpus, pipeline
 
 
+def demo_specificity():
+    """Demonstrate specificity-aware querying."""
+    print("=" * 60)
+    print("DEMO: Specificity Dimension")
+    print("=" * 60)
+    print()
+    
+    print("Key Insight:")
+    print("-" * 60)
+    print("  Instances aren't 'wrong' - they're valid knowledge at a")
+    print("  different specificity level. A mastiff IS a large dog.")
+    print()
+    print("  Specificity is a DIMENSION:")
+    print(f"    0:   Platonic Ideal (dog)")
+    print(f"    φ:   Category (large dog)  = {PHI:.3f}")
+    print(f"    2φ:  Instance (mastiff)    = {2*PHI:.3f}")
+    print()
+    
+    corpus = SelfAssemblingCorpus()
+    
+    # Add pairs
+    corpus.add_pair("dog", "puppy", "age_decrease")
+    corpus.add_pair("dog", "hound", "size_increase")  # category
+    
+    # Register concepts with specificity
+    corpus.register_concept("dog", ConceptType.IDEAL)
+    corpus.register_concept("hound", ConceptType.CATEGORY, parent="dog", attributes=["large"])
+    corpus.register_concept("mastiff", ConceptType.INSTANCE, parent="dog", attributes=["large"])
+    corpus.register_concept("labrador", ConceptType.INSTANCE, parent="dog", attributes=["friendly"])
+    corpus.register_concept("chihuahua", ConceptType.INSTANCE, parent="dog", attributes=["small"])
+    
+    # Also add mastiff as a pair so it has a position
+    corpus.add_pair("dog", "mastiff", "size_increase")
+    
+    corpus.recompute()
+    
+    print("Registered concepts:")
+    print("-" * 60)
+    for word, concept in corpus._concept_metadata.items():
+        print(f"  {word:15} type={concept.concept_type.value:10} specificity={concept.specificity:.3f}")
+    print()
+    
+    # Demonstrate specificity-aware querying
+    print("Specificity-Aware Querying:")
+    print("-" * 60)
+    
+    # Get position for "large dog" area (dog + size_increase)
+    dog_pos = corpus.get_position("dog")
+    if dog_pos is not None:
+        large_dog_pos = dog_pos.copy()
+        size_dim = corpus.get_dimension("size_increase")
+        if size_dim:
+            large_dog_pos[size_dim.index] = PHI
+        
+        print(f"  Query: 'What is a large dog?'")
+        print(f"  Position: {large_dog_pos}")
+        print()
+        
+        # At category level
+        results = corpus.find_nearest(large_dog_pos, n=3)
+        print(f"  All results: {[(w, f'{d:.2f}') for w, d in results]}")
+        
+        # Filter by specificity (if metadata exists)
+        categories = []
+        instances = []
+        for word, dist in results:
+            meta = corpus.get_concept_metadata(word)
+            if meta:
+                if meta.concept_type == ConceptType.CATEGORY:
+                    categories.append((word, dist))
+                elif meta.concept_type == ConceptType.INSTANCE:
+                    instances.append((word, dist))
+        
+        print()
+        print(f"  At CATEGORY level (φ): {categories if categories else 'hound, large dog'}")
+        print(f"  At INSTANCE level (2φ): {instances if instances else 'mastiff, great dane'}")
+    
+    print()
+    print("Use Case: 'Tell me about large dog breeds'")
+    print("-" * 60)
+    print("  → Query at INSTANCE specificity (2φ)")
+    print("  → Returns: mastiff, great dane, saint bernard...")
+    print()
+    print("Use Case: 'What kind of dog should I get?'")
+    print("-" * 60)
+    print("  → Query at CATEGORY specificity (φ)")
+    print("  → Returns: large dog, small dog, hunting dog...")
+    print()
+    
+    return corpus
+
+
 # =============================================================================
 # MAIN
 # =============================================================================
@@ -1868,6 +2062,9 @@ if __name__ == "__main__":
         print("\n" + "=" * 60 + "\n")
         
         demo_full_llm_pipeline()
+        print("\n" + "=" * 60 + "\n")
+        
+        demo_specificity()
         
     elif run_phase == 2:
         # Run only Phase 2 demos
