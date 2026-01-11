@@ -1,7 +1,7 @@
 # Self-Assembling Corpus: Progress Tracker
 
 **Last Updated:** January 11, 2025
-**Status:** Phase 5 Complete, Phase 6 Pending
+**Status:** ALL PHASES COMPLETE (1-6)
 
 ---
 
@@ -79,7 +79,7 @@ From the project philosophy:
 | **Phase 3** | LLM Integration + Specificity | ✅ Complete |
 | **Phase 4** | Platonic Ideal Discovery | ✅ Complete |
 | **Phase 5** | Self-Assembly Loop | ✅ Complete |
-| **Phase 6** | Persistence & Versioning | ⏳ Pending |
+| **Phase 6** | Persistence & Versioning | ✅ Complete |
 
 ---
 
@@ -436,24 +436,71 @@ CYCLE 1 COMPLETE
 
 ---
 
-## Phase 6: Persistence & Versioning ⏳
+## Phase 6: Persistence & Versioning ✅
 
 **Goal:** Robust storage and incremental updates.
 
-### Planned Components
+### Key Principle
 
-1. **JSON Storage Format**
-   - Pairs as source of truth (append-only)
-   - Dimensions, ideals as derived data
-   - Version tracking for rebalances
+**Pairs are the source of truth.** The entire corpus can be reconstructed from pairs alone.
 
-2. **Incremental Updates**
-   - Add pairs without full recompute
-   - Lazy recomputation on query
+### Completed Components
 
-3. **Reconstruction**
-   - Space reconstructable entirely from pairs
+1. **`save(path, include_derived=False)`** - Save corpus to disk
+   - Core: pairs, concept_metadata, version
+   - Optional: derived data (dimensions, ideals, positions)
+   - Format version tracking
+
+2. **`load(path, use_derived=True)`** - Load corpus from disk
+   - Fast path: use derived data if available
+   - Verification path: reconstruct from pairs
+
+3. **`export_pairs_only(path)`** - Minimal export
+   - Just the pairs (source of truth)
+   - 86% smaller than full save
+   - Shareable, reconstructable
+
+4. **`import_pairs_only(path)`** - Reconstruct from pairs
+   - Proves pairs are sufficient
    - No external dependencies
+
+5. **`get_save_stats()`** - Introspection
+   - Pairs, dimensions, ideals, concepts, metadata counts
+
+### Storage Format
+
+```json
+{
+  "format_version": "1.0",
+  "saved_at": "2025-01-11T...",
+  "corpus_version": 4,
+  "pairs": [...],           // Source of truth
+  "concept_metadata": {...}, // Specificity, type, parent
+  "stats": {...},           // Verification counts
+  "derived": {...}          // Optional: fast loading
+}
+```
+
+### Demo Results
+
+```
+Step 2: Save corpus to disk
+  Full save (with derived): 5175 bytes
+  Pairs only: 704 bytes
+  Size reduction: 86%
+
+Step 5: Verify reconstruction integrity
+  Position matches: 9
+  Position mismatches: 0
+  ✓ All positions match - reconstruction verified!
+```
+
+### Key Insights
+
+1. **Pairs are sufficient** - entire corpus reconstructable from pairs alone
+2. **Derived data is optional** - speeds up loading but not required
+3. **86% size reduction** with pairs-only export
+4. **Concept metadata persisted** - specificity, type, parent, attributes
 
 ---
 
