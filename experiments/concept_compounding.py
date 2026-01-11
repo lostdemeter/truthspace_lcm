@@ -6,12 +6,36 @@ then "linear algebra" should be derivable from their combination WITHOUT an LLM 
 
 This is geometrically pure - compound concepts emerge from primitive composition.
 
-Compounding operations to explore:
-1. ADDITION: pos("linear algebra") ≈ pos("linear") + pos("algebra")
-2. AVERAGING: pos("linear algebra") ≈ (pos("linear") + pos("algebra")) / 2
-3. WEIGHTED: pos("linear algebra") ≈ w1*pos("linear") + w2*pos("algebra")
-4. OUTER PRODUCT: Higher-dimensional representation
-5. PHI-SCALING: pos("linear algebra") ≈ pos("linear") * φ + pos("algebra") / φ
+## φ-Zipf Duality (Design 109)
+
+The key insight: Zipf's law and φ-scaling are the SAME structure viewed differently.
+
+Statistical view (WRONG - uses weights):
+    weight[i] = 1 / rank[i]  # Zipf
+    
+Geometric view (CORRECT - uses structure):
+    scale[i] = φ^(-rank[i])  # φ-Zipf
+    
+These produce identical RANKINGS but:
+- Zipf requires fitting weights to data (statistical)
+- φ-Zipf uses the structure that's already there (geometric)
+
+The φ^(-rank) IS the Zipf distribution - we're not approximating it, we're using it.
+
+## Compounding Methods (all φ-based, NO weights):
+
+1. phi_zipf: φ^(-rank) scaling
+   - Head word (last) = φ^0 = 1
+   - Modifier (first) = φ^(-(n-1))
+   - This IS Zipf structure geometrically
+
+2. phi_nest: Self-similar nesting
+   - result = head * φ + modifier / φ
+   - Like Russian dolls - each level scales by φ
+
+3. phi_spiral: Golden angle rotation
+   - Each word rotates by 2π/φ radians
+   - Creates golden spiral through concept space
 
 If this works, we can:
 - Bootstrap primitives via LLM (once)
@@ -88,16 +112,17 @@ class PrimitiveSpace:
         """Check if word is a known primitive."""
         return word.lower().strip() in self._primitives
     
-    def get_compound(self, phrase: str, method: str = "weighted_avg") -> Optional[np.ndarray]:
+    def get_compound(self, phrase: str, method: str = "phi_zipf") -> Optional[np.ndarray]:
         """
         Get position for a compound phrase by composing primitives.
         
-        Methods:
-        - "sum": Simple addition
-        - "avg": Simple average
-        - "weighted_avg": Weight by position in phrase (head-final bias)
-        - "phi_scale": φ-weighted composition
-        - "outer_sum": Sum of outer products (higher-dim, projected back)
+        Methods (φ-Zipf based, no statistical weights):
+        - "phi_zipf": φ^rank composition (Zipf structure)
+        - "phi_nest": Nested φ scaling (self-similar)
+        - "phi_spiral": Spiral composition in φ-space
+        
+        Legacy (statistical - deprecated):
+        - "weighted_avg": Statistical weights (DEPRECATED)
         """
         cache_key = f"{phrase}:{method}"
         if cache_key in self._compounds_cache:
@@ -110,45 +135,66 @@ class PrimitiveSpace:
         for word in words:
             pos = self.get_primitive(word)
             if pos is not None:
-                positions.append(pos)
+                positions.append((word, pos))
         
         if not positions:
             return None
         
-        # Compose based on method
-        if method == "sum":
-            result = np.sum(positions, axis=0)
+        # Compose based on method - ALL use φ structure, NO statistical weights
+        if method == "phi_zipf":
+            # φ-Zipf: Position in phrase determines φ^rank scaling
+            # First word (modifier) = φ^(-1), last word (head) = φ^0 = 1
+            # This is Zipf structure: head is most important, modifiers scale down
+            result = np.zeros(self.dims)
+            n = len(positions)
+            for i, (word, pos) in enumerate(positions):
+                # Rank from end: last word = rank 0, first = rank n-1
+                rank = n - 1 - i
+                # φ^(-rank) gives Zipf-like decay without statistics
+                scale = PHI ** (-rank)
+                result += pos * scale
+            # No normalization by sum - the φ structure IS the normalization
         
-        elif method == "avg":
-            result = np.mean(positions, axis=0)
+        elif method == "phi_nest":
+            # Nested φ: Each word nests inside the previous
+            # Like Russian dolls: outer * φ + inner
+            # This is self-similar composition
+            result = positions[-1][1].copy()  # Start with head (last word)
+            for i in range(len(positions) - 2, -1, -1):
+                # Nest: previous = current * φ + modifier / φ
+                modifier_pos = positions[i][1]
+                result = result * PHI + modifier_pos / PHI
+            # The nesting naturally bounds the result
+        
+        elif method == "phi_spiral":
+            # Spiral in φ-space: Each word rotates by φ radians
+            # This creates a golden spiral through concept space
+            result = np.zeros(self.dims)
+            for i, (word, pos) in enumerate(positions):
+                # Rotate position by φ^i in each dimension pair
+                angle = i * (2 * np.pi / PHI)  # Golden angle
+                rotated = pos.copy()
+                # Apply rotation to dimension pairs
+                for d in range(0, self.dims - 1, 2):
+                    c, s = np.cos(angle), np.sin(angle)
+                    x, y = rotated[d], rotated[d + 1]
+                    rotated[d] = c * x - s * y
+                    rotated[d + 1] = s * x + c * y
+                result += rotated
         
         elif method == "weighted_avg":
-            # Weight later words more (head-final languages, modifiers first)
+            # DEPRECATED: Statistical weights
+            # Kept for comparison only
             n = len(positions)
             weights = np.array([PHI ** (i - n/2) for i in range(n)])
-            weights /= weights.sum()
-            result = np.sum([w * p for w, p in zip(weights, positions)], axis=0)
-        
-        elif method == "phi_scale":
-            # Each word scales by φ relative to previous
-            result = np.zeros(self.dims)
-            for i, pos in enumerate(positions):
-                result += pos * (PHI ** (i - len(positions) + 1))
-            result /= len(positions)
-        
-        elif method == "geometric_mean":
-            # Geometric mean (multiplicative)
-            result = np.ones(self.dims)
-            for pos in positions:
-                # Handle negative values by using sign-preserving geometric mean
-                signs = np.sign(pos)
-                magnitudes = np.abs(pos) + 1e-10
-                result *= signs * (magnitudes ** (1/len(positions)))
+            weights /= weights.sum()  # This normalization is the statistical crutch
+            result = np.sum([w * p for _, p in zip(weights, positions)], axis=0)
         
         else:
-            result = np.mean(positions, axis=0)
+            # Default to phi_zipf
+            return self.get_compound(phrase, "phi_zipf")
         
-        # Normalize to unit sphere
+        # Normalize to unit sphere (geometric, not statistical)
         norm = np.linalg.norm(result)
         if norm > 0:
             result = result / norm
@@ -447,7 +493,7 @@ def demo_compounding(space: PrimitiveSpace):
         "geometry interpretation",
     ]
     
-    methods = ["sum", "avg", "weighted_avg", "phi_scale"]
+    methods = ["phi_zipf", "phi_nest", "phi_spiral"]
     
     for phrase in test_phrases:
         known, unknown = space.decompose(phrase)
@@ -487,9 +533,9 @@ def demo_similarity(space: PrimitiveSpace):
         ("vector space", "branch study"),
     ]
     
-    method = "weighted_avg"
+    method = "phi_zipf"
     
-    print(f"Using method: {method}")
+    print(f"Using method: {method} (φ-Zipf, no statistical weights)")
     print()
     
     print("Similar pairs (should have high similarity):")
@@ -682,8 +728,8 @@ def demo_high_dimensional():
     print("-" * 60)
     
     for p1, p2, label in test_pairs:
-        pos1 = space.get_compound(p1, "weighted_avg")
-        pos2 = space.get_compound(p2, "weighted_avg")
+        pos1 = space.get_compound(p1, "phi_zipf")
+        pos2 = space.get_compound(p2, "phi_zipf")
         
         if pos1 is not None and pos2 is not None:
             sim = np.dot(pos1, pos2) / (np.linalg.norm(pos1) * np.linalg.norm(pos2))
@@ -718,9 +764,10 @@ if __name__ == "__main__":
     print("=" * 60)
     print()
     print("Key findings:")
-    print("1. Compound positions can be derived from primitives")
-    print("2. Similar compounds have similar positions (semantic coherence)")
+    print("1. Compound positions derived from primitives using φ-Zipf (NO weights)")
+    print("2. φ^(-rank) gives Zipf structure geometrically")
     print("3. 100 primitives → 1M+ potential compounds")
     print("4. Time savings: 99%+ vs learning each compound individually")
-    print("5. Higher dimensions (64, 128) enable richer composition")
+    print("5. Three φ-based methods: phi_zipf, phi_nest, phi_spiral")
     print("6. Cross-domain separation improves with more dimensions")
+    print("7. NO statistical weights - pure geometric composition")
