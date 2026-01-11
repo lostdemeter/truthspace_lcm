@@ -1303,6 +1303,358 @@ class LLMEnhancedPipeline(IngestionPipeline):
 
 
 # =============================================================================
+# PHASE 5: SELF-ASSEMBLY LOOP
+# =============================================================================
+
+@dataclass
+class AssemblyState:
+    """
+    State of the self-assembly loop.
+    
+    Tracks what happened in each cycle for introspection.
+    """
+    cycle: int = 0
+    pairs_before: int = 0
+    pairs_after: int = 0
+    dimensions_before: int = 0
+    dimensions_after: int = 0
+    ideals_before: int = 0
+    ideals_after: int = 0
+    gaps_detected: int = 0
+    gaps_filled: int = 0
+    compounds_derived: int = 0
+    self_similarity_score: float = 0.0
+    errors: List[str] = field(default_factory=list)
+    
+    def pairs_added(self) -> int:
+        return self.pairs_after - self.pairs_before
+    
+    def dimensions_added(self) -> int:
+        return self.dimensions_after - self.dimensions_before
+    
+    def ideals_added(self) -> int:
+        return self.ideals_after - self.ideals_before
+
+
+class SelfAssemblyLoop:
+    """
+    Phase 5: Continuous self-improvement cycle.
+    
+    The loop:
+    1. INGEST    → New text → Extract transformation pairs
+    2. DETECT    → New relationship type? → Create dimension
+    3. REBALANCE → New dimension → Extend all positions
+    4. POSITION  → Place concepts (source=0, target=φ)
+    5. DISCOVER  → Find Platonic Ideals
+    6. GAP-FILL  → Identify missing → Query LLM
+    7. COMPOUND  → Derive compound positions geometrically
+    8. VERIFY    → Check self-similarity, introspect
+    
+    The corpus improves itself based on what the structure says is missing.
+    """
+    
+    def __init__(self, corpus: SelfAssemblingCorpus = None, 
+                 llm: LLMInterface = None,
+                 verbose: bool = True):
+        self.corpus = corpus or SelfAssemblingCorpus()
+        self.llm = llm or LLMInterface()
+        self.pipeline = LLMEnhancedPipeline(self.corpus, self.llm)
+        self.verbose = verbose
+        
+        # History of assembly states
+        self.history: List[AssemblyState] = []
+        self.total_cycles = 0
+        
+        # Configuration
+        self.max_gaps_per_cycle = 5
+        self.min_self_similarity = 0.8  # Target self-similarity score
+    
+    def _log(self, msg: str):
+        """Log if verbose."""
+        if self.verbose:
+            print(msg)
+    
+    def run_cycle(self, text: str = None) -> AssemblyState:
+        """
+        Run one complete self-assembly cycle.
+        
+        Args:
+            text: Optional new text to ingest
+            
+        Returns:
+            AssemblyState with cycle results
+        """
+        self.total_cycles += 1
+        state = AssemblyState(cycle=self.total_cycles)
+        
+        # Capture before state
+        self.corpus.recompute()
+        state.pairs_before = len(self.corpus.pairs)
+        state.dimensions_before = len(self.corpus.dimensions)
+        state.ideals_before = len(self.corpus.ideals)
+        
+        self._log(f"\n{'='*60}")
+        self._log(f"SELF-ASSEMBLY CYCLE {self.total_cycles}")
+        self._log(f"{'='*60}")
+        
+        # Step 1: INGEST - Extract pairs from new text
+        if text:
+            self._log("\n[1] INGEST: Extracting transformation pairs...")
+            pairs_extracted = self._ingest(text)
+            self._log(f"    Extracted {pairs_extracted} pairs from text")
+        else:
+            self._log("\n[1] INGEST: No new text (gap-fill mode)")
+        
+        # Step 2: DETECT - Check for new dimensions
+        self._log("\n[2] DETECT: Checking for new dimensions...")
+        self.corpus.recompute()
+        new_dims = state.dimensions_after - state.dimensions_before if hasattr(state, 'dimensions_after') else 0
+        self._log(f"    Dimensions: {len(self.corpus.dimensions)}")
+        
+        # Step 3: REBALANCE - Extend positions if needed
+        self._log("\n[3] REBALANCE: Extending positions for new dimensions...")
+        # This happens automatically in recompute()
+        self._log(f"    All positions extended to {len(self.corpus.dimensions)} dimensions")
+        
+        # Step 4: POSITION - Verify positioning
+        self._log("\n[4] POSITION: Verifying φ-based positioning...")
+        self._verify_positioning()
+        
+        # Step 5: DISCOVER - Find Platonic Ideals
+        self._log("\n[5] DISCOVER: Finding Platonic Ideals...")
+        hierarchy = self.corpus.get_ideal_hierarchy()
+        universal = len(hierarchy.get(0, []))
+        domain = len(hierarchy.get(1, []))
+        category = len(hierarchy.get(2, []))
+        self._log(f"    Universal: {universal}, Domain: {domain}, Category: {category}")
+        
+        # Step 6: GAP-FILL - Query LLM for missing variations
+        self._log("\n[6] GAP-FILL: Detecting and filling gaps...")
+        gaps = self.pipeline.detect_gaps()
+        state.gaps_detected = len(gaps)
+        self._log(f"    Gaps detected: {len(gaps)}")
+        
+        if gaps and self.llm.is_available():
+            result = self.pipeline.fill_gaps_with_llm(max_gaps=self.max_gaps_per_cycle)
+            state.gaps_filled = result.get('pairs_added', 0)
+            self._log(f"    Gaps filled: {state.gaps_filled}")
+        elif gaps:
+            self._log("    LLM not available - gaps queued for later")
+        
+        # Step 7: COMPOUND - Derive compound positions
+        self._log("\n[7] COMPOUND: Deriving compound positions...")
+        compounds = self._derive_compounds()
+        state.compounds_derived = compounds
+        self._log(f"    Compounds derived: {compounds}")
+        
+        # Step 8: VERIFY - Check self-similarity
+        self._log("\n[8] VERIFY: Checking self-similarity...")
+        state.self_similarity_score = self._verify_self_similarity()
+        self._log(f"    Self-similarity score: {state.self_similarity_score:.2%}")
+        
+        # Capture after state
+        self.corpus.recompute()
+        state.pairs_after = len(self.corpus.pairs)
+        state.dimensions_after = len(self.corpus.dimensions)
+        state.ideals_after = len(self.corpus.ideals)
+        
+        # Summary
+        self._log(f"\n{'─'*60}")
+        self._log(f"CYCLE {self.total_cycles} COMPLETE")
+        self._log(f"  Pairs: {state.pairs_before} → {state.pairs_after} (+{state.pairs_added()})")
+        self._log(f"  Dimensions: {state.dimensions_before} → {state.dimensions_after} (+{state.dimensions_added()})")
+        self._log(f"  Ideals: {state.ideals_before} → {state.ideals_after} (+{state.ideals_added()})")
+        self._log(f"  Self-similarity: {state.self_similarity_score:.2%}")
+        
+        self.history.append(state)
+        return state
+    
+    def _ingest(self, text: str) -> int:
+        """Ingest text and extract transformation pairs."""
+        pairs_before = len(self.corpus.pairs)
+        self.pipeline.ingest_text(text)
+        return len(self.corpus.pairs) - pairs_before
+    
+    def _verify_positioning(self):
+        """Verify that positioning follows φ-based rules."""
+        # Check that all deltas are approximately φ
+        violations = 0
+        checked = 0
+        for pair in self.corpus.pairs:
+            src_pos = self.corpus.get_position(pair.source)
+            tgt_pos = self.corpus.get_position(pair.target)
+            if src_pos is not None and tgt_pos is not None:
+                delta = tgt_pos - src_pos
+                # Check if non-zero component is approximately φ
+                non_zero = delta[np.abs(delta) > 0.01]
+                if len(non_zero) > 0:
+                    checked += 1
+                    for val in non_zero:
+                        if abs(abs(val) - PHI) > 0.1:
+                            violations += 1
+        
+        if violations > 0:
+            self._log(f"    WARNING: {violations} positioning violations in {checked} pairs")
+        else:
+            self._log(f"    All deltas = φ (verified, {checked} pairs)")
+    
+    def _derive_compounds(self) -> int:
+        """Derive compound positions for multi-dimensional concepts."""
+        compounds = 0
+        
+        # Find concepts that could be compounds
+        # (appear as targets in multiple pairs with same source)
+        target_sources: Dict[str, Set[str]] = {}
+        for pair in self.corpus.pairs:
+            if pair.target not in target_sources:
+                target_sources[pair.target] = set()
+            target_sources[pair.target].add(pair.source)
+        
+        # Concepts with multiple sources might be compounds
+        for target, sources in target_sources.items():
+            if len(sources) > 1:
+                # This is a potential compound - verify position
+                pos = self.corpus.get_position(target)
+                if pos is not None:
+                    # Count non-zero dimensions
+                    non_zero = np.sum(np.abs(pos) > 0.1)
+                    if non_zero > 1:
+                        compounds += 1
+        
+        return compounds
+    
+    def _verify_self_similarity(self) -> float:
+        """
+        Verify self-similarity of the corpus.
+        
+        Self-similarity means:
+        - Same transformations work at every scale
+        - All deltas are φ (or multiples)
+        - The structure is fractal
+        
+        Returns score from 0 to 1.
+        """
+        if len(self.corpus.pairs) == 0:
+            return 1.0
+        
+        # Check 1: All deltas should be φ
+        delta_scores = []
+        for pair in self.corpus.pairs:
+            src_pos = self.corpus.get_position(pair.source)
+            tgt_pos = self.corpus.get_position(pair.target)
+            if src_pos is not None and tgt_pos is not None:
+                delta = tgt_pos - src_pos
+                non_zero = delta[np.abs(delta) > 0.01]
+                if len(non_zero) > 0:
+                    # Score based on how close to φ
+                    for val in non_zero:
+                        deviation = abs(abs(val) - PHI) / PHI
+                        delta_scores.append(max(0, 1 - deviation))
+        
+        # Check 2: Ideals should be at origin
+        origin_scores = []
+        for ideal_word in self.corpus.ideals:
+            pos = self.corpus.get_position(ideal_word)
+            if pos is not None:
+                # Score based on distance from origin
+                dist = np.linalg.norm(pos)
+                origin_scores.append(max(0, 1 - dist / PHI))
+        
+        # Check 3: Transformation consistency
+        # Same relationship should produce same delta everywhere
+        consistency_scores = []
+        for dim_name in self.corpus.dimensions:
+            pairs_in_dim = [p for p in self.corpus.pairs if p.relationship == dim_name]
+            if len(pairs_in_dim) >= 2:
+                # All pairs should have same delta
+                deltas = []
+                for pair in pairs_in_dim:
+                    src_pos = self.corpus.get_position(pair.source)
+                    tgt_pos = self.corpus.get_position(pair.target)
+                    if src_pos is not None and tgt_pos is not None:
+                        deltas.append(tgt_pos - src_pos)
+                
+                if len(deltas) >= 2:
+                    # Check variance of deltas
+                    delta_array = np.array(deltas)
+                    variance = np.mean(np.var(delta_array, axis=0))
+                    consistency_scores.append(max(0, 1 - variance))
+        
+        # Combine scores
+        all_scores = delta_scores + origin_scores + consistency_scores
+        if not all_scores:
+            return 1.0
+        
+        return np.mean(all_scores)
+    
+    def run_until_stable(self, max_cycles: int = 10, 
+                         stability_threshold: float = 0.95) -> List[AssemblyState]:
+        """
+        Run cycles until the corpus is stable.
+        
+        Stability means:
+        - Self-similarity score >= threshold
+        - No new gaps detected
+        - No new dimensions emerging
+        """
+        self._log(f"\nRunning until stable (max {max_cycles} cycles)...")
+        self._log(f"Stability threshold: {stability_threshold:.0%}")
+        
+        states = []
+        
+        for i in range(max_cycles):
+            state = self.run_cycle()
+            states.append(state)
+            
+            # Check stability
+            if (state.self_similarity_score >= stability_threshold and
+                state.gaps_detected == 0 and
+                state.dimensions_added() == 0):
+                self._log(f"\n✓ STABLE after {i+1} cycles")
+                break
+            
+            # Check if making progress
+            if i > 0 and state.pairs_added() == 0 and state.gaps_filled == 0:
+                self._log(f"\n⚠ No progress - stopping")
+                break
+        else:
+            self._log(f"\n⚠ Max cycles ({max_cycles}) reached")
+        
+        return states
+    
+    def get_status(self) -> Dict[str, any]:
+        """Get current status of the self-assembly loop."""
+        self.corpus.recompute()
+        
+        return {
+            "total_cycles": self.total_cycles,
+            "pairs": len(self.corpus.pairs),
+            "dimensions": len(self.corpus.dimensions),
+            "ideals": len(self.corpus.ideals),
+            "llm_available": self.llm.is_available(),
+            "llm_queries": self.pipeline.llm_queries_made,
+            "pairs_from_llm": self.pipeline.pairs_from_llm,
+            "last_self_similarity": self.history[-1].self_similarity_score if self.history else None
+        }
+    
+    def print_status(self):
+        """Print current status."""
+        status = self.get_status()
+        print(f"\n{'='*60}")
+        print("SELF-ASSEMBLY LOOP STATUS")
+        print(f"{'='*60}")
+        print(f"  Total cycles: {status['total_cycles']}")
+        print(f"  Pairs: {status['pairs']}")
+        print(f"  Dimensions: {status['dimensions']}")
+        print(f"  Ideals: {status['ideals']}")
+        print(f"  LLM available: {status['llm_available']}")
+        print(f"  LLM queries: {status['llm_queries']}")
+        print(f"  Pairs from LLM: {status['pairs_from_llm']}")
+        if status['last_self_similarity'] is not None:
+            print(f"  Last self-similarity: {status['last_self_similarity']:.2%}")
+
+
+# =============================================================================
 # DEMO FUNCTIONS - PHASE 1
 # =============================================================================
 
@@ -2064,6 +2416,73 @@ def demo_full_llm_pipeline():
     return corpus, pipeline
 
 
+def demo_self_assembly_loop():
+    """Demonstrate Phase 5: Self-Assembly Loop."""
+    print("=" * 60)
+    print("DEMO: Self-Assembly Loop (Phase 5)")
+    print("=" * 60)
+    print()
+    
+    print("The self-assembly loop continuously improves the corpus:")
+    print("-" * 60)
+    print("  1. INGEST    → Extract transformation pairs from text")
+    print("  2. DETECT    → Create new dimensions for new relationships")
+    print("  3. REBALANCE → Extend all positions for new dimensions")
+    print("  4. POSITION  → Verify φ-based positioning")
+    print("  5. DISCOVER  → Find Platonic Ideals")
+    print("  6. GAP-FILL  → Query LLM for missing variations")
+    print("  7. COMPOUND  → Derive compound positions")
+    print("  8. VERIFY    → Check self-similarity")
+    print()
+    
+    # Create the loop
+    loop = SelfAssemblyLoop(verbose=True)
+    
+    # Seed with initial pairs
+    print("Seeding with initial transformation pairs...")
+    print("-" * 60)
+    loop.corpus.add_pair("house", "cottage", "size_decrease")
+    loop.corpus.add_pair("house", "mansion", "size_increase")
+    loop.corpus.add_pair("dog", "puppy", "age_decrease")
+    loop.corpus.add_pair("person", "child", "age_decrease")
+    print(f"  Initial pairs: {len(loop.corpus.pairs)}")
+    print()
+    
+    # Run first cycle (gap-fill mode)
+    print("Running first self-assembly cycle...")
+    state1 = loop.run_cycle()
+    
+    # Ingest new text
+    sample_text = """
+    A palace is a grand house fit for royalty.
+    A hovel is a poor, run-down house.
+    An elder is an old person with wisdom.
+    A noble is a person of high status.
+    """
+    
+    print("\n\nIngesting new text...")
+    state2 = loop.run_cycle(text=sample_text)
+    
+    # Run until stable
+    print("\n\nRunning until stable...")
+    states = loop.run_until_stable(max_cycles=3)
+    
+    # Final status
+    loop.print_status()
+    
+    # Show history
+    print("\n" + "=" * 60)
+    print("CYCLE HISTORY")
+    print("=" * 60)
+    for state in loop.history:
+        print(f"  Cycle {state.cycle}: +{state.pairs_added()} pairs, "
+              f"+{state.dimensions_added()} dims, "
+              f"self-sim={state.self_similarity_score:.0%}")
+    
+    print()
+    return loop
+
+
 def demo_platonic_ideal_discovery():
     """Demonstrate Phase 4: Platonic Ideal Discovery."""
     print("=" * 60)
@@ -2279,7 +2698,9 @@ if __name__ == "__main__":
     # Check for phase-specific run
     run_phase = None
     if len(sys.argv) > 1:
-        if sys.argv[1] == "--phase4":
+        if sys.argv[1] == "--phase5":
+            run_phase = 5
+        elif sys.argv[1] == "--phase4":
             run_phase = 4
         elif sys.argv[1] == "--phase3":
             run_phase = 3
@@ -2290,7 +2711,7 @@ if __name__ == "__main__":
     
     print()
     print("=" * 60)
-    print("SELF-ASSEMBLING CORPUS EXPERIMENT - PHASE 1, 2, 3 & 4")
+    print("SELF-ASSEMBLING CORPUS EXPERIMENT - PHASE 1-5")
     print("=" * 60)
     print()
     print("This experiment demonstrates the core infrastructure for")
@@ -2321,8 +2742,23 @@ if __name__ == "__main__":
     print("  16. Deep analysis and gap detection")
     print("  17. Potential ideal discovery")
     print()
+    print("PHASE 5: Self-Assembly Loop")
+    print("  18. Continuous self-improvement cycle")
+    print("  19. Ingest → Detect → Rebalance → Position")
+    print("  20. Discover → Gap-Fill → Compound → Verify")
+    print("  21. Self-similarity verification")
+    print()
     
-    if run_phase == 4:
+    if run_phase == 5:
+        # Run only Phase 5 demos
+        print("=" * 60)
+        print("PHASE 5 DEMOS ONLY")
+        print("=" * 60)
+        print()
+        
+        demo_self_assembly_loop()
+        
+    elif run_phase == 4:
         # Run only Phase 4 demos
         print("=" * 60)
         print("PHASE 4 DEMOS ONLY")
@@ -2484,9 +2920,16 @@ if __name__ == "__main__":
     print("  16. Deep analysis reveals related ideals and gaps")
     print("  17. Potential ideals discovered from high-variation single-dimension words")
     print()
+    print("Key findings - Phase 5:")
+    print("  18. Self-assembly loop runs 8-step continuous improvement")
+    print("  19. Self-similarity score verifies geometric consistency")
+    print("  20. Loop runs until stable (no gaps, high self-similarity)")
+    print("  21. History tracks progress across cycles")
+    print()
     print("Usage:")
     print("  python -m experiments.self_assembling_corpus           # All phases")
     print("  python -m experiments.self_assembling_corpus --phase1  # Phase 1 only")
     print("  python -m experiments.self_assembling_corpus --phase2  # Phase 2 only")
     print("  python -m experiments.self_assembling_corpus --phase3  # Phase 3 only")
     print("  python -m experiments.self_assembling_corpus --phase4  # Phase 4 only")
+    print("  python -m experiments.self_assembling_corpus --phase5  # Phase 5 only")
