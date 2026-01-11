@@ -597,33 +597,84 @@ class SelfAssemblingCorpus:
         return (magnitude, "unknown")
     
     # =========================================================================
-    # PERSISTENCE
+    # PERSISTENCE (Phase 6)
     # =========================================================================
     
-    def save(self, path: Optional[Path] = None):
-        """Save the corpus to disk."""
+    def save(self, path: Optional[Path] = None, include_derived: bool = False):
+        """
+        Save the corpus to disk.
+        
+        Args:
+            path: Path to save to (uses persist_path if not specified)
+            include_derived: If True, include derived data (dimensions, ideals, positions)
+                           If False, only save pairs (source of truth) - smaller file
+        
+        The corpus can be fully reconstructed from pairs alone.
+        """
         path = path or self.persist_path
         if path is None:
             raise ValueError("No persist path specified")
         
+        import datetime
+        
+        # Core data - pairs are the source of truth
         data = {
-            "version": self.version,
+            "format_version": "1.0",
+            "saved_at": datetime.datetime.now().isoformat(),
+            "corpus_version": self.version,
             "pairs": [asdict(p) for p in self.pairs],
-            "dimensions": {name: asdict(d) for name, d in self.dimensions.items()},
-            "ideals": {name: asdict(i) for name, i in self.ideals.items()},
+            "concept_metadata": {
+                word: {
+                    "word": c.word,
+                    "concept_type": c.concept_type.value,
+                    "parent": c.parent,
+                    "attributes": c.attributes,
+                    "specificity": c.specificity
+                }
+                for word, c in self._concept_metadata.items()
+            }
+        }
+        
+        # Optionally include derived data (for faster loading)
+        if include_derived:
+            self.recompute()
+            data["derived"] = {
+                "dimensions": {name: asdict(d) for name, d in self.dimensions.items()},
+                "ideals": {name: asdict(i) for name, i in self.ideals.items()},
+                "positions": {word: pos.tolist() for word, pos in self.concepts.items()}
+            }
+        
+        # Statistics for verification
+        data["stats"] = {
+            "pair_count": len(self.pairs),
+            "dimension_count": len(self.dimensions),
+            "ideal_count": len(self.ideals),
+            "concept_count": len(self.concepts),
+            "metadata_count": len(self._concept_metadata)
         }
         
         with open(path, 'w') as f:
             json.dump(data, f, indent=2)
+        
+        return path
     
     @classmethod
-    def load(cls, path: Path) -> 'SelfAssemblingCorpus':
-        """Load a corpus from disk."""
+    def load(cls, path: Path, use_derived: bool = True) -> 'SelfAssemblingCorpus':
+        """
+        Load a corpus from disk.
+        
+        Args:
+            path: Path to load from
+            use_derived: If True and derived data exists, use it (faster)
+                        If False, reconstruct from pairs (verifies integrity)
+        
+        The corpus is reconstructed from pairs (source of truth).
+        """
         with open(path, 'r') as f:
             data = json.load(f)
         
         corpus = cls(persist_path=path)
-        corpus.version = data.get("version", 0)
+        corpus.version = data.get("corpus_version", data.get("version", 0))
         
         # Reconstruct from pairs (the source of truth)
         for pair_data in data.get("pairs", []):
@@ -641,10 +692,77 @@ class SelfAssemblingCorpus:
                 dim.pole_positive.append(pair.target)
             dim.source_pairs.append((pair.source, pair.target))
         
-        corpus._dirty = True
-        corpus.recompute()
+        # Restore concept metadata
+        for word, meta in data.get("concept_metadata", {}).items():
+            corpus._concept_metadata[word] = Concept(
+                word=meta["word"],
+                concept_type=ConceptType(meta["concept_type"]),
+                parent=meta.get("parent"),
+                attributes=meta.get("attributes", []),
+                specificity=meta.get("specificity", SPECIFICITY_CATEGORY)
+            )
+        
+        # Use derived data if available and requested (faster)
+        if use_derived and "derived" in data:
+            derived = data["derived"]
+            # Restore positions
+            for word, pos_list in derived.get("positions", {}).items():
+                corpus.concepts[word] = np.array(pos_list)
+            corpus._dirty = False
+        else:
+            corpus._dirty = True
+            corpus.recompute()
         
         return corpus
+    
+    def export_pairs_only(self, path: Path):
+        """
+        Export only the pairs (minimal format for sharing/backup).
+        
+        This is the absolute minimum needed to reconstruct the corpus.
+        """
+        data = {
+            "format": "pairs_only",
+            "pairs": [
+                {"source": p.source, "target": p.target, "relationship": p.relationship}
+                for p in self.pairs
+            ]
+        }
+        with open(path, 'w') as f:
+            json.dump(data, f, indent=2)
+        return path
+    
+    @classmethod
+    def import_pairs_only(cls, path: Path) -> 'SelfAssemblingCorpus':
+        """
+        Import from pairs-only format.
+        
+        Reconstructs the entire corpus from just the pairs.
+        """
+        with open(path, 'r') as f:
+            data = json.load(f)
+        
+        corpus = cls()
+        for pair in data.get("pairs", []):
+            corpus.add_pair(
+                pair["source"],
+                pair["target"],
+                pair["relationship"]
+            )
+        
+        return corpus
+    
+    def get_save_stats(self) -> Dict[str, any]:
+        """Get statistics about what would be saved."""
+        self.recompute()
+        return {
+            "pairs": len(self.pairs),
+            "dimensions": len(self.dimensions),
+            "ideals": len(self.ideals),
+            "concepts": len(self.concepts),
+            "metadata": len(self._concept_metadata),
+            "version": self.version
+        }
     
     # =========================================================================
     # REPORTING
@@ -2416,6 +2534,118 @@ def demo_full_llm_pipeline():
     return corpus, pipeline
 
 
+def demo_persistence():
+    """Demonstrate Phase 6: Persistence & Versioning."""
+    print("=" * 60)
+    print("DEMO: Persistence & Versioning (Phase 6)")
+    print("=" * 60)
+    print()
+    
+    import tempfile
+    import os
+    
+    print("Key principle: Pairs are the source of truth.")
+    print("The entire corpus can be reconstructed from pairs alone.")
+    print()
+    
+    # Create a corpus with some data
+    print("Step 1: Create corpus with transformation pairs")
+    print("-" * 60)
+    corpus = SelfAssemblingCorpus()
+    
+    corpus.add_pair("king", "queen", "gender")
+    corpus.add_pair("man", "woman", "gender")
+    corpus.add_pair("boy", "girl", "gender")
+    corpus.add_pair("boy", "man", "age")
+    corpus.add_pair("girl", "woman", "age")
+    corpus.add_pair("house", "cottage", "size_decrease")
+    corpus.add_pair("house", "mansion", "size_increase")
+    
+    # Register some concept metadata
+    corpus.register_concept("king", ConceptType.IDEAL)
+    corpus.register_concept("queen", ConceptType.CATEGORY, parent="king")
+    corpus.register_concept("mastiff", ConceptType.INSTANCE, parent="dog", attributes=["large"])
+    
+    corpus.recompute()
+    
+    print(f"  Pairs: {len(corpus.pairs)}")
+    print(f"  Dimensions: {len(corpus.dimensions)}")
+    print(f"  Ideals: {len(corpus.ideals)}")
+    print(f"  Concept metadata: {len(corpus._concept_metadata)}")
+    print()
+    
+    # Save to temp file
+    print("Step 2: Save corpus to disk")
+    print("-" * 60)
+    
+    with tempfile.TemporaryDirectory() as tmpdir:
+        full_path = Path(tmpdir) / "corpus_full.json"
+        pairs_path = Path(tmpdir) / "corpus_pairs.json"
+        
+        # Save with derived data
+        corpus.save(full_path, include_derived=True)
+        full_size = os.path.getsize(full_path)
+        print(f"  Full save (with derived): {full_size} bytes")
+        
+        # Save pairs only
+        corpus.export_pairs_only(pairs_path)
+        pairs_size = os.path.getsize(pairs_path)
+        print(f"  Pairs only: {pairs_size} bytes")
+        print(f"  Size reduction: {100 * (1 - pairs_size/full_size):.0f}%")
+        print()
+        
+        # Load from full save
+        print("Step 3: Load from full save (fast)")
+        print("-" * 60)
+        loaded1 = SelfAssemblingCorpus.load(full_path, use_derived=True)
+        print(f"  Pairs: {len(loaded1.pairs)}")
+        print(f"  Dimensions: {len(loaded1.dimensions)}")
+        print(f"  Concept metadata: {len(loaded1._concept_metadata)}")
+        print()
+        
+        # Load from pairs only (reconstruction)
+        print("Step 4: Reconstruct from pairs only")
+        print("-" * 60)
+        loaded2 = SelfAssemblingCorpus.import_pairs_only(pairs_path)
+        loaded2.recompute()
+        print(f"  Pairs: {len(loaded2.pairs)}")
+        print(f"  Dimensions: {len(loaded2.dimensions)}")
+        print(f"  Ideals: {len(loaded2.ideals)}")
+        print("  ✓ Corpus fully reconstructed from pairs alone!")
+        print()
+        
+        # Verify positions match
+        print("Step 5: Verify reconstruction integrity")
+        print("-" * 60)
+        
+        matches = 0
+        mismatches = 0
+        for word in corpus.concepts:
+            pos1 = corpus.get_position(word)
+            pos2 = loaded2.get_position(word)
+            if pos1 is not None and pos2 is not None:
+                if np.allclose(pos1, pos2, atol=0.01):
+                    matches += 1
+                else:
+                    mismatches += 1
+        
+        print(f"  Position matches: {matches}")
+        print(f"  Position mismatches: {mismatches}")
+        if mismatches == 0:
+            print("  ✓ All positions match - reconstruction verified!")
+        print()
+    
+    # Show save stats
+    print("Step 6: Save statistics")
+    print("-" * 60)
+    stats = corpus.get_save_stats()
+    for key, value in stats.items():
+        print(f"  {key}: {value}")
+    print()
+    
+    return corpus
+
+
 def demo_self_assembly_loop():
     """Demonstrate Phase 5: Self-Assembly Loop."""
     print("=" * 60)
@@ -2698,7 +2928,9 @@ if __name__ == "__main__":
     # Check for phase-specific run
     run_phase = None
     if len(sys.argv) > 1:
-        if sys.argv[1] == "--phase5":
+        if sys.argv[1] == "--phase6":
+            run_phase = 6
+        elif sys.argv[1] == "--phase5":
             run_phase = 5
         elif sys.argv[1] == "--phase4":
             run_phase = 4
@@ -2711,7 +2943,7 @@ if __name__ == "__main__":
     
     print()
     print("=" * 60)
-    print("SELF-ASSEMBLING CORPUS EXPERIMENT - PHASE 1-5")
+    print("SELF-ASSEMBLING CORPUS EXPERIMENT - PHASE 1-6")
     print("=" * 60)
     print()
     print("This experiment demonstrates the core infrastructure for")
@@ -2748,8 +2980,23 @@ if __name__ == "__main__":
     print("  20. Discover → Gap-Fill → Compound → Verify")
     print("  21. Self-similarity verification")
     print()
+    print("PHASE 6: Persistence & Versioning")
+    print("  22. JSON storage (pairs as source of truth)")
+    print("  23. Full save with derived data (fast load)")
+    print("  24. Pairs-only export (minimal, reconstructable)")
+    print("  25. Concept metadata persistence")
+    print()
     
-    if run_phase == 5:
+    if run_phase == 6:
+        # Run only Phase 6 demos
+        print("=" * 60)
+        print("PHASE 6 DEMOS ONLY")
+        print("=" * 60)
+        print()
+        
+        demo_persistence()
+        
+    elif run_phase == 5:
         # Run only Phase 5 demos
         print("=" * 60)
         print("PHASE 5 DEMOS ONLY")
@@ -2926,6 +3173,12 @@ if __name__ == "__main__":
     print("  20. Loop runs until stable (no gaps, high self-similarity)")
     print("  21. History tracks progress across cycles")
     print()
+    print("Key findings - Phase 6:")
+    print("  22. Pairs are the source of truth - corpus reconstructable from pairs alone")
+    print("  23. Full save includes derived data for fast loading")
+    print("  24. Pairs-only export is minimal and shareable")
+    print("  25. Concept metadata (specificity, type) persisted")
+    print()
     print("Usage:")
     print("  python -m experiments.self_assembling_corpus           # All phases")
     print("  python -m experiments.self_assembling_corpus --phase1  # Phase 1 only")
@@ -2933,3 +3186,4 @@ if __name__ == "__main__":
     print("  python -m experiments.self_assembling_corpus --phase3  # Phase 3 only")
     print("  python -m experiments.self_assembling_corpus --phase4  # Phase 4 only")
     print("  python -m experiments.self_assembling_corpus --phase5  # Phase 5 only")
+    print("  python -m experiments.self_assembling_corpus --phase6  # Phase 6 only")
