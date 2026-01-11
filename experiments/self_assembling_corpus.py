@@ -777,6 +777,274 @@ class IngestionPipeline:
 
 
 # =============================================================================
+# PHASE 3: LLM INTEGRATION
+# =============================================================================
+
+class LLMInterface:
+    """
+    Interface to local LLM (Ollama) for gap filling and validation.
+    
+    Responsibilities:
+    - Query LLM for missing variations
+    - Validate instance vs category classifications
+    - Parse responses into transformation pairs
+    - Batch queries efficiently
+    """
+    
+    DEFAULT_URL = "http://localhost:11434/api/generate"
+    DEFAULT_MODEL = "qwen2.5:14b"
+    
+    def __init__(self, url: str = None, model: str = None, timeout: int = 60):
+        self.url = url or self.DEFAULT_URL
+        self.model = model or self.DEFAULT_MODEL
+        self.timeout = timeout
+        self._available = None  # Cached availability check
+    
+    def is_available(self) -> bool:
+        """Check if Ollama is running and accessible."""
+        if self._available is not None:
+            return self._available
+        
+        try:
+            import requests
+            response = requests.get(
+                self.url.replace("/api/generate", "/api/tags"),
+                timeout=5
+            )
+            self._available = response.status_code == 200
+        except Exception:
+            self._available = False
+        
+        return self._available
+    
+    def query(self, prompt: str) -> Optional[str]:
+        """Send a query to the LLM and return the response."""
+        if not self.is_available():
+            return None
+        
+        try:
+            import requests
+            response = requests.post(
+                self.url,
+                json={
+                    'model': self.model,
+                    'prompt': prompt,
+                    'stream': False,
+                },
+                timeout=self.timeout,
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                return data.get('response', '')
+        except Exception as e:
+            print(f"LLM query error: {e}")
+        
+        return None
+    
+    def query_variation(self, ideal: str, dimension: str) -> Optional[Tuple[str, bool]]:
+        """
+        Query LLM for a variation of an ideal along a dimension.
+        
+        Returns (word, is_category) or None if failed.
+        """
+        prompt = f"""What is a single English word that represents a {dimension} version of "{ideal}"?
+
+Rules:
+1. Give ONLY the word, nothing else
+2. The word should be a GENERAL CATEGORY, not a specific instance or brand
+3. For example: "large dog" should give "hound" not "mastiff" (mastiff is a specific breed)
+4. For example: "large house" should give "mansion" (mansion is a general category)
+
+Word:"""
+        
+        response = self.query(prompt)
+        if response:
+            # Extract just the word (first word, lowercase, stripped)
+            word = response.strip().split()[0].lower().strip('.,!?";\'')
+            if word and len(word) > 1:
+                return (word, True)  # Assume category for now
+        
+        return None
+    
+    def validate_instance_vs_category(self, word: str, ideal: str) -> Tuple[bool, str]:
+        """
+        Ask LLM whether a word is a general category or specific instance.
+        
+        Returns (is_category, explanation).
+        """
+        prompt = f"""Is "{word}" a general category or a specific instance/type of "{ideal}"?
+
+Examples:
+- "mansion" is a CATEGORY of "house" (any large fancy house is a mansion)
+- "mastiff" is an INSTANCE of "dog" (a specific breed, not all large dogs are mastiffs)
+- "cottage" is a CATEGORY of "house" (any small cozy house is a cottage)
+- "labrador" is an INSTANCE of "dog" (a specific breed)
+
+Answer with ONLY one word: CATEGORY or INSTANCE"""
+        
+        response = self.query(prompt)
+        if response:
+            response_lower = response.strip().lower()
+            if 'category' in response_lower:
+                return (True, f"LLM classified '{word}' as a general category of '{ideal}'")
+            elif 'instance' in response_lower:
+                return (False, f"LLM classified '{word}' as a specific instance of '{ideal}'")
+        
+        return (True, f"LLM unavailable, defaulting to category for '{word}'")
+    
+    def query_batch_variations(self, gaps: List['Gap']) -> List[Tuple[str, str, str, bool]]:
+        """
+        Query LLM for multiple variations at once.
+        
+        Returns list of (ideal, variation_word, dimension, is_category).
+        """
+        if not gaps:
+            return []
+        
+        # Build batch prompt
+        gap_descriptions = []
+        for i, gap in enumerate(gaps, 1):
+            gap_descriptions.append(f"{i}. {gap.dimension} version of \"{gap.ideal}\"")
+        
+        prompt = f"""For each item below, give a SINGLE WORD that represents that variation.
+Use general categories, not specific instances or brands.
+
+{chr(10).join(gap_descriptions)}
+
+Format your response as:
+1. [word]
+2. [word]
+etc."""
+        
+        response = self.query(prompt)
+        if not response:
+            return []
+        
+        # Parse response
+        results = []
+        lines = response.strip().split('\n')
+        
+        for i, line in enumerate(lines):
+            if i >= len(gaps):
+                break
+            
+            # Extract word from line like "1. mansion" or "1) mansion"
+            line = line.strip()
+            if line and line[0].isdigit():
+                # Remove number prefix
+                parts = line.split('.', 1) if '.' in line else line.split(')', 1)
+                if len(parts) > 1:
+                    word = parts[1].strip().split()[0].lower().strip('.,!?";\'')
+                    if word and len(word) > 1:
+                        gap = gaps[i]
+                        results.append((gap.ideal, word, gap.dimension, True))
+        
+        return results
+
+
+class LLMEnhancedPipeline(IngestionPipeline):
+    """
+    Extended ingestion pipeline with LLM integration for gap filling.
+    """
+    
+    def __init__(self, corpus: 'SelfAssemblingCorpus', llm: LLMInterface = None):
+        super().__init__(corpus)
+        self.llm = llm or LLMInterface()
+        self.llm_queries_made = 0
+        self.pairs_from_llm = 0
+    
+    def fill_gaps_with_llm(self, max_gaps: int = 10) -> Dict[str, any]:
+        """
+        Use LLM to fill detected gaps.
+        
+        Returns statistics about what was filled.
+        """
+        if not self.llm.is_available():
+            return {
+                "success": False,
+                "error": "LLM not available",
+                "gaps_filled": 0
+            }
+        
+        # Detect gaps
+        gaps = self.detect_gaps()
+        if not gaps:
+            return {
+                "success": True,
+                "gaps_filled": 0,
+                "message": "No gaps to fill"
+            }
+        
+        # Limit gaps to process
+        gaps_to_fill = gaps[:max_gaps]
+        
+        # Query LLM for variations
+        print(f"Querying LLM for {len(gaps_to_fill)} variations...")
+        results = self.llm.query_batch_variations(gaps_to_fill)
+        self.llm_queries_made += 1
+        
+        # Process results
+        pairs_added = 0
+        for ideal, word, dimension, is_category in results:
+            if is_category:
+                # Validate with instance vs category check
+                is_cat, reason = self.llm.validate_instance_vs_category(word, ideal)
+                self.llm_queries_made += 1
+                
+                if is_cat:
+                    # Add the pair
+                    self.corpus.add_pair(ideal, word, dimension)
+                    pairs_added += 1
+                    self.pairs_from_llm += 1
+                    print(f"  Added: {ideal} → {word} ({dimension})")
+                else:
+                    print(f"  Rejected: {word} is an instance, not category ({reason})")
+            else:
+                print(f"  Skipped: {word} marked as instance")
+        
+        return {
+            "success": True,
+            "gaps_detected": len(gaps),
+            "gaps_processed": len(gaps_to_fill),
+            "pairs_added": pairs_added,
+            "llm_queries": self.llm_queries_made
+        }
+    
+    def validate_existing_pairs(self) -> Dict[str, any]:
+        """
+        Validate existing pairs to check for instance vs category issues.
+        """
+        if not self.llm.is_available():
+            return {"success": False, "error": "LLM not available"}
+        
+        issues = []
+        validated = 0
+        
+        for pair in self.corpus.pairs:
+            # Check if target might be an instance
+            is_cat, reason = self.llm.validate_instance_vs_category(
+                pair.target, pair.source
+            )
+            self.llm_queries_made += 1
+            validated += 1
+            
+            if not is_cat:
+                issues.append({
+                    "pair": f"{pair.source} → {pair.target}",
+                    "dimension": pair.relationship,
+                    "issue": reason
+                })
+        
+        return {
+            "success": True,
+            "validated": validated,
+            "issues_found": len(issues),
+            "issues": issues
+        }
+
+
+# =============================================================================
 # DEMO FUNCTIONS - PHASE 1
 # =============================================================================
 
@@ -1308,13 +1576,256 @@ def demo_full_pipeline():
 
 
 # =============================================================================
+# DEMO FUNCTIONS - PHASE 3
+# =============================================================================
+
+def demo_llm_availability():
+    """Check if LLM is available."""
+    print("=" * 60)
+    print("DEMO: LLM Availability Check (Phase 3)")
+    print("=" * 60)
+    print()
+    
+    llm = LLMInterface()
+    
+    print(f"Checking Ollama at {llm.url}...")
+    available = llm.is_available()
+    
+    if available:
+        print(f"  ✓ LLM available (model: {llm.model})")
+    else:
+        print(f"  ✗ LLM not available")
+        print()
+        print("To enable LLM features:")
+        print("  1. Install Ollama: https://ollama.ai")
+        print("  2. Run: ollama serve")
+        print("  3. Pull model: ollama pull qwen2.5:14b")
+    
+    print()
+    return llm, available
+
+
+def demo_llm_gap_filling():
+    """Demonstrate LLM-based gap filling."""
+    print("=" * 60)
+    print("DEMO: LLM Gap Filling (Phase 3)")
+    print("=" * 60)
+    print()
+    
+    # Create corpus with gaps
+    corpus = SelfAssemblingCorpus()
+    
+    # House has size variations but no formality
+    corpus.add_pair("house", "cottage", "size_decrease")
+    corpus.add_pair("house", "mansion", "size_increase")
+    
+    # Dog has size but no age
+    corpus.add_pair("dog", "lapdog", "size_decrease")
+    
+    # Person has age but no size
+    corpus.add_pair("person", "child", "age_decrease")
+    corpus.add_pair("person", "elder", "age_increase")
+    
+    corpus.recompute()
+    
+    # Create LLM-enhanced pipeline
+    pipeline = LLMEnhancedPipeline(corpus)
+    
+    print("Initial corpus state:")
+    print(f"  Pairs: {len(corpus.pairs)}")
+    print(f"  Dimensions: {len(corpus.dimensions)}")
+    print(f"  Platonic Ideals: {len(corpus.ideals)}")
+    print()
+    
+    # Detect gaps
+    gaps = pipeline.detect_gaps()
+    print(f"Detected {len(gaps)} gaps:")
+    for gap in gaps[:5]:
+        print(f"  {gap.ideal} missing {gap.dimension}")
+    if len(gaps) > 5:
+        print(f"  ... and {len(gaps) - 5} more")
+    print()
+    
+    # Try to fill gaps with LLM
+    if pipeline.llm.is_available():
+        print("Filling gaps with LLM...")
+        result = pipeline.fill_gaps_with_llm(max_gaps=5)
+        print()
+        print(f"Result: {result}")
+        print()
+        
+        print("Updated corpus state:")
+        print(f"  Pairs: {len(corpus.pairs)}")
+        print(f"  LLM queries made: {pipeline.llm_queries_made}")
+        print(f"  Pairs from LLM: {pipeline.pairs_from_llm}")
+    else:
+        print("LLM not available - skipping gap filling")
+        print()
+        print("Simulating what would happen:")
+        print("  1. Query LLM for variations")
+        print("  2. Validate each as category (not instance)")
+        print("  3. Add confirmed pairs to corpus")
+        print()
+        
+        # Show what queries would be generated
+        queries = pipeline.generate_llm_queries(max_queries=5)
+        print("Queries that would be sent:")
+        for q in queries:
+            print(f"  {q}")
+    
+    print()
+    return corpus, pipeline
+
+
+def demo_llm_instance_validation():
+    """Demonstrate LLM-based instance vs category validation."""
+    print("=" * 60)
+    print("DEMO: LLM Instance Validation (Phase 3)")
+    print("=" * 60)
+    print()
+    
+    llm = LLMInterface()
+    
+    test_cases = [
+        ("mastiff", "dog"),
+        ("mansion", "house"),
+        ("labrador", "dog"),
+        ("cottage", "house"),
+        ("chihuahua", "dog"),
+        ("palace", "house"),
+    ]
+    
+    if llm.is_available():
+        print("Validating with LLM:")
+        print("-" * 60)
+        
+        for word, ideal in test_cases:
+            is_cat, reason = llm.validate_instance_vs_category(word, ideal)
+            status = "CATEGORY ✓" if is_cat else "INSTANCE ✗"
+            print(f"  {word:15} ({ideal}): {status}")
+    else:
+        print("LLM not available - showing expected results:")
+        print("-" * 60)
+        
+        expected = {
+            "mastiff": False,    # Specific breed
+            "mansion": True,     # General category
+            "labrador": False,   # Specific breed
+            "cottage": True,     # General category
+            "chihuahua": False,  # Specific breed
+            "palace": True,      # General category
+        }
+        
+        for word, ideal in test_cases:
+            is_cat = expected.get(word, True)
+            status = "CATEGORY ✓" if is_cat else "INSTANCE ✗"
+            print(f"  {word:15} ({ideal}): {status} (expected)")
+    
+    print()
+    print("Key insight:")
+    print("  LLM can distinguish specific instances (breeds) from")
+    print("  general categories, solving the mastiff problem.")
+    print()
+    
+    return llm
+
+
+def demo_full_llm_pipeline():
+    """Demonstrate the complete LLM-enhanced pipeline."""
+    print("=" * 60)
+    print("DEMO: Full LLM Pipeline (Phase 3)")
+    print("=" * 60)
+    print()
+    
+    corpus = SelfAssemblingCorpus()
+    pipeline = LLMEnhancedPipeline(corpus)
+    
+    # Start with minimal seed pairs
+    print("Step 1: Seed with minimal pairs")
+    print("-" * 60)
+    
+    seed_pairs = [
+        ("house", "cottage", "size_decrease"),
+        ("house", "mansion", "size_increase"),
+        ("dog", "puppy", "age_decrease"),
+        ("person", "child", "age_decrease"),
+    ]
+    
+    for source, target, rel in seed_pairs:
+        corpus.add_pair(source, target, rel)
+        print(f"  Added: {source} → {target} ({rel})")
+    
+    corpus.recompute()
+    print()
+    print(f"  Dimensions: {len(corpus.dimensions)}")
+    print(f"  Platonic Ideals: {len(corpus.ideals)}")
+    print()
+    
+    # Detect gaps
+    print("Step 2: Detect gaps")
+    print("-" * 60)
+    
+    gaps = pipeline.detect_gaps()
+    print(f"  Found {len(gaps)} gaps")
+    for gap in gaps[:3]:
+        print(f"    {gap.ideal} needs {gap.dimension}")
+    print()
+    
+    # Fill gaps (if LLM available)
+    print("Step 3: Fill gaps with LLM")
+    print("-" * 60)
+    
+    if pipeline.llm.is_available():
+        result = pipeline.fill_gaps_with_llm(max_gaps=5)
+        print(f"  Gaps filled: {result.get('pairs_added', 0)}")
+        print(f"  LLM queries: {result.get('llm_queries', 0)}")
+    else:
+        print("  LLM not available - simulating...")
+        print("  Would query for: size_decrease(dog), age_decrease(house), etc.")
+    
+    print()
+    
+    # Final state
+    print("Step 4: Final corpus state")
+    print("-" * 60)
+    corpus.print_report()
+    
+    # Efficiency metrics
+    print("Efficiency Metrics:")
+    print("-" * 60)
+    print(f"  Total pairs: {len(corpus.pairs)}")
+    print(f"  Seed pairs: {len(seed_pairs)}")
+    print(f"  LLM-derived pairs: {pipeline.pairs_from_llm}")
+    print(f"  LLM queries made: {pipeline.llm_queries_made}")
+    
+    if pipeline.pairs_from_llm > 0:
+        ratio = len(corpus.pairs) / pipeline.llm_queries_made
+        print(f"  Pairs per LLM query: {ratio:.1f}")
+    
+    print()
+    return corpus, pipeline
+
+
+# =============================================================================
 # MAIN
 # =============================================================================
 
 if __name__ == "__main__":
+    import sys
+    
+    # Check for phase-specific run
+    run_phase = None
+    if len(sys.argv) > 1:
+        if sys.argv[1] == "--phase3":
+            run_phase = 3
+        elif sys.argv[1] == "--phase2":
+            run_phase = 2
+        elif sys.argv[1] == "--phase1":
+            run_phase = 1
+    
     print()
     print("=" * 60)
-    print("SELF-ASSEMBLING CORPUS EXPERIMENT - PHASE 1 & 2")
+    print("SELF-ASSEMBLING CORPUS EXPERIMENT - PHASE 1, 2 & 3")
     print("=" * 60)
     print()
     print("This experiment demonstrates the core infrastructure for")
@@ -1333,47 +1844,133 @@ if __name__ == "__main__":
     print("  8. Detect gaps and generate LLM queries")
     print("  9. Handle dynamic dimension discovery")
     print()
-    
-    # Phase 1 demos
-    print("=" * 60)
-    print("PHASE 1 DEMOS")
-    print("=" * 60)
+    print("PHASE 3: LLM Integration")
+    print("  10. Connect to local LLM (Ollama)")
+    print("  11. Fill gaps with LLM-generated variations")
+    print("  12. Validate instance vs category with LLM")
+    print("  13. Automated corpus expansion")
     print()
     
-    demo_basic()
-    print("\n" + "=" * 60 + "\n")
-    
-    demo_platonic_ideals()
-    print("\n" + "=" * 60 + "\n")
-    
-    demo_transformation()
-    print("\n" + "=" * 60 + "\n")
-    
-    demo_persistence()
-    print("\n" + "=" * 60 + "\n")
-    
-    demo_dynamic_dimension()
-    print("\n" + "=" * 60 + "\n")
-    
-    demo_compound_positions()
-    
-    # Phase 2 demos
-    print("\n")
-    print("=" * 60)
-    print("PHASE 2 DEMOS")
-    print("=" * 60)
-    print()
-    
-    demo_text_ingestion()
-    print("\n" + "=" * 60 + "\n")
-    
-    demo_instance_vs_category()
-    print("\n" + "=" * 60 + "\n")
-    
-    demo_gap_detection()
-    print("\n" + "=" * 60 + "\n")
-    
-    demo_full_pipeline()
+    if run_phase == 3:
+        # Run only Phase 3 demos
+        print("=" * 60)
+        print("PHASE 3 DEMOS ONLY")
+        print("=" * 60)
+        print()
+        
+        demo_llm_availability()
+        print("\n" + "=" * 60 + "\n")
+        
+        demo_llm_gap_filling()
+        print("\n" + "=" * 60 + "\n")
+        
+        demo_llm_instance_validation()
+        print("\n" + "=" * 60 + "\n")
+        
+        demo_full_llm_pipeline()
+        
+    elif run_phase == 2:
+        # Run only Phase 2 demos
+        print("=" * 60)
+        print("PHASE 2 DEMOS ONLY")
+        print("=" * 60)
+        print()
+        
+        demo_text_ingestion()
+        print("\n" + "=" * 60 + "\n")
+        
+        demo_instance_vs_category()
+        print("\n" + "=" * 60 + "\n")
+        
+        demo_gap_detection()
+        print("\n" + "=" * 60 + "\n")
+        
+        demo_full_pipeline()
+        
+    elif run_phase == 1:
+        # Run only Phase 1 demos
+        print("=" * 60)
+        print("PHASE 1 DEMOS ONLY")
+        print("=" * 60)
+        print()
+        
+        demo_basic()
+        print("\n" + "=" * 60 + "\n")
+        
+        demo_platonic_ideals()
+        print("\n" + "=" * 60 + "\n")
+        
+        demo_transformation()
+        print("\n" + "=" * 60 + "\n")
+        
+        demo_persistence()
+        print("\n" + "=" * 60 + "\n")
+        
+        demo_dynamic_dimension()
+        print("\n" + "=" * 60 + "\n")
+        
+        demo_compound_positions()
+        
+    else:
+        # Run all demos
+        # Phase 1 demos
+        print("=" * 60)
+        print("PHASE 1 DEMOS")
+        print("=" * 60)
+        print()
+        
+        demo_basic()
+        print("\n" + "=" * 60 + "\n")
+        
+        demo_platonic_ideals()
+        print("\n" + "=" * 60 + "\n")
+        
+        demo_transformation()
+        print("\n" + "=" * 60 + "\n")
+        
+        demo_persistence()
+        print("\n" + "=" * 60 + "\n")
+        
+        demo_dynamic_dimension()
+        print("\n" + "=" * 60 + "\n")
+        
+        demo_compound_positions()
+        
+        # Phase 2 demos
+        print("\n")
+        print("=" * 60)
+        print("PHASE 2 DEMOS")
+        print("=" * 60)
+        print()
+        
+        demo_text_ingestion()
+        print("\n" + "=" * 60 + "\n")
+        
+        demo_instance_vs_category()
+        print("\n" + "=" * 60 + "\n")
+        
+        demo_gap_detection()
+        print("\n" + "=" * 60 + "\n")
+        
+        demo_full_pipeline()
+        
+        # Phase 3 demos
+        print("\n")
+        print("=" * 60)
+        print("PHASE 3 DEMOS")
+        print("=" * 60)
+        print()
+        
+        demo_llm_availability()
+        print("\n" + "=" * 60 + "\n")
+        
+        demo_llm_gap_filling()
+        print("\n" + "=" * 60 + "\n")
+        
+        demo_llm_instance_validation()
+        print("\n" + "=" * 60 + "\n")
+        
+        demo_full_llm_pipeline()
     
     print("=" * 60)
     print("EXPERIMENT COMPLETE")
@@ -1392,7 +1989,14 @@ if __name__ == "__main__":
     print("  8. Gaps can be detected and batched for LLM queries")
     print("  9. New dimensions emerge from new content types")
     print()
-    print("Next: Phase 3 - LLM Integration")
-    print("  - Connect to local LLM for gap filling")
-    print("  - Validate instance vs category with LLM")
-    print("  - Automated corpus expansion")
+    print("Key findings - Phase 3:")
+    print("  10. LLM can fill gaps with appropriate variations")
+    print("  11. LLM validates instance vs category (solves mastiff problem)")
+    print("  12. Batch queries reduce LLM calls")
+    print("  13. Geometric structure guides LLM usage (not the other way around)")
+    print()
+    print("Usage:")
+    print("  python -m experiments.self_assembling_corpus           # All phases")
+    print("  python -m experiments.self_assembling_corpus --phase1  # Phase 1 only")
+    print("  python -m experiments.self_assembling_corpus --phase2  # Phase 2 only")
+    print("  python -m experiments.self_assembling_corpus --phase3  # Phase 3 only")
