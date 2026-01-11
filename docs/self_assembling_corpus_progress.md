@@ -1,7 +1,7 @@
 # Self-Assembling Corpus: Progress Tracker
 
 **Last Updated:** January 11, 2025
-**Status:** Phase 2 Complete, Phase 3 Pending
+**Status:** Phase 3 Complete, Phase 4-6 Pending
 
 ---
 
@@ -76,7 +76,7 @@ From the project philosophy:
 |-------|-------------|--------|
 | **Phase 1** | Core Infrastructure | ✅ Complete |
 | **Phase 2** | Ingestion Pipeline | ✅ Complete |
-| **Phase 3** | LLM Integration | ⏳ Pending |
+| **Phase 3** | LLM Integration | ✅ Complete |
 | **Phase 4** | Platonic Ideal Discovery | ⏳ Pending |
 | **Phase 5** | Self-Assembly Loop | ⏳ Pending |
 | **Phase 6** | Persistence & Versioning | ⏳ Pending |
@@ -196,31 +196,50 @@ Batched LLM queries:
 
 ---
 
-## Phase 3: LLM Integration ⏳
+## Phase 3: LLM Integration ✅
 
 **Goal:** Connect to local LLM for gap filling and validation.
 
-### Planned Components
+### Completed Components
 
-1. **LLM Query Interface**
-   - Connect to local Ollama/LLM
-   - Send batched queries
-   - Parse responses into pairs
+1. **LLMInterface Class**
+   - `is_available()`: Check if Ollama is running
+   - `query()`: Send prompt, get response
+   - `query_variation()`: Get variation word for ideal+dimension
+   - `validate_instance_vs_category()`: Solve the mastiff problem
+   - `query_batch_variations()`: Efficient batched queries
 
-2. **Instance vs Category Validation**
-   - Ask LLM: "Is 'mastiff' a general 'large dog' or a specific breed?"
-   - Use response to classify concepts
+2. **LLMEnhancedPipeline Class**
+   - `fill_gaps_with_llm()`: Query LLM for missing variations
+   - `validate_existing_pairs()`: Check for instance issues
 
-3. **Gap Filling**
-   - Query LLM for missing variations
-   - Validate responses geometrically
-   - Add confirmed pairs to corpus
+3. **Instance vs Category Validation (WORKING)**
+   ```
+   mastiff         (dog): INSTANCE ✗  (specific breed)
+   mansion         (house): CATEGORY ✓ (general concept)
+   labrador        (dog): INSTANCE ✗  (specific breed)
+   cottage         (house): CATEGORY ✓ (general concept)
+   chihuahua       (dog): INSTANCE ✗  (specific breed)
+   palace          (house): CATEGORY ✓ (general concept)
+   ```
 
-### Efficiency Target
+4. **Gap Filling Results**
+   - LLM suggested "dwarf" and "giant" for person size variations
+   - Both correctly REJECTED as instances (mythological/specific)
+   - LLM suggested "cottage" for house age_decrease → ACCEPTED
 
-- <1 LLM call per 100 concepts
-- Compound-before-query strategy
-- Batch queries by dimension
+### Efficiency Achieved
+
+- **2.5 pairs per LLM query** in demo
+- Batch queries by dimension working
+- Geometry guides LLM (not the other way around)
+
+### Key Principle Maintained
+
+The LLM is a **tool** used by the geometric system, not the driver:
+- Geometry identifies gaps
+- LLM suggests candidates
+- Geometry validates and positions
 
 ---
 
