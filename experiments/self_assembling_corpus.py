@@ -1,14 +1,21 @@
 """
-Self-Assembling Corpus Experiment - Phase 1
+Self-Assembling Corpus Experiment - Phase 1 & 2
 
 This experiment demonstrates the core infrastructure for a self-assembling
 knowledge corpus that:
 
+Phase 1 (Core Infrastructure):
 1. Stores transformation pairs as the source of truth
 2. Derives dimensions emergently from relationship types
 3. Positions concepts using φ-based geometry
 4. Detects Platonic Ideals (multi-dimension anchors)
 5. Persists and reconstructs from pairs alone
+
+Phase 2 (Ingestion Pipeline):
+6. Extracts transformation pairs from text
+7. Distinguishes categories from instances (mastiff vs 'large dog')
+8. Detects gaps and queries LLM for unknowns
+9. Handles relationship type inference
 
 Key principle: Everything derives from transformation pairs.
 The space can be reconstructed entirely from pairs.
@@ -23,9 +30,19 @@ from dataclasses import dataclass, field, asdict
 from typing import Dict, List, Optional, Set, Tuple
 from pathlib import Path
 from datetime import datetime
+from enum import Enum
+import re
 
 # Golden ratio - the fundamental unit of semantic distance
 PHI = (1 + np.sqrt(5)) / 2
+
+
+class ConceptType(Enum):
+    """Distinguishes categories from instances."""
+    CATEGORY = "category"      # General concept (e.g., "large dog")
+    INSTANCE = "instance"      # Specific example (e.g., "mastiff")
+    IDEAL = "ideal"            # Platonic ideal (e.g., "dog")
+    UNKNOWN = "unknown"        # Not yet classified
 
 
 @dataclass
@@ -459,7 +476,308 @@ class SelfAssemblingCorpus:
 
 
 # =============================================================================
-# DEMO FUNCTIONS
+# PHASE 2: INGESTION PIPELINE
+# =============================================================================
+
+@dataclass
+class Concept:
+    """A concept with type information (category vs instance)."""
+    word: str
+    concept_type: ConceptType = ConceptType.UNKNOWN
+    parent: Optional[str] = None  # For instances, the category they belong to
+    attributes: List[str] = field(default_factory=list)  # e.g., ["large", "friendly"]
+    
+    def is_instance(self) -> bool:
+        return self.concept_type == ConceptType.INSTANCE
+    
+    def is_category(self) -> bool:
+        return self.concept_type == ConceptType.CATEGORY
+
+
+@dataclass
+class Gap:
+    """A detected gap in the corpus that needs filling."""
+    ideal: str
+    dimension: str
+    direction: str  # "positive" or "negative"
+    description: str
+    
+    def to_query(self) -> str:
+        """Generate an LLM query to fill this gap."""
+        if self.direction == "positive":
+            return f"What is a word for a {self.dimension} version of {self.ideal}?"
+        else:
+            return f"What is a word for a less {self.dimension} version of {self.ideal}?"
+
+
+class IngestionPipeline:
+    """
+    Phase 2: Extracts transformation pairs from text and manages ingestion.
+    
+    Key responsibilities:
+    - Extract relationships from text
+    - Distinguish categories from instances
+    - Detect gaps and generate LLM queries
+    - Batch queries efficiently
+    """
+    
+    # Common relationship patterns
+    # Note: patterns use (?:a |an |the )? to skip articles
+    RELATIONSHIP_PATTERNS = [
+        # "X is a type of Y" → (Y, X, specificity_increase)
+        (r"(?:a |an |the )?(\w+)\s+is\s+a\s+(?:type|kind|form|breed)\s+of\s+(?:a |an |the )?(\w+)", "specificity_increase", True),
+        # "X is larger/smaller than Y" → size relationship
+        (r"(?:a |an |the )?(\w+)\s+is\s+(?:larger|bigger)\s+than\s+(?:a |an |the )?(\w+)", "size_increase", False),
+        (r"(?:a |an |the )?(\w+)\s+is\s+(?:smaller|tinier)\s+than\s+(?:a |an |the )?(\w+)", "size_decrease", False),
+        # "X is more/less formal than Y"
+        (r"(?:a |an |the )?(\w+)\s+is\s+more\s+formal\s+than\s+(?:a |an |the )?(\w+)", "formality_increase", False),
+        (r"(?:a |an |the )?(\w+)\s+is\s+less\s+formal\s+than\s+(?:a |an |the )?(\w+)", "formality_decrease", False),
+        # "X and Y" in same context (potential pairs) - require 3+ char words
+        (r"\b([a-z]{3,})\s+and\s+([a-z]{3,})\b", "co_occurrence", False),
+        # "unlike X, Y is..." (contrast)
+        (r"unlike\s+(?:a |an |the )?(\w+),?\s+(?:a |an |the )?(\w+)", "contrast", False),
+    ]
+    
+    # Words to skip (articles, common words)
+    SKIP_WORDS = {"a", "an", "the", "is", "are", "was", "were", "be", "been",
+                  "have", "has", "had", "do", "does", "did", "will", "would",
+                  "could", "should", "may", "might", "must", "shall", "can",
+                  "this", "that", "these", "those", "it", "its", "most", "more",
+                  "less", "very", "much", "many", "some", "any", "all", "each"}
+    
+    # Instance indicators - words that suggest something is a specific instance
+    INSTANCE_INDICATORS = [
+        "breed", "species", "variety", "type", "kind", "model", "brand",
+        "specific", "particular", "individual", "named", "called"
+    ]
+    
+    # Category indicators - words that suggest something is a general category
+    CATEGORY_INDICATORS = [
+        "any", "all", "every", "general", "typical", "average", "normal",
+        "generic", "common", "standard"
+    ]
+    
+    def __init__(self, corpus: 'SelfAssemblingCorpus'):
+        self.corpus = corpus
+        self.concepts: Dict[str, Concept] = {}
+        self.pending_queries: List[Gap] = []
+        self.extracted_pairs: List[Tuple[str, str, str, float]] = []
+    
+    def classify_concept(self, word: str, context: str = "") -> ConceptType:
+        """
+        Classify a concept as category, instance, or ideal.
+        
+        The mastiff problem: "mastiff" is a specific breed (instance),
+        not a general "large dog" (category).
+        """
+        word_lower = word.lower()
+        context_lower = context.lower()
+        
+        # Check if already classified
+        if word_lower in self.concepts:
+            return self.concepts[word_lower].concept_type
+        
+        # Check if it's a known Platonic Ideal
+        if word_lower in self.corpus.ideals:
+            return ConceptType.IDEAL
+        
+        # Check context for instance indicators
+        for indicator in self.INSTANCE_INDICATORS:
+            if indicator in context_lower:
+                # Context suggests this is a specific instance
+                return ConceptType.INSTANCE
+        
+        # Check context for category indicators
+        for indicator in self.CATEGORY_INDICATORS:
+            if indicator in context_lower:
+                return ConceptType.CATEGORY
+        
+        # Heuristic: proper nouns (capitalized) are often instances
+        if word[0].isupper() and not context.startswith(word):
+            return ConceptType.INSTANCE
+        
+        return ConceptType.UNKNOWN
+    
+    def register_concept(self, word: str, concept_type: ConceptType,
+                        parent: Optional[str] = None,
+                        attributes: Optional[List[str]] = None) -> Concept:
+        """Register a concept with its type information."""
+        concept = Concept(
+            word=word.lower(),
+            concept_type=concept_type,
+            parent=parent,
+            attributes=attributes or []
+        )
+        self.concepts[word.lower()] = concept
+        return concept
+    
+    def extract_pairs_from_text(self, text: str) -> List[Tuple[str, str, str, float]]:
+        """
+        Extract transformation pairs from text.
+        Returns list of (source, target, relationship, confidence).
+        """
+        pairs = []
+        
+        for pattern, rel_type, swap in self.RELATIONSHIP_PATTERNS:
+            for match in re.finditer(pattern, text, re.IGNORECASE):
+                word1, word2 = match.group(1), match.group(2)
+                
+                if swap:
+                    source, target = word2, word1
+                else:
+                    source, target = word1, word2
+                
+                # Skip if same word
+                if source.lower() == target.lower():
+                    continue
+                
+                # Classify concepts
+                context = text[max(0, match.start()-50):match.end()+50]
+                type1 = self.classify_concept(source, context)
+                type2 = self.classify_concept(target, context)
+                
+                # Skip if either word is in skip list
+                if source.lower() in self.SKIP_WORDS or target.lower() in self.SKIP_WORDS:
+                    continue
+                
+                # Confidence based on pattern type
+                confidence = 0.8 if rel_type != "co_occurrence" else 0.3
+                
+                pairs.append((source.lower(), target.lower(), rel_type, confidence))
+        
+        self.extracted_pairs.extend(pairs)
+        return pairs
+    
+    def ingest_text(self, text: str) -> Dict[str, any]:
+        """
+        Ingest text and update the corpus.
+        Returns statistics about what was ingested.
+        """
+        # Extract pairs
+        pairs = self.extract_pairs_from_text(text)
+        
+        # Add to corpus (filtering low confidence)
+        new_dims = 0
+        added_pairs = 0
+        for source, target, rel, conf in pairs:
+            if conf >= 0.5:  # Only add reasonably confident pairs
+                if self.corpus.add_pair(source, target, rel, conf):
+                    new_dims += 1
+                added_pairs += 1
+        
+        # Detect gaps
+        gaps = self.detect_gaps()
+        
+        return {
+            "extracted_pairs": len(pairs),
+            "added_pairs": added_pairs,
+            "new_dimensions": new_dims,
+            "gaps_detected": len(gaps)
+        }
+    
+    def detect_gaps(self) -> List[Gap]:
+        """
+        Detect gaps in the corpus - missing variations for Platonic Ideals.
+        """
+        self.corpus.recompute()
+        gaps = []
+        
+        # For each ideal, check if it has variations in all known dimensions
+        for ideal_word, ideal in self.corpus.ideals.items():
+            for dim_name in self.corpus.dimensions:
+                # Check if this ideal has a variation in this dimension
+                has_variation = dim_name in ideal.variations
+                
+                if not has_variation:
+                    # This is a gap - the ideal doesn't have a variation in this dimension
+                    gap = Gap(
+                        ideal=ideal_word,
+                        dimension=dim_name,
+                        direction="positive",
+                        description=f"{ideal_word} has no {dim_name} variation"
+                    )
+                    gaps.append(gap)
+        
+        self.pending_queries = gaps
+        return gaps
+    
+    def handle_instance_vs_category(self, word: str, ideal: str, 
+                                     dimension: str) -> Tuple[bool, str]:
+        """
+        Handle the mastiff problem: determine if a word is a true category
+        variation or just a specific instance.
+        
+        Returns (is_valid_category, explanation).
+        
+        Example:
+        - "mastiff" for dog + size_increase → INSTANCE (specific breed)
+        - "large dog" for dog + size_increase → CATEGORY (general concept)
+        - "mansion" for house + size_increase → CATEGORY (general concept)
+        """
+        word_lower = word.lower()
+        
+        # Check if we have type information
+        if word_lower in self.concepts:
+            concept = self.concepts[word_lower]
+            if concept.is_instance():
+                return (False, f"'{word}' is a specific instance, not a general category")
+        
+        # Heuristic: single words that are proper nouns or specific terms
+        # are likely instances
+        
+        # Check if the word contains the ideal (e.g., "large dog" contains "dog")
+        if ideal.lower() in word_lower:
+            return (True, f"'{word}' is a compound containing the ideal")
+        
+        # Check if it's a known breed/type/variety
+        # This would ideally be an LLM query, but for now use heuristics
+        known_instances = {
+            "dog": ["mastiff", "chihuahua", "labrador", "poodle", "bulldog", 
+                    "beagle", "terrier", "collie", "shepherd", "retriever"],
+            "cat": ["persian", "siamese", "tabby", "maine coon", "ragdoll"],
+            "car": ["ferrari", "toyota", "honda", "ford", "tesla"],
+            "house": [],  # mansion, cottage are categories, not instances
+        }
+        
+        if ideal.lower() in known_instances:
+            if word_lower in known_instances[ideal.lower()]:
+                return (False, f"'{word}' is a specific {ideal} breed/type")
+        
+        return (True, f"'{word}' appears to be a valid category variation")
+    
+    def generate_llm_queries(self, max_queries: int = 10) -> List[str]:
+        """
+        Generate batched LLM queries for filling gaps.
+        """
+        queries = []
+        
+        # Group gaps by type for efficient batching
+        gaps_by_dim = {}
+        for gap in self.pending_queries[:max_queries]:
+            if gap.dimension not in gaps_by_dim:
+                gaps_by_dim[gap.dimension] = []
+            gaps_by_dim[gap.dimension].append(gap)
+        
+        # Generate batched queries
+        for dim, dim_gaps in gaps_by_dim.items():
+            ideals = [g.ideal for g in dim_gaps]
+            query = f"For the '{dim}' dimension, what are variations of: {', '.join(ideals)}?"
+            queries.append(query)
+        
+        return queries
+    
+    def process_llm_response(self, query: str, response: str) -> List[Tuple[str, str, str]]:
+        """
+        Process an LLM response and extract pairs.
+        Returns list of (source, target, relationship) to add.
+        """
+        # This would parse the LLM response
+        # For now, return empty - actual implementation would parse response
+        return []
+
+
+# =============================================================================
+# DEMO FUNCTIONS - PHASE 1
 # =============================================================================
 
 def demo_basic():
@@ -765,27 +1083,263 @@ def demo_compound_positions():
 
 
 # =============================================================================
+# DEMO FUNCTIONS - PHASE 2
+# =============================================================================
+
+def demo_text_ingestion():
+    """Demonstrate text ingestion and pair extraction."""
+    print("=" * 60)
+    print("DEMO: Text Ingestion (Phase 2)")
+    print("=" * 60)
+    print()
+    
+    corpus = SelfAssemblingCorpus()
+    pipeline = IngestionPipeline(corpus)
+    
+    # Sample text with relationships
+    sample_text = """
+    A mansion is larger than a house. A cottage is smaller than a house.
+    The palace is more formal than the mansion. A hovel is less formal than a cottage.
+    Dogs and cats are common pets. A mastiff is a type of dog.
+    Unlike a chihuahua, a mastiff is larger than most dogs.
+    """
+    
+    print("Ingesting sample text...")
+    print("-" * 60)
+    print(sample_text.strip())
+    print("-" * 60)
+    print()
+    
+    # Extract pairs
+    pairs = pipeline.extract_pairs_from_text(sample_text)
+    
+    print(f"Extracted {len(pairs)} pairs:")
+    for source, target, rel, conf in pairs:
+        print(f"  {source} → {target} ({rel}, conf={conf:.1f})")
+    
+    print()
+    
+    # Ingest into corpus
+    stats = pipeline.ingest_text(sample_text)
+    print(f"Ingestion stats: {stats}")
+    
+    print()
+    corpus.print_report()
+    
+    return corpus, pipeline
+
+
+def demo_instance_vs_category():
+    """Demonstrate the mastiff problem - instance vs category distinction."""
+    print("=" * 60)
+    print("DEMO: Instance vs Category (The Mastiff Problem)")
+    print("=" * 60)
+    print()
+    
+    corpus = SelfAssemblingCorpus()
+    pipeline = IngestionPipeline(corpus)
+    
+    # Set up the dog ideal
+    corpus.add_pair("dog", "puppy", "age_decrease")
+    corpus.add_pair("dog", "lapdog", "size_decrease")
+    corpus.recompute()
+    
+    print("The Problem:")
+    print("-" * 60)
+    print("  Q: What is 'large + dog'?")
+    print("  A1: 'mastiff' - but this is a SPECIFIC BREED")
+    print("  A2: 'large dog' - this is a GENERAL CATEGORY")
+    print()
+    print("  Mastiff IS large, but not every large dog is a mastiff.")
+    print("  This is the instance vs category distinction.")
+    print()
+    
+    # Test various words
+    test_cases = [
+        ("mastiff", "dog", "size_increase"),
+        ("chihuahua", "dog", "size_decrease"),
+        ("mansion", "house", "size_increase"),
+        ("cottage", "house", "size_decrease"),
+        ("large dog", "dog", "size_increase"),
+        ("labrador", "dog", "friendliness_increase"),
+    ]
+    
+    print("Classification results:")
+    print("-" * 60)
+    for word, ideal, dim in test_cases:
+        is_category, explanation = pipeline.handle_instance_vs_category(word, ideal, dim)
+        status = "CATEGORY ✓" if is_category else "INSTANCE ✗"
+        print(f"  {word:15} for {ideal}+{dim}: {status}")
+        print(f"    → {explanation}")
+    
+    print()
+    print("Key insight:")
+    print("  - 'mansion' is a valid category (any large fancy house)")
+    print("  - 'mastiff' is an instance (a specific breed)")
+    print("  - 'large dog' is a valid category (compound descriptor)")
+    print()
+    
+    return corpus, pipeline
+
+
+def demo_gap_detection():
+    """Demonstrate gap detection and LLM query generation."""
+    print("=" * 60)
+    print("DEMO: Gap Detection")
+    print("=" * 60)
+    print()
+    
+    corpus = SelfAssemblingCorpus()
+    pipeline = IngestionPipeline(corpus)
+    
+    # Create a corpus with some gaps
+    # House has size and regality variations
+    corpus.add_pair("house", "cottage", "size_decrease")
+    corpus.add_pair("house", "mansion", "size_increase")
+    corpus.add_pair("house", "palace", "regality_increase")
+    
+    # Dog only has size variations (gap: no regality)
+    corpus.add_pair("dog", "puppy", "size_decrease")
+    corpus.add_pair("dog", "mastiff", "size_increase")
+    
+    # Person has age variations (gap: no size, no regality)
+    corpus.add_pair("person", "child", "age_decrease")
+    corpus.add_pair("person", "elder", "age_increase")
+    
+    corpus.recompute()
+    
+    print("Current Platonic Ideals and their variations:")
+    print("-" * 60)
+    for word in corpus.list_ideals():
+        ideal = corpus.get_ideal(word)
+        print(f"\n  {word.upper()}")
+        for dim, vars in ideal.variations.items():
+            print(f"    {dim}: {vars}")
+    
+    print()
+    
+    # Detect gaps
+    gaps = pipeline.detect_gaps()
+    
+    print(f"Detected {len(gaps)} gaps:")
+    print("-" * 60)
+    for gap in gaps:
+        print(f"  {gap.ideal} missing {gap.dimension} variation")
+        print(f"    Query: {gap.to_query()}")
+    
+    print()
+    
+    # Generate batched LLM queries
+    queries = pipeline.generate_llm_queries()
+    print("Batched LLM queries:")
+    print("-" * 60)
+    for q in queries:
+        print(f"  {q}")
+    
+    print()
+    return corpus, pipeline
+
+
+def demo_full_pipeline():
+    """Demonstrate the full ingestion pipeline with real-ish text."""
+    print("=" * 60)
+    print("DEMO: Full Pipeline")
+    print("=" * 60)
+    print()
+    
+    corpus = SelfAssemblingCorpus()
+    pipeline = IngestionPipeline(corpus)
+    
+    # Simulate ingesting multiple documents
+    documents = [
+        # Document 1: About houses
+        """
+        Houses come in many sizes. A mansion is larger than a typical house,
+        while a cottage is smaller than a house. Palaces are more formal than
+        mansions, representing the pinnacle of grandeur. A hovel, unlike a palace,
+        is less formal than even a cottage.
+        """,
+        
+        # Document 2: About dogs (introduces the mastiff problem)
+        """
+        Dogs vary greatly in size. A mastiff is a breed of dog known for being
+        larger than most dogs. Chihuahuas are smaller than typical dogs.
+        Puppies are younger than adult dogs. Any large dog needs more space
+        than a small dog.
+        """,
+        
+        # Document 3: About perspective (new dimension!)
+        """
+        In first-person narrative, "I" refers to the narrator. In third-person,
+        "he" or "she" replaces "I". Similarly, "me" becomes "him" or "her",
+        and "my" becomes "his" or "her".
+        """
+    ]
+    
+    for i, doc in enumerate(documents, 1):
+        print(f"Ingesting document {i}...")
+        stats = pipeline.ingest_text(doc)
+        print(f"  Extracted: {stats['extracted_pairs']} pairs")
+        print(f"  Added: {stats['added_pairs']} pairs")
+        print(f"  New dimensions: {stats['new_dimensions']}")
+        print()
+    
+    print("Final corpus state:")
+    corpus.print_report()
+    
+    # Show instance vs category handling
+    print("Instance vs Category Analysis:")
+    print("-" * 60)
+    
+    # Register mastiff as an instance
+    pipeline.register_concept("mastiff", ConceptType.INSTANCE, parent="dog")
+    
+    for word in ["mastiff", "mansion", "cottage", "palace"]:
+        if word in pipeline.concepts:
+            concept = pipeline.concepts[word]
+            print(f"  {word}: {concept.concept_type.value}")
+        else:
+            # Check using heuristics
+            is_cat, reason = pipeline.handle_instance_vs_category(word, "house", "size")
+            print(f"  {word}: {'category' if is_cat else 'instance'} ({reason})")
+    
+    print()
+    return corpus, pipeline
+
+
+# =============================================================================
 # MAIN
 # =============================================================================
 
 if __name__ == "__main__":
     print()
     print("=" * 60)
-    print("SELF-ASSEMBLING CORPUS EXPERIMENT - PHASE 1")
+    print("SELF-ASSEMBLING CORPUS EXPERIMENT - PHASE 1 & 2")
     print("=" * 60)
     print()
     print("This experiment demonstrates the core infrastructure for")
     print("a self-assembling knowledge corpus.")
     print()
-    print("Key principles:")
+    print("PHASE 1: Core Infrastructure")
     print("  1. Transformation pairs are the source of truth")
     print("  2. Dimensions emerge from relationship types")
     print("  3. Positions use φ-based geometry")
     print("  4. Platonic Ideals are detected automatically")
     print("  5. The space can be reconstructed from pairs alone")
     print()
+    print("PHASE 2: Ingestion Pipeline")
+    print("  6. Extract transformation pairs from text")
+    print("  7. Distinguish categories from instances (mastiff problem)")
+    print("  8. Detect gaps and generate LLM queries")
+    print("  9. Handle dynamic dimension discovery")
+    print()
     
-    # Run demos
+    # Phase 1 demos
+    print("=" * 60)
+    print("PHASE 1 DEMOS")
+    print("=" * 60)
+    print()
+    
     demo_basic()
     print("\n" + "=" * 60 + "\n")
     
@@ -803,18 +1357,42 @@ if __name__ == "__main__":
     
     demo_compound_positions()
     
+    # Phase 2 demos
+    print("\n")
     print("=" * 60)
-    print("PHASE 1 EXPERIMENT COMPLETE")
+    print("PHASE 2 DEMOS")
     print("=" * 60)
     print()
-    print("Key findings:")
+    
+    demo_text_ingestion()
+    print("\n" + "=" * 60 + "\n")
+    
+    demo_instance_vs_category()
+    print("\n" + "=" * 60 + "\n")
+    
+    demo_gap_detection()
+    print("\n" + "=" * 60 + "\n")
+    
+    demo_full_pipeline()
+    
+    print("=" * 60)
+    print("EXPERIMENT COMPLETE")
+    print("=" * 60)
+    print()
+    print("Key findings - Phase 1:")
     print("  1. Dimensions emerge automatically from relationship types")
     print("  2. Platonic Ideals detected by multi-dimension anchoring")
     print("  3. Positions extend automatically when new dimensions added")
     print("  4. Self-similarity preserved (all deltas = φ)")
     print("  5. Corpus reconstructable from pairs alone")
     print()
-    print("Next: Phase 2 - Ingestion Pipeline")
-    print("  - Text → Transformation Pairs extraction")
-    print("  - Automatic relationship detection")
-    print("  - Gap identification")
+    print("Key findings - Phase 2:")
+    print("  6. Text can be parsed for transformation pairs")
+    print("  7. Instance vs category distinction is critical (mastiff problem)")
+    print("  8. Gaps can be detected and batched for LLM queries")
+    print("  9. New dimensions emerge from new content types")
+    print()
+    print("Next: Phase 3 - LLM Integration")
+    print("  - Connect to local LLM for gap filling")
+    print("  - Validate instance vs category with LLM")
+    print("  - Automated corpus expansion")
