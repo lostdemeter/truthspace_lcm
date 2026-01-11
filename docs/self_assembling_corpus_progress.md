@@ -1,7 +1,7 @@
 # Self-Assembling Corpus: Progress Tracker
 
 **Last Updated:** January 11, 2025
-**Status:** Phase 4 Complete, Phase 5-6 Pending
+**Status:** Phase 5 Complete, Phase 6 Pending
 
 ---
 
@@ -78,7 +78,7 @@ From the project philosophy:
 | **Phase 2** | Ingestion Pipeline | ✅ Complete |
 | **Phase 3** | LLM Integration + Specificity | ✅ Complete |
 | **Phase 4** | Platonic Ideal Discovery | ✅ Complete |
-| **Phase 5** | Self-Assembly Loop | ⏳ Pending |
+| **Phase 5** | Self-Assembly Loop | ✅ Complete |
 | **Phase 6** | Persistence & Versioning | ⏳ Pending |
 
 ---
@@ -368,7 +368,7 @@ Dimension Gaps for 'house':
 
 ---
 
-## Phase 5: Self-Assembly Loop ⏳
+## Phase 5: Self-Assembly Loop ✅
 
 **Goal:** Continuous self-improvement cycle.
 
@@ -381,12 +381,58 @@ Dimension Gaps for 'house':
 │  3. REBALANCE → New dimension → Extend all positions         │
 │  4. POSITION  → Place concepts (source=0, target=φ)          │
 │  5. DISCOVER  → Find Platonic Ideals                         │
-│  6. GAP-FILL  → Identify missing → Queue for LLM             │
+│  6. GAP-FILL  → Identify missing → Query LLM                 │
 │  7. COMPOUND  → Derive compound positions geometrically      │
 │  8. VERIFY    → Check self-similarity, introspect            │
 │  └──────────────────── REPEAT ──────────────────────────────┘
 └─────────────────────────────────────────────────────────────┘
 ```
+
+### Completed Components
+
+1. **`AssemblyState`** - Tracks cycle results
+   - Pairs, dimensions, ideals (before/after)
+   - Gaps detected/filled
+   - Self-similarity score
+   - Error tracking
+
+2. **`SelfAssemblyLoop`** - Orchestrates continuous improvement
+   - `run_cycle(text=None)`: Execute one complete 8-step cycle
+   - `run_until_stable()`: Run until no gaps and high self-similarity
+   - `get_status()`/`print_status()`: Introspection
+
+3. **Self-Similarity Verification**
+   - All deltas should be φ
+   - Ideals should be at origin
+   - Same relationship = same delta everywhere
+
+### Demo Results
+
+```
+SELF-ASSEMBLY CYCLE 1
+  [1] INGEST: No new text (gap-fill mode)
+  [2] DETECT: Dimensions: 3
+  [3] REBALANCE: All positions extended to 3 dimensions
+  [4] POSITION: All deltas = φ (verified, 4 pairs)
+  [5] DISCOVER: Universal: 0, Domain: 0, Category: 1
+  [6] GAP-FILL: Gaps detected: 1, filled: 1
+  [7] COMPOUND: Compounds derived: 0
+  [8] VERIFY: Self-similarity score: 97.85%
+
+CYCLE 1 COMPLETE
+  Pairs: 4 → 5 (+1)
+  Dimensions: 3 → 3 (+0)
+  Self-similarity: 97.85%
+
+✓ STABLE after 1 cycles
+```
+
+### Key Insights
+
+1. **Self-similarity score** verifies geometric consistency (target: 95%+)
+2. **Stability** = no gaps + high self-similarity + no new dimensions
+3. **History tracking** enables introspection across cycles
+4. **LLM integration** fills gaps automatically when available
 
 ---
 
