@@ -720,13 +720,18 @@ class EmergentDimensionSpace:
             # Find all pairs with this relationship
             rel_pairs = [(w1, w2) for w1, w2, r in self.pairs if r == rel]
             
-            # Source words get negative values, target words get positive
-            # The magnitude is φ-scaled based on how many pairs they're in
+            # Identify unique sources and targets
+            sources = set(w1 for w1, w2 in rel_pairs)
+            targets = set(w2 for w1, w2 in rel_pairs)
+            
+            # Sources (Platonic Ideals) stay at ORIGIN (0)
+            # Targets move to +φ or -φ based on relationship direction
             for w1, w2 in rel_pairs:
                 i, j = word_to_idx[w1], word_to_idx[w2]
-                # φ-based positioning: source at -φ, target at +φ
-                self.positions[i, rel_idx] -= PHI
-                self.positions[j, rel_idx] += PHI
+                # Source stays at 0 (the ideal)
+                # Target moves to +φ (the variation)
+                # This gives delta = φ from ideal to variation
+                self.positions[j, rel_idx] = PHI  # Set, don't accumulate
         
         # DON'T normalize - preserve φ-based magnitudes
         # Normalization destroys self-similarity
@@ -953,6 +958,409 @@ def demo_emergent_dimensions():
                 delta2 = woman_pos[gender_dim] - man_pos[gender_dim]
                 print(f"  man → woman delta on gender dim: {delta2:+.3f}")
                 print(f"  Self-similarity: {abs(delta - delta2) < 0.1}")
+    
+    return space
+
+
+def demo_platonic_ideals():
+    """
+    Investigate Platonic Ideals - neutral intersection points across dimensions.
+    
+    The insight: Some concepts sit at the ORIGIN of multiple dimensions.
+    These are the "pure" or "platonic" forms. Variations are movements
+    along dimensions from that center.
+    
+    Example - "house" is the platonic ideal:
+    
+                        palace (high regal)
+                            ↑
+             cottage ← ← HOUSE → → mansion
+            (small)         ↓        (large)
+                        hovel (low regal)
+    
+    When we find a word that participates in MULTIPLE dimension pairs
+    as the neutral/source point, we've found a Platonic Ideal.
+    """
+    print("=" * 60)
+    print("PLATONIC IDEALS: Neutral Intersection Points")
+    print("=" * 60)
+    print()
+    print("A Platonic Ideal sits at the ORIGIN of multiple dimensions.")
+    print("It's the 'pure' concept from which variations emerge.")
+    print()
+    print("Example: 'house' is the platonic ideal for dwellings:")
+    print("  - house → cottage (size: smaller)")
+    print("  - house → mansion (size: larger)")
+    print("  - house → hovel (regality: lower)")
+    print("  - house → palace (regality: higher)")
+    print()
+    
+    space = EmergentDimensionSpace()
+    
+    # HOUSE as platonic ideal - it's the source for multiple dimensions
+    # Size dimension
+    space.add_pair("house", "cottage", "size_decrease")
+    space.add_pair("house", "mansion", "size_increase")
+    space.add_pair("house", "cabin", "size_decrease")
+    space.add_pair("house", "estate", "size_increase")
+    
+    # Regality dimension
+    space.add_pair("house", "hovel", "regality_decrease")
+    space.add_pair("house", "palace", "regality_increase")
+    space.add_pair("house", "shack", "regality_decrease")
+    space.add_pair("house", "manor", "regality_increase")
+    
+    # PERSON as platonic ideal
+    space.add_pair("person", "child", "age_decrease")
+    space.add_pair("person", "elder", "age_increase")
+    space.add_pair("person", "peasant", "status_decrease")
+    space.add_pair("person", "noble", "status_increase")
+    space.add_pair("person", "stranger", "familiarity_decrease")
+    space.add_pair("person", "friend", "familiarity_increase")
+    
+    # FOOD as platonic ideal
+    space.add_pair("food", "snack", "size_decrease")
+    space.add_pair("food", "feast", "size_increase")
+    space.add_pair("food", "slop", "quality_decrease")
+    space.add_pair("food", "cuisine", "quality_increase")
+    
+    # VEHICLE as platonic ideal
+    space.add_pair("vehicle", "bicycle", "size_decrease")
+    space.add_pair("vehicle", "truck", "size_increase")
+    space.add_pair("vehicle", "jalopy", "quality_decrease")
+    space.add_pair("vehicle", "limousine", "quality_increase")
+    
+    # Discover dimensions
+    n_dims = space.discover_dimensions(target_dims=16)
+    print(f"Discovered {n_dims} dimensions from transformation pairs")
+    print()
+    
+    # Find Platonic Ideals: words that appear as SOURCE in multiple relationships
+    print("=" * 60)
+    print("IDENTIFYING PLATONIC IDEALS")
+    print("=" * 60)
+    print()
+    
+    # Count how many times each word appears as source
+    source_counts = {}
+    source_rels = {}  # Which relationships each word is source for
+    
+    for w1, w2, rel in space.pairs:
+        source_counts[w1] = source_counts.get(w1, 0) + 1
+        if w1 not in source_rels:
+            source_rels[w1] = set()
+        source_rels[w1].add(rel)
+    
+    # Sort by count
+    ideals = sorted(source_counts.items(), key=lambda x: -x[1])
+    
+    print("Words by 'ideality' (how many dimensions they anchor):")
+    print("-" * 60)
+    for word, count in ideals:
+        if count >= 2:  # At least 2 dimensions
+            rels = source_rels.get(word, set())
+            unique_dims = len(set(r.split('_')[0] for r in rels))  # Count unique dimension types
+            print(f"  {word}: {count} pairs across {unique_dims} dimension types")
+            print(f"    Dimensions: {list(rels)}")
+    
+    print()
+    
+    # Analyze the position of platonic ideals
+    print("=" * 60)
+    print("PLATONIC IDEAL POSITIONS")
+    print("=" * 60)
+    print()
+    print("Hypothesis: Platonic ideals should be near the ORIGIN")
+    print("(neutral on all dimensions they anchor)")
+    print()
+    
+    for word, count in ideals[:4]:  # Top 4 ideals
+        pos = space.get_position(word)
+        if pos is not None:
+            # Check position on each dimension
+            print(f"{word}:")
+            for d, dim_info in enumerate(space.dimensions[:n_dims]):
+                val = pos[d]
+                desc = dim_info.get("description", f"dim_{d}")[:30]
+                bar = "█" * int(abs(val) * 5) if abs(val) > 0.1 else "·"
+                sign = "+" if val > 0 else "-" if val < 0 else " "
+                print(f"  dim {d} ({desc}): {sign}{bar} ({val:+.2f})")
+            print()
+    
+    # The key insight: variations from the ideal
+    print("=" * 60)
+    print("VARIATIONS FROM THE IDEAL")
+    print("=" * 60)
+    print()
+    print("Each variation is a movement along ONE dimension from the ideal.")
+    print()
+    
+    # Show house variations
+    house_pos = space.get_position("house")
+    if house_pos is not None:
+        variations = ["cottage", "mansion", "hovel", "palace", "cabin", "manor"]
+        print("HOUSE variations:")
+        for var in variations:
+            var_pos = space.get_position(var)
+            if var_pos is not None:
+                delta = var_pos - house_pos
+                # Find which dimension has the largest delta
+                max_dim = np.argmax(np.abs(delta))
+                max_delta = delta[max_dim]
+                dim_name = space._rel_types[max_dim] if max_dim < len(space._rel_types) else f"dim_{max_dim}"
+                print(f"  house → {var}: Δ = {max_delta:+.2f} on {dim_name}")
+    
+    print()
+    
+    # Test compound variations
+    print("=" * 60)
+    print("COMPOUND VARIATIONS")
+    print("=" * 60)
+    print()
+    print("What if a concept varies on MULTIPLE dimensions?")
+    print("A 'palace' might be both large AND regal.")
+    print()
+    
+    # Check if any variations appear on multiple dimensions
+    if house_pos is not None:
+        all_variations = ["cottage", "mansion", "hovel", "palace", "cabin", "manor", "shack", "estate"]
+        print("Checking multi-dimensional variations:")
+        for var in all_variations:
+            var_pos = space.get_position(var)
+            if var_pos is not None:
+                delta = var_pos - house_pos
+                # Count how many dimensions have significant delta
+                significant_dims = []
+                for d in range(len(delta)):
+                    if abs(delta[d]) > 0.1:
+                        dim_name = space._rel_types[d] if d < len(space._rel_types) else f"dim_{d}"
+                        significant_dims.append((dim_name, delta[d]))
+                
+                if len(significant_dims) > 1:
+                    print(f"  {var}: COMPOUND - varies on {len(significant_dims)} dimensions")
+                    for dim_name, d in significant_dims:
+                        print(f"    {dim_name}: Δ = {d:+.2f}")
+                elif len(significant_dims) == 1:
+                    print(f"  {var}: SIMPLE - varies on {significant_dims[0][0]} only")
+    
+    print()
+    
+    # The key insight about compound concepts
+    print("=" * 60)
+    print("THE COMPOUND CONCEPT HYPOTHESIS")
+    print("=" * 60)
+    print()
+    print("If 'palace' is BOTH large AND regal, its position would be:")
+    print(f"  palace = house + φ(size) + φ(regality)")
+    print(f"  Distance from ideal = √(φ² + φ²) = φ√2 ≈ {PHI * np.sqrt(2):.3f}")
+    print()
+    print("But in our current model, 'palace' only varies on regality.")
+    print("To capture compound concepts, we'd need pairs like:")
+    print("  - mansion → palace (regality_increase)")
+    print("  - manor → palace (size_increase)")
+    print()
+    print("This would place 'palace' at the intersection of size AND regality.")
+    print()
+    
+    # The meta-pattern
+    print("=" * 60)
+    print("THE META-PATTERN: PLATONIC IDEALS")
+    print("=" * 60)
+    print()
+    print("Platonic Ideals are concepts that:")
+    print("  1. Sit at the ORIGIN (neutral on multiple dimensions)")
+    print("  2. Anchor MULTIPLE transformation pairs")
+    print("  3. Have named variations in each direction")
+    print()
+    print("This suggests a hierarchy:")
+    print("  - Platonic Ideals (origin points) - e.g., 'house', 'person', 'food'")
+    print("  - Dimensions (axes through the origin) - e.g., size, regality, age")
+    print("  - Simple Variations (φ along one axis) - e.g., 'cottage', 'mansion'")
+    print("  - Compound Variations (φ on multiple axes) - e.g., 'palace' = large + regal")
+    print()
+    print("The φ constant is the fundamental unit of semantic distance.")
+    print("Compound concepts have distance φ√n where n = number of dimensions.")
+    print()
+    
+    return space
+
+
+def demo_meta_patterns():
+    """
+    Investigate meta-patterns in emergent dimensions.
+    
+    Key questions:
+    1. Is the constant 2φ delta a fundamental unit?
+    2. Are some dimensions compounds of others? (e.g., regality = formality + wealth)
+    3. What happens when we add overlapping dimensions?
+    """
+    print("=" * 60)
+    print("META-PATTERN ANALYSIS")
+    print("=" * 60)
+    print()
+    print("Question: Are dimensions themselves compounds of other dimensions?")
+    print("Example: 'regality' might be 'formality' + 'wealth'")
+    print()
+    
+    space = EmergentDimensionSpace()
+    
+    # Base dimensions
+    space.add_pair("hi", "hello", "formality_increase")
+    space.add_pair("yeah", "yes", "formality_increase")
+    space.add_pair("gonna", "going to", "formality_increase")
+    space.add_pair("kid", "child", "formality_increase")
+    
+    space.add_pair("poor", "rich", "wealth_increase")
+    space.add_pair("cheap", "expensive", "wealth_increase")
+    space.add_pair("peasant", "noble", "wealth_increase")
+    
+    # Now add a COMPOUND dimension: regality = formality + wealth
+    # These pairs should show movement on BOTH formality AND wealth
+    space.add_pair("tableware", "china", "regality_increase")
+    space.add_pair("house", "manor", "regality_increase")
+    space.add_pair("clothes", "attire", "regality_increase")
+    space.add_pair("food", "cuisine", "regality_increase")
+    
+    # Age dimension (independent)
+    space.add_pair("boy", "man", "age_increase")
+    space.add_pair("girl", "woman", "age_increase")
+    space.add_pair("puppy", "dog", "age_increase")
+    
+    # Discover dimensions
+    n_dims = space.discover_dimensions(target_dims=16)
+    print(f"Discovered {n_dims} dimensions")
+    print()
+    
+    # Analyze dimension correlations
+    print("DIMENSION CORRELATION ANALYSIS")
+    print("-" * 60)
+    
+    # Get dimension vectors (which words are positive/negative on each)
+    n_words = len(space.words)
+    dim_vectors = {}
+    
+    for d in space.dimensions:
+        idx = d["index"]
+        if hasattr(space, '_rel_types') and idx < len(space._rel_types):
+            rel = space._rel_types[idx]
+            # Build a vector of word positions on this dimension
+            vec = np.zeros(n_words)
+            for word, word_idx in space.words.items():
+                vec[word_idx] = space.positions[word_idx, idx]
+            dim_vectors[rel] = vec
+    
+    # Compute correlations between dimensions
+    print("\nDimension correlations:")
+    rels = list(dim_vectors.keys())
+    for i, rel1 in enumerate(rels):
+        for rel2 in rels[i+1:]:
+            v1, v2 = dim_vectors[rel1], dim_vectors[rel2]
+            # Cosine similarity
+            norm1, norm2 = np.linalg.norm(v1), np.linalg.norm(v2)
+            if norm1 > 0 and norm2 > 0:
+                corr = np.dot(v1, v2) / (norm1 * norm2)
+                if abs(corr) > 0.1:  # Only show significant correlations
+                    print(f"  {rel1} ↔ {rel2}: {corr:+.3f}")
+    
+    # Check if regality is a compound of formality + wealth
+    print("\n" + "=" * 60)
+    print("IS REGALITY A COMPOUND DIMENSION?")
+    print("=" * 60)
+    
+    if "regality_increase" in dim_vectors and "formality_increase" in dim_vectors:
+        regality = dim_vectors.get("regality_increase", np.zeros(n_words))
+        formality = dim_vectors.get("formality_increase", np.zeros(n_words))
+        wealth = dim_vectors.get("wealth_increase", np.zeros(n_words))
+        
+        # Try to express regality as a linear combination of formality + wealth
+        # regality ≈ α * formality + β * wealth
+        
+        # Stack formality and wealth as columns
+        if np.linalg.norm(formality) > 0 and np.linalg.norm(wealth) > 0:
+            X = np.column_stack([formality, wealth])
+            
+            # Least squares fit
+            coeffs, residuals, rank, s = np.linalg.lstsq(X, regality, rcond=None)
+            
+            # Reconstruct regality from formality + wealth
+            regality_reconstructed = X @ coeffs
+            
+            # How well does the reconstruction match?
+            if np.linalg.norm(regality) > 0:
+                reconstruction_error = np.linalg.norm(regality - regality_reconstructed) / np.linalg.norm(regality)
+                r_squared = 1 - reconstruction_error ** 2
+                
+                print(f"\nRegality ≈ {coeffs[0]:.3f} × formality + {coeffs[1]:.3f} × wealth")
+                print(f"Reconstruction R²: {r_squared:.3f}")
+                
+                if r_squared > 0.8:
+                    print("\n✓ REGALITY IS A COMPOUND DIMENSION!")
+                    print("  It can be expressed as a combination of formality and wealth.")
+                elif r_squared > 0.5:
+                    print("\n? REGALITY IS PARTIALLY COMPOUND")
+                    print("  Some overlap with formality/wealth, but has unique component.")
+                else:
+                    print("\n✗ REGALITY IS INDEPENDENT")
+                    print("  Cannot be expressed as formality + wealth.")
+    
+    # The 2φ constant
+    print("\n" + "=" * 60)
+    print("THE 2φ CONSTANT: A FUNDAMENTAL UNIT?")
+    print("=" * 60)
+    print()
+    print("Every transformation has delta = 2φ = 3.236...")
+    print("This suggests φ is the fundamental unit of semantic distance.")
+    print()
+    print("Implications:")
+    print("  - Source → Target is always exactly 2φ apart")
+    print("  - Compound dimensions would have delta = 2φ × √2 ≈ 4.58")
+    print("    (if they're orthogonal combinations)")
+    print("  - Or delta = 2φ × 2 = 4φ if they're parallel")
+    print()
+    
+    # Check actual deltas for regality pairs
+    print("Checking regality pair deltas:")
+    regality_pairs = [
+        ("tableware", "china"),
+        ("house", "manor"),
+        ("clothes", "attire"),
+    ]
+    
+    for w1, w2 in regality_pairs:
+        pos1 = space.get_position(w1)
+        pos2 = space.get_position(w2)
+        if pos1 is not None and pos2 is not None:
+            total_delta = np.linalg.norm(pos2 - pos1)
+            print(f"  {w1} → {w2}: total Δ = {total_delta:.3f} (expected 2φ = 3.236)")
+    
+    # Compare to simple pairs
+    print("\nComparing to simple (non-compound) pairs:")
+    simple_pairs = [
+        ("hi", "hello", "formality"),
+        ("poor", "rich", "wealth"),
+        ("boy", "man", "age"),
+    ]
+    
+    for w1, w2, dim_name in simple_pairs:
+        pos1 = space.get_position(w1)
+        pos2 = space.get_position(w2)
+        if pos1 is not None and pos2 is not None:
+            total_delta = np.linalg.norm(pos2 - pos1)
+            print(f"  {w1} → {w2} ({dim_name}): total Δ = {total_delta:.3f}")
+    
+    print()
+    print("=" * 60)
+    print("META-PATTERN HYPOTHESIS")
+    print("=" * 60)
+    print()
+    print("If compound dimensions exist, we should see:")
+    print("  1. Higher total delta (√(2φ² + 2φ²) = 2φ√2 ≈ 4.58)")
+    print("  2. Movement on multiple base dimensions")
+    print("  3. Correlation between compound and base dimensions")
+    print()
+    print("This would mean the 'true' dimensions are FEWER than")
+    print("the named relationships - some are just combinations.")
+    print()
     
     return space
 
