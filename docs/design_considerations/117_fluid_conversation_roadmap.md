@@ -230,88 +230,51 @@ class DiscourseTracker:
 
 ## Phase 3: Response Generation
 
-### Current Approach (Limited)
+### ~~Template Approach~~ (REJECTED)
+
+Templates violate our core principle - they're hard-coded patterns that don't scale.
+
+See **Design Doc 118: Emergent Response Patterns** for the correct approach.
+
+### Correct Approach: Patterns as Pairs
+
+**Key insight:** Patterns are concepts. Responses are traversals.
 
 ```python
-# Find concepts → format as text
-concepts = find_nearest(query_position)
-response = f"Related concepts: {concepts}"
+# Patterns are transformation pairs, just like content:
+corpus.add_pair("what_is_X", "X_is_definition", "response_type")
+corpus.add_pair("how_are_you", "i_am_well", "greeting_response")
+corpus.add_pair("formal_answer", "casual_answer", "register")
+
+# The pattern POSITION is learned from examples
+corpus.add_pattern_with_examples(
+    "what_is_X",
+    examples=["What is a king?", "What is love?", "What is a dog?"]
+)
 ```
 
-### Improved Approach: Template + Traversal
+### How It Works
 
-```python
-class ResponseGenerator:
-    """Generate responses by traversing geometry."""
-    
-    def __init__(self, stack: CorpusStack):
-        self.stack = stack
-        self.templates = self._load_templates()
-    
-    def generate(self, query: str, turn_type: TurnType) -> str:
-        """Generate response based on turn type and geometry."""
-        
-        if turn_type == TurnType.GREETING:
-            return self._respond_greeting(query)
-        
-        if turn_type == TurnType.QUESTION:
-            return self._respond_question(query)
-        
-        if turn_type == TurnType.STATEMENT:
-            return self._respond_statement(query)
-        
-        # ...
-    
-    def _respond_question(self, query: str) -> str:
-        """Answer a question by geometric traversal."""
-        # Parse question type
-        q_type = self._parse_question_type(query)  # what, who, where, etc.
-        
-        # Extract focus concept
-        focus = self._extract_focus(query)
-        
-        # Traverse geometry based on question type
-        if q_type == "what":
-            # Find definition (traverse to Platonic Ideal)
-            ideal = self.stack.base.corpus.get_ideal(focus)
-            if ideal:
-                return f"{focus} is a concept that anchors {ideal.dimensions_anchored}"
-        
-        if q_type == "who":
-            # Find person-like concepts near focus
-            results = self.stack.query(focus)
-            persons = [r for r in results if self._is_person(r.concept)]
-            return f"Related people: {[p.concept for p in persons]}"
-        
-        # ... etc
+```
+Input: "What is a king?"
+
+1. Parse → position (near "what_is_X" pattern)
+2. Traverse response_type dimension → "X_is_definition" pattern
+3. Compound pattern + content → "A king is a male monarch"
 ```
 
-### Template System
+### Pattern Dimensions
 
-```python
-TEMPLATES = {
-    "greeting_response": [
-        "Hello! How can I help you?",
-        "Hi there! What would you like to know?",
-        "Hey! What's on your mind?",
-    ],
-    "definition": [
-        "{concept} is {definition}.",
-        "A {concept} is {definition}.",
-        "{concept} can be described as {definition}.",
-    ],
-    "transformation": [
-        "The {dimension} of {source} is {target}.",
-        "{source} becomes {target} along the {dimension} dimension.",
-        "If you apply {dimension} to {source}, you get {target}.",
-    ],
-    "unknown": [
-        "I don't have information about {concept} yet.",
-        "I'm not familiar with {concept}. Can you tell me more?",
-        "{concept} isn't in my knowledge base.",
-    ],
-}
-```
+| Dimension | Negative | Positive |
+|-----------|----------|----------|
+| `response_type` | question | answer |
+| `register` | formal | casual |
+| `verbosity` | terse | elaborate |
+| `certainty` | uncertain | definite |
+
+### The Principle
+
+> **Patterns are concepts. Responses are traversals. Templates are forbidden.**
 
 ## Phase 4: LLM-Assisted Expansion
 
