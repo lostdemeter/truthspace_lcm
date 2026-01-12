@@ -273,6 +273,54 @@ The complete self-assembly cycle:
 └─────────────────────────────────────────────────────────────┘
 ```
 
+### Phase 5b: Unified Self-Assembly (Content + Patterns)
+
+**UPDATE (Jan 2025):** The self-assembly loop has been extended to handle
+BOTH content AND patterns in a unified space. See design docs 118, 119.
+
+Key insight: **Pattern dimensions emerge the same way content dimensions do.**
+The loop doesn't need to know the difference - it just processes pairs.
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│              UNIFIED SELF-ASSEMBLY LOOP                      │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  1. INGEST                                                   │
+│     └── Extract CONTENT pairs (king→queen)                   │
+│     └── Extract PATTERN pairs (formal→casual)                │
+│                                                              │
+│  2. DETECT                                                   │
+│     └── Content dimension? → gender, age, size               │
+│     └── Pattern dimension? → register, tone, verbosity       │
+│                                                              │
+│  5. DISCOVER                                                 │
+│     └── Content ideals (king anchors gender+regality)        │
+│     └── Pattern ideals (dr_seuss anchors meter+rhyme+tone)   │
+│     └── UNIFIED ideals (bridge content AND pattern)          │
+│                                                              │
+│  6. GAP-FILL                                                 │
+│     └── Content gaps (missing gender variations)             │
+│     └── Pattern gaps (missing register variations)           │
+│                                                              │
+│  7. COMPOUND                                                 │
+│     └── Content compounds (young king)                       │
+│     └── Pattern compounds (formal verbose)                   │
+│     └── STYLED compounds (formal king, casual explanation)   │
+│                                                              │
+│  8. VERIFY                                                   │
+│     └── Unified self-similarity across both types            │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Implementation:** `experiments/unified_assembly.py`
+
+**Demo results:**
+- 9 dimensions: 4 content + 5 pattern
+- Styled compounds work: `formal + king` → royalty content + formal pattern
+- Unified self-similarity verification works
+
 ### Phase 6: Persistence and Versioning
 
 #### 6.1 Storage Format
