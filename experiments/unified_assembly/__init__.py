@@ -8,12 +8,16 @@ Components:
 - core: Base classes for unified corpus and dimensions
 - scales: Multi-scale dimension architecture
 - stylization: Character-level stylization transforms
-- patterns: Speech patterns and discourse dimensions
 - loop: The unified self-assembly loop
+- bidirectional: ENCODE = DECODE traversal in both directions
 
 The key insight: Content, patterns, stylization, and scale are all just
 dimensions in the same φ-based geometry. The self-assembly mechanism
 works identically for all of them.
+
+ENCODE = DECODE:
+- Forward: dimensions → text (generation)
+- Reverse: text → dimensions (analysis)
 
 Author: TruthSpace LCM Project
 License: GPLv3
@@ -31,6 +35,12 @@ from experiments.unified_assembly.loop import (
     UnifiedAssemblyState,
 )
 
+from experiments.unified_assembly.bidirectional import (
+    TextAnalyzer,
+    DimensionalAnalysis,
+    BidirectionalTraversal,
+)
+
 __all__ = [
     'UnifiedCorpus',
     'DimensionType',
@@ -38,4 +48,7 @@ __all__ = [
     'Scale',
     'UnifiedSelfAssemblyLoop',
     'UnifiedAssemblyState',
+    'TextAnalyzer',
+    'DimensionalAnalysis',
+    'BidirectionalTraversal',
 ]
