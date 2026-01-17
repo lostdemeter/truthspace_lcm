@@ -79,3 +79,39 @@ output/
 
 # Outside projects (cloned repos for reference, not part of this project)
 outside_projects/
+
+# Large datasets and caches (depth learning experiment)
+experiments/unified_assembly/val2017/
+experiments/unified_assembly/depth_cache/
+experiments/unified_assembly/feature_cache.json
+
+# VR video converter - large media files
+experiments/vr_video_converter/uploads/
+experiments/vr_video_converter/processed/
+experiments/vr_video_converter/*.mp4
+experiments/vr_video_converter/*.avi
+experiments/vr_video_converter/*.mov
+experiments/vr_video_converter/*.mkv
+
+# Large binary files
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.webm
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.bmp
+*.tiff
+*.npy
+*.npz
+*.h5
+*.hdf5
+*.pkl
+*.pickle
+
+# But allow specific small images in docs
+!docs/**/*.png
+!docs/**/*.jpg
