@@ -127,9 +127,12 @@ class PhiQwen2Engine:
     The φ-optimized Qwen2 engine.
     
     Uses additive error attention for 68× speedup with 99.9967% accuracy.
+    
+    Note: Using Qwen2-1.5B-Instruct for better chat quality.
+    The 0.5B model is too small for coherent chat responses.
     """
     
-    def __init__(self, model_name: str = "Qwen/Qwen2-0.5B"):
+    def __init__(self, model_name: str = "Qwen/Qwen2-1.5B-Instruct"):
         self.model_name = model_name
         self.device = DEVICE
         self.model = None
@@ -234,23 +237,32 @@ class PhiQwen2Engine:
         # Build prompt from messages
         prompt = self._build_prompt(messages)
         
+        logger.debug(f"Prompt: {prompt[:200]}...")
+        
         # Tokenize
         inputs = self.tokenizer(prompt, return_tensors="pt")
         inputs = {k: v.to(self.device) for k, v in inputs.items()}
         
-        # Generate
+        # Generate with better parameters for chat
         with torch.no_grad():
             outputs = self.model.generate(
                 **inputs,
                 max_new_tokens=max_tokens,
-                temperature=temperature if temperature > 0 else 1.0,
-                do_sample=temperature > 0,
+                temperature=max(0.1, temperature),  # Avoid 0
+                do_sample=True,
+                top_p=0.9,
+                top_k=50,
+                repetition_penalty=1.1,
                 pad_token_id=self.tokenizer.eos_token_id,
+                eos_token_id=self.tokenizer.eos_token_id,
             )
         
         # Decode
         generated_ids = outputs[0][inputs['input_ids'].shape[1]:]
         response = self.tokenizer.decode(generated_ids, skip_special_tokens=True)
+        
+        # Clean up response
+        response = self._clean_response(response)
         
         # Update stats
         elapsed_ms = (time.perf_counter() - start_time) * 1000
@@ -260,19 +272,73 @@ class PhiQwen2Engine:
         
         logger.info(f"Generated {len(generated_ids)} tokens in {elapsed_ms:.1f}ms")
         
-        return response.strip()
+        return response
+    
+    def _clean_response(self, response: str) -> str:
+        """Clean up model response."""
+        response = response.strip()
+        
+        # Remove common artifacts from small models
+        artifacts = [
+            "Based on the content",
+            "Here is a summary",
+            "The following points",
+            "According to the text",
+            "The document provides",
+        ]
+        
+        for artifact in artifacts:
+            if response.startswith(artifact):
+                # Try to find actual content after the artifact
+                lines = response.split('\n')
+                if len(lines) > 1:
+                    response = '\n'.join(lines[1:]).strip()
+                    break
+        
+        # If response is empty or too short, don't override
+        # (the model may have given a short valid answer like "4")
+        
+        return response
     
     def _build_prompt(self, messages: List[Message]) -> str:
         """Build a prompt from chat messages."""
         # Qwen2 chat format
         prompt_parts = []
         
+        # Use a simple system prompt instead of Goose's long one
+        simple_system = "You are a helpful AI assistant. Be concise and direct."
+        prompt_parts.append(f"<|im_start|>system\n{simple_system}<|im_end|>")
+        
         for msg in messages:
             content = msg.get_text_content()
+            
+            # Skip Goose's system prompts (they confuse small models)
             if msg.role == "system":
-                prompt_parts.append(f"<|im_start|>system\n{content}<|im_end|>")
-            elif msg.role == "user":
+                continue
+            
+            # Filter out Goose system prompt embedded in user messages
+            if msg.role == "user":
+                # Goose sometimes embeds system prompt in user message
+                goose_markers = [
+                    "You are a general-purpose AI agent called goose",
+                    "You are an AI assistant",
+                    "You have access to the following tools",
+                ]
+                for marker in goose_markers:
+                    if marker in content:
+                        # Extract just the actual user message
+                        # Usually after double newline or at the end
+                        parts = content.split("\n\n")
+                        # Take the last non-empty part as the actual message
+                        for part in reversed(parts):
+                            part = part.strip()
+                            if part and not any(m in part for m in goose_markers):
+                                content = part
+                                break
+                        break
+                
                 prompt_parts.append(f"<|im_start|>user\n{content}<|im_end|>")
+            
             elif msg.role == "assistant":
                 prompt_parts.append(f"<|im_start|>assistant\n{content}<|im_end|>")
         
