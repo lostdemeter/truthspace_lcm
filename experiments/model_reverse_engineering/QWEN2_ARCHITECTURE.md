@@ -482,3 +482,119 @@ The φ-basis preserves semantic operations while providing:
 2. **The structure is in different places** - DA2: attention, Qwen2: semantic space
 3. **Layer 2 is the "meaning" layer** - extract φ-basis from here
 4. **10 dimensions suffice** - for semantic operations with 97.4% variance
+
+---
+
+## Path to Complete φ-Representation
+
+### Goal
+
+Reproduce Qwen2's behavior exactly using a φ-basis representation that can then be optimized.
+
+### Architecture Decomposition
+
+```
+INPUT TOKEN
+    ↓
+┌─────────────────────────────────────┐
+│  EMBEDDING (Layer 0)                │
+│  - 151,936 × 896 matrix             │
+│  - S[0]/S[1] ≈ φ²                   │
+│  - Analogies work here              │
+└─────────────────────────────────────┘
+    ↓
+┌─────────────────────────────────────┐
+│  SEMANTIC LAYERS (1-2)              │  ← DRUM
+│  - Build semantic structure         │
+│  - S[0]/S[1] ≈ φ at Layer 2         │
+│  - Best analogy performance         │
+│  - φ-coordinates cluster at 0,±1/φ  │
+└─────────────────────────────────────┘
+    ↓
+┌─────────────────────────────────────┐
+│  PHASE TRANSITION (Layer 3)         │
+│  - Semantic alignment INVERTS       │
+│  - S[0]/S[1] explodes to 6.94       │
+│  - Perfectly linear transform       │
+└─────────────────────────────────────┘
+    ↓
+┌─────────────────────────────────────┐
+│  TRANSCODER LAYERS (3-24)           │  ← COMB
+│  - Transform semantics → prediction │
+│  - Analogies don't work here        │
+│  - Linear transformations           │
+└─────────────────────────────────────┘
+    ↓
+┌─────────────────────────────────────┐
+│  OUTPUT HEAD                        │  ← MUSIC
+│  - 896 → 151,936 logits             │
+│  - Next token prediction            │
+└─────────────────────────────────────┘
+```
+
+### Extraction Strategy
+
+**Phase 1: Semantic Layer (DRUM)**
+1. Extract φ-basis from Layer 2 hidden states
+2. Verify exact reconstruction
+3. Test semantic operations (analogies)
+4. Find minimal dimension count (currently: 10 for 97.4%)
+
+**Phase 2: Transcoder (COMB)**
+1. Analyze layers 3-24 transformation
+2. Factor into linear components
+3. Look for compression opportunities
+4. The transformation is perfectly linear - can be represented as matrices
+
+**Phase 3: Integration**
+1. Combine φ-basis DRUM with linear COMB
+2. Test end-to-end reproduction
+3. Compare outputs with original model
+
+### Current Progress
+
+| Phase | Status | Notes |
+|-------|--------|-------|
+| DRUM extraction | ✓ Complete | 10 dims, 97.4% variance, analogies work |
+| DRUM scaling | In Progress | Need full vocabulary |
+| COMB analysis | Pending | Linear, can be factored |
+| Integration | Pending | End-to-end test |
+
+### Key Insight: Universal Dimensions
+
+From the Universal Dimension Principle (doc 120), dimensions can be:
+- **Content**: gender, age, size, sentiment
+- **Pattern**: tense, register, formality
+- **Style**: spacing, case
+
+The φ-basis should capture ALL these dimension types, not just content.
+
+### Connection to LCM Theory
+
+| LCM Concept | Qwen2 Mapping |
+|-------------|---------------|
+| φ-Zipf duality | S[0]/S[1] ≈ φ in semantic space |
+| Platonic Ideals | Not at origin, but extractable |
+| Self-similar transforms | Magnitude yes, direction no |
+| ENCODE = DECODE | Layer 2 ↔ Layer 2 (semantic layer) |
+| Music Box | DRUM (0-2), COMB (3-24), MUSIC (output) |
+
+---
+
+## Next Steps
+
+1. **Scale φ-extraction to larger vocabulary**
+   - Test with 1000+ words
+   - Verify φ-patterns hold at scale
+
+2. **Analyze transcoder structure**
+   - Factor layers 3-24
+   - Find compression opportunities
+
+3. **Test end-to-end reproduction**
+   - φ-basis → transcoder → output
+   - Compare with original model
+
+4. **Optimize φ-representation**
+   - Once exact reproduction works
+   - Apply φ-based compression
