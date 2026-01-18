@@ -23,6 +23,7 @@ from dataclasses import dataclass
 from typing import Dict, List, Tuple, Optional
 from pathlib import Path
 import time
+import os
 
 PHI = (1 + np.sqrt(5)) / 2
 K = 128  # φ-grid resolution (gives 99.91% accuracy)
@@ -56,6 +57,29 @@ class PhiEncoded:
     
     def storage_bytes(self) -> int:
         return self.signs.nbytes + self.exponents.nbytes
+    
+    def save(self, path: str, compress: bool = False):
+        """Save φ-encoded tensor to file."""
+        if compress:
+            np.savez_compressed(path, 
+                               signs=self.signs, 
+                               exponents=self.exponents,
+                               shape=np.array(self.shape))
+        else:
+            np.savez(path, 
+                    signs=self.signs, 
+                    exponents=self.exponents,
+                    shape=np.array(self.shape))
+    
+    @classmethod
+    def load(cls, path: str) -> 'PhiEncoded':
+        """Load φ-encoded tensor from file."""
+        data = np.load(path)
+        return cls(
+            signs=data['signs'],
+            exponents=data['exponents'],
+            shape=tuple(data['shape'])
+        )
 
 
 class UnraveledLayer:
@@ -176,6 +200,68 @@ class UnraveledLayer:
             if w is not None:
                 total += w.storage_bytes()
         return total
+    
+    def save(self, layer_dir: str, compress: bool = False):
+        """Save layer to directory."""
+        os.makedirs(layer_dir, exist_ok=True)
+        
+        # Save MESH matrices
+        for i, mesh in enumerate(self.mesh_qk):
+            mesh.save(os.path.join(layer_dir, f'mesh_qk_{i:02d}.npz'), compress=compress)
+        
+        # Save bias cross-terms
+        save_fn = np.savez_compressed if compress else np.savez
+        save_fn(os.path.join(layer_dir, 'cross_terms.npz'),
+               cross_qk=np.array(self.cross_qk),
+               cross_kq=np.array(self.cross_kq),
+               bias_term=np.array(self.bias_term))
+        
+        # Save other projections
+        self.W_v.save(os.path.join(layer_dir, 'W_v.npz'), compress=compress)
+        self.W_o.save(os.path.join(layer_dir, 'W_o.npz'), compress=compress)
+        self.W_gate.save(os.path.join(layer_dir, 'W_gate.npz'), compress=compress)
+        self.W_up.save(os.path.join(layer_dir, 'W_up.npz'), compress=compress)
+        self.W_down.save(os.path.join(layer_dir, 'W_down.npz'), compress=compress)
+        
+        # Save biases and layernorm weights
+        save_fn(os.path.join(layer_dir, 'biases.npz'),
+               b_v=self.b_v,
+               b_o=self.b_o if self.b_o is not None else np.array([]),
+               ln1_weight=self.ln1_weight,
+               ln2_weight=self.ln2_weight)
+    
+    @classmethod
+    def load(cls, layer_dir: str, layer_idx: int) -> 'UnraveledLayer':
+        """Load layer from directory."""
+        layer = cls(layer_idx)
+        
+        # Load MESH matrices
+        layer.mesh_qk = []
+        for i in range(layer.num_heads):
+            mesh = PhiEncoded.load(os.path.join(layer_dir, f'mesh_qk_{i:02d}.npz'))
+            layer.mesh_qk.append(mesh)
+        
+        # Load bias cross-terms
+        cross_data = np.load(os.path.join(layer_dir, 'cross_terms.npz'))
+        layer.cross_qk = list(cross_data['cross_qk'])
+        layer.cross_kq = list(cross_data['cross_kq'])
+        layer.bias_term = list(cross_data['bias_term'])
+        
+        # Load other projections
+        layer.W_v = PhiEncoded.load(os.path.join(layer_dir, 'W_v.npz'))
+        layer.W_o = PhiEncoded.load(os.path.join(layer_dir, 'W_o.npz'))
+        layer.W_gate = PhiEncoded.load(os.path.join(layer_dir, 'W_gate.npz'))
+        layer.W_up = PhiEncoded.load(os.path.join(layer_dir, 'W_up.npz'))
+        layer.W_down = PhiEncoded.load(os.path.join(layer_dir, 'W_down.npz'))
+        
+        # Load biases and layernorm weights
+        bias_data = np.load(os.path.join(layer_dir, 'biases.npz'))
+        layer.b_v = bias_data['b_v']
+        layer.b_o = bias_data['b_o'] if len(bias_data['b_o']) > 0 else None
+        layer.ln1_weight = bias_data['ln1_weight']
+        layer.ln2_weight = bias_data['ln2_weight']
+        
+        return layer
 
 
 class PhiUnraveledEngine:
@@ -244,6 +330,75 @@ class PhiUnraveledEngine:
         
         print("Done!")
         del model
+    
+    def save(self, save_dir: str, compress: bool = False):
+        """Save entire engine to directory."""
+        os.makedirs(save_dir, exist_ok=True)
+        
+        print(f"Saving φ-unraveled engine to {save_dir}...")
+        
+        # Save embeddings
+        self.embed_tokens.save(os.path.join(save_dir, 'embed_tokens.npz'), compress=compress)
+        
+        # Save layers
+        for i, layer in enumerate(self.layers):
+            layer_dir = os.path.join(save_dir, f'layer_{i:02d}')
+            layer.save(layer_dir, compress=compress)
+            print(f"  Saved layer {i}")
+        
+        # Save output head
+        self.lm_head.save(os.path.join(save_dir, 'lm_head.npz'), compress=compress)
+        
+        # Save norm weight and config
+        save_fn = np.savez_compressed if compress else np.savez
+        save_fn(os.path.join(save_dir, 'config.npz'),
+               norm_weight=self.norm_weight,
+               vocab_size=self.vocab_size,
+               hidden_dim=self.hidden_dim,
+               num_layers=len(self.layers),
+               num_heads=self.num_heads,
+               num_kv_heads=self.num_kv_heads,
+               head_dim=self.head_dim,
+               rope_theta=self.rope_theta,
+               rope_dim=self.rope_dim)
+        
+        print(f"Done! Saved {len(self.layers)} layers.")
+    
+    @classmethod
+    def load(cls, save_dir: str) -> 'PhiUnraveledEngine':
+        """Load engine from directory."""
+        print(f"Loading φ-unraveled engine from {save_dir}...")
+        
+        engine = cls()
+        
+        # Load config
+        config = np.load(os.path.join(save_dir, 'config.npz'))
+        engine.vocab_size = int(config['vocab_size'])
+        engine.hidden_dim = int(config['hidden_dim'])
+        engine.num_heads = int(config['num_heads'])
+        engine.num_kv_heads = int(config['num_kv_heads'])
+        engine.head_dim = int(config['head_dim'])
+        engine.rope_theta = float(config['rope_theta'])
+        engine.rope_dim = int(config['rope_dim'])
+        engine.norm_weight = config['norm_weight']
+        num_layers = int(config['num_layers'])
+        
+        # Load embeddings
+        engine.embed_tokens = PhiEncoded.load(os.path.join(save_dir, 'embed_tokens.npz'))
+        
+        # Load layers
+        engine.layers = []
+        for i in range(num_layers):
+            layer_dir = os.path.join(save_dir, f'layer_{i:02d}')
+            layer = UnraveledLayer.load(layer_dir, i)
+            engine.layers.append(layer)
+            print(f"  Loaded layer {i}")
+        
+        # Load output head
+        engine.lm_head = PhiEncoded.load(os.path.join(save_dir, 'lm_head.npz'))
+        
+        print(f"Done! Loaded {len(engine.layers)} layers.")
+        return engine
     
     def rms_norm(self, x: np.ndarray, weight: np.ndarray, eps: float = 1e-6) -> np.ndarray:
         """RMS normalization."""
