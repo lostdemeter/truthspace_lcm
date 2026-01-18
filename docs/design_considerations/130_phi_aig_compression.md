@@ -2,7 +2,12 @@
 
 ## Executive Summary
 
-We can compress the φ-unraveled Qwen2-7B model from **51.9 GB → 6.9 GB** (7.5× compression) using low-rank decomposition, analogous to And-Inverter Graph (AIG) simplification in circuit design.
+**REVISED**: Initial analysis suggested 7.5× compression via low-rank decomposition. However, deeper investigation reveals:
+
+1. **MESH matrices ARE naturally low-rank** (rank = head_dim = 128) → **14× compression, 0% error** ✓
+2. **Other weight matrices are nearly full-rank** → low-rank compression causes unacceptable error
+
+The achievable compression is **~2× for MESH only**, not 7.5× for the full model. Alternative strategies are needed for other components.
 
 ## The AIG Analogy
 
@@ -164,17 +169,111 @@ Expected total speedup: **10-20×** for attention computation.
    - Quantized exponents (additional 2×)
    - Sparse factors (if applicable)
 
+## Revised Analysis: What Can Actually Be Compressed
+
+### Matrix Rank Analysis
+
+| Matrix | Shape | 99% Variance Rank | 99.9% Variance Rank |
+|--------|-------|-------------------|---------------------|
+| **MESH** | (3584, 3584) | **128** | **128** |
+| W_q | (3584, 3584) | 1855 | 2623 |
+| W_v | (512, 3584) | 437 | 490 |
+| W_o | (3584, 3584) | 2599 | 3090 |
+| W_gate | (18944, 3584) | 2585 | 3387 |
+| W_up | (18944, 3584) | 2853 | 3454 |
+| W_down | (3584, 18944) | 3424 | 3562 |
+
+**Key Insight**: MESH is naturally rank-128 because:
+```
+MESH = W_q_head.T @ W_k_head
+W_q_head: (128, 3584)  # head_dim × hidden
+W_k_head: (128, 3584)
+MESH: (3584, 3584) but rank ≤ 128
+```
+
+### What Works
+
+**MESH Compression**: 14× compression with 0% error
+- Original: 28 heads × 28 layers × 38.5 MB = 30.2 GB
+- Compressed: 28 heads × 28 layers × 2.75 MB = 2.16 GB
+- **Savings: 28 GB**
+
+### What Doesn't Work
+
+**Other Weight Matrices**: Nearly full-rank, low-rank compression causes >50% error
+- W_v, W_o, MLP matrices need rank 2500-3500 for 99% variance
+- Compression ratio would be only 1.0-1.4× with significant error
+
+**Exponent Quantization**: Exponent span too large
+- Exponent range: [-6758, -120], span = 6638
+- 8-bit quantization step = 26 exponent units → 10.3% error per step
+- Block-wise encoding doesn't help (block spans still ~3000)
+
+## Revised Compression Strategy
+
+### Tier 1: MESH (Works Perfectly)
+- Low-rank decomposition: rank-128
+- 14× compression, 0% error
+- 30.2 GB → 2.16 GB
+
+### Tier 2: Embeddings & LM Head (Keep Full)
+- These are lookup tables, not computed
+- 1.63 GB + 1.63 GB = 3.26 GB
+
+### Tier 3: V, O, MLP (Keep Full φ-Encoded)
+- Full 16-bit exponents required for accuracy
+- ~18 GB
+
+### Total Achievable Compression
+
+| Component | Original | Compressed |
+|-----------|----------|------------|
+| MESH | 30.2 GB | 2.16 GB |
+| Embeddings | 1.63 GB | 1.63 GB |
+| LM Head | 1.63 GB | 1.63 GB |
+| V, O, MLP | 18.5 GB | 18.5 GB |
+| **Total** | **51.9 GB** | **24.0 GB** |
+
+**Actual compression: 2.2×** (not 7.5×)
+
+## The Real Win: Computation Speed
+
+Even without storage compression, the MESH low-rank decomposition provides:
+
+| Operation | Original | Low-Rank | Speedup |
+|-----------|----------|----------|---------|
+| Attention scores | 12.8M ops | 918K ops | **14×** |
+| Memory bandwidth | 38.5 MB | 2.75 MB | **14×** |
+
+The attention computation is often the bottleneck, so **14× speedup for attention** is significant.
+
+## Comparison to DA2
+
+DA2 achieved extreme compression (32 weights total) because:
+1. It's a **decoder** (weighted sum of features)
+2. The features were **already compressed** by the encoder
+3. The task was **single-output** (depth per pixel)
+
+Qwen2-7B is fundamentally different:
+1. It's an **encoder-decoder** (full transformer)
+2. The weights ARE the knowledge (not features)
+3. The task is **vocabulary-sized output** (152K tokens)
+
+The φ-basis works for both, but the compression opportunities differ.
+
 ## Conclusion
 
-The AIG-style compression reduces the φ-unraveled Qwen2-7B from 51.9 GB to 6.9 GB while maintaining 99.8% accuracy. This is achieved by recognizing that:
+The AIG-style compression achieves:
+- **MESH matrices**: 14× compression, 0% error ✓
+- **Other matrices**: No compression without accuracy loss ✗
 
-1. **MESH matrices are low-rank** (learned structure is redundant)
-2. **Low-rank factors can be φ-encoded** (preserving geometric representation)
-3. **Computation becomes cheaper** (14× fewer operations)
+Total model compression: **2.2×** (51.9 GB → 24 GB)
+Attention speedup: **14×**
 
-This brings us closer to a practical φ-arithmetic inference engine that could run on consumer hardware.
+The key insight is that **MESH is naturally low-rank** (bounded by head_dim), while other matrices encode the full knowledge of the model and cannot be compressed without loss.
 
 ---
 
 *Document created: January 18, 2025*
+*Revised: January 18, 2025 (updated with actual rank analysis)*
 *Related: 129_phi_unraveled_transformer_engine.md, 125_exact_da2_recreation_phi_arithmetic.md*
