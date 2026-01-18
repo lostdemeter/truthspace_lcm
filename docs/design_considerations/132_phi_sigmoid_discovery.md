@@ -138,7 +138,45 @@ The φ-sigmoid connection is not accidental - it reflects deep structure in how 
 2. The **bilinear structure** (gate × up) is what matters
 3. φ-basis compression should focus on the **bilinear forms**, not individual matrices
 
+## Compression Results
+
+### Factored Gate-Up + Low-Rank Down
+
+By factoring W_gate and W_up via SVD, and using low-rank W_down:
+
+| r_gu | r_d | Correlation | Compression |
+|------|-----|-------------|-------------|
+| 2000 | 2500 | **93.0%** | **1.39×** |
+| 1500 | 2500 | 89.1% | 1.64× |
+| 2000 | 2000 | 89.5% | 1.51× |
+
+Storage formula:
+```
+gate_up_storage = 2 × (r_gu × 3584 + 18944 × r_gu)
+down_storage = r_d × 3584 + r_d + r_d × 18944
+```
+
+### Comparison to MESH
+
+| Component | Compression | Accuracy |
+|-----------|-------------|----------|
+| MESH (attention) | **14×** | **100%** |
+| MLP (factored) | 1.4× | 93% |
+
+The MLP is harder to compress because:
+1. It's element-wise (not bilinear like Q@K.T)
+2. The matrices are nearly full-rank
+3. No natural low-rank structure like head_dim
+
+### The Clock Solver Connection
+
+The clock_solver uses eigenphases and smooth counting functions to find zeros. For MLP:
+- Intermediate dimensions are like "eigenphases"
+- Each has an "eigenvalue" = gate_norm × up_norm × down_norm
+- But eigenvalues are too evenly distributed for aggressive pruning
+
 ---
 
 *Document created: January 18, 2025*
+*Updated: January 18, 2025 (added compression results)*
 *Related: 131_decoupling_encoder_decoder.md, 129_phi_unraveled_transformer_engine.md*
