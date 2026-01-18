@@ -775,15 +775,110 @@ But for **generation**, we need to preserve the attention mechanism.
 
 ---
 
+---
+
+## Attention as Tachyon Navigation (MAJOR DISCOVERY)
+
+### Q-K Orthogonality (Like DA2!)
+
+| Metric | DA2 (Vision) | Qwen2 (Language) |
+|--------|--------------|------------------|
+| R trace | ~0 | -0.8 |
+| Interpretation | 90° rotation | ~90° rotation |
+
+**Q and K are approximately orthogonal in both models!**
+
+### MESH Decomposition
+
+```
+MESH = W_q.T @ W_k = MASS + SPIN
+
+MASS = (MESH + MESH.T) / 2  → Symmetric (similarity)
+SPIN = (MESH - MESH.T) / 2  → Antisymmetric (navigation)
+```
+
+| Layer | MASS rank-1 | SPIN rank-2 |
+|-------|-------------|-------------|
+| 0 | 74% | 82% |
+| 1 | 12% | 33% |
+| 2 | 14% | 24% |
+| 3 | 14% | 25% |
+
+**Layer 0 has the strongest MASS/SPIN structure!**
+
+### The Tachyon Interpretation
+
+From doc 055 (Tachyon-Symmetric Quaternion Unification):
+
+```
+W-AXIS (Certainty) = TACHYON NAVIGATION DIRECTION
+  -1 = Definitive    → φ^+n (forward attention, data-confirmed)
+  +1 = Hedged        → φ^-n (backward attention, hypothesis)
+   0 = Neutral       → At the φ-joint (balanced)
+```
+
+**Causal attention IS tachyon navigation:**
+
+```
+CAUSAL ATTENTION:
+  Position i attends to positions 0..i (PAST)
+  This is φ^+n navigation (forward, data-confirmed)
+
+NEXT TOKEN PREDICTION:
+  Model predicts token at position i+1 (FUTURE)
+  This is φ^-n navigation (backward, hypothesis)
+
+THE ATTENTION MECHANISM IS THE TACHYON JOINT!
+  It bridges past (attention) and future (prediction)
+```
+
+### Attention Patterns Across Layers
+
+For "The king examined the evidence":
+
+| Layer | Entropy | Focus | Interpretation |
+|-------|---------|-------|----------------|
+| 0 | 1.3 | Distributed | Gathering context |
+| 11 | 0.7 | "The" (82%) | Structural anchor |
+| 23 | 0.9 | Self (79%) | Local refinement |
+
+### Why Single Tokens Work
+
+Single tokens don't need W-axis navigation:
+- No past to attend to
+- No context to integrate
+- Linear transcoder suffices
+
+### Why Sequences Need Attention
+
+Sequences traverse the W-axis:
+- Each position attends to past (φ^+n)
+- Each position predicts future (φ^-n)
+- Attention is the tachyon joint between them
+
+### Implication for φ-Basis
+
+To replace attention, we must model the W-axis explicitly:
+
+```
+Option A: Keep attention for W-axis, compress X/Y/Z
+Option B: Model W-axis with efficient tachyon navigation
+Option C: Use position-based φ-weighting (like DA2's 17 angles)
+```
+
+---
+
 ## Next Steps
 
 1. **For vocabulary/semantic analysis**: φ-basis is ready to use
 
-2. **For generation**: Need to preserve attention mechanism
+2. **For generation**: Need to model W-axis (tachyon navigation)
    - Option A: Keep attention, compress other parts
-   - Option B: Approximate attention with efficient alternatives
+   - Option B: Approximate attention with position-based φ-weights
+   - Option C: Use MASS for similarity, SPIN for navigation
 
 3. **Optimization opportunities**:
    - Compress φ-basis (10 dims for 97.4% variance)
    - Factor transcoder matrix (6 significant singular values)
    - Quantize to φ-based values (coordinates cluster at φ-points)
+   - Use MASS rank-1 + SPIN rank-2 approximation for attention
