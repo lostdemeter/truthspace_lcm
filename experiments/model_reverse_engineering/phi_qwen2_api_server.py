@@ -128,16 +128,24 @@ class PhiQwen2Engine:
     
     Uses additive error attention for 68× speedup with 99.9967% accuracy.
     
-    Note: Using Qwen2-1.5B-Instruct for better chat quality.
-    The 0.5B model is too small for coherent chat responses.
+    Supports multiple Qwen2 model sizes:
+    - Qwen2-0.5B: 896 hidden, 14 heads, 2 KV heads
+    - Qwen2-1.5B: 1536 hidden, 12 heads, 2 KV heads  
+    - Qwen2-7B: 3584 hidden, 28 heads, 4 KV heads
     """
     
-    def __init__(self, model_name: str = "Qwen/Qwen2-1.5B-Instruct"):
+    def __init__(self, model_name: str = "Qwen/Qwen2-7B-Instruct"):
         self.model_name = model_name
         self.device = DEVICE
         self.model = None
         self.tokenizer = None
         self.phi_attention = None
+        
+        # Model architecture (auto-detected)
+        self.n_heads = None
+        self.n_kv_heads = None
+        self.head_dim = None
+        self.hidden_dim = None
         
         # Statistics
         self.total_requests = 0
@@ -151,15 +159,29 @@ class PhiQwen2Engine:
         """Load the Qwen2 model and set up φ-attention."""
         logger.info(f"Loading {self.model_name}...")
         
-        from transformers import AutoModelForCausalLM, AutoTokenizer
+        from transformers import AutoModelForCausalLM, AutoTokenizer, AutoConfig
+        
+        # Get model config to auto-detect architecture
+        config = AutoConfig.from_pretrained(self.model_name)
+        self.hidden_dim = config.hidden_size
+        self.n_heads = config.num_attention_heads
+        self.n_kv_heads = config.num_key_value_heads
+        self.head_dim = self.hidden_dim // self.n_heads
+        self.n_layers = config.num_hidden_layers
+        
+        logger.info(f"Architecture: {self.hidden_dim} hidden, {self.n_heads} heads, {self.n_kv_heads} KV heads, {self.head_dim} head_dim")
         
         self.tokenizer = AutoTokenizer.from_pretrained(self.model_name)
+        
+        # Use bfloat16 for 7B model to fit in GPU memory
+        dtype = torch.bfloat16 if "7B" in self.model_name else torch.float32
+        
         self.model = AutoModelForCausalLM.from_pretrained(
             self.model_name,
-            torch_dtype=torch.float32,
+            torch_dtype=dtype,
             attn_implementation="eager",
+            device_map="auto",  # Auto device mapping for large models
         )
-        self.model = self.model.to(self.device)
         self.model.eval()
         
         # Set up φ-attention for layer 0
@@ -168,6 +190,7 @@ class PhiQwen2Engine:
         logger.info(f"Model loaded on {self.device}")
         if CUDA_AVAILABLE:
             logger.info(f"GPU: {torch.cuda.get_device_name(0)}")
+            logger.info(f"GPU Memory: {torch.cuda.memory_allocated() / 1e9:.1f} GB used")
     
     def _setup_phi_attention(self):
         """Set up the φ-attention optimization."""
@@ -175,19 +198,26 @@ class PhiQwen2Engine:
         
         @dataclass
         class PhiAttentionConfig:
-            n_heads: int = 14
-            n_kv_heads: int = 2
-            head_dim: int = 64
-            hidden_dim: int = 896
+            n_heads: int
+            n_kv_heads: int
+            head_dim: int
+            hidden_dim: int
             error_threshold: float = 0.001
-            device: str = self.device
+            device: str = "cuda"
+        
+        # Use auto-detected architecture
+        config = PhiAttentionConfig(
+            n_heads=self.n_heads,
+            n_kv_heads=self.n_kv_heads,
+            head_dim=self.head_dim,
+            hidden_dim=self.hidden_dim,
+            device=self.device,
+        )
         
         layer = self.model.model.layers[0]
         W_q = layer.self_attn.q_proj.weight.detach().cpu().float().numpy()
         W_k = layer.self_attn.k_proj.weight.detach().cpu().float().numpy()
         ln_weight = layer.input_layernorm.weight.detach().cpu().float().numpy()
-        
-        config = PhiAttentionConfig()
         
         # Store weights as tensors
         self.phi_W_q = torch.tensor(W_q, dtype=torch.float32, device=self.device)
@@ -196,7 +226,10 @@ class PhiQwen2Engine:
         self.phi_scale = 1.0 / np.sqrt(config.head_dim)
         self.phi_config = config
         
-        logger.info("φ-attention initialized")
+        # Compute heads per KV group for GQA
+        self.heads_per_kv = self.n_heads // self.n_kv_heads
+        
+        logger.info(f"φ-attention initialized: {self.n_heads} heads, {self.n_kv_heads} KV, {self.heads_per_kv} heads/KV")
     
     def compute_phi_attention(self, hidden: torch.Tensor) -> torch.Tensor:
         """Compute attention using φ-basis (68× faster)."""
@@ -207,15 +240,21 @@ class PhiQwen2Engine:
         hidden_normed = hidden * torch.rsqrt(variance + 1e-6) * self.phi_ln_weight
         
         # Project Q, K
-        Q = hidden_normed @ self.phi_W_q.T
-        K = hidden_normed @ self.phi_W_k.T
+        Q = hidden_normed @ self.phi_W_q.T  # [seq_len, n_heads * head_dim]
+        K = hidden_normed @ self.phi_W_k.T  # [seq_len, n_kv_heads * head_dim]
         
-        # Reshape for batched matmul
-        Q = Q.view(seq_len, self.phi_config.n_heads, self.phi_config.head_dim).transpose(0, 1)
-        K = K.view(seq_len, self.phi_config.n_kv_heads, self.phi_config.head_dim)
-        K = K.repeat_interleave(7, dim=1).transpose(0, 1)
+        # Reshape to heads
+        Q = Q.view(seq_len, self.n_heads, self.head_dim)
+        K = K.view(seq_len, self.n_kv_heads, self.head_dim)
         
-        # Batched matmul
+        # Expand K for GQA (heads_per_kv Q heads per K head)
+        K = K.repeat_interleave(self.heads_per_kv, dim=1)
+        
+        # Transpose for batch matmul: [n_heads, seq_len, head_dim]
+        Q = Q.transpose(0, 1)
+        K = K.transpose(0, 1)
+        
+        # Compute attention scores: [n_heads, seq_len, seq_len]
         scores = torch.bmm(Q, K.transpose(-2, -1)) * self.phi_scale
         
         # Causal mask
