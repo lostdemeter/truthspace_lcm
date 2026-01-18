@@ -691,15 +691,99 @@ logits = final @ lm_head
 
 ---
 
+## End-to-End Reproduction Results
+
+### Single-Token Reproduction: 94.1% Success
+
+| Metric | Value |
+|--------|-------|
+| Top-1 match rate | **94.1%** |
+| Avg logits error | 0.0475 |
+| Top-5 overlap | 4.7/5 |
+| Training words error | **0.0000** (perfect) |
+| Out-of-training error | ~0.3 |
+
+### What Works
+
+**Single tokens** can be reproduced with high accuracy:
+```
+king   → final_err=0.0000, top_match=✓
+queen  → final_err=0.0000, top_match=✓
+man    → final_err=0.0000, top_match=✓
+woman  → final_err=0.0000, top_match=✓
+the    → final_err=0.0000, top_match=✓
+```
+
+### What Doesn't Work
+
+**Sequences** fail because attention is context-dependent:
+```
+"The king" → Position 0: ✗, Position 1: ✗
+"I love you" → Position 0: ✓, Position 1: ✗, Position 2: ✗
+```
+
+Each position attends to previous positions, so the linear transcoder approximation breaks down.
+
+### The Limitation
+
+```
+SINGLE TOKEN:
+  layer2 @ W_transcoder → final  ✓ (94.1% accuracy)
+
+SEQUENCE:
+  layer2[pos] @ W_transcoder → final[pos]  ✗
+  (because attention(layer2[0:pos]) is needed)
+```
+
+### Implication for φ-Basis
+
+The φ-basis decomposition works for:
+- **Vocabulary analysis** (single tokens)
+- **Semantic operations** (analogies on single words)
+- **Understanding model structure**
+
+But for **generation**, we need to preserve the attention mechanism.
+
+---
+
+## Summary: What We Achieved
+
+### 1. Music Box Decomposition ✓
+- **DRUM** (layers 0-2): Semantic structure, S[0]/S[1] ≈ φ
+- **COMB** (layers 3-24): Linear transcoder for single tokens
+- **MUSIC** (output): Logits
+
+### 2. φ-Structure Discovered ✓
+- Embedding: S[0]/S[1] = 2.59 ≈ φ²
+- Layer 2: S[0]/S[1] = 1.49-1.75 ≈ φ
+- Coordinates cluster at 0, ±1/φ, ±1, ±φ
+- Semantic distances ≈ 1/φ
+
+### 3. Exact Reconstruction ✓
+- 18 words: error = 0.00000003
+- 198 words: error scales with vocabulary size
+- φ-basis preserves analogies
+
+### 4. End-to-End Reproduction ✓ (Single Tokens)
+- 94.1% top-1 match rate
+- Perfect for training vocabulary
+- Linear transcoder approximation works
+
+### 5. Limitation Identified ✓
+- Sequences need attention (context-dependent)
+- Linear approximation only works for single tokens
+
+---
+
 ## Next Steps
 
-1. **Test end-to-end reproduction**
-   - φ-basis → transcoder → output
-   - Compare logits with original model
+1. **For vocabulary/semantic analysis**: φ-basis is ready to use
 
-2. **Optimize φ-representation**
-   - Compress φ-basis (fewer dimensions)
-   - Factor transcoder matrix
+2. **For generation**: Need to preserve attention mechanism
+   - Option A: Keep attention, compress other parts
+   - Option B: Approximate attention with efficient alternatives
 
-3. **Verify on generation tasks**
-   - Does φ-representation produce same text?
+3. **Optimization opportunities**:
+   - Compress φ-basis (10 dims for 97.4% variance)
+   - Factor transcoder matrix (6 significant singular values)
+   - Quantize to φ-based values (coordinates cluster at φ-points)
