@@ -320,3 +320,59 @@ Generalizes to new words:
 ### Implication
 
 Qwen2 has **implicitly** learned φ-related structure from language statistics (φ-Zipf duality), but it's **noisy** compared to our constructed LCM. The φ-patterns are there but require extraction/averaging to see clearly.
+
+---
+
+## Music Box Decomposition (MAJOR DISCOVERY)
+
+### The Phase Transition at Layer 3
+
+Testing analogies at each layer revealed a **phase transition**:
+
+| Layer | king - man + woman = ? | Gender Alignment |
+|-------|------------------------|------------------|
+| 0 | queen ✓ | +0.19 |
+| 1 | queen ✓ | +0.21 |
+| 2 | queen ✓ | +0.29 (best!) |
+| 3 | bad ✗ | -0.29 (INVERTED!) |
+| 4-22 | bad ✗ | -0.29 |
+| 23-24 | girl ✗ | +0.08 to +0.27 |
+
+### What Happens at Layer 3
+
+1. **Semantic delta INVERTS**: king→queen alignment goes from +0.59 to -0.06
+2. **First singular value explodes**: S[0]/S[1] = 6.94 (vs ~1.1 at other layers)
+3. **Transformation is perfectly linear**: Reconstruction error = 0.0000
+
+### The Music Box Mapping
+
+```
+DRUM (Input Structure):
+  - Layers 0-2
+  - Semantic relationships preserved
+  - Analogies WORK here
+  - S[0]/S[1] ≈ φ at layer 2!
+
+COMB (Transcoder):
+  - Layers 3-24
+  - Transforms semantics → prediction
+  - Analogies DON'T work here
+  - This is the "next token" machinery
+
+MUSIC (Output):
+  - Final logits
+  - What the model actually produces
+```
+
+### Implications for φ-Basis Extraction
+
+1. **Extract from Layer 2** - This is where semantic structure lives
+2. **The transcoder (layers 3-24) is separate** - Don't try to φ-ify this
+3. **The transformation is linear** - Can potentially be factored/compressed
+
+### φ-Structure at Layer 2
+
+At the optimal semantic layer:
+- S[0]/S[1] = 1.53 ≈ φ (from semantic delta SVD)
+- Distances cluster around 17 × (1/φ) = 10.5
+- Semantic relationships are preserved and aligned
