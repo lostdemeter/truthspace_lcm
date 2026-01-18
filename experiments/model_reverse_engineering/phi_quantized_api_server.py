@@ -178,9 +178,9 @@ class PhiQuantizedMLP:
     
     def load_from_hf(self, mlp_layer):
         """Load and quantize MLP weights from HuggingFace layer."""
-        W_gate = mlp_layer.gate_proj.weight.detach().float().numpy()
-        W_up = mlp_layer.up_proj.weight.detach().float().numpy()
-        W_down = mlp_layer.down_proj.weight.detach().float().numpy()
+        W_gate = mlp_layer.gate_proj.weight.detach().cpu().float().numpy()
+        W_up = mlp_layer.up_proj.weight.detach().cpu().float().numpy()
+        W_down = mlp_layer.down_proj.weight.detach().cpu().float().numpy()
         
         # Quantize
         self.W_gate_signs, self.W_gate_indices, self.W_gate_codebook = phi_quantize(W_gate)
