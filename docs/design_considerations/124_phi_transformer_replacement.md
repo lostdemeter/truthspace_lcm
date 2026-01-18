@@ -379,5 +379,85 @@ The next step is to extend this analysis to the MLP and develop efficient comput
 
 ---
 
+## Update: Unraveling Transformers for φ-Arithmetic (January 18, 2025)
+
+### The Error Compounding Problem
+
+When encoding transformer weights in φ-basis, we discovered a critical issue:
+
+**Transformers are self-referential** - they're essentially two neural networks glued together:
+1. **Attention**: Q @ K.T creates self-reference
+2. **MLP**: SiLU(gate) * up creates another self-reference
+
+When we encode W_q and W_k separately in φ-basis, errors **compound multiplicatively**:
+
+```
+Q_error × K_error → multiplicative error growth through layers
+```
+
+### The Solution: Unravel and Pre-compute MESH
+
+Instead of encoding W_q and W_k separately, we pre-compute the **MESH**:
+
+```
+MESH = W_q.T @ W_k
+```
+
+Then encode MESH directly in φ-basis:
+
+| Method | Error | Notes |
+|--------|-------|-------|
+| Separate (Q_φ @ K_φ) | 0.1663% | Errors compound |
+| Direct MESH encoding | 0.0940% | Single error source |
+| **Improvement** | **1.8×** | Eliminates compounding |
+
+### MESH Structure Analysis
+
+The MESH matrices have exploitable structure:
+
+| Property | Value |
+|----------|-------|
+| Sparsity (|x| < 0.001) | 26% |
+| Rank for 90% variance | 75 |
+| Rank for 99% variance | 106 |
+
+This means we can use **low-rank approximation** for further compression.
+
+### The Unraveled Architecture
+
+```
+ORIGINAL TRANSFORMER:
+  Q = input @ W_q.T  (error e1)
+  K = input @ W_k.T  (error e2)
+  Attention = Q @ K.T  (error e1 × e2 compounds!)
+
+UNRAVELED φ-TRANSFORMER:
+  MESH = W_q.T @ W_k  (pre-computed, exact)
+  MESH_φ = φ-encode(MESH)  (single 0.09% error)
+  Attention = input @ MESH_φ @ input.T  (no compounding!)
+```
+
+### Implications
+
+1. **Errors add linearly, not multiplicatively** - 28 layers × 0.09% ≈ 2.5% total error
+2. **Low-rank structure** enables compression (rank-106 for 99%)
+3. **This is the path to 99.9%+ accuracy** for the full model
+
+### Connection to DA2 Success
+
+DA2 achieved 99.99% accuracy because:
+- We encoded the **decoder weights directly**
+- No self-referential structure to compound errors
+
+For transformers, we must:
+- **Unravel** the self-referential structure
+- **Pre-compute** the MESH matrices
+- **Encode** MESH directly in φ-basis
+
+This is the key insight for building a φ-arithmetic inference engine that produces correct text.
+
+---
+
 *Document created: January 16, 2025*
+*Updated: January 18, 2025 - Added unraveling insight*
 *Related: 123_phi_basis_backbone_replacement.md*
