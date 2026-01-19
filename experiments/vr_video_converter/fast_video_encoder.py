@@ -52,6 +52,8 @@ class FastVideoEncoder:
         self.frame_count = 0
         
         # Build FFmpeg command
+        # IMPORTANT: Force yuv420p output for maximum compatibility
+        # bgr24 input -> yuv420p output (standard H.264 format)
         if use_nvenc:
             cmd = [
                 'ffmpeg', '-y',
@@ -62,11 +64,13 @@ class FastVideoEncoder:
                 '-r', str(fps),
                 '-i', '-',
                 '-c:v', 'h264_nvenc',
+                '-pix_fmt', 'yuv420p',  # Force standard pixel format
                 '-preset', preset,
                 '-tune', 'll',  # Low latency
                 '-b:v', bitrate,
                 '-bf', '0',  # No B-frames
                 '-g', str(int(fps * 2)),  # GOP size
+                '-movflags', '+faststart',  # Enable streaming/seeking
                 output_path
             ]
         else:
@@ -79,9 +83,11 @@ class FastVideoEncoder:
                 '-r', str(fps),
                 '-i', '-',
                 '-c:v', 'libx264',
+                '-pix_fmt', 'yuv420p',  # Force standard pixel format
                 '-preset', 'ultrafast' if preset == 'p1' else preset,
                 '-tune', 'zerolatency',
                 '-b:v', bitrate,
+                '-movflags', '+faststart',  # Enable streaming/seeking
                 output_path
             ]
         
