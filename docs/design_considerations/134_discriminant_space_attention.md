@@ -233,12 +233,84 @@ The "intelligence" of attention is concentrated in 106 discriminant dimensions. 
 - **DA2 reference**: `docs/design_considerations/125_exact_da2_recreation_phi_arithmetic.md`
 - **Unraveled engine**: `docs/design_considerations/129_phi_unraveled_transformer_engine.md`
 
+## AIG Optimization for FPGA/ASIC
+
+### The Memory Bottleneck Problem
+
+On GPU, inference is **memory-bound**:
+- Must read 15 GB of weights from HBM per token
+- HBM bandwidth: ~1 TB/s
+- Minimum time per token: 15 ms
+
+Reducing compute ops (like discriminant space 17×) doesn't help because we're waiting on memory.
+
+### The FPGA Solution
+
+FPGA solves this by putting weights **on-chip in BRAM**:
+- No HBM bottleneck
+- Effective bandwidth: ~10 TB/s (on-chip)
+- Now we're **compute-bound**, not memory-bound
+
+### AIG Circuit Design
+
+In φ-basis, multiplication becomes integer addition:
+```
+a × b = φ^(e_a + e_b)
+```
+
+Per "multiplication":
+- 32 gates for 16-bit exponent addition
+- 1 gate for sign XOR
+- Total: 33 gates
+
+### Gate Count Analysis
+
+| Component | Gates |
+|-----------|-------|
+| Single MAC unit | 57 |
+| 106 parallel MACs | 6,042 |
+| Control + buffers | 5,000 |
+| **Per attention head** | **11,042** |
+
+### FPGA Fit
+
+| FPGA | Gates | Heads Parallel |
+|------|-------|----------------|
+| Artix-7 100T | 400K | 36 ✅ |
+| Kintex-7 325T | 1.3M | 117 ✅ |
+| Virtex UltraScale+ VU9P | 8M | 724 ✅ |
+
+### Weight Storage (BRAM)
+
+Discriminant basis per head:
+- U: 742 KB
+- S: 0.2 KB  
+- V: 742 KB
+- **Total: 1.48 MB per head**
+
+All 28 heads: **40.6 MB** → Fits in Virtex UltraScale+ (75 MB BRAM)
+
+### The Key Insight
+
+| Platform | Bottleneck | Solution |
+|----------|------------|----------|
+| GPU | Memory (HBM → Compute) | INT4 quantization (1.7×) |
+| **FPGA** | **Compute (weights in BRAM!)** | **φ-integer + discriminant** |
+
+By combining:
+1. Discriminant space (106 dims instead of 3584)
+2. φ-integer arithmetic (no float multiply)
+3. On-chip BRAM (no memory bottleneck)
+
+We transform attention from **memory-bound to compute-bound**.
+
 ## Next Steps
 
 1. Implement full discriminant-space inference engine
-2. Benchmark against standard attention (expect 10-100× speedup)
+2. Benchmark against standard attention
 3. Apply to MLP layers (find their discriminant dimensions)
-4. Design FPGA prototype with 106-dim discriminant space
+4. **Design FPGA prototype** with 106-dim discriminant space
+5. Synthesize AIG circuit and verify gate count
 
 ## Conclusion
 
