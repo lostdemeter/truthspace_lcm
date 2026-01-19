@@ -115,3 +115,8 @@ experiments/vr_video_converter/*.mkv
 # But allow specific small images in docs
 !docs/**/*.png
 !docs/**/*.jpg
+# Large generated files
+experiments/vr_video_converter/phi_representation.json
+phi_adapter/
+*.pdf
+
