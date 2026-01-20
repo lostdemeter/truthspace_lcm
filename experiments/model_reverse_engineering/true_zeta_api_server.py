@@ -32,9 +32,11 @@ from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 import json
 import logging
+import asyncio
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -462,7 +464,7 @@ async def chat_completions(request: ChatCompletionRequest):
         response = ChatCompletionResponse(
             id=f"chatcmpl-{uuid.uuid4().hex[:8]}",
             created=int(time.time()),
-            model="true-zeta",
+            model=request.model,
             choices=[
                 ChatCompletionChoice(
                     index=0,
@@ -471,11 +473,36 @@ async def chat_completions(request: ChatCompletionRequest):
                 )
             ],
             usage=Usage(
-                prompt_tokens=0,
+                prompt_tokens=sum(len(m.get_text_content().split()) for m in request.messages),
                 completion_tokens=len(response_text.split()),
-                total_tokens=len(response_text.split()),
+                total_tokens=sum(len(m.get_text_content().split()) for m in request.messages) + len(response_text.split()),
             ),
         )
+        
+        if request.stream:
+            # Streaming response for Goose compatibility
+            async def generate_stream():
+                words = response_text.split()
+                for i, word in enumerate(words):
+                    chunk = {
+                        "id": response.id,
+                        "object": "chat.completion.chunk",
+                        "created": response.created,
+                        "model": request.model,
+                        "choices": [{
+                            "index": 0,
+                            "delta": {"content": word + " "},
+                            "finish_reason": None if i < len(words) - 1 else "stop",
+                        }],
+                    }
+                    yield f"data: {json.dumps(chunk)}\n\n"
+                    await asyncio.sleep(0.01)
+                yield "data: [DONE]\n\n"
+            
+            return StreamingResponse(
+                generate_stream(),
+                media_type="text/event-stream",
+            )
         
         return response
         
