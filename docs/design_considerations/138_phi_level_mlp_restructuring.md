@@ -324,11 +324,62 @@ For 203.7M MLP operations:
 - 100x less area and power
 - Ideal for edge devices without FPU
 
+## AIG Optimization for ASIC
+
+### The Opportunity
+
+And-Inverter Graphs (AIGs) can further optimize the φ-exponent circuits by:
+
+1. **Fusing operations**: Combine level addition + φ-lookup into single AIG
+2. **Exploiting don't-cares**: Only 20,930 valid input combinations (out of 65,536)
+3. **Bit-serial accumulation**: Share logic across all 3584 terms
+
+### Fused φ-Lookup Unit
+
+```
+Inputs:
+  - level_w: 8 bits (182 valid values)
+  - level_x: 8 bits (115 valid values)
+  
+Output:
+  - value: 16 bits (fixed-point φ^(level_w + level_x))
+
+Truth table: 20,930 entries (68% don't-cares)
+```
+
+AIG optimization with ABC:
+```
+read_pla phi_lookup.pla
+strash; dc2; balance; rewrite -l; refactor -l
+print_stats
+```
+
+### Complete AIG-Optimized Architecture
+
+| Component | Gates | Notes |
+|-----------|-------|-------|
+| Level addition | ~20 | 9-bit adder |
+| Fused φ-lookup | ~500 | AIG with don't-cares |
+| Sign application | ~16 | Conditional negation |
+| Bit-serial accumulator | ~1000 | Shared across terms |
+| **Total per output** | **~1,500** | |
+
+### Comparison
+
+| Approach | Gates per Output | Total (gate proj) |
+|----------|------------------|-------------------|
+| Float FPU | 35.8M | 678B (impossible) |
+| φ-exponent | ~50 | 950K |
+| φ + AIG | ~1,500 | 28M |
+
+The φ-exponent + AIG approach is **24,000x more efficient** than float FPU.
+
 ## Next Steps
 
-1. **FPGA prototype** with φ-exponent MLP
-2. **INT8 tensor core integration** for GPU path
-3. **Full model conversion** with φ-quantization
+1. **Generate PLA** for fused φ-lookup
+2. **Synthesize with ABC** to get actual gate counts
+3. **FPGA prototype** with φ-exponent MLP
+4. **INT8 tensor core integration** for GPU path
 
 ## Conclusion
 
