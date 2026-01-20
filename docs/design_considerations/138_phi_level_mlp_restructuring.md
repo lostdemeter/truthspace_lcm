@@ -347,39 +347,66 @@ Output:
 Truth table: 20,930 entries (68% don't-cares)
 ```
 
-AIG optimization with ABC:
+### ABC Synthesis Results (Actual)
+
+Generated PLA files and synthesized with yosys-abc:
+
 ```
-read_pla phi_lookup.pla
-strash; dc2; balance; rewrite -l; refactor -l
+# Indexed phi-level lookup (15 inputs → 9 outputs)
+read_pla phi_level_indexed.pla
+strash; dc2; dc2; balance; rewrite -l; refactor -l; rewrite -l; refactor -l; balance
 print_stats
 ```
 
-### Complete AIG-Optimized Architecture
+**Results:**
 
-| Component | Gates | Notes |
-|-----------|-------|-------|
-| Level addition | ~20 | 9-bit adder |
-| Fused φ-lookup | ~500 | AIG with don't-cares |
-| Sign application | ~16 | Conditional negation |
-| Bit-serial accumulator | ~1000 | Shared across terms |
-| **Total per output** | **~1,500** | |
+| Version | Initial | Optimized | Levels |
+|---------|---------|-----------|--------|
+| Direct (16→9 bits) | 6,332 | 4,380 | 26 |
+| Indexed (15→9 bits) | 5,097 | **3,679** | 26 |
 
-### Comparison
+### Architecture Options
 
-| Approach | Gates per Output | Total (gate proj) |
-|----------|------------------|-------------------|
-| Float FPU | 35.8M | 678B (impossible) |
-| φ-exponent | ~50 | 950K |
-| φ + AIG | ~1,500 | 28M |
+**Option A: Adder + BRAM LUT**
+- Adder: 45 gates
+- BRAM: 2 KB (external memory)
+- Latency: 2-3 cycles
+- Best for: FPGA (abundant BRAM)
 
-The φ-exponent + AIG approach is **24,000x more efficient** than float FPU.
+**Option B: AIG-Fused Lookup**
+- Logic: 3,679 gates
+- No memory access
+- Latency: 26 logic levels (pipelineable)
+- Best for: ASIC (no SRAM needed)
+
+### Complete φ-MLP Unit Analysis
+
+For one output dimension (3584 inputs):
+
+| Component | Gates | Count | Total |
+|-----------|-------|-------|-------|
+| φ-level lookup | 3,679 | 3,584 | 13.2M |
+| Sign application | 16 | 3,584 | 57K |
+| Accumulator tree | 200K | 1 | 200K |
+| **Total** | | | **13.4M** |
+
+### Final Comparison
+
+| Approach | Gates | Throughput |
+|----------|-------|------------|
+| Float FPU (parallel) | 35.8M/output | 1 output/cycle |
+| φ-AIG (time-mux) | 13.4M shared | 1 output/12 cycles |
+| φ-AIG (pipelined) | 13.4M shared | 1 output/cycle |
+
+**With pipelining: 2.7x fewer gates than float FPU, same throughput, 99.84% accuracy.**
 
 ## Next Steps
 
-1. **Generate PLA** for fused φ-lookup
-2. **Synthesize with ABC** to get actual gate counts
+1. ~~Generate PLA for fused φ-lookup~~ ✓ Done
+2. ~~Synthesize with ABC to get actual gate counts~~ ✓ Done (3,679 gates)
 3. **FPGA prototype** with φ-exponent MLP
 4. **INT8 tensor core integration** for GPU path
+5. **Verilog generation** from optimized AIG
 
 ## Conclusion
 
