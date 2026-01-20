@@ -220,13 +220,59 @@ This structure is ideal for:
 - **ASIC**: Dedicated φ-level units
 - **GPU**: Warp-level reductions with shared LUT
 
+## Implementation Status
+
+### Proof of Concept (2026-01-19)
+
+Implemented in `experiments/model_reverse_engineering/cuda/phi_level_mlp.py`:
+
+- **PhiLevelMatrix**: CSR-like sparse representation of level→indices mapping
+- **PhiLevelMLP**: Full MLP with gate/up/down projections
+- **CUDA kernel**: Basic phi-level matmul
+
+### Results
+
+| Metric | Value |
+|--------|-------|
+| Float operation reduction | **29.4x** |
+| Correlation with original | **99.95%** |
+| Actual speedup | **0.10x** (10x slower) |
+
+### Why No Speedup Yet
+
+The naive kernel is **memory-bound**, not compute-bound:
+
+1. **Irregular memory access**: The sparse level→indices structure has poor cache locality
+2. **No vectorization**: Inner loop iterates one index at a time
+3. **cuBLAS is highly optimized**: Uses tensor cores, tiled memory access, warp-level operations
+
+### Path to Actual Speedup
+
+1. **Warp-level reduction**: Each warp handles one output dim, uses shuffle for reduction
+2. **Shared memory LUT**: Load 180-entry φ^level LUT to shared memory
+3. **Coalesced access**: Reorganize indices for sequential memory reads
+4. **INT8 hybrid**: Use INT8 weights with φ-level dequantization (similar to standard quantization)
+
+### Alternative: φ-Quantization
+
+Instead of custom kernel, integrate with existing quantization:
+
+```python
+# phi-quantized weight = sign * phi^level * (1 + correction)
+# where correction is int8 quantized
+
+Weight reconstruction correlation: 99.9996%
+Output correlation: 99.9994%
+```
+
+This could leverage existing INT8 matmul infrastructure while using φ-level scaling.
+
 ## Next Steps
 
-1. **Implement CUDA kernel** for φ-level matmul
-2. **Benchmark actual speedup** (not just operation count)
-3. **Combine with pruning** for additional gains
-4. **Test across all layers** for consistency
-5. **Measure memory bandwidth** impact
+1. **Optimize CUDA kernel** with warp-level reduction and shared memory
+2. **Benchmark on different hardware** (tensor cores, different GPUs)
+3. **Integrate with INT8 quantization** for hybrid approach
+4. **Consider FPGA/ASIC** where φ-arithmetic has native support
 
 ## Conclusion
 
