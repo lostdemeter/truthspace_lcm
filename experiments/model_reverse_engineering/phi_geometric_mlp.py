@@ -267,8 +267,114 @@ def benchmark_phi_mlp():
     return corr_out
 
 
-if __name__ == "__main__":
-    corr = benchmark_phi_mlp()
+def test_text_generation():
+    """Test that φ-geometric MLP produces identical text output."""
+    import torch
+    from transformers import AutoModelForCausalLM, AutoTokenizer
+    
+    print("=" * 70)
+    print("φ-Geometric Text Generation Test")
+    print("=" * 70)
+    
+    # Build global LUT
+    LUT_MIN = -400
+    LUT_MAX = 100
+    PHI_LUT = torch.tensor(
+        [PHI ** (l * QUANTUM / SCALE) for l in range(LUT_MIN, LUT_MAX + 1)], 
+        dtype=torch.float32, device='cuda'
+    )
+    
+    def phi_matmul_gpu(W_signs, W_levels, x_signs, x_levels):
+        """The mesh gear: integer add + LUT lookup."""
+        combined_signs = W_signs.float() * x_signs.float().unsqueeze(0)
+        combined_levels = W_levels.to(torch.int32) + x_levels.to(torch.int32).unsqueeze(0)
+        lut_indices = (combined_levels - LUT_MIN).clamp(0, len(PHI_LUT) - 1)
+        magnitudes = PHI_LUT[lut_indices]
+        output = (combined_signs * magnitudes).sum(dim=1)
+        return output
+    
+    # Load model
+    print("\nLoading Qwen2-7B...")
+    model = AutoModelForCausalLM.from_pretrained(
+        'Qwen/Qwen2-7B-Instruct',
+        torch_dtype=torch.bfloat16,
+        device_map='cuda',
+    )
+    tokenizer = AutoTokenizer.from_pretrained('Qwen/Qwen2-7B-Instruct')
+    
+    # Pre-encode layer 14 weights
+    mlp = model.model.layers[14].mlp
+    W_gate = mlp.gate_proj.weight.data.float()
+    W_up = mlp.up_proj.weight.data.float()
+    W_down = mlp.down_proj.weight.data.float()
+    
+    gate_signs = torch.sign(W_gate).to(torch.int8)
+    gate_levels = torch.round(torch.log(torch.abs(W_gate) + 1e-45) / LOG_PHI * SCALE / QUANTUM).to(torch.int16)
+    up_signs = torch.sign(W_up).to(torch.int8)
+    up_levels = torch.round(torch.log(torch.abs(W_up) + 1e-45) / LOG_PHI * SCALE / QUANTUM).to(torch.int16)
+    down_signs = torch.sign(W_down).to(torch.int8)
+    down_levels = torch.round(torch.log(torch.abs(W_down) + 1e-45) / LOG_PHI * SCALE / QUANTUM).to(torch.int16)
+    
+    def phi_mlp_forward(x):
+        batch, seq_len, hidden_dim = x.shape
+        output = torch.zeros_like(x)
+        for b in range(batch):
+            for t in range(seq_len):
+                token = x[b, t, :]
+                x_signs = torch.sign(token).to(torch.int8)
+                x_levels = torch.round(torch.log(torch.abs(token) + 1e-45) / LOG_PHI * SCALE / QUANTUM).to(torch.int16)
+                
+                g_out = phi_matmul_gpu(gate_signs, gate_levels, x_signs, x_levels)
+                u_out = phi_matmul_gpu(up_signs, up_levels, x_signs, x_levels)
+                hidden = g_out * torch.sigmoid(g_out) * u_out
+                
+                h_signs = torch.sign(hidden).to(torch.int8)
+                h_levels = torch.round(torch.log(torch.abs(hidden) + 1e-45) / LOG_PHI * SCALE / QUANTUM).to(torch.int16)
+                output[b, t, :] = phi_matmul_gpu(down_signs, down_levels, h_signs, h_levels)
+        return output
+    
+    # Test prompts
+    prompts = [
+        'The golden ratio φ is approximately',
+        'In mathematics, the Fibonacci sequence is',
+        'The capital of France is',
+    ]
+    
+    original_forward = model.model.layers[14].mlp.forward
+    all_match = True
+    
+    for prompt in prompts:
+        inputs = tokenizer(prompt, return_tensors='pt').to('cuda')
+        
+        # φ-geometric
+        model.model.layers[14].mlp.forward = phi_mlp_forward
+        with torch.no_grad():
+            phi_out = model.generate(inputs['input_ids'], max_new_tokens=10, do_sample=False, pad_token_id=tokenizer.eos_token_id)
+        phi_text = tokenizer.decode(phi_out[0], skip_special_tokens=True)
+        
+        # Original
+        model.model.layers[14].mlp.forward = original_forward
+        with torch.no_grad():
+            orig_out = model.generate(inputs['input_ids'], max_new_tokens=10, do_sample=False, pad_token_id=tokenizer.eos_token_id)
+        orig_text = tokenizer.decode(orig_out[0], skip_special_tokens=True)
+        
+        match = phi_text == orig_text
+        all_match = all_match and match
+        print(f"\nPrompt: {prompt}")
+        print(f"  Match: {'✓' if match else '✗'}")
+    
     print(f"\n{'='*70}")
-    print(f"FINAL: {corr*100:.2f}% correlation with φ-geometric inference")
+    print(f"ALL TESTS PASSED: {all_match}")
     print(f"{'='*70}")
+    return all_match
+
+
+if __name__ == "__main__":
+    import sys
+    if len(sys.argv) > 1 and sys.argv[1] == "text":
+        test_text_generation()
+    else:
+        corr = benchmark_phi_mlp()
+        print(f"\n{'='*70}")
+        print(f"FINAL: {corr*100:.2f}% correlation with φ-geometric inference")
+        print(f"{'='*70}")
