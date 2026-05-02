@@ -4,8 +4,12 @@ Web interface for VR video conversion.
 Simple Flask server for uploading and processing videos.
 """
 
-from flask import Flask, request, jsonify, send_file, render_template_string
+# Force software decoding for AV1 and other codecs without hw acceleration
+# Must be set BEFORE importing cv2
 import os
+os.environ['OPENCV_FFMPEG_CAPTURE_OPTIONS'] = 'hwaccel;none'
+
+from flask import Flask, request, jsonify, send_file, render_template_string
 import cv2
 import numpy as np
 try:

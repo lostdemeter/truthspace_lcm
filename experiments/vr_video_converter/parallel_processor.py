@@ -20,6 +20,97 @@ from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 from queue import Queue
 import threading
 import time
+import subprocess
+import json
+
+
+class FFmpegVideoReader:
+    """Video reader using ffmpeg subprocess - handles AV1 and all codecs."""
+    
+    def __init__(self, input_path: str):
+        self.input_path = input_path
+        self.process = None
+        self.width = 0
+        self.height = 0
+        self.fps = 0
+        self.total_frames = 0
+        self._probe_video()
+        self._start_ffmpeg()
+    
+    def _probe_video(self):
+        """Get video metadata using ffprobe."""
+        cmd = [
+            'ffprobe', '-v', 'quiet',
+            '-print_format', 'json',
+            '-show_streams', '-show_format',
+            self.input_path
+        ]
+        result = subprocess.run(cmd, capture_output=True, text=True)
+        if result.returncode != 0:
+            raise ValueError(f"Cannot probe video: {self.input_path}")
+        
+        info = json.loads(result.stdout)
+        for stream in info.get('streams', []):
+            if stream.get('codec_type') == 'video':
+                self.width = int(stream['width'])
+                self.height = int(stream['height'])
+                # Parse fps from r_frame_rate (e.g., "30/1" or "30000/1001")
+                fps_parts = stream.get('r_frame_rate', '30/1').split('/')
+                self.fps = float(fps_parts[0]) / float(fps_parts[1]) if len(fps_parts) == 2 else float(fps_parts[0])
+                # Get frame count
+                self.total_frames = int(stream.get('nb_frames', 0))
+                if self.total_frames == 0:
+                    # Estimate from duration
+                    duration = float(info.get('format', {}).get('duration', 0))
+                    self.total_frames = int(duration * self.fps)
+                break
+    
+    def _start_ffmpeg(self):
+        """Start ffmpeg process for decoding."""
+        cmd = [
+            'ffmpeg', '-i', self.input_path,
+            '-f', 'rawvideo',
+            '-pix_fmt', 'bgr24',
+            '-v', 'quiet',
+            '-'
+        ]
+        self.process = subprocess.Popen(
+            cmd, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL
+        )
+        self.frame_size = self.width * self.height * 3
+    
+    def read(self) -> Tuple[bool, Optional[np.ndarray]]:
+        """Read next frame."""
+        if self.process is None:
+            return False, None
+        
+        raw = self.process.stdout.read(self.frame_size)
+        if len(raw) != self.frame_size:
+            return False, None
+        
+        frame = np.frombuffer(raw, dtype=np.uint8).reshape(self.height, self.width, 3)
+        return True, frame
+    
+    def get(self, prop):
+        """Get video property (cv2.VideoCapture compatible)."""
+        if prop == cv2.CAP_PROP_FPS:
+            return self.fps
+        elif prop == cv2.CAP_PROP_FRAME_COUNT:
+            return self.total_frames
+        elif prop == cv2.CAP_PROP_FRAME_WIDTH:
+            return self.width
+        elif prop == cv2.CAP_PROP_FRAME_HEIGHT:
+            return self.height
+        return 0
+    
+    def isOpened(self) -> bool:
+        return self.process is not None and self.process.poll() is None
+    
+    def release(self):
+        if self.process:
+            self.process.terminate()
+            self.process.wait()
+            self.process = None
 
 
 class ParallelVRProcessor:
@@ -82,8 +173,8 @@ class ParallelVRProcessor:
         self.frames_processed = 0
         self.frames_encoded = 0
         
-        # Open video
-        cap = cv2.VideoCapture(input_path)
+        # Use FFmpeg subprocess for decoding (handles AV1 and all codecs)
+        cap = FFmpegVideoReader(input_path)
         if not cap.isOpened():
             raise ValueError(f"Cannot open video: {input_path}")
         

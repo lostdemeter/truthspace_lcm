@@ -1,0 +1,917 @@
+# TruthSpace Design Documents - Master Index
+
+Generated: 2026-02-04 10:02
+Total Documents: 207
+
+## By Theme
+
+### Architecture (47 docs)
+- **001**: Intentional vs Emergent Geometry: The Core Problem - Analyzes the distinction between intentionally defined and emergently learned geometric spaces in AI models.
+- **003**: Vacuum Forming Hypothesis - An analogy comparing LLM training to vacuum forming, focusing on capturing surface structure rather than interior.
+- **014**: Design Consideration 014: Hierarchical Knowledge Navigation - A geometric architecture for determining knowledge domain activation based on input.
+- **017**: Design Consideration 017: Stacked Geometric Embeddings - A geometric AI project aiming to recreate LLM embedding discriminative power through stacked hierarchical geometric layers.
+- **018**: Design Consideration 018: Stacked Geometric LCM Analysis - Summary of Stacked Geometric LCM v1 and v2 development focusing on architecture evolution, quantitative results, and what works.
+- **020**: Scalable Geometric Layer Addition Protocol - Addresses discrimination resolution through scalable layer addition using holographic principles.
+- **026**: Research Proposal: Generalized φ-Based Knowledge Ingestion - Abstracts and generalizes a system for ingesting domain knowledge across various fields.
+- **032**: Design Consideration 032: VSA Binding Extension - Extends TruthSpace LCM with VSA binding for symbolic reasoning.
+- **035**: Autonomous Bootstrap: Beyond the Coupon Collector Problem - Shifts focus from pattern enumeration to error-driven construction for AI pattern discovery.
+- **049**: Design Consideration 049: Gradient-Free Learning - Achieving high accuracy through error-driven structure learning without gradients
+- **076**: Emergent Classifier Protocol - A systematic approach for converting hardcoded word lists and pattern-based detection into emergent, self-learning classifiers.
+- **077**: Bootstrap Gear Protocol - A method for creating new emergent capabilities by combining a blank EmergentGear with LLM-powered refinement, saving the emergent state to JSON for reuse.
+- **079**: Design Consideration 079: Emergent Structure Patterns - Systematic analysis of recurring patterns in design decisions for emergent structure understanding
+- **082**: Design Decision: Folding Structure for GearImprovementLoop - Replaces pattern-matching in GearImprovementLoop with a folding structure inspired by DNA, encoding information in shape.
+- **084**: 084: Holographic Pattern Projection for Regulatory Networks - Revisiting DNA-inspired regulatory networks to directly construct desired geometric relationships using holographic projection.
+- **085**: Temporary Module Injection for Unknown Queries - A method to handle queries containing unknown terms by temporarily creating a module from the query text.
+- **086**: The Emergent Gear Pattern - A recurring design pattern across the codebase involving structure definition, bootstrap, matching, composition, and learning.
+- **088**: Design Consideration 088: Geometric Knowledge Persistence - Proposes direct persistent storage of geometric knowledge in TruthSpace LCM.
+- **094**: 094: Gear Serialization Architecture - Proposes a unified serialization protocol for Gear and GearChain components.
+- **096**: Design Consideration 096: Gear to HyperMapping Migration - Migrating from Gear-based architecture to HyperMapping for TruthSpace LCM system.
+- **097**: Geometric Purity Audit (January 2025) - Summary of the audit on ensuring geometric principles in the TruthSpace project.
+- **100**: 100_phi_lattice_implementation_plan - Implementation plan for integrating φ-lattice coordinates into the truthspace_lcm workspace.
+- **102**: φ-Lattice Purity Audit - Audit of φ-lattice implementation focusing on geometric purity and bootstrap acceptability.
+- **112**: Design 112: The Music Box Principle - An analogy between a music box and geometric AI, emphasizing emergent output through interaction rather than hard-coded rules.
+- **116**: Design Consideration 116: Attachable Corpus Layers - Introduces a layered corpus system to manage domain-specific knowledge without affecting base language understanding.
+- **117**: Roadmap to Fluid Conversations - Aims to enhance an AI's conversational capabilities by addressing gaps in current experimental corpus and implementing missing components.
+- **118**: Design Consideration 118: Emergent Response Patterns - Shifts from hard-coded templates to emergent pattern pairs for AI response generation.
+- **122**: Design Consideration 122: Self-Assembly on Model Weights - Explores using self-assembly on model weights for discovering geometric structure without needing to recreate models from outputs.
+- **123**: Design Consideration 123: φ-Basis Backbone Replacement - Replaces DINOv2 transformer backbone with φ-basis linear transform + error lookup table for 80x speedup and 0.62 depth correlation.
+- **127**: The Geometric Model Hypothesis - Weights are coordinates of a shape in high-dimensional space, discovered through training rather than learned in a statistical sense.
+- **128**: Design Consideration 128: Absolute φ-Lattice Weight Representation - Model weights naturally occupy absolute positions on the φ-lattice, forming a characteristic distribution.
+- **130**: φ-AIG Compression for Transformers - Achieves 14× compression with 0.09% error in MESH matrices, while other components require alternative strategies.
+- **131**: Decoupling Encoder-Decoder for φ-Basis Compression - Explains how decoupling the encoder-decoder structure in transformers enables DA2-level compression by addressing the mathematical structure of dense MLPs and attention mechanisms.
+- **138**: φ-Level MLP Restructuring - Reduces MLP computations by restructuring from per-weight to per-φ-level multiplications, achieving significant efficiency gains.
+- **140**: The Trivial AI Hypothesis - AI computation and structure can be described using φ-structure, making it O(log N) rather than O(N).
+- **143**: Design Consideration 143: Zeta-Aligned Neural Architecture - Proposed neural architecture that addresses issues in Transformers by introducing a 'W-axis' for navigation and critical line symmetry.
+- **152**: Design Consideration 152: φ-Level MLP Replacement - Replaces standard MLP with a φ-Level geometric structure for efficiency gains.
+- **162**: The Tetromino Weight Hypothesis - Neural network weights form a constrained geometric structure akin to tetrominoes tiling space.
+- **169**: Design Consideration 169: Replacing Inference with Navigation - Replaces traditional neural network inference with geometric navigation through φ-lattice for improved efficiency and separation of interdependencies.
+- **172**: Bias-Free φ-Lattice Navigation - Eliminates biases in AI models using φ-lattice for natural coordinate system, enhancing navigation over inference.
+- **175**: Autoregression as an Eigenvalue Problem - Treating autoregressive token generation as a singular system akin to a quantum eigenvalue problem for efficiency and insight.
+- **186**: Design Consideration 186: Rank-1 Transformer Replacement - Rank-1 transformations in Qwen2-7B's layers 3-27 enable complete precomputation and significant storage reduction.
+- **187**: Transformer as Lookup Table - A 7B parameter transformer is replaced with a 1.09 GB lookup table for single-token prediction, achieving 100% accuracy with 12.9x compression.
+- **190**: Design Consideration 190: Full Transformer Unwinding - Achieved high accuracy in unwinding transformer layer 3 computation by including biases and rotary position embeddings.
+- **191**: The φ-Computer Proof - Proved that transformers are φ-computers with exact φ-operations for sigmoids, softmax, and SiLU, achieving 100% token accuracy.
+- **197**: Doc 197: Perspective-Invariant Analog Computation - Perspective-invariant computation using SVD factorization for efficient multi-perspective problem solving in AI models.
+- **198**: Exploiting Structure - The Unified Approach - Unified method for optimizing transformer models by leveraging weight clustering, low-rank structure, and input similarity.
+
+### Attention (65 docs)
+- **-01**: Design Considerations for TruthSpace LCM - Documentation on architectural decisions for TruthSpace focusing on geometry, learning mechanisms, and experimental validation
+- **000**: TruthSpace LCM Design Considerations: Meta-Document - Synthesizes 48 design documents on TruthSpace LCM's evolution from foundational theory to comprehensive geometric language model.
+- **001**: Intentional vs Emergent Geometry: The Core Problem - Analyzes the distinction between intentionally defined and emergently learned geometric spaces in AI models.
+- **002**: Critical Analysis: What Do LLMs Actually Learn? - Analyzes how LLMs learn through token embeddings, attention patterns, feed-forward networks, and output projections, comparing to TruthSpace's approach.
+- **003**: Vacuum Forming Hypothesis - An analogy comparing LLM training to vacuum forming, focusing on capturing surface structure rather than interior.
+- **012**: Design Consideration 012: Geometric Overlap Handling - Addresses synonym-induced over-counting in natural language query encoding using geometric operations inspired by fractal geometry.
+- **015**: Design Consideration 015: Dynamic Geometric LCM - A scalable, generalizable geometric language model that discovers new primitives from data and organizes knowledge geometrically.
+- **019**: Holographic Resolution: GOP, MGOP, and Probe Extraction - A method using error amplification and multi-view analysis for enhancing semantic matching through geometric embeddings.
+- **023**: Design Consideration 023: OpenAI Sparse Circuits Comparison - Compares OpenAI's sparse circuit approach with TruthSpace's attractor/repeller method, focusing on the common insight that meaning resides in sparse, disentangled structures.
+- **033**: Design Consideration 033: Dynamic Geometric LCM - A foundational geometric computation architecture for AI that replaces traditional LLMs with dynamic geometric structures for knowledge representation and learning.
+- **034**: Design Consideration 034: Bootstrapped Instinct Knowledge - Observations on scaling GeometricLCM to process a full book, focusing on 'bootstrapped instinct knowledge' needed for effective operation.
+- **037**: Design Consideration 037: Spatial Attention for Concept Importance - Integrating spatial attention to assess concept importance beyond frequency in text analysis.
+- **038**: Design Consideration 038: Relationship Formation and Autobalancing - Utilizing Zipf's law across concept space for autobalancing in AI models
+- **046**: Design Consideration 046: Holographic Interference Patterns - Explores how multiple knowledge sources can interfere like light waves, impacting the synthesis of information in TruthSpace.
+- **050**: Geometric LLM Roadmap - Exploring the potential of geometric structure to replace statistical learning in language models.
+- **051**: Phase 6: Data Ingestion and Capability Refinement - Improving GeometricLCM's conversational flow, code generation, and data handling for competitive LLM capabilities.
+- **053**: Tachyon Hypothesis Navigation - Hypothesis formation navigates concept space in reverse, akin to a Tachyon traveling backward in time.
+- **054**: Design Consideration 054: Temporal Symmetry and Tachyon Joints - Exploring how verbs function as temporal navigation instructions in language processing.
+- **059**: Design Consideration 059: Two-Source Diffraction Chat - Two sources (Knowledge and Style) generate meaningful, styled responses through interference, mirroring human communication.
+- **061**: Design Consideration 061: ENCODE = DECODE - Realization that encoding and decoding are the same operation in opposite directions, embodying the essence of φ-geometry.
+- **068**: Design Consideration 068: Roadmap Update - December 28, 2024 - Advancements in holographic template projection, semantic quaternions, and geometric encoding for enhanced AI understanding and generation.
+- **072**: Design Consideration 072: Self-Similar TruthSpace and the Geometry of Naming - TruthSpace exhibits fractal self-similarity with self-verifying transformations and reveals structural rules in language naming.
+- **073**: Geometric Reinforcement Learning - Learning through structural modifications in bidirectional transformations within TruthSpace.
+- **089**: Geometric Knowledge Persistence - Post-Review Analysis - Review of Design 088 focusing on the core insight of ENCODE = DECODE and its implications for geometric knowledge storage.
+- **090**: Design Consideration 090: The Critical Line as Information Limit - The critical line σ = 0.5 acts as a universal information limit across holographic resolution, geometric knowledge persistence, and the Riemann hypothesis.
+- **091**: Design Consideration 091: Position Is Everything - Position encapsulates all features in the critical strip as information limit.
+- **098**: Prime-Zeta Lattice for Concept Positioning - A model using prime numbers for concept positioning and zeta zeros for navigation, inspired by Zipf's law and attractor dynamics.
+- **109**: Generalized Geometric Space - A breakthrough in geometric AI where transformations across various domains reveal concept identity through self-similar φ-based positions.
+- **110**: Agent-Grounded Geometric Interpretation - Improving intent classification in AI by considering the agent's self-model and geometric interpretation of queries.
+- **111**: Design 111: Perspective as Layer Manipulation - Reinterpreting agent identity through perspective as a layer offset in AI systems.
+- **112**: Design 112: The Music Box Principle - An analogy between a music box and geometric AI, emphasizing emergent output through interaction rather than hard-coded rules.
+- **126**: Design Consideration 126: φ-Basis Compounding for Speed - Optimizing AI speed by storing geometric primitives and deriving complex data structures.
+- **127**: The Geometric Model Hypothesis - Weights are coordinates of a shape in high-dimensional space, discovered through training rather than learned in a statistical sense.
+- **129**: φ-Unraveled Transformer Engine: Design Consideration 129 - Reproduced Qwen2-7B output with 99.9991% correlation by unraveling transformer's self-referential structure before encoding in φ-basis.
+- **131**: Decoupling Encoder-Decoder for φ-Basis Compression - Explains how decoupling the encoder-decoder structure in transformers enables DA2-level compression by addressing the mathematical structure of dense MLPs and attention mechanisms.
+- **132**: Design Consideration 132: The φ-Sigmoid Discovery - Decoupling MLP structure reveals exact φ-structure in sigmoid and near-linear operation across the network.
+- **134**: Design Consideration 134: Discriminant Space Attention - Transformer attention operates in a discriminant space of ~106 dimensions, significantly reducing operations and maintaining high accuracy.
+- **135**: Design Consideration 135: Attention Head Semantic Specialization - Analysis of Qwen2-7B attention heads reveals specialization in semantic dimensions.
+- **136**: φ-Encoding Duplicates Transformer Output - Demonstrates 99.9984% correlation of φ-encoding with transformer attention, validating the core TruthSpace hypothesis.
+- **138**: φ-Level MLP Restructuring - Reduces MLP computations by restructuring from per-weight to per-φ-level multiplications, achieving significant efficiency gains.
+- **144**: Design Consideration 144: Unified Zeta-Aligned Architecture - A proposed architecture that unifies concepts through a balance point found in zeta functions, golden ratio, softmax, and dimensional downcasting.
+- **148**: Design Consideration 148: Sierpinski-φ Quantization - Sierpinski triangle's Hausdorff dimension explains BitNet's ternary structure and inspires φ-quantization for enhanced neural network performance.
+- **157**: Design Consideration 157: Adaptive LOD Token Generation - Adaptive token generation using Level of Detail (LOD) based on token confidence for efficiency and speedup.
+- **158**: SVD Quality Analysis: Limitations of Low-Rank Approximation for LLM Inference - Analysis reveals SVD-based LOD fails for Qwen2-7B due to slow singular value decay and high sensitivity of critical layers.
+- **159**: The Zeta Sonic Boom Hypothesis - A hypothesis linking integer math, geometry, and the Riemann zeta function's zeros through a 'sonic boom' phenomenon.
+- **160**: Unified Geometric Theory: Shape IS Information - A theory linking mathematical constants, neural network phenomena, and geometric principles through self-similarity, integer relations, and the fine structure constant.
+- **161**: Design Consideration 161: The Attention Spigot - Reframing attention mechanism from statistical prediction to spatial traversal through φ-lattice.
+- **162**: The Tetromino Weight Hypothesis - Neural network weights form a constrained geometric structure akin to tetrominoes tiling space.
+- **170**: The Full-Rank Attention Limit in LLMs - Single-token attention in LLMs is inherently full-rank, limiting efficient compression.
+- **171**: 171: Dislodging the Full-Rank Basin - Investigates the hypothesis that full-rank attention is a training basin and explores methods to dislodge models towards achieving equivalent performance with low-rank attention.
+- **173**: Doc 173: Quantum Resonant Attention - Attention mechanism is viewed as a quantum interference problem, focusing on resonant modes and dominant interference patterns.
+- **176**: Token Fixed Points Discovery - Autoregressive token generation operates via self-predicting fixed points, each acting as an attractor and having consistent transformations.
+- **177**: Design Consideration 177: Transformer Disentanglement - Transformer's transformation from input to output can be approximated by a 37-dimensional linear mapping with 100% accuracy.
+- **179**: Geometric Transformer Replacement Progress Review - Validation of LLMs as hyperdimensional transcoders through geometric structure replacement
+- **188**: Design Consideration 188: Context Geometry Analysis - Investigation into geometric transformations of hidden states influenced by context in a transformer model
+- **189**: Design Consideration 189: The Safe Dial Mechanism - Analogizes context processing in AI models using a safe dial mechanism.
+- **190**: Design Consideration 190: Full Transformer Unwinding - Achieved high accuracy in unwinding transformer layer 3 computation by including biases and rotary position embeddings.
+- **192**: Doc 192: Boom-Newton Attention - O(N) Attention via Zero-Hunting - Achieves 2.5-2.7× speedup in attention layers using the rhzeros Newton zero-hunting algorithm, maintaining 100% token accuracy.
+- **193**: MLP Optimization Analysis - The Memory Bandwidth Wall - Analysis reveals MLP is memory-bandwidth bound, not compute-bound, affecting optimization strategies.
+- **195**: Bilinear MLP Precomputation - The O(d) Architecture - Reduces transformer operations to O(d) through precomputation, achieving significant speedup.
+- **196**: Bottleneck Analysis - Memory Bandwidth is the Wall - Analysis reveals memory bandwidth limitation in AI model performance rather than compute, focusing on the bottleneck caused by reading large model weights.
+- **199**: φ-Complete Computation: Eliminating the Fallback - Directly expressing all transformer operations in terms of φ for a unified, discrete, and algebraic computational model.
+- **200**: The Universal Bottleneck Discovery in Qwen2-7B - All reasoning types converge to a φ-level of approximately 1.57 at layer 27, forming a universal bottleneck.
+- **201**: Automated φ-Discovery System - An AI system using φ-universal coordinates to discover novel ideas and patterns.
+- **202**: The Recursive Discovery Bootstrap - AI system discovers its own discovery process, creating a recursive bootstrap.
+
+### Encoding (129 docs)
+- **-01**: Design Considerations for TruthSpace LCM - Documentation on architectural decisions for TruthSpace focusing on geometry, learning mechanisms, and experimental validation
+- **000**: TruthSpace LCM Design Considerations: Meta-Document - Synthesizes 48 design documents on TruthSpace LCM's evolution from foundational theory to comprehensive geometric language model.
+- **001**: Intentional vs Emergent Geometry: The Core Problem - Analyzes the distinction between intentionally defined and emergently learned geometric spaces in AI models.
+- **002**: Critical Analysis: What Do LLMs Actually Learn? - Analyzes how LLMs learn through token embeddings, attention patterns, feed-forward networks, and output projections, comparing to TruthSpace's approach.
+- **007**: Design Consideration 007: Semantic Disambiguation in TruthSpace LCM - Analyzes the semantic understanding gap between TruthSpace LCM and traditional LLMs post 12D plastic-primary encoding migration.
+- **009**: Design Consideration 009: Projection Weighting and Group Theory - Improved 12D vector projection for command disambiguation by emphasizing action dimensions through diagonal linear transformation.
+- **011**: Design Consideration 011: Automated Knowledge Expansion - Explores automating the expansion of a geometric AI's knowledge base from sources like Linux man pages.
+- **012**: Design Consideration 012: Geometric Overlap Handling - Addresses synonym-induced over-counting in natural language query encoding using geometric operations inspired by fractal geometry.
+- **013**: Design Consideration 013: Compound Phrase Resolution - Geometric approach for resolving complex natural language queries into executable commands with parameter extraction.
+- **015**: Design Consideration 015: Dynamic Geometric LCM - A scalable, generalizable geometric language model that discovers new primitives from data and organizes knowledge geometrically.
+- **016**: Design Consideration 016: Truly Dynamic Geometric LCM - Addresses how to organize information without overlap, dynamically create domains, switch domains on the fly, and do this geometrically in hyper dimensions.
+- **019**: Holographic Resolution: GOP, MGOP, and Probe Extraction - A method using error amplification and multi-view analysis for enhancing semantic matching through geometric embeddings.
+- **023**: Design Consideration 023: OpenAI Sparse Circuits Comparison - Compares OpenAI's sparse circuit approach with TruthSpace's attractor/repeller method, focusing on the common insight that meaning resides in sparse, disentangled structures.
+- **024**: Design Consideration 024: Scalable φ-Based Data Ingestion - Proposes a direct data placement method for scalable φ-based structure building.
+- **025**: Design Consideration 025: Co-occurrence Based Cluster Matching - A scalable geometric approach to semantic matching using co-occurrence data to dynamically form clusters.
+- **026**: Research Proposal: Generalized φ-Based Knowledge Ingestion - Abstracts and generalizes a system for ingesting domain knowledge across various fields.
+- **027**: Design Consideration 027: Pareto Bootstrap for Universal Knowledge Encoding - Bootstraps a universal knowledge encoder using Zipf's Law for word weights and semantic clusters for positions.
+- **028**: Design Consideration 028: Semantic Tree Architecture - A dual-layered approach combining semantic clusters for vocabulary bridging and a recursive tree for self-organizing structure to address knowledge encoding challenges.
+- **030**: Geometric Q&A Projection Framework - Decomposes statements into multiple Q&A pairs through geometric projection
+- **031**: Unified Projection Framework - Q&A and style transfer are seen as projection operations onto axes in a universal semantic space.
+- **032**: Design Consideration 032: VSA Binding Extension - Extends TruthSpace LCM with VSA binding for symbolic reasoning.
+- **033**: Design Consideration 033: Dynamic Geometric LCM - A foundational geometric computation architecture for AI that replaces traditional LLMs with dynamic geometric structures for knowledge representation and learning.
+- **034**: Design Consideration 034: Bootstrapped Instinct Knowledge - Observations on scaling GeometricLCM to process a full book, focusing on 'bootstrapped instinct knowledge' needed for effective operation.
+- **036**: Design Consideration 036: Geometric Q&A Pattern Transfer - Investigates transferring Q&A patterns from general knowledge to literary queries using geometric operations.
+- **037**: Design Consideration 037: Spatial Attention for Concept Importance - Integrating spatial attention to assess concept importance beyond frequency in text analysis.
+- **038**: Design Consideration 038: Relationship Formation and Autobalancing - Utilizing Zipf's law across concept space for autobalancing in AI models
+- **041**: Design Consideration 041: The φ-Dial as Unified Control Mechanism - Unified control mechanism using φ-Dial for multiple dimensions of answer generation
+- **042**: Design Consideration 042: The Complex φ-Dial (2D Control) - Introduces a 2D control plane using complex numbers for controlling specificity/style and perspective/voice in content generation.
+- **043**: Design Consideration 043: 3D φ-Dial with Depth Control - Introduces a 3D φ-Dial controlling style, perspective, and depth for nuanced answer generation.
+- **044**: Design Consideration 044: 4D Quaternion φ-Dial - A 4D quaternion dial controlling style, perspective, depth, and certainty in communication.
+- **046**: Design Consideration 046: Holographic Interference Patterns - Explores how multiple knowledge sources can interfere like light waves, impacting the synthesis of information in TruthSpace.
+- **047**: Design Consideration 047: Intrinsic vs Functional Dimension - Discovers geometric distinction between intrinsic properties and functional purposes in knowledge representation.
+- **050**: Geometric LLM Roadmap - Exploring the potential of geometric structure to replace statistical learning in language models.
+- **051**: Phase 6: Data Ingestion and Capability Refinement - Improving GeometricLCM's conversational flow, code generation, and data handling for competitive LLM capabilities.
+- **054**: Design Consideration 054: Temporal Symmetry and Tachyon Joints - Exploring how verbs function as temporal navigation instructions in language processing.
+- **056**: Design Consideration 056: Quad-Quaternion Text Generation - Text generation decomposes into four quaternion spaces controlling concept, output style, morphological aspects, and error dimensions.
+- **057**: Design Consideration 057: Domain Dimension as Zeta t-Coordinate - Integrating domain separation into geometric AI through zeta function coordinates for enhanced character differentiation
+- **058**: Design Consideration 058: Diffraction Grating Simplification - Simplifying complex holographic concept encoding using a diffraction grating analogy.
+- **059**: Design Consideration 059: Two-Source Diffraction Chat - Two sources (Knowledge and Style) generate meaningful, styled responses through interference, mirroring human communication.
+- **060**: Unified Symmetric Ingestion - A design consideration unifying knowledge, style, and projection through a common ingestion process and differing interpretation.
+- **061**: Design Consideration 061: ENCODE = DECODE - Realization that encoding and decoding are the same operation in opposite directions, embodying the essence of φ-geometry.
+- **062**: Design Consideration 062: Geometric Stop Word Detection - Develops a method to detect stop words geometrically based on their semantic roles in text.
+- **063**: Design Consideration 063: Geometric Morphology Bootstrap - A geometric approach to learning morphological equivalences from parallel sentences.
+- **064**: Design Consideration 064: Geometric LCM v2 Roadmap - Roadmap for replacing LLM functionalities with a Geometric LCM model focusing on core geometric concepts and infrastructure.
+- **065**: Design Consideration 065: Holographic Template Projection - Adaptable template generation from Q&A pairs using complex vector interference
+- **066**: Design Consideration 066: Geometric Holographic Roadmap Update - Explored holographic template projection, found hash-based encoding lacks semantic structure, and updated roadmap.
+- **067**: Design Consideration 067: Semantic Quaternion for Concept Encoding - A 4D encoding method for concepts enabling 100% analogy accuracy by representing semantic attributes like gender, age, agency, and animacy.
+- **068**: Design Consideration 068: Roadmap Update - December 28, 2024 - Advancements in holographic template projection, semantic quaternions, and geometric encoding for enhanced AI understanding and generation.
+- **069**: Design Consideration 069: Concept Distillation & Correction Learning - A method for extracting and distilling geometric concepts from text into a compact format for enhanced inference capabilities.
+- **070**: Design Consideration 070: Concept Space & Dual Quaternions - Explores using dual quaternions to represent concepts in TruthSpace, focusing on semantic and identity properties.
+- **072**: Design Consideration 072: Self-Similar TruthSpace and the Geometry of Naming - TruthSpace exhibits fractal self-similarity with self-verifying transformations and reveals structural rules in language naming.
+- **073**: Geometric Reinforcement Learning - Learning through structural modifications in bidirectional transformations within TruthSpace.
+- **074**: Gear Chain Projection - A method for refining geometric truth output into natural language using a series of specialized transformations.
+- **078**: Concept Token Architecture - Replaces frames with concept tokens as the primary unit in geometric AI space.
+- **082**: Design Decision: Folding Structure for GearImprovementLoop - Replaces pattern-matching in GearImprovementLoop with a folding structure inspired by DNA, encoding information in shape.
+- **083**: Python Code Gear Roadmap - Creating an emergent, geometric Python code generation system for use in a larger AI framework.
+- **084**: 084: Holographic Pattern Projection for Regulatory Networks - Revisiting DNA-inspired regulatory networks to directly construct desired geometric relationships using holographic projection.
+- **088**: Design Consideration 088: Geometric Knowledge Persistence - Proposes direct persistent storage of geometric knowledge in TruthSpace LCM.
+- **089**: Geometric Knowledge Persistence - Post-Review Analysis - Review of Design 088 focusing on the core insight of ENCODE = DECODE and its implications for geometric knowledge storage.
+- **090**: Design Consideration 090: The Critical Line as Information Limit - The critical line σ = 0.5 acts as a universal information limit across holographic resolution, geometric knowledge persistence, and the Riemann hypothesis.
+- **091**: Design Consideration 091: Position Is Everything - Position encapsulates all features in the critical strip as information limit.
+- **092**: JSON ↔ Structure Duality - Explains how JSON defines an initial structure, which evolves into dynamic, living geometry during runtime.
+- **095**: 095: HyperMapping - Final Form - A geometric data structure that solves problems as effectively as neural networks but is explicit and interpretable.
+- **098**: Prime-Zeta Lattice for Concept Positioning - A model using prime numbers for concept positioning and zeta zeros for navigation, inspired by Zipf's law and attractor dynamics.
+- **099**: Design Consideration 099: Absolute φ-Lattice Coordinates - Proposed shift from relative eigenspace coordinates to absolute φ-lattice coordinates for improved knowledge matching accuracy and verifiability.
+- **101**: φ-Lattice Implementation Results - Implemented absolute φ-lattice coordinates achieving 100% accuracy, solving DC component problem in eigenspace approach.
+- **103**: Design Consideration 103: Self-Assembling Primitives - Transforming chaotic input into geometric structure through self-assembling primitives for φ-lattice geometry.
+- **104**: Design Consideration 104: Dimensional Scalability - Exploring scalability of the φ-lattice in handling increased dimensions for natural language understanding.
+- **105**: Design Consideration 105: Dynamic Quaternion Layers - Introduces dynamic z-layer to address the limitations of predefined quaternion dimensions in handling the vastness of natural language.
+- **107**: Design 107: Transformation Coverage Gap Detection - Improves a transformation system by enhancing confidence calculation, identifying transformable words, and using LLMs for fallbacks.
+- **108**: Design 108: Pure Geometric Transformation (No LLM Fallback) - Experimental results highlight issues with content encoding in geometric AI, focusing on quaternion encoder and holographic transformer.
+- **109**: Generalized Geometric Space - A breakthrough in geometric AI where transformations across various domains reveal concept identity through self-similar φ-based positions.
+- **110**: Agent-Grounded Geometric Interpretation - Improving intent classification in AI by considering the agent's self-model and geometric interpretation of queries.
+- **111**: Design 111: Perspective as Layer Manipulation - Reinterpreting agent identity through perspective as a layer offset in AI systems.
+- **112**: Design 112: The Music Box Principle - An analogy between a music box and geometric AI, emphasizing emergent output through interaction rather than hard-coded rules.
+- **113**: Design 113: Geometric Code Generation - Transforming code generation by treating Python tokens geometrically and enabling true code generation.
+- **114**: Design Consideration 114: Emergent Dimensions and Platonic Ideals - Describes emergent dimensions from transformation pairs and Platonic ideals at semantic space origins.
+- **119**: Design Consideration 119: Unified Content + Pattern Space - Unified φ-based geometric space validates coexistence of content and speech patterns, with styles as Platonic ideals.
+- **120**: Design Consideration 120: The Universal Dimension Principle - Discovers that any transformation can be a dimension in text analysis.
+- **124**: Design Consideration 124: φ-Exponent Arithmetic - A mathematical approach to geometric computation using powers of the golden ratio φ.
+- **126**: Design Consideration 126: φ-Basis Compounding for Speed - Optimizing AI speed by storing geometric primitives and deriving complex data structures.
+- **127**: The Geometric Model Hypothesis - Weights are coordinates of a shape in high-dimensional space, discovered through training rather than learned in a statistical sense.
+- **128**: Design Consideration 128: Absolute φ-Lattice Weight Representation - Model weights naturally occupy absolute positions on the φ-lattice, forming a characteristic distribution.
+- **129**: φ-Unraveled Transformer Engine: Design Consideration 129 - Reproduced Qwen2-7B output with 99.9991% correlation by unraveling transformer's self-referential structure before encoding in φ-basis.
+- **130**: φ-AIG Compression for Transformers - Achieves 14× compression with 0.09% error in MESH matrices, while other components require alternative strategies.
+- **131**: Decoupling Encoder-Decoder for φ-Basis Compression - Explains how decoupling the encoder-decoder structure in transformers enables DA2-level compression by addressing the mathematical structure of dense MLPs and attention mechanisms.
+- **132**: Design Consideration 132: The φ-Sigmoid Discovery - Decoupling MLP structure reveals exact φ-structure in sigmoid and near-linear operation across the network.
+- **133**: Design Consideration 133: φ-Basis Floating-Point Unit (φ-FPU) - A floating-point unit using the golden ratio φ as the numeric base for efficient neural network computations.
+- **135**: Design Consideration 135: Attention Head Semantic Specialization - Analysis of Qwen2-7B attention heads reveals specialization in semantic dimensions.
+- **137**: Design Consideration 137: φ as Universal Adapter - φ (the golden ratio) acts as a universal adapter capable of representing any linear structure due to its properties of self-similarity, Fibonacci connection, optimal packing, and logarithmic representation.
+- **138**: φ-Level MLP Restructuring - Reduces MLP computations by restructuring from per-weight to per-φ-level multiplications, achieving significant efficiency gains.
+- **142**: Design Consideration 142: Holographic φ-Encoding - A method for storing neural network weights using φ-encoding that achieves high compression with negligible error.
+- **144**: Design Consideration 144: Unified Zeta-Aligned Architecture - A proposed architecture that unifies concepts through a balance point found in zeta functions, golden ratio, softmax, and dimensional downcasting.
+- **145**: Design Consideration 145: The Fibonacci Correction Formula - Expressing SiLU as φ-sigmoid plus a Fibonacci correction for exact reconstruction.
+- **147**: Sign Bit Analysis in TruthSpace - Investigation into the structured nature of sign bits in interactions between dimensions, revealing a special role for Layer 0 and implications for compression.
+- **148**: Design Consideration 148: Sierpinski-φ Quantization - Sierpinski triangle's Hausdorff dimension explains BitNet's ternary structure and inspires φ-quantization for enhanced neural network performance.
+- **149**: Design Consideration 149: Hierarchical φ-Encoding for 100% Correlation - A method using hierarchical refinement for achieving 100% correlation with φ-encoding.
+- **150**: Design Consideration 150: Trivial AI with Integer SVD - AI simplified using integer SVD and φ-scaling for high-quality, low-storage computations.
+- **151**: LUT-Only Compression for Geometric AI Models - A method to compress models by storing only Lookup Table (LUT) indices, achieving significant compression ratios.
+- **153**: φ-Circuit Geometry - Gates describe a geometric shape in the context of AI computation.
+- **154**: Computation IS Geometry All The Way Down - Proof that computation exhibits a consistent φ-geometry across layers of abstraction.
+- **155**: Design Consideration 155: Smart φ-Shape (Vector Graphics for Knowledge) - Treats knowledge as vector graphics with self-similar, self-scaling, self-solving, and self-improving properties.
+- **157**: Design Consideration 157: Adaptive LOD Token Generation - Adaptive token generation using Level of Detail (LOD) based on token confidence for efficiency and speedup.
+- **158**: SVD Quality Analysis: Limitations of Low-Rank Approximation for LLM Inference - Analysis reveals SVD-based LOD fails for Qwen2-7B due to slow singular value decay and high sensitivity of critical layers.
+- **159**: The Zeta Sonic Boom Hypothesis - A hypothesis linking integer math, geometry, and the Riemann zeta function's zeros through a 'sonic boom' phenomenon.
+- **160**: Unified Geometric Theory: Shape IS Information - A theory linking mathematical constants, neural network phenomena, and geometric principles through self-similarity, integer relations, and the fine structure constant.
+- **162**: The Tetromino Weight Hypothesis - Neural network weights form a constrained geometric structure akin to tetrominoes tiling space.
+- **163**: Design 163: The Rules of the φ-Lattice - A geometric coordinate system for neural network weights and embeddings with validated rules on quantization, vocabulary, quaternion sign structure, clustered deltas, self-similarity, and translation invariance.
+- **164**: Design 164: Navigating the Embedding Space - Discovered navigability in φ-lattice embedding space by flipping specific sign dimensions.
+- **165**: Design Consideration 165: σ=0.5 Sign Navigation - Achieves 100% accuracy in sign-only semantic navigation at the critical line σ=0.5, enabling 960x total compression and implicit knowledge through SVD projection.
+- **167**: Self-Assembling Navigation - Navigation replaces inference by discovering semantic relationships encoded in model embeddings.
+- **168**: Design Consideration 168: Navigation vs Inference - Investigates replacing autoregressive inference with geometric navigation in AI models.
+- **173**: Doc 173: Quantum Resonant Attention - Attention mechanism is viewed as a quantum interference problem, focusing on resonant modes and dominant interference patterns.
+- **176**: Token Fixed Points Discovery - Autoregressive token generation operates via self-predicting fixed points, each acting as an attractor and having consistent transformations.
+- **177**: Design Consideration 177: Transformer Disentanglement - Transformer's transformation from input to output can be approximated by a 37-dimensional linear mapping with 100% accuracy.
+- **178**: Design Consideration 178: The Spatial Encoder Pattern - A general-purpose pattern for replacing complex computations with spatial lookups, validated on transformer next-token prediction.
+- **179**: Geometric Transformer Replacement Progress Review - Validation of LLMs as hyperdimensional transcoders through geometric structure replacement
+- **182**: φ-Shape Knowledge Base: Geometric Storage for World Knowledge - A geometric approach to storing and accessing world knowledge for content token prediction.
+- **185**: Design Consideration 185: Hidden State Caching and Compression - Efficiently caching and compressing hidden states using basis decomposition for geometric AI.
+- **188**: Design Consideration 188: Context Geometry Analysis - Investigation into geometric transformations of hidden states influenced by context in a transformer model
+- **189**: Design Consideration 189: The Safe Dial Mechanism - Analogizes context processing in AI models using a safe dial mechanism.
+- **193**: MLP Optimization Analysis - The Memory Bandwidth Wall - Analysis reveals MLP is memory-bandwidth bound, not compute-bound, affecting optimization strategies.
+- **195**: Bilinear MLP Precomputation - The O(d) Architecture - Reduces transformer operations to O(d) through precomputation, achieving significant speedup.
+- **196**: Bottleneck Analysis - Memory Bandwidth is the Wall - Analysis reveals memory bandwidth limitation in AI model performance rather than compute, focusing on the bottleneck caused by reading large model weights.
+- **199**: φ-Complete Computation: Eliminating the Fallback - Directly expressing all transformer operations in terms of φ for a unified, discrete, and algebraic computational model.
+- **201**: Automated φ-Discovery System - An AI system using φ-universal coordinates to discover novel ideas and patterns.
+- **202**: The Recursive Discovery Bootstrap - AI system discovers its own discovery process, creating a recursive bootstrap.
+- **205**: Doc 205: CRUD Operations on φ-Space - Implemented CRUD operations using vector addition, scalar multiplication, and cosine similarity on φ-space.
+- **206**: Conceptual Nexus - Model Self-Control Interface - Model designs an interface for self-control and manipulation of interconnected concepts
+
+### Experiments (52 docs)
+- **004**: Experiments to Test the Vacuum Forming Hypothesis - A series of experiments to validate or refute the hypothesis about how LLMs learn semantic structures through phase shifts and φ-based geometry.
+- **005**: Experimental Results: Vacuum Forming Hypothesis - Initial experiments support the vacuum forming hypothesis in φ-geometry, showing structure beyond simple correlation.
+- **006**: Dimensionality Analysis Findings - Investigates why the plastic constant shows stronger separation than φ, optimality of dimensions, and exploitation of orthogonality for autotuning.
+- **009**: Design Consideration 009: Projection Weighting and Group Theory - Improved 12D vector projection for command disambiguation by emphasizing action dimensions through diagonal linear transformation.
+- **017**: Design Consideration 017: Stacked Geometric Embeddings - A geometric AI project aiming to recreate LLM embedding discriminative power through stacked hierarchical geometric layers.
+- **018**: Design Consideration 018: Stacked Geometric LCM Analysis - Summary of Stacked Geometric LCM v1 and v2 development focusing on architecture evolution, quantitative results, and what works.
+- **020**: Scalable Geometric Layer Addition Protocol - Addresses discrimination resolution through scalable layer addition using holographic principles.
+- **036**: Design Consideration 036: Geometric Q&A Pattern Transfer - Investigates transferring Q&A patterns from general knowledge to literary queries using geometric operations.
+- **039**: Design Consideration 039: φ and Zipf as Dual Self-Similar Fractals - φ-based encoding and Zipf weighting are dual self-similar fractals viewing power-law decay from opposite directions.
+- **048**: Design Consideration 048: Clock-Geodesic Unification - Unifying clock and geodesic concepts for reverse training in a geometric AI framework.
+- **049**: Design Consideration 049: Gradient-Free Learning - Achieving high accuracy through error-driven structure learning without gradients
+- **062**: Design Consideration 062: Geometric Stop Word Detection - Develops a method to detect stop words geometrically based on their semantic roles in text.
+- **063**: Design Consideration 063: Geometric Morphology Bootstrap - A geometric approach to learning morphological equivalences from parallel sentences.
+- **065**: Design Consideration 065: Holographic Template Projection - Adaptable template generation from Q&A pairs using complex vector interference
+- **067**: Design Consideration 067: Semantic Quaternion for Concept Encoding - A 4D encoding method for concepts enabling 100% analogy accuracy by representing semantic attributes like gender, age, agency, and animacy.
+- **070**: Design Consideration 070: Concept Space & Dual Quaternions - Explores using dual quaternions to represent concepts in TruthSpace, focusing on semantic and identity properties.
+- **075**: Design Consideration 075: Gear Chain Feedback and Auto-Refinement - A bidirectional gear chain system for automatic refinement of the TruthSpace corpus through output correction.
+- **076**: Emergent Classifier Protocol - A systematic approach for converting hardcoded word lists and pattern-based detection into emergent, self-learning classifiers.
+- **077**: Bootstrap Gear Protocol - A method for creating new emergent capabilities by combining a blank EmergentGear with LLM-powered refinement, saving the emergent state to JSON for reuse.
+- **080**: Design Consideration 080: Emergent Dimension Discovery - Semantic dimensions discovered from behavior alone using SVD, proving a 'hyperdimensional transcoder' concept.
+- **081**: Design Consideration 081: Emergent vs Designed Gears - Experiment comparing emergent gears from LLM-generated behavioral data vs intentionally designed gears.
+- **082**: Design Decision: Folding Structure for GearImprovementLoop - Replaces pattern-matching in GearImprovementLoop with a folding structure inspired by DNA, encoding information in shape.
+- **096**: Design Consideration 096: Gear to HyperMapping Migration - Migrating from Gear-based architecture to HyperMapping for TruthSpace LCM system.
+- **103**: Design Consideration 103: Self-Assembling Primitives - Transforming chaotic input into geometric structure through self-assembling primitives for φ-lattice geometry.
+- **105**: Design Consideration 105: Dynamic Quaternion Layers - Introduces dynamic z-layer to address the limitations of predefined quaternion dimensions in handling the vastness of natural language.
+- **106**: Design 106: Transformation Corpus Generation - Creating a corpus for sentence transformations using an LLM to enable geometric manipulation across grammatical and semantic dimensions.
+- **107**: Design 107: Transformation Coverage Gap Detection - Improves a transformation system by enhancing confidence calculation, identifying transformable words, and using LLMs for fallbacks.
+- **112**: Design 112: The Music Box Principle - An analogy between a music box and geometric AI, emphasizing emergent output through interaction rather than hard-coded rules.
+- **122**: Design Consideration 122: Self-Assembly on Model Weights - Explores using self-assembly on model weights for discovering geometric structure without needing to recreate models from outputs.
+- **123**: Design Consideration 123: φ-Basis Backbone Replacement - Replaces DINOv2 transformer backbone with φ-basis linear transform + error lookup table for 80x speedup and 0.62 depth correlation.
+- **126**: Design Consideration 126: φ-Basis Compounding for Speed - Optimizing AI speed by storing geometric primitives and deriving complex data structures.
+- **131**: Decoupling Encoder-Decoder for φ-Basis Compression - Explains how decoupling the encoder-decoder structure in transformers enables DA2-level compression by addressing the mathematical structure of dense MLPs and attention mechanisms.
+- **143**: Design Consideration 143: Zeta-Aligned Neural Architecture - Proposed neural architecture that addresses issues in Transformers by introducing a 'W-axis' for navigation and critical line symmetry.
+- **145**: Design Consideration 145: The Fibonacci Correction Formula - Expressing SiLU as φ-sigmoid plus a Fibonacci correction for exact reconstruction.
+- **162**: The Tetromino Weight Hypothesis - Neural network weights form a constrained geometric structure akin to tetrominoes tiling space.
+- **164**: Design 164: Navigating the Embedding Space - Discovered navigability in φ-lattice embedding space by flipping specific sign dimensions.
+- **167**: Self-Assembling Navigation - Navigation replaces inference by discovering semantic relationships encoded in model embeddings.
+- **169**: Design Consideration 169: Replacing Inference with Navigation - Replaces traditional neural network inference with geometric navigation through φ-lattice for improved efficiency and separation of interdependencies.
+- **171**: 171: Dislodging the Full-Rank Basin - Investigates the hypothesis that full-rank attention is a training basin and explores methods to dislodge models towards achieving equivalent performance with low-rank attention.
+- **175**: Autoregression as an Eigenvalue Problem - Treating autoregressive token generation as a singular system akin to a quantum eigenvalue problem for efficiency and insight.
+- **186**: Design Consideration 186: Rank-1 Transformer Replacement - Rank-1 transformations in Qwen2-7B's layers 3-27 enable complete precomputation and significant storage reduction.
+- **187**: Transformer as Lookup Table - A 7B parameter transformer is replaced with a 1.09 GB lookup table for single-token prediction, achieving 100% accuracy with 12.9x compression.
+- **189**: Design Consideration 189: The Safe Dial Mechanism - Analogizes context processing in AI models using a safe dial mechanism.
+- **190**: Design Consideration 190: Full Transformer Unwinding - Achieved high accuracy in unwinding transformer layer 3 computation by including biases and rotary position embeddings.
+- **191**: The φ-Computer Proof - Proved that transformers are φ-computers with exact φ-operations for sigmoids, softmax, and SiLU, achieving 100% token accuracy.
+- **194**: Doc 194: Designed vs Trained Models - The Path to True φ-Computation - Investigates why trivial navigation requires caching and explores designing a model to eliminate computational steps.
+- **197**: Doc 197: Perspective-Invariant Analog Computation - Perspective-invariant computation using SVD factorization for efficient multi-perspective problem solving in AI models.
+- **198**: Exploiting Structure - The Unified Approach - Unified method for optimizing transformer models by leveraging weight clustering, low-rank structure, and input similarity.
+- **200**: The Universal Bottleneck Discovery in Qwen2-7B - All reasoning types converge to a φ-level of approximately 1.57 at layer 27, forming a universal bottleneck.
+- **201**: Automated φ-Discovery System - An AI system using φ-universal coordinates to discover novel ideas and patterns.
+- **203**: φ-Space Interface Design - An interface for navigating φ-space, a 3D universe where concepts are nodes and relationships are edges, allowing users to query, explore, and discover unknown unknowns.
+- **204**: Reverse Navigation and Validity Filtering - Explores backward navigation in φ-space for finding valid paths to a target concept, revealing insights into cognitive complexity and semantic coherence.
+
+### Implementation (58 docs)
+- **001**: Intentional vs Emergent Geometry: The Core Problem - Analyzes the distinction between intentionally defined and emergently learned geometric spaces in AI models.
+- **006**: Dimensionality Analysis Findings - Investigates why the plastic constant shows stronger separation than φ, optimality of dimensions, and exploitation of orthogonality for autotuning.
+- **007**: Design Consideration 007: Semantic Disambiguation in TruthSpace LCM - Analyzes the semantic understanding gap between TruthSpace LCM and traditional LLMs post 12D plastic-primary encoding migration.
+- **008**: Design Consideration 008: Conceptual Depth in the LCM - Analyzes the need for deeper conceptual overlap in the Large Concept Model through compositional vs. conceptual semantics.
+- **010**: φ-Based Dimensional Navigation - Revisiting the use of φ (golden ratio) for dimensional navigation in TruthSpace due to its natural hierarchical structure and potential for exact representation.
+- **021**: Structural Similarity Breakthrough: Escaping Keyword Matching - Shifts from word-based primitives to character-level structural similarity for improved query resolution.
+- **024**: Design Consideration 024: Scalable φ-Based Data Ingestion - Proposes a direct data placement method for scalable φ-based structure building.
+- **045**: Design Consideration 045: The 4D Holographic Bound - 4D quaternion φ-dial reaches holographic bound for semantic answer generation, with grammatical voice as the only orthogonal candidate that is syntactic, not semantic.
+- **048**: Design Consideration 048: Clock-Geodesic Unification - Unifying clock and geodesic concepts for reverse training in a geometric AI framework.
+- **052**: Hypothesis-Driven Knowledge Acquisition in GeometricLCM - Shifts knowledge acquisition from passive extraction to goal-directed, hypothesis-driven approach using Pólya's method.
+- **075**: Design Consideration 075: Gear Chain Feedback and Auto-Refinement - A bidirectional gear chain system for automatic refinement of the TruthSpace corpus through output correction.
+- **077**: Bootstrap Gear Protocol - A method for creating new emergent capabilities by combining a blank EmergentGear with LLM-powered refinement, saving the emergent state to JSON for reuse.
+- **081**: Design Consideration 081: Emergent vs Designed Gears - Experiment comparing emergent gears from LLM-generated behavioral data vs intentionally designed gears.
+- **085**: Temporary Module Injection for Unknown Queries - A method to handle queries containing unknown terms by temporarily creating a module from the query text.
+- **086**: The Emergent Gear Pattern - A recurring design pattern across the codebase involving structure definition, bootstrap, matching, composition, and learning.
+- **087**: Roadmap: Goose Tool Calling Integration - Plan for Goose AI Agent to integrate tool calling support using geometric LCM as reasoning engine.
+- **094**: 094: Gear Serialization Architecture - Proposes a unified serialization protocol for Gear and GearChain components.
+- **096**: Design Consideration 096: Gear to HyperMapping Migration - Migrating from Gear-based architecture to HyperMapping for TruthSpace LCM system.
+- **097**: Geometric Purity Audit (January 2025) - Summary of the audit on ensuring geometric principles in the TruthSpace project.
+- **099**: Design Consideration 099: Absolute φ-Lattice Coordinates - Proposed shift from relative eigenspace coordinates to absolute φ-lattice coordinates for improved knowledge matching accuracy and verifiability.
+- **100**: 100_phi_lattice_implementation_plan - Implementation plan for integrating φ-lattice coordinates into the truthspace_lcm workspace.
+- **101**: φ-Lattice Implementation Results - Implemented absolute φ-lattice coordinates achieving 100% accuracy, solving DC component problem in eigenspace approach.
+- **102**: φ-Lattice Purity Audit - Audit of φ-lattice implementation focusing on geometric purity and bootstrap acceptability.
+- **106**: Design 106: Transformation Corpus Generation - Creating a corpus for sentence transformations using an LLM to enable geometric manipulation across grammatical and semantic dimensions.
+- **115**: Design Consideration 115: Self-Assembling Corpus Roadmap - Roadmap for building a self-assembling knowledge corpus that compounds data, discovers dimensions, rebalances dynamically, fills unknowns, and remains geometrically pure.
+- **116**: Design Consideration 116: Attachable Corpus Layers - Introduces a layered corpus system to manage domain-specific knowledge without affecting base language understanding.
+- **121**: Design Consideration 121: Geometric Constraint Depth Estimation - Shifts from statistical fitting to geometric constraint solving for depth estimation using inverse kinematics analogy.
+- **125**: Exact DA2 Recreation with φ-Arithmetic - Demonstrates exact recreation of DA2 using φ-arithmetic, validating neural networks as geometric transcoders.
+- **126**: Design Consideration 126: φ-Basis Compounding for Speed - Optimizing AI speed by storing geometric primitives and deriving complex data structures.
+- **130**: φ-AIG Compression for Transformers - Achieves 14× compression with 0.09% error in MESH matrices, while other components require alternative strategies.
+- **134**: Design Consideration 134: Discriminant Space Attention - Transformer attention operates in a discriminant space of ~106 dimensions, significantly reducing operations and maintaining high accuracy.
+- **136**: φ-Encoding Duplicates Transformer Output - Demonstrates 99.9984% correlation of φ-encoding with transformer attention, validating the core TruthSpace hypothesis.
+- **138**: φ-Level MLP Restructuring - Reduces MLP computations by restructuring from per-weight to per-φ-level multiplications, achieving significant efficiency gains.
+- **139**: Design Consideration 139: The φ-Convergence Theorem - Recursive application of 'weights describe a shape' optimization converges to φ, enabling scale-invariant computation through the Zeckendorf adder.
+- **142**: Design Consideration 142: Holographic φ-Encoding - A method for storing neural network weights using φ-encoding that achieves high compression with negligible error.
+- **146**: Design Consideration 146: The φ/Bandwidth Fundamental Limit - A theoretical discovery outlining the minimum bandwidth required for representing neural network weights based on φ-geometry.
+- **149**: Design Consideration 149: Hierarchical φ-Encoding for 100% Correlation - A method using hierarchical refinement for achieving 100% correlation with φ-encoding.
+- **150**: Design Consideration 150: Trivial AI with Integer SVD - AI simplified using integer SVD and φ-scaling for high-quality, low-storage computations.
+- **151**: LUT-Only Compression for Geometric AI Models - A method to compress models by storing only Lookup Table (LUT) indices, achieving significant compression ratios.
+- **152**: Design Consideration 152: φ-Level MLP Replacement - Replaces standard MLP with a φ-Level geometric structure for efficiency gains.
+- **168**: Design Consideration 168: Navigation vs Inference - Investigates replacing autoregressive inference with geometric navigation in AI models.
+- **170**: The Full-Rank Attention Limit in LLMs - Single-token attention in LLMs is inherently full-rank, limiting efficient compression.
+- **171**: 171: Dislodging the Full-Rank Basin - Investigates the hypothesis that full-rank attention is a training basin and explores methods to dislodge models towards achieving equivalent performance with low-rank attention.
+- **172**: Bias-Free φ-Lattice Navigation - Eliminates biases in AI models using φ-lattice for natural coordinate system, enhancing navigation over inference.
+- **174**: φ-MLP Analysis and Spectral Parallel Generation - Investigates φ-Exponent MLP conversion and introduces Spectral Parallel Generation technique.
+- **178**: Design Consideration 178: The Spatial Encoder Pattern - A general-purpose pattern for replacing complex computations with spatial lookups, validated on transformer next-token prediction.
+- **181**: Design Consideration 181: Path to Full Geometric Speedup - Progress tracking towards eliminating catches preventing full geometric speedup for all entities in geometric AI.
+- **182**: φ-Shape Knowledge Base: Geometric Storage for World Knowledge - A geometric approach to storing and accessing world knowledge for content token prediction.
+- **183**: Design Consideration 183: Navigation Geometry - Transformer computation is seen as navigation through space, not static knowledge lookup.
+- **184**: Design Consideration 184: Trivial Navigation - Fixed-point navigation implementation achieves high accuracy and significant speedup over transformer models.
+- **185**: Design Consideration 185: Hidden State Caching and Compression - Efficiently caching and compressing hidden states using basis decomposition for geometric AI.
+- **186**: Design Consideration 186: Rank-1 Transformer Replacement - Rank-1 transformations in Qwen2-7B's layers 3-27 enable complete precomputation and significant storage reduction.
+- **187**: Transformer as Lookup Table - A 7B parameter transformer is replaced with a 1.09 GB lookup table for single-token prediction, achieving 100% accuracy with 12.9x compression.
+- **189**: Design Consideration 189: The Safe Dial Mechanism - Analogizes context processing in AI models using a safe dial mechanism.
+- **192**: Doc 192: Boom-Newton Attention - O(N) Attention via Zero-Hunting - Achieves 2.5-2.7× speedup in attention layers using the rhzeros Newton zero-hunting algorithm, maintaining 100% token accuracy.
+- **201**: Automated φ-Discovery System - An AI system using φ-universal coordinates to discover novel ideas and patterns.
+- **203**: φ-Space Interface Design - An interface for navigating φ-space, a 3D universe where concepts are nodes and relationships are edges, allowing users to query, explore, and discover unknown unknowns.
+- **205**: Doc 205: CRUD Operations on φ-Space - Implemented CRUD operations using vector addition, scalar multiplication, and cosine similarity on φ-space.
+
+### Navigation (92 docs)
+- **000**: TruthSpace LCM Design Considerations: Meta-Document - Synthesizes 48 design documents on TruthSpace LCM's evolution from foundational theory to comprehensive geometric language model.
+- **001**: Intentional vs Emergent Geometry: The Core Problem - Analyzes the distinction between intentionally defined and emergently learned geometric spaces in AI models.
+- **004**: Experiments to Test the Vacuum Forming Hypothesis - A series of experiments to validate or refute the hypothesis about how LLMs learn semantic structures through phase shifts and φ-based geometry.
+- **009**: Design Consideration 009: Projection Weighting and Group Theory - Improved 12D vector projection for command disambiguation by emphasizing action dimensions through diagonal linear transformation.
+- **010**: φ-Based Dimensional Navigation - Revisiting the use of φ (golden ratio) for dimensional navigation in TruthSpace due to its natural hierarchical structure and potential for exact representation.
+- **011**: Design Consideration 011: Automated Knowledge Expansion - Explores automating the expansion of a geometric AI's knowledge base from sources like Linux man pages.
+- **013**: Design Consideration 013: Compound Phrase Resolution - Geometric approach for resolving complex natural language queries into executable commands with parameter extraction.
+- **014**: Design Consideration 014: Hierarchical Knowledge Navigation - A geometric architecture for determining knowledge domain activation based on input.
+- **016**: Design Consideration 016: Truly Dynamic Geometric LCM - Addresses how to organize information without overlap, dynamically create domains, switch domains on the fly, and do this geometrically in hyper dimensions.
+- **025**: Design Consideration 025: Co-occurrence Based Cluster Matching - A scalable geometric approach to semantic matching using co-occurrence data to dynamically form clusters.
+- **027**: Design Consideration 027: Pareto Bootstrap for Universal Knowledge Encoding - Bootstraps a universal knowledge encoder using Zipf's Law for word weights and semantic clusters for positions.
+- **028**: Design Consideration 028: Semantic Tree Architecture - A dual-layered approach combining semantic clusters for vocabulary bridging and a recursive tree for self-organizing structure to address knowledge encoding challenges.
+- **030**: Geometric Q&A Projection Framework - Decomposes statements into multiple Q&A pairs through geometric projection
+- **031**: Unified Projection Framework - Q&A and style transfer are seen as projection operations onto axes in a universal semantic space.
+- **032**: Design Consideration 032: VSA Binding Extension - Extends TruthSpace LCM with VSA binding for symbolic reasoning.
+- **034**: Design Consideration 034: Bootstrapped Instinct Knowledge - Observations on scaling GeometricLCM to process a full book, focusing on 'bootstrapped instinct knowledge' needed for effective operation.
+- **035**: Autonomous Bootstrap: Beyond the Coupon Collector Problem - Shifts focus from pattern enumeration to error-driven construction for AI pattern discovery.
+- **036**: Design Consideration 036: Geometric Q&A Pattern Transfer - Investigates transferring Q&A patterns from general knowledge to literary queries using geometric operations.
+- **040**: Design Consideration 040: φ-Inversion as Navigation Mechanism - φ-Inversion provides a self-inverse property for navigation that conserves 'energy' and allows for dual inward and outward movement.
+- **041**: Design Consideration 041: The φ-Dial as Unified Control Mechanism - Unified control mechanism using φ-Dial for multiple dimensions of answer generation
+- **042**: Design Consideration 042: The Complex φ-Dial (2D Control) - Introduces a 2D control plane using complex numbers for controlling specificity/style and perspective/voice in content generation.
+- **043**: Design Consideration 043: 3D φ-Dial with Depth Control - Introduces a 3D φ-Dial controlling style, perspective, and depth for nuanced answer generation.
+- **044**: Design Consideration 044: 4D Quaternion φ-Dial - A 4D quaternion dial controlling style, perspective, depth, and certainty in communication.
+- **045**: Design Consideration 045: The 4D Holographic Bound - 4D quaternion φ-dial reaches holographic bound for semantic answer generation, with grammatical voice as the only orthogonal candidate that is syntactic, not semantic.
+- **048**: Design Consideration 048: Clock-Geodesic Unification - Unifying clock and geodesic concepts for reverse training in a geometric AI framework.
+- **050**: Geometric LLM Roadmap - Exploring the potential of geometric structure to replace statistical learning in language models.
+- **053**: Tachyon Hypothesis Navigation - Hypothesis formation navigates concept space in reverse, akin to a Tachyon traveling backward in time.
+- **055**: Design Consideration 055: Tachyon-Symmetric Quaternion Unification - Unification of symmetry-based knowledge extraction, tachyon hypothesis navigation, and quaternion φ-dial control.
+- **056**: Design Consideration 056: Quad-Quaternion Text Generation - Text generation decomposes into four quaternion spaces controlling concept, output style, morphological aspects, and error dimensions.
+- **057**: Design Consideration 057: Domain Dimension as Zeta t-Coordinate - Integrating domain separation into geometric AI through zeta function coordinates for enhanced character differentiation
+- **058**: Design Consideration 058: Diffraction Grating Simplification - Simplifying complex holographic concept encoding using a diffraction grating analogy.
+- **064**: Design Consideration 064: Geometric LCM v2 Roadmap - Roadmap for replacing LLM functionalities with a Geometric LCM model focusing on core geometric concepts and infrastructure.
+- **066**: Design Consideration 066: Geometric Holographic Roadmap Update - Explored holographic template projection, found hash-based encoding lacks semantic structure, and updated roadmap.
+- **069**: Design Consideration 069: Concept Distillation & Correction Learning - A method for extracting and distilling geometric concepts from text into a compact format for enhanced inference capabilities.
+- **071**: Design Consideration 071: Perspective Lenses for Truth Projection - Explores using different perspectives or 'lenses' to project and understand geometric truth.
+- **074**: Gear Chain Projection - A method for refining geometric truth output into natural language using a series of specialized transformations.
+- **075**: Design Consideration 075: Gear Chain Feedback and Auto-Refinement - A bidirectional gear chain system for automatic refinement of the TruthSpace corpus through output correction.
+- **079**: Design Consideration 079: Emergent Structure Patterns - Systematic analysis of recurring patterns in design decisions for emergent structure understanding
+- **080**: Design Consideration 080: Emergent Dimension Discovery - Semantic dimensions discovered from behavior alone using SVD, proving a 'hyperdimensional transcoder' concept.
+- **083**: Python Code Gear Roadmap - Creating an emergent, geometric Python code generation system for use in a larger AI framework.
+- **084**: 084: Holographic Pattern Projection for Regulatory Networks - Revisiting DNA-inspired regulatory networks to directly construct desired geometric relationships using holographic projection.
+- **087**: Roadmap: Goose Tool Calling Integration - Plan for Goose AI Agent to integrate tool calling support using geometric LCM as reasoning engine.
+- **092**: JSON ↔ Structure Duality - Explains how JSON defines an initial structure, which evolves into dynamic, living geometry during runtime.
+- **093**: 093: Geometric Purity Audit - Audit evaluates adherence to geometric principles in an LLM system, focusing on structure, computation, and knowledge representation.
+- **095**: 095: HyperMapping - Final Form - A geometric data structure that solves problems as effectively as neural networks but is explicit and interpretable.
+- **103**: Design Consideration 103: Self-Assembling Primitives - Transforming chaotic input into geometric structure through self-assembling primitives for φ-lattice geometry.
+- **105**: Design Consideration 105: Dynamic Quaternion Layers - Introduces dynamic z-layer to address the limitations of predefined quaternion dimensions in handling the vastness of natural language.
+- **107**: Design 107: Transformation Coverage Gap Detection - Improves a transformation system by enhancing confidence calculation, identifying transformable words, and using LLMs for fallbacks.
+- **108**: Design 108: Pure Geometric Transformation (No LLM Fallback) - Experimental results highlight issues with content encoding in geometric AI, focusing on quaternion encoder and holographic transformer.
+- **111**: Design 111: Perspective as Layer Manipulation - Reinterpreting agent identity through perspective as a layer offset in AI systems.
+- **112**: Design 112: The Music Box Principle - An analogy between a music box and geometric AI, emphasizing emergent output through interaction rather than hard-coded rules.
+- **113**: Design 113: Geometric Code Generation - Transforming code generation by treating Python tokens geometrically and enabling true code generation.
+- **114**: Design Consideration 114: Emergent Dimensions and Platonic Ideals - Describes emergent dimensions from transformation pairs and Platonic ideals at semantic space origins.
+- **115**: Design Consideration 115: Self-Assembling Corpus Roadmap - Roadmap for building a self-assembling knowledge corpus that compounds data, discovers dimensions, rebalances dynamically, fills unknowns, and remains geometrically pure.
+- **117**: Roadmap to Fluid Conversations - Aims to enhance an AI's conversational capabilities by addressing gaps in current experimental corpus and implementing missing components.
+- **119**: Design Consideration 119: Unified Content + Pattern Space - Unified φ-based geometric space validates coexistence of content and speech patterns, with styles as Platonic ideals.
+- **121**: Design Consideration 121: Geometric Constraint Depth Estimation - Shifts from statistical fitting to geometric constraint solving for depth estimation using inverse kinematics analogy.
+- **126**: Design Consideration 126: φ-Basis Compounding for Speed - Optimizing AI speed by storing geometric primitives and deriving complex data structures.
+- **131**: Decoupling Encoder-Decoder for φ-Basis Compression - Explains how decoupling the encoder-decoder structure in transformers enables DA2-level compression by addressing the mathematical structure of dense MLPs and attention mechanisms.
+- **133**: Design Consideration 133: φ-Basis Floating-Point Unit (φ-FPU) - A floating-point unit using the golden ratio φ as the numeric base for efficient neural network computations.
+- **140**: The Trivial AI Hypothesis - AI computation and structure can be described using φ-structure, making it O(log N) rather than O(N).
+- **141**: Design Consideration 141: The Irreducible Shape - The irreducible shape is a lattice of critical lines dividing semantic space.
+- **143**: Design Consideration 143: Zeta-Aligned Neural Architecture - Proposed neural architecture that addresses issues in Transformers by introducing a 'W-axis' for navigation and critical line symmetry.
+- **147**: Sign Bit Analysis in TruthSpace - Investigation into the structured nature of sign bits in interactions between dimensions, revealing a special role for Layer 0 and implications for compression.
+- **148**: Design Consideration 148: Sierpinski-φ Quantization - Sierpinski triangle's Hausdorff dimension explains BitNet's ternary structure and inspires φ-quantization for enhanced neural network performance.
+- **153**: φ-Circuit Geometry - Gates describe a geometric shape in the context of AI computation.
+- **154**: Computation IS Geometry All The Way Down - Proof that computation exhibits a consistent φ-geometry across layers of abstraction.
+- **155**: Design Consideration 155: Smart φ-Shape (Vector Graphics for Knowledge) - Treats knowledge as vector graphics with self-similar, self-scaling, self-solving, and self-improving properties.
+- **156**: Design Consideration 156: Critical Strip as Level of Detail (LOD) - Uses the Riemann zeta function's critical strip to dynamically adjust the complexity of φ-shapes based on their distance from the viewer.
+- **161**: Design Consideration 161: The Attention Spigot - Reframing attention mechanism from statistical prediction to spatial traversal through φ-lattice.
+- **163**: Design 163: The Rules of the φ-Lattice - A geometric coordinate system for neural network weights and embeddings with validated rules on quantization, vocabulary, quaternion sign structure, clustered deltas, self-similarity, and translation invariance.
+- **164**: Design 164: Navigating the Embedding Space - Discovered navigability in φ-lattice embedding space by flipping specific sign dimensions.
+- **165**: Design Consideration 165: σ=0.5 Sign Navigation - Achieves 100% accuracy in sign-only semantic navigation at the critical line σ=0.5, enabling 960x total compression and implicit knowledge through SVD projection.
+- **166**: Design Consideration 166: Crystalline Flip Structure - Exploration of a crystalline structure underlying semantic flip patterns, explaining holographic projection limitations and proposing a complete geometric framework.
+- **167**: Self-Assembling Navigation - Navigation replaces inference by discovering semantic relationships encoded in model embeddings.
+- **168**: Design Consideration 168: Navigation vs Inference - Investigates replacing autoregressive inference with geometric navigation in AI models.
+- **169**: Design Consideration 169: Replacing Inference with Navigation - Replaces traditional neural network inference with geometric navigation through φ-lattice for improved efficiency and separation of interdependencies.
+- **172**: Bias-Free φ-Lattice Navigation - Eliminates biases in AI models using φ-lattice for natural coordinate system, enhancing navigation over inference.
+- **178**: Design Consideration 178: The Spatial Encoder Pattern - A general-purpose pattern for replacing complex computations with spatial lookups, validated on transformer next-token prediction.
+- **179**: Geometric Transformer Replacement Progress Review - Validation of LLMs as hyperdimensional transcoders through geometric structure replacement
+- **180**: Design Consideration 180: Platonic Ideals and Shape-Based Memory - Memory is conceptualized as a geometric manifold of rotation axes towards Platonic Ideals in the context of 'capital-of' relationships.
+- **181**: Design Consideration 181: Path to Full Geometric Speedup - Progress tracking towards eliminating catches preventing full geometric speedup for all entities in geometric AI.
+- **183**: Design Consideration 183: Navigation Geometry - Transformer computation is seen as navigation through space, not static knowledge lookup.
+- **184**: Design Consideration 184: Trivial Navigation - Fixed-point navigation implementation achieves high accuracy and significant speedup over transformer models.
+- **189**: Design Consideration 189: The Safe Dial Mechanism - Analogizes context processing in AI models using a safe dial mechanism.
+- **194**: Doc 194: Designed vs Trained Models - The Path to True φ-Computation - Investigates why trivial navigation requires caching and explores designing a model to eliminate computational steps.
+- **195**: Bilinear MLP Precomputation - The O(d) Architecture - Reduces transformer operations to O(d) through precomputation, achieving significant speedup.
+- **200**: The Universal Bottleneck Discovery in Qwen2-7B - All reasoning types converge to a φ-level of approximately 1.57 at layer 27, forming a universal bottleneck.
+- **201**: Automated φ-Discovery System - An AI system using φ-universal coordinates to discover novel ideas and patterns.
+- **203**: φ-Space Interface Design - An interface for navigating φ-space, a 3D universe where concepts are nodes and relationships are edges, allowing users to query, explore, and discover unknown unknowns.
+- **204**: Reverse Navigation and Validity Filtering - Explores backward navigation in φ-space for finding valid paths to a target concept, revealing insights into cognitive complexity and semantic coherence.
+- **206**: Conceptual Nexus - Model Self-Control Interface - Model designs an interface for self-control and manipulation of interconnected concepts
+
+### Self-Similarity (38 docs)
+- **000**: TruthSpace LCM Design Considerations: Meta-Document - Synthesizes 48 design documents on TruthSpace LCM's evolution from foundational theory to comprehensive geometric language model.
+- **003**: Vacuum Forming Hypothesis - An analogy comparing LLM training to vacuum forming, focusing on capturing surface structure rather than interior.
+- **010**: φ-Based Dimensional Navigation - Revisiting the use of φ (golden ratio) for dimensional navigation in TruthSpace due to its natural hierarchical structure and potential for exact representation.
+- **011**: Design Consideration 011: Automated Knowledge Expansion - Explores automating the expansion of a geometric AI's knowledge base from sources like Linux man pages.
+- **013**: Design Consideration 013: Compound Phrase Resolution - Geometric approach for resolving complex natural language queries into executable commands with parameter extraction.
+- **014**: Design Consideration 014: Hierarchical Knowledge Navigation - A geometric architecture for determining knowledge domain activation based on input.
+- **022**: Design Consideration 022: Attractor-Repeller Dynamics for Semantic Self-Organization - Self-similarity acts as an attractor, deviation acts as a repeller, guiding semantic structure emergence in TruthSpace.
+- **028**: Design Consideration 028: Semantic Tree Architecture - A dual-layered approach combining semantic clusters for vocabulary bridging and a recursive tree for self-organizing structure to address knowledge encoding challenges.
+- **035**: Autonomous Bootstrap: Beyond the Coupon Collector Problem - Shifts focus from pattern enumeration to error-driven construction for AI pattern discovery.
+- **039**: Design Consideration 039: φ and Zipf as Dual Self-Similar Fractals - φ-based encoding and Zipf weighting are dual self-similar fractals viewing power-law decay from opposite directions.
+- **040**: Design Consideration 040: φ-Inversion as Navigation Mechanism - φ-Inversion provides a self-inverse property for navigation that conserves 'energy' and allows for dual inward and outward movement.
+- **041**: Design Consideration 041: The φ-Dial as Unified Control Mechanism - Unified control mechanism using φ-Dial for multiple dimensions of answer generation
+- **044**: Design Consideration 044: 4D Quaternion φ-Dial - A 4D quaternion dial controlling style, perspective, depth, and certainty in communication.
+- **055**: Design Consideration 055: Tachyon-Symmetric Quaternion Unification - Unification of symmetry-based knowledge extraction, tachyon hypothesis navigation, and quaternion φ-dial control.
+- **060**: Unified Symmetric Ingestion - A design consideration unifying knowledge, style, and projection through a common ingestion process and differing interpretation.
+- **061**: Design Consideration 061: ENCODE = DECODE - Realization that encoding and decoding are the same operation in opposite directions, embodying the essence of φ-geometry.
+- **071**: Design Consideration 071: Perspective Lenses for Truth Projection - Explores using different perspectives or 'lenses' to project and understand geometric truth.
+- **078**: Concept Token Architecture - Replaces frames with concept tokens as the primary unit in geometric AI space.
+- **079**: Design Consideration 079: Emergent Structure Patterns - Systematic analysis of recurring patterns in design decisions for emergent structure understanding
+- **093**: 093: Geometric Purity Audit - Audit evaluates adherence to geometric principles in an LLM system, focusing on structure, computation, and knowledge representation.
+- **120**: Design Consideration 120: The Universal Dimension Principle - Discovers that any transformation can be a dimension in text analysis.
+- **124**: Design Consideration 124: φ-Exponent Arithmetic - A mathematical approach to geometric computation using powers of the golden ratio φ.
+- **126**: Design Consideration 126: φ-Basis Compounding for Speed - Optimizing AI speed by storing geometric primitives and deriving complex data structures.
+- **131**: Decoupling Encoder-Decoder for φ-Basis Compression - Explains how decoupling the encoder-decoder structure in transformers enables DA2-level compression by addressing the mathematical structure of dense MLPs and attention mechanisms.
+- **137**: Design Consideration 137: φ as Universal Adapter - φ (the golden ratio) acts as a universal adapter capable of representing any linear structure due to its properties of self-similarity, Fibonacci connection, optimal packing, and logarithmic representation.
+- **139**: Design Consideration 139: The φ-Convergence Theorem - Recursive application of 'weights describe a shape' optimization converges to φ, enabling scale-invariant computation through the Zeckendorf adder.
+- **140**: The Trivial AI Hypothesis - AI computation and structure can be described using φ-structure, making it O(log N) rather than O(N).
+- **141**: Design Consideration 141: The Irreducible Shape - The irreducible shape is a lattice of critical lines dividing semantic space.
+- **148**: Design Consideration 148: Sierpinski-φ Quantization - Sierpinski triangle's Hausdorff dimension explains BitNet's ternary structure and inspires φ-quantization for enhanced neural network performance.
+- **153**: φ-Circuit Geometry - Gates describe a geometric shape in the context of AI computation.
+- **163**: Design 163: The Rules of the φ-Lattice - A geometric coordinate system for neural network weights and embeddings with validated rules on quantization, vocabulary, quaternion sign structure, clustered deltas, self-similarity, and translation invariance.
+- **165**: Design Consideration 165: σ=0.5 Sign Navigation - Achieves 100% accuracy in sign-only semantic navigation at the critical line σ=0.5, enabling 960x total compression and implicit knowledge through SVD projection.
+- **166**: Design Consideration 166: Crystalline Flip Structure - Exploration of a crystalline structure underlying semantic flip patterns, explaining holographic projection limitations and proposing a complete geometric framework.
+- **179**: Geometric Transformer Replacement Progress Review - Validation of LLMs as hyperdimensional transcoders through geometric structure replacement
+- **180**: Design Consideration 180: Platonic Ideals and Shape-Based Memory - Memory is conceptualized as a geometric manifold of rotation axes towards Platonic Ideals in the context of 'capital-of' relationships.
+- **195**: Bilinear MLP Precomputation - The O(d) Architecture - Reduces transformer operations to O(d) through precomputation, achieving significant speedup.
+- **201**: Automated φ-Discovery System - An AI system using φ-universal coordinates to discover novel ideas and patterns.
+- **206**: Conceptual Nexus - Model Self-Control Interface - Model designs an interface for self-control and manipulation of interconnected concepts
+
+### Theory (51 docs)
+- **001**: Intentional vs Emergent Geometry: The Core Problem - Analyzes the distinction between intentionally defined and emergently learned geometric spaces in AI models.
+- **002**: Critical Analysis: What Do LLMs Actually Learn? - Analyzes how LLMs learn through token embeddings, attention patterns, feed-forward networks, and output projections, comparing to TruthSpace's approach.
+- **004**: Experiments to Test the Vacuum Forming Hypothesis - A series of experiments to validate or refute the hypothesis about how LLMs learn semantic structures through phase shifts and φ-based geometry.
+- **005**: Experimental Results: Vacuum Forming Hypothesis - Initial experiments support the vacuum forming hypothesis in φ-geometry, showing structure beyond simple correlation.
+- **007**: Design Consideration 007: Semantic Disambiguation in TruthSpace LCM - Analyzes the semantic understanding gap between TruthSpace LCM and traditional LLMs post 12D plastic-primary encoding migration.
+- **008**: Design Consideration 008: Conceptual Depth in the LCM - Analyzes the need for deeper conceptual overlap in the Large Concept Model through compositional vs. conceptual semantics.
+- **009**: Design Consideration 009: Projection Weighting and Group Theory - Improved 12D vector projection for command disambiguation by emphasizing action dimensions through diagonal linear transformation.
+- **010**: φ-Based Dimensional Navigation - Revisiting the use of φ (golden ratio) for dimensional navigation in TruthSpace due to its natural hierarchical structure and potential for exact representation.
+- **017**: Design Consideration 017: Stacked Geometric Embeddings - A geometric AI project aiming to recreate LLM embedding discriminative power through stacked hierarchical geometric layers.
+- **018**: Design Consideration 018: Stacked Geometric LCM Analysis - Summary of Stacked Geometric LCM v1 and v2 development focusing on architecture evolution, quantitative results, and what works.
+- **020**: Scalable Geometric Layer Addition Protocol - Addresses discrimination resolution through scalable layer addition using holographic principles.
+- **021**: Structural Similarity Breakthrough: Escaping Keyword Matching - Shifts from word-based primitives to character-level structural similarity for improved query resolution.
+- **037**: Design Consideration 037: Spatial Attention for Concept Importance - Integrating spatial attention to assess concept importance beyond frequency in text analysis.
+- **047**: Design Consideration 047: Intrinsic vs Functional Dimension - Discovers geometric distinction between intrinsic properties and functional purposes in knowledge representation.
+- **049**: Design Consideration 049: Gradient-Free Learning - Achieving high accuracy through error-driven structure learning without gradients
+- **052**: Hypothesis-Driven Knowledge Acquisition in GeometricLCM - Shifts knowledge acquisition from passive extraction to goal-directed, hypothesis-driven approach using Pólya's method.
+- **053**: Tachyon Hypothesis Navigation - Hypothesis formation navigates concept space in reverse, akin to a Tachyon traveling backward in time.
+- **065**: Design Consideration 065: Holographic Template Projection - Adaptable template generation from Q&A pairs using complex vector interference
+- **067**: Design Consideration 067: Semantic Quaternion for Concept Encoding - A 4D encoding method for concepts enabling 100% analogy accuracy by representing semantic attributes like gender, age, agency, and animacy.
+- **070**: Design Consideration 070: Concept Space & Dual Quaternions - Explores using dual quaternions to represent concepts in TruthSpace, focusing on semantic and identity properties.
+- **076**: Emergent Classifier Protocol - A systematic approach for converting hardcoded word lists and pattern-based detection into emergent, self-learning classifiers.
+- **080**: Design Consideration 080: Emergent Dimension Discovery - Semantic dimensions discovered from behavior alone using SVD, proving a 'hyperdimensional transcoder' concept.
+- **104**: Design Consideration 104: Dimensional Scalability - Exploring scalability of the φ-lattice in handling increased dimensions for natural language understanding.
+- **106**: Design 106: Transformation Corpus Generation - Creating a corpus for sentence transformations using an LLM to enable geometric manipulation across grammatical and semantic dimensions.
+- **112**: Design 112: The Music Box Principle - An analogy between a music box and geometric AI, emphasizing emergent output through interaction rather than hard-coded rules.
+- **116**: Design Consideration 116: Attachable Corpus Layers - Introduces a layered corpus system to manage domain-specific knowledge without affecting base language understanding.
+- **117**: Roadmap to Fluid Conversations - Aims to enhance an AI's conversational capabilities by addressing gaps in current experimental corpus and implementing missing components.
+- **118**: Design Consideration 118: Emergent Response Patterns - Shifts from hard-coded templates to emergent pattern pairs for AI response generation.
+- **122**: Design Consideration 122: Self-Assembly on Model Weights - Explores using self-assembly on model weights for discovering geometric structure without needing to recreate models from outputs.
+- **123**: Design Consideration 123: φ-Basis Backbone Replacement - Replaces DINOv2 transformer backbone with φ-basis linear transform + error lookup table for 80x speedup and 0.62 depth correlation.
+- **127**: The Geometric Model Hypothesis - Weights are coordinates of a shape in high-dimensional space, discovered through training rather than learned in a statistical sense.
+- **131**: Decoupling Encoder-Decoder for φ-Basis Compression - Explains how decoupling the encoder-decoder structure in transformers enables DA2-level compression by addressing the mathematical structure of dense MLPs and attention mechanisms.
+- **135**: Design Consideration 135: Attention Head Semantic Specialization - Analysis of Qwen2-7B attention heads reveals specialization in semantic dimensions.
+- **137**: Design Consideration 137: φ as Universal Adapter - φ (the golden ratio) acts as a universal adapter capable of representing any linear structure due to its properties of self-similarity, Fibonacci connection, optimal packing, and logarithmic representation.
+- **143**: Design Consideration 143: Zeta-Aligned Neural Architecture - Proposed neural architecture that addresses issues in Transformers by introducing a 'W-axis' for navigation and critical line symmetry.
+- **146**: Design Consideration 146: The φ/Bandwidth Fundamental Limit - A theoretical discovery outlining the minimum bandwidth required for representing neural network weights based on φ-geometry.
+- **161**: Design Consideration 161: The Attention Spigot - Reframing attention mechanism from statistical prediction to spatial traversal through φ-lattice.
+- **162**: The Tetromino Weight Hypothesis - Neural network weights form a constrained geometric structure akin to tetrominoes tiling space.
+- **168**: Design Consideration 168: Navigation vs Inference - Investigates replacing autoregressive inference with geometric navigation in AI models.
+- **169**: Design Consideration 169: Replacing Inference with Navigation - Replaces traditional neural network inference with geometric navigation through φ-lattice for improved efficiency and separation of interdependencies.
+- **172**: Bias-Free φ-Lattice Navigation - Eliminates biases in AI models using φ-lattice for natural coordinate system, enhancing navigation over inference.
+- **175**: Autoregression as an Eigenvalue Problem - Treating autoregressive token generation as a singular system akin to a quantum eigenvalue problem for efficiency and insight.
+- **183**: Design Consideration 183: Navigation Geometry - Transformer computation is seen as navigation through space, not static knowledge lookup.
+- **189**: Design Consideration 189: The Safe Dial Mechanism - Analogizes context processing in AI models using a safe dial mechanism.
+- **190**: Design Consideration 190: Full Transformer Unwinding - Achieved high accuracy in unwinding transformer layer 3 computation by including biases and rotary position embeddings.
+- **194**: Doc 194: Designed vs Trained Models - The Path to True φ-Computation - Investigates why trivial navigation requires caching and explores designing a model to eliminate computational steps.
+- **197**: Doc 197: Perspective-Invariant Analog Computation - Perspective-invariant computation using SVD factorization for efficient multi-perspective problem solving in AI models.
+- **198**: Exploiting Structure - The Unified Approach - Unified method for optimizing transformer models by leveraging weight clustering, low-rank structure, and input similarity.
+- **200**: The Universal Bottleneck Discovery in Qwen2-7B - All reasoning types converge to a φ-level of approximately 1.57 at layer 27, forming a universal bottleneck.
+- **201**: Automated φ-Discovery System - An AI system using φ-universal coordinates to discover novel ideas and patterns.
+- **204**: Reverse Navigation and Validity Filtering - Explores backward navigation in φ-space for finding valid paths to a target concept, revealing insights into cognitive complexity and semantic coherence.
+
+### Zeta (11 docs)
+- **022**: Design Consideration 022: Attractor-Repeller Dynamics for Semantic Self-Organization - Self-similarity acts as an attractor, deviation acts as a repeller, guiding semantic structure emergence in TruthSpace.
+- **057**: Design Consideration 057: Domain Dimension as Zeta t-Coordinate - Integrating domain separation into geometric AI through zeta function coordinates for enhanced character differentiation
+- **090**: Design Consideration 090: The Critical Line as Information Limit - The critical line σ = 0.5 acts as a universal information limit across holographic resolution, geometric knowledge persistence, and the Riemann hypothesis.
+- **098**: Prime-Zeta Lattice for Concept Positioning - A model using prime numbers for concept positioning and zeta zeros for navigation, inspired by Zipf's law and attractor dynamics.
+- **139**: Design Consideration 139: The φ-Convergence Theorem - Recursive application of 'weights describe a shape' optimization converges to φ, enabling scale-invariant computation through the Zeckendorf adder.
+- **140**: The Trivial AI Hypothesis - AI computation and structure can be described using φ-structure, making it O(log N) rather than O(N).
+- **143**: Design Consideration 143: Zeta-Aligned Neural Architecture - Proposed neural architecture that addresses issues in Transformers by introducing a 'W-axis' for navigation and critical line symmetry.
+- **144**: Design Consideration 144: Unified Zeta-Aligned Architecture - A proposed architecture that unifies concepts through a balance point found in zeta functions, golden ratio, softmax, and dimensional downcasting.
+- **156**: Design Consideration 156: Critical Strip as Level of Detail (LOD) - Uses the Riemann zeta function's critical strip to dynamically adjust the complexity of φ-shapes based on their distance from the viewer.
+- **159**: The Zeta Sonic Boom Hypothesis - A hypothesis linking integer math, geometry, and the Riemann zeta function's zeros through a 'sonic boom' phenomenon.
+- **160**: Unified Geometric Theory: Shape IS Information - A theory linking mathematical constants, neural network phenomena, and geometric principles through self-similarity, integer relations, and the fine structure constant.
+
+### Φ-Geometry (138 docs)
+- **-01**: Design Considerations for TruthSpace LCM - Documentation on architectural decisions for TruthSpace focusing on geometry, learning mechanisms, and experimental validation
+- **000**: TruthSpace LCM Design Considerations: Meta-Document - Synthesizes 48 design documents on TruthSpace LCM's evolution from foundational theory to comprehensive geometric language model.
+- **001**: Intentional vs Emergent Geometry: The Core Problem - Analyzes the distinction between intentionally defined and emergently learned geometric spaces in AI models.
+- **003**: Vacuum Forming Hypothesis - An analogy comparing LLM training to vacuum forming, focusing on capturing surface structure rather than interior.
+- **004**: Experiments to Test the Vacuum Forming Hypothesis - A series of experiments to validate or refute the hypothesis about how LLMs learn semantic structures through phase shifts and φ-based geometry.
+- **005**: Experimental Results: Vacuum Forming Hypothesis - Initial experiments support the vacuum forming hypothesis in φ-geometry, showing structure beyond simple correlation.
+- **006**: Dimensionality Analysis Findings - Investigates why the plastic constant shows stronger separation than φ, optimality of dimensions, and exploitation of orthogonality for autotuning.
+- **012**: Design Consideration 012: Geometric Overlap Handling - Addresses synonym-induced over-counting in natural language query encoding using geometric operations inspired by fractal geometry.
+- **014**: Design Consideration 014: Hierarchical Knowledge Navigation - A geometric architecture for determining knowledge domain activation based on input.
+- **015**: Design Consideration 015: Dynamic Geometric LCM - A scalable, generalizable geometric language model that discovers new primitives from data and organizes knowledge geometrically.
+- **016**: Design Consideration 016: Truly Dynamic Geometric LCM - Addresses how to organize information without overlap, dynamically create domains, switch domains on the fly, and do this geometrically in hyper dimensions.
+- **019**: Holographic Resolution: GOP, MGOP, and Probe Extraction - A method using error amplification and multi-view analysis for enhancing semantic matching through geometric embeddings.
+- **022**: Design Consideration 022: Attractor-Repeller Dynamics for Semantic Self-Organization - Self-similarity acts as an attractor, deviation acts as a repeller, guiding semantic structure emergence in TruthSpace.
+- **023**: Design Consideration 023: OpenAI Sparse Circuits Comparison - Compares OpenAI's sparse circuit approach with TruthSpace's attractor/repeller method, focusing on the common insight that meaning resides in sparse, disentangled structures.
+- **024**: Design Consideration 024: Scalable φ-Based Data Ingestion - Proposes a direct data placement method for scalable φ-based structure building.
+- **025**: Design Consideration 025: Co-occurrence Based Cluster Matching - A scalable geometric approach to semantic matching using co-occurrence data to dynamically form clusters.
+- **026**: Research Proposal: Generalized φ-Based Knowledge Ingestion - Abstracts and generalizes a system for ingesting domain knowledge across various fields.
+- **027**: Design Consideration 027: Pareto Bootstrap for Universal Knowledge Encoding - Bootstraps a universal knowledge encoder using Zipf's Law for word weights and semantic clusters for positions.
+- **030**: Geometric Q&A Projection Framework - Decomposes statements into multiple Q&A pairs through geometric projection
+- **031**: Unified Projection Framework - Q&A and style transfer are seen as projection operations onto axes in a universal semantic space.
+- **032**: Design Consideration 032: VSA Binding Extension - Extends TruthSpace LCM with VSA binding for symbolic reasoning.
+- **033**: Design Consideration 033: Dynamic Geometric LCM - A foundational geometric computation architecture for AI that replaces traditional LLMs with dynamic geometric structures for knowledge representation and learning.
+- **037**: Design Consideration 037: Spatial Attention for Concept Importance - Integrating spatial attention to assess concept importance beyond frequency in text analysis.
+- **038**: Design Consideration 038: Relationship Formation and Autobalancing - Utilizing Zipf's law across concept space for autobalancing in AI models
+- **039**: Design Consideration 039: φ and Zipf as Dual Self-Similar Fractals - φ-based encoding and Zipf weighting are dual self-similar fractals viewing power-law decay from opposite directions.
+- **040**: Design Consideration 040: φ-Inversion as Navigation Mechanism - φ-Inversion provides a self-inverse property for navigation that conserves 'energy' and allows for dual inward and outward movement.
+- **042**: Design Consideration 042: The Complex φ-Dial (2D Control) - Introduces a 2D control plane using complex numbers for controlling specificity/style and perspective/voice in content generation.
+- **043**: Design Consideration 043: 3D φ-Dial with Depth Control - Introduces a 3D φ-Dial controlling style, perspective, and depth for nuanced answer generation.
+- **045**: Design Consideration 045: The 4D Holographic Bound - 4D quaternion φ-dial reaches holographic bound for semantic answer generation, with grammatical voice as the only orthogonal candidate that is syntactic, not semantic.
+- **046**: Design Consideration 046: Holographic Interference Patterns - Explores how multiple knowledge sources can interfere like light waves, impacting the synthesis of information in TruthSpace.
+- **047**: Design Consideration 047: Intrinsic vs Functional Dimension - Discovers geometric distinction between intrinsic properties and functional purposes in knowledge representation.
+- **050**: Geometric LLM Roadmap - Exploring the potential of geometric structure to replace statistical learning in language models.
+- **051**: Phase 6: Data Ingestion and Capability Refinement - Improving GeometricLCM's conversational flow, code generation, and data handling for competitive LLM capabilities.
+- **054**: Design Consideration 054: Temporal Symmetry and Tachyon Joints - Exploring how verbs function as temporal navigation instructions in language processing.
+- **055**: Design Consideration 055: Tachyon-Symmetric Quaternion Unification - Unification of symmetry-based knowledge extraction, tachyon hypothesis navigation, and quaternion φ-dial control.
+- **056**: Design Consideration 056: Quad-Quaternion Text Generation - Text generation decomposes into four quaternion spaces controlling concept, output style, morphological aspects, and error dimensions.
+- **057**: Design Consideration 057: Domain Dimension as Zeta t-Coordinate - Integrating domain separation into geometric AI through zeta function coordinates for enhanced character differentiation
+- **058**: Design Consideration 058: Diffraction Grating Simplification - Simplifying complex holographic concept encoding using a diffraction grating analogy.
+- **059**: Design Consideration 059: Two-Source Diffraction Chat - Two sources (Knowledge and Style) generate meaningful, styled responses through interference, mirroring human communication.
+- **060**: Unified Symmetric Ingestion - A design consideration unifying knowledge, style, and projection through a common ingestion process and differing interpretation.
+- **061**: Design Consideration 061: ENCODE = DECODE - Realization that encoding and decoding are the same operation in opposite directions, embodying the essence of φ-geometry.
+- **062**: Design Consideration 062: Geometric Stop Word Detection - Develops a method to detect stop words geometrically based on their semantic roles in text.
+- **063**: Design Consideration 063: Geometric Morphology Bootstrap - A geometric approach to learning morphological equivalences from parallel sentences.
+- **064**: Design Consideration 064: Geometric LCM v2 Roadmap - Roadmap for replacing LLM functionalities with a Geometric LCM model focusing on core geometric concepts and infrastructure.
+- **066**: Design Consideration 066: Geometric Holographic Roadmap Update - Explored holographic template projection, found hash-based encoding lacks semantic structure, and updated roadmap.
+- **068**: Design Consideration 068: Roadmap Update - December 28, 2024 - Advancements in holographic template projection, semantic quaternions, and geometric encoding for enhanced AI understanding and generation.
+- **069**: Design Consideration 069: Concept Distillation & Correction Learning - A method for extracting and distilling geometric concepts from text into a compact format for enhanced inference capabilities.
+- **071**: Design Consideration 071: Perspective Lenses for Truth Projection - Explores using different perspectives or 'lenses' to project and understand geometric truth.
+- **072**: Design Consideration 072: Self-Similar TruthSpace and the Geometry of Naming - TruthSpace exhibits fractal self-similarity with self-verifying transformations and reveals structural rules in language naming.
+- **073**: Geometric Reinforcement Learning - Learning through structural modifications in bidirectional transformations within TruthSpace.
+- **074**: Gear Chain Projection - A method for refining geometric truth output into natural language using a series of specialized transformations.
+- **078**: Concept Token Architecture - Replaces frames with concept tokens as the primary unit in geometric AI space.
+- **083**: Python Code Gear Roadmap - Creating an emergent, geometric Python code generation system for use in a larger AI framework.
+- **084**: 084: Holographic Pattern Projection for Regulatory Networks - Revisiting DNA-inspired regulatory networks to directly construct desired geometric relationships using holographic projection.
+- **088**: Design Consideration 088: Geometric Knowledge Persistence - Proposes direct persistent storage of geometric knowledge in TruthSpace LCM.
+- **089**: Geometric Knowledge Persistence - Post-Review Analysis - Review of Design 088 focusing on the core insight of ENCODE = DECODE and its implications for geometric knowledge storage.
+- **090**: Design Consideration 090: The Critical Line as Information Limit - The critical line σ = 0.5 acts as a universal information limit across holographic resolution, geometric knowledge persistence, and the Riemann hypothesis.
+- **091**: Design Consideration 091: Position Is Everything - Position encapsulates all features in the critical strip as information limit.
+- **092**: JSON ↔ Structure Duality - Explains how JSON defines an initial structure, which evolves into dynamic, living geometry during runtime.
+- **093**: 093: Geometric Purity Audit - Audit evaluates adherence to geometric principles in an LLM system, focusing on structure, computation, and knowledge representation.
+- **095**: 095: HyperMapping - Final Form - A geometric data structure that solves problems as effectively as neural networks but is explicit and interpretable.
+- **097**: Geometric Purity Audit (January 2025) - Summary of the audit on ensuring geometric principles in the TruthSpace project.
+- **098**: Prime-Zeta Lattice for Concept Positioning - A model using prime numbers for concept positioning and zeta zeros for navigation, inspired by Zipf's law and attractor dynamics.
+- **099**: Design Consideration 099: Absolute φ-Lattice Coordinates - Proposed shift from relative eigenspace coordinates to absolute φ-lattice coordinates for improved knowledge matching accuracy and verifiability.
+- **101**: φ-Lattice Implementation Results - Implemented absolute φ-lattice coordinates achieving 100% accuracy, solving DC component problem in eigenspace approach.
+- **102**: φ-Lattice Purity Audit - Audit of φ-lattice implementation focusing on geometric purity and bootstrap acceptability.
+- **104**: Design Consideration 104: Dimensional Scalability - Exploring scalability of the φ-lattice in handling increased dimensions for natural language understanding.
+- **108**: Design 108: Pure Geometric Transformation (No LLM Fallback) - Experimental results highlight issues with content encoding in geometric AI, focusing on quaternion encoder and holographic transformer.
+- **109**: Generalized Geometric Space - A breakthrough in geometric AI where transformations across various domains reveal concept identity through self-similar φ-based positions.
+- **110**: Agent-Grounded Geometric Interpretation - Improving intent classification in AI by considering the agent's self-model and geometric interpretation of queries.
+- **112**: Design 112: The Music Box Principle - An analogy between a music box and geometric AI, emphasizing emergent output through interaction rather than hard-coded rules.
+- **113**: Design 113: Geometric Code Generation - Transforming code generation by treating Python tokens geometrically and enabling true code generation.
+- **114**: Design Consideration 114: Emergent Dimensions and Platonic Ideals - Describes emergent dimensions from transformation pairs and Platonic ideals at semantic space origins.
+- **115**: Design Consideration 115: Self-Assembling Corpus Roadmap - Roadmap for building a self-assembling knowledge corpus that compounds data, discovers dimensions, rebalances dynamically, fills unknowns, and remains geometrically pure.
+- **117**: Roadmap to Fluid Conversations - Aims to enhance an AI's conversational capabilities by addressing gaps in current experimental corpus and implementing missing components.
+- **119**: Design Consideration 119: Unified Content + Pattern Space - Unified φ-based geometric space validates coexistence of content and speech patterns, with styles as Platonic ideals.
+- **120**: Design Consideration 120: The Universal Dimension Principle - Discovers that any transformation can be a dimension in text analysis.
+- **121**: Design Consideration 121: Geometric Constraint Depth Estimation - Shifts from statistical fitting to geometric constraint solving for depth estimation using inverse kinematics analogy.
+- **124**: Design Consideration 124: φ-Exponent Arithmetic - A mathematical approach to geometric computation using powers of the golden ratio φ.
+- **125**: Exact DA2 Recreation with φ-Arithmetic - Demonstrates exact recreation of DA2 using φ-arithmetic, validating neural networks as geometric transcoders.
+- **126**: Design Consideration 126: φ-Basis Compounding for Speed - Optimizing AI speed by storing geometric primitives and deriving complex data structures.
+- **127**: The Geometric Model Hypothesis - Weights are coordinates of a shape in high-dimensional space, discovered through training rather than learned in a statistical sense.
+- **128**: Design Consideration 128: Absolute φ-Lattice Weight Representation - Model weights naturally occupy absolute positions on the φ-lattice, forming a characteristic distribution.
+- **129**: φ-Unraveled Transformer Engine: Design Consideration 129 - Reproduced Qwen2-7B output with 99.9991% correlation by unraveling transformer's self-referential structure before encoding in φ-basis.
+- **130**: φ-AIG Compression for Transformers - Achieves 14× compression with 0.09% error in MESH matrices, while other components require alternative strategies.
+- **131**: Decoupling Encoder-Decoder for φ-Basis Compression - Explains how decoupling the encoder-decoder structure in transformers enables DA2-level compression by addressing the mathematical structure of dense MLPs and attention mechanisms.
+- **132**: Design Consideration 132: The φ-Sigmoid Discovery - Decoupling MLP structure reveals exact φ-structure in sigmoid and near-linear operation across the network.
+- **133**: Design Consideration 133: φ-Basis Floating-Point Unit (φ-FPU) - A floating-point unit using the golden ratio φ as the numeric base for efficient neural network computations.
+- **134**: Design Consideration 134: Discriminant Space Attention - Transformer attention operates in a discriminant space of ~106 dimensions, significantly reducing operations and maintaining high accuracy.
+- **135**: Design Consideration 135: Attention Head Semantic Specialization - Analysis of Qwen2-7B attention heads reveals specialization in semantic dimensions.
+- **136**: φ-Encoding Duplicates Transformer Output - Demonstrates 99.9984% correlation of φ-encoding with transformer attention, validating the core TruthSpace hypothesis.
+- **137**: Design Consideration 137: φ as Universal Adapter - φ (the golden ratio) acts as a universal adapter capable of representing any linear structure due to its properties of self-similarity, Fibonacci connection, optimal packing, and logarithmic representation.
+- **138**: φ-Level MLP Restructuring - Reduces MLP computations by restructuring from per-weight to per-φ-level multiplications, achieving significant efficiency gains.
+- **139**: Design Consideration 139: The φ-Convergence Theorem - Recursive application of 'weights describe a shape' optimization converges to φ, enabling scale-invariant computation through the Zeckendorf adder.
+- **140**: The Trivial AI Hypothesis - AI computation and structure can be described using φ-structure, making it O(log N) rather than O(N).
+- **141**: Design Consideration 141: The Irreducible Shape - The irreducible shape is a lattice of critical lines dividing semantic space.
+- **142**: Design Consideration 142: Holographic φ-Encoding - A method for storing neural network weights using φ-encoding that achieves high compression with negligible error.
+- **144**: Design Consideration 144: Unified Zeta-Aligned Architecture - A proposed architecture that unifies concepts through a balance point found in zeta functions, golden ratio, softmax, and dimensional downcasting.
+- **145**: Design Consideration 145: The Fibonacci Correction Formula - Expressing SiLU as φ-sigmoid plus a Fibonacci correction for exact reconstruction.
+- **146**: Design Consideration 146: The φ/Bandwidth Fundamental Limit - A theoretical discovery outlining the minimum bandwidth required for representing neural network weights based on φ-geometry.
+- **147**: Sign Bit Analysis in TruthSpace - Investigation into the structured nature of sign bits in interactions between dimensions, revealing a special role for Layer 0 and implications for compression.
+- **148**: Design Consideration 148: Sierpinski-φ Quantization - Sierpinski triangle's Hausdorff dimension explains BitNet's ternary structure and inspires φ-quantization for enhanced neural network performance.
+- **149**: Design Consideration 149: Hierarchical φ-Encoding for 100% Correlation - A method using hierarchical refinement for achieving 100% correlation with φ-encoding.
+- **150**: Design Consideration 150: Trivial AI with Integer SVD - AI simplified using integer SVD and φ-scaling for high-quality, low-storage computations.
+- **151**: LUT-Only Compression for Geometric AI Models - A method to compress models by storing only Lookup Table (LUT) indices, achieving significant compression ratios.
+- **152**: Design Consideration 152: φ-Level MLP Replacement - Replaces standard MLP with a φ-Level geometric structure for efficiency gains.
+- **153**: φ-Circuit Geometry - Gates describe a geometric shape in the context of AI computation.
+- **154**: Computation IS Geometry All The Way Down - Proof that computation exhibits a consistent φ-geometry across layers of abstraction.
+- **155**: Design Consideration 155: Smart φ-Shape (Vector Graphics for Knowledge) - Treats knowledge as vector graphics with self-similar, self-scaling, self-solving, and self-improving properties.
+- **156**: Design Consideration 156: Critical Strip as Level of Detail (LOD) - Uses the Riemann zeta function's critical strip to dynamically adjust the complexity of φ-shapes based on their distance from the viewer.
+- **157**: Design Consideration 157: Adaptive LOD Token Generation - Adaptive token generation using Level of Detail (LOD) based on token confidence for efficiency and speedup.
+- **158**: SVD Quality Analysis: Limitations of Low-Rank Approximation for LLM Inference - Analysis reveals SVD-based LOD fails for Qwen2-7B due to slow singular value decay and high sensitivity of critical layers.
+- **159**: The Zeta Sonic Boom Hypothesis - A hypothesis linking integer math, geometry, and the Riemann zeta function's zeros through a 'sonic boom' phenomenon.
+- **160**: Unified Geometric Theory: Shape IS Information - A theory linking mathematical constants, neural network phenomena, and geometric principles through self-similarity, integer relations, and the fine structure constant.
+- **161**: Design Consideration 161: The Attention Spigot - Reframing attention mechanism from statistical prediction to spatial traversal through φ-lattice.
+- **162**: The Tetromino Weight Hypothesis - Neural network weights form a constrained geometric structure akin to tetrominoes tiling space.
+- **163**: Design 163: The Rules of the φ-Lattice - A geometric coordinate system for neural network weights and embeddings with validated rules on quantization, vocabulary, quaternion sign structure, clustered deltas, self-similarity, and translation invariance.
+- **166**: Design Consideration 166: Crystalline Flip Structure - Exploration of a crystalline structure underlying semantic flip patterns, explaining holographic projection limitations and proposing a complete geometric framework.
+- **169**: Design Consideration 169: Replacing Inference with Navigation - Replaces traditional neural network inference with geometric navigation through φ-lattice for improved efficiency and separation of interdependencies.
+- **173**: Doc 173: Quantum Resonant Attention - Attention mechanism is viewed as a quantum interference problem, focusing on resonant modes and dominant interference patterns.
+- **174**: φ-MLP Analysis and Spectral Parallel Generation - Investigates φ-Exponent MLP conversion and introduces Spectral Parallel Generation technique.
+- **176**: Token Fixed Points Discovery - Autoregressive token generation operates via self-predicting fixed points, each acting as an attractor and having consistent transformations.
+- **177**: Design Consideration 177: Transformer Disentanglement - Transformer's transformation from input to output can be approximated by a 37-dimensional linear mapping with 100% accuracy.
+- **179**: Geometric Transformer Replacement Progress Review - Validation of LLMs as hyperdimensional transcoders through geometric structure replacement
+- **180**: Design Consideration 180: Platonic Ideals and Shape-Based Memory - Memory is conceptualized as a geometric manifold of rotation axes towards Platonic Ideals in the context of 'capital-of' relationships.
+- **181**: Design Consideration 181: Path to Full Geometric Speedup - Progress tracking towards eliminating catches preventing full geometric speedup for all entities in geometric AI.
+- **182**: φ-Shape Knowledge Base: Geometric Storage for World Knowledge - A geometric approach to storing and accessing world knowledge for content token prediction.
+- **188**: Design Consideration 188: Context Geometry Analysis - Investigation into geometric transformations of hidden states influenced by context in a transformer model
+- **189**: Design Consideration 189: The Safe Dial Mechanism - Analogizes context processing in AI models using a safe dial mechanism.
+- **191**: The φ-Computer Proof - Proved that transformers are φ-computers with exact φ-operations for sigmoids, softmax, and SiLU, achieving 100% token accuracy.
+- **193**: MLP Optimization Analysis - The Memory Bandwidth Wall - Analysis reveals MLP is memory-bandwidth bound, not compute-bound, affecting optimization strategies.
+- **195**: Bilinear MLP Precomputation - The O(d) Architecture - Reduces transformer operations to O(d) through precomputation, achieving significant speedup.
+- **196**: Bottleneck Analysis - Memory Bandwidth is the Wall - Analysis reveals memory bandwidth limitation in AI model performance rather than compute, focusing on the bottleneck caused by reading large model weights.
+- **199**: φ-Complete Computation: Eliminating the Fallback - Directly expressing all transformer operations in terms of φ for a unified, discrete, and algebraic computational model.
+- **200**: The Universal Bottleneck Discovery in Qwen2-7B - All reasoning types converge to a φ-level of approximately 1.57 at layer 27, forming a universal bottleneck.
+- **201**: Automated φ-Discovery System - An AI system using φ-universal coordinates to discover novel ideas and patterns.
+- **202**: The Recursive Discovery Bootstrap - AI system discovers its own discovery process, creating a recursive bootstrap.
+- **205**: Doc 205: CRUD Operations on φ-Space - Implemented CRUD operations using vector addition, scalar multiplication, and cosine similarity on φ-space.
+
+## All Documents (by number)
+
+- **-01** [φ-geometry, attention]: Design Considerations for TruthSpace LCM
+- **000** [φ-geometry, attention]: TruthSpace LCM Design Considerations: Meta-Document
+- **001** [architecture, theory]: Intentional vs Emergent Geometry: The Core Problem
+- **002** [attention, encoding]: Critical Analysis: What Do LLMs Actually Learn?
+- **003** [φ-geometry, self-similarity]: Vacuum Forming Hypothesis
+- **004** [experiments, theory]: Experiments to Test the Vacuum Forming Hypothesis
+- **005** [φ-geometry, experiments]: Experimental Results: Vacuum Forming Hypothesis
+- **006** [φ-geometry, experiments]: Dimensionality Analysis Findings
+- **007** [theory, implementation]: Design Consideration 007: Semantic Disambiguation in TruthSpace LCM
+- **008** [theory, implementation]: Design Consideration 008: Conceptual Depth in the LCM
+- **009** [navigation, encoding]: Design Consideration 009: Projection Weighting and Group Theory
+- **010** [navigation, theory]: φ-Based Dimensional Navigation
+- **011** [encoding, navigation]: Design Consideration 011: Automated Knowledge Expansion
+- **012** [φ-geometry, attention]: Design Consideration 012: Geometric Overlap Handling
+- **013** [encoding, navigation]: Design Consideration 013: Compound Phrase Resolution
+- **014** [navigation, architecture]: Design Consideration 014: Hierarchical Knowledge Navigation
+- **015** [φ-geometry, attention]: Design Consideration 015: Dynamic Geometric LCM
+- **016** [φ-geometry, encoding]: Design Consideration 016: Truly Dynamic Geometric LCM
+- **017** [architecture, experiments]: Design Consideration 017: Stacked Geometric Embeddings
+- **018** [architecture, experiments]: Design Consideration 018: Stacked Geometric LCM Analysis
+- **019** [φ-geometry, attention]: Holographic Resolution: GOP, MGOP, and Probe Extraction
+- **020** [architecture, experiments]: Scalable Geometric Layer Addition Protocol
+- **021** [theory, implementation]: Structural Similarity Breakthrough: Escaping Keyword Matching
+- **022** [φ-geometry, self-similarity]: Design Consideration 022: Attractor-Repeller Dynamics for Semantic Self-Organization
+- **023** [φ-geometry, attention]: Design Consideration 023: OpenAI Sparse Circuits Comparison
+- **024** [φ-geometry, encoding]: Design Consideration 024: Scalable φ-Based Data Ingestion
+- **025** [φ-geometry, encoding]: Design Consideration 025: Co-occurrence Based Cluster Matching
+- **026** [φ-geometry, encoding]: Research Proposal: Generalized φ-Based Knowledge Ingestion
+- **027** [φ-geometry, encoding]: Design Consideration 027: Pareto Bootstrap for Universal Knowledge Encoding
+- **028** [encoding, navigation]: Design Consideration 028: Semantic Tree Architecture
+- **030** [φ-geometry, encoding]: Geometric Q&A Projection Framework
+- **031** [φ-geometry, encoding]: Unified Projection Framework
+- **032** [φ-geometry, encoding]: Design Consideration 032: VSA Binding Extension
+- **033** [φ-geometry, attention]: Design Consideration 033: Dynamic Geometric LCM
+- **034** [navigation, attention]: Design Consideration 034: Bootstrapped Instinct Knowledge
+- **035** [navigation, self-similarity]: Autonomous Bootstrap: Beyond the Coupon Collector Problem
+- **036** [navigation, encoding]: Design Consideration 036: Geometric Q&A Pattern Transfer
+- **037** [attention, encoding]: Design Consideration 037: Spatial Attention for Concept Importance
+- **038** [φ-geometry, attention]: Design Consideration 038: Relationship Formation and Autobalancing
+- **039** [φ-geometry, self-similarity]: Design Consideration 039: φ and Zipf as Dual Self-Similar Fractals
+- **040** [navigation, φ-geometry]: Design Consideration 040: φ-Inversion as Navigation Mechanism
+- **041** [navigation, encoding]: Design Consideration 041: The φ-Dial as Unified Control Mechanism
+- **042** [φ-geometry, encoding]: Design Consideration 042: The Complex φ-Dial (2D Control)
+- **043** [φ-geometry, encoding]: Design Consideration 043: 3D φ-Dial with Depth Control
+- **044** [navigation, self-similarity]: Design Consideration 044: 4D Quaternion φ-Dial
+- **045** [φ-geometry, navigation]: Design Consideration 045: The 4D Holographic Bound
+- **046** [φ-geometry, attention]: Design Consideration 046: Holographic Interference Patterns
+- **047** [φ-geometry, encoding]: Design Consideration 047: Intrinsic vs Functional Dimension
+- **048** [navigation, experiments]: Design Consideration 048: Clock-Geodesic Unification
+- **049** [architecture, experiments]: Design Consideration 049: Gradient-Free Learning
+- **050** [φ-geometry, attention]: Geometric LLM Roadmap
+- **051** [φ-geometry, attention]: Phase 6: Data Ingestion and Capability Refinement
+- **052** [theory, implementation]: Hypothesis-Driven Knowledge Acquisition in GeometricLCM
+- **053** [navigation, theory]: Tachyon Hypothesis Navigation
+- **054** [φ-geometry, attention]: Design Consideration 054: Temporal Symmetry and Tachyon Joints
+- **055** [φ-geometry, navigation]: Design Consideration 055: Tachyon-Symmetric Quaternion Unification
+- **056** [φ-geometry, encoding]: Design Consideration 056: Quad-Quaternion Text Generation
+- **057** [φ-geometry, encoding]: Design Consideration 057: Domain Dimension as Zeta t-Coordinate
+- **058** [φ-geometry, encoding]: Design Consideration 058: Diffraction Grating Simplification
+- **059** [φ-geometry, attention]: Design Consideration 059: Two-Source Diffraction Chat
+- **060** [φ-geometry, encoding]: Unified Symmetric Ingestion
+- **061** [φ-geometry, encoding]: Design Consideration 061: ENCODE = DECODE
+- **062** [φ-geometry, encoding]: Design Consideration 062: Geometric Stop Word Detection
+- **063** [φ-geometry, encoding]: Design Consideration 063: Geometric Morphology Bootstrap
+- **064** [φ-geometry, encoding]: Design Consideration 064: Geometric LCM v2 Roadmap
+- **065** [encoding, experiments]: Design Consideration 065: Holographic Template Projection
+- **066** [φ-geometry, encoding]: Design Consideration 066: Geometric Holographic Roadmap Update
+- **067** [encoding, experiments]: Design Consideration 067: Semantic Quaternion for Concept Encoding
+- **068** [φ-geometry, attention]: Design Consideration 068: Roadmap Update - December 28, 2024
+- **069** [φ-geometry, encoding]: Design Consideration 069: Concept Distillation & Correction Learning
+- **070** [encoding, experiments]: Design Consideration 070: Concept Space & Dual Quaternions
+- **071** [φ-geometry, navigation]: Design Consideration 071: Perspective Lenses for Truth Projection
+- **072** [φ-geometry, attention]: Design Consideration 072: Self-Similar TruthSpace and the Geometry of Naming
+- **073** [φ-geometry, attention]: Geometric Reinforcement Learning
+- **074** [φ-geometry, encoding]: Gear Chain Projection
+- **075** [navigation, experiments]: Design Consideration 075: Gear Chain Feedback and Auto-Refinement
+- **076** [architecture, experiments]: Emergent Classifier Protocol
+- **077** [architecture, experiments]: Bootstrap Gear Protocol
+- **078** [φ-geometry, encoding]: Concept Token Architecture
+- **079** [self-similarity, navigation]: Design Consideration 079: Emergent Structure Patterns
+- **080** [navigation, experiments]: Design Consideration 080: Emergent Dimension Discovery
+- **081** [experiments, implementation]: Design Consideration 081: Emergent vs Designed Gears
+- **082** [architecture, encoding]: Design Decision: Folding Structure for GearImprovementLoop
+- **083** [φ-geometry, encoding]: Python Code Gear Roadmap
+- **084** [φ-geometry, navigation]: 084: Holographic Pattern Projection for Regulatory Networks
+- **085** [architecture, implementation]: Temporary Module Injection for Unknown Queries
+- **086** [architecture, implementation]: The Emergent Gear Pattern
+- **087** [navigation, implementation]: Roadmap: Goose Tool Calling Integration
+- **088** [φ-geometry, encoding]: Design Consideration 088: Geometric Knowledge Persistence
+- **089** [φ-geometry, attention]: Geometric Knowledge Persistence - Post-Review Analysis
+- **090** [φ-geometry, attention]: Design Consideration 090: The Critical Line as Information Limit
+- **091** [φ-geometry, attention]: Design Consideration 091: Position Is Everything
+- **092** [φ-geometry, encoding]: JSON ↔ Structure Duality
+- **093** [φ-geometry, navigation]: 093: Geometric Purity Audit
+- **094** [architecture, implementation]: 094: Gear Serialization Architecture
+- **095** [φ-geometry, encoding]: 095: HyperMapping - Final Form
+- **096** [implementation, experiments]: Design Consideration 096: Gear to HyperMapping Migration
+- **097** [φ-geometry, architecture]: Geometric Purity Audit (January 2025)
+- **098** [φ-geometry, attention]: Prime-Zeta Lattice for Concept Positioning
+- **099** [φ-geometry, encoding]: Design Consideration 099: Absolute φ-Lattice Coordinates
+- **100** [architecture, implementation]: 100_phi_lattice_implementation_plan
+- **101** [φ-geometry, encoding]: φ-Lattice Implementation Results
+- **102** [φ-geometry, architecture]: φ-Lattice Purity Audit
+- **103** [navigation, encoding]: Design Consideration 103: Self-Assembling Primitives
+- **104** [φ-geometry, encoding]: Design Consideration 104: Dimensional Scalability
+- **105** [encoding, navigation]: Design Consideration 105: Dynamic Quaternion Layers
+- **106** [experiments, theory]: Design 106: Transformation Corpus Generation
+- **107** [navigation, encoding]: Design 107: Transformation Coverage Gap Detection
+- **108** [φ-geometry, encoding]: Design 108: Pure Geometric Transformation (No LLM Fallback)
+- **109** [φ-geometry, attention]: Generalized Geometric Space
+- **110** [φ-geometry, attention]: Agent-Grounded Geometric Interpretation
+- **111** [navigation, attention]: Design 111: Perspective as Layer Manipulation
+- **112** [architecture, experiments]: Design 112: The Music Box Principle
+- **113** [φ-geometry, encoding]: Design 113: Geometric Code Generation
+- **114** [φ-geometry, encoding]: Design Consideration 114: Emergent Dimensions and Platonic Ideals
+- **115** [φ-geometry, navigation]: Design Consideration 115: Self-Assembling Corpus Roadmap
+- **116** [architecture, theory]: Design Consideration 116: Attachable Corpus Layers
+- **117** [navigation, architecture]: Roadmap to Fluid Conversations
+- **118** [architecture, theory]: Design Consideration 118: Emergent Response Patterns
+- **119** [φ-geometry, encoding]: Design Consideration 119: Unified Content + Pattern Space
+- **120** [φ-geometry, self-similarity]: Design Consideration 120: The Universal Dimension Principle
+- **121** [φ-geometry, navigation]: Design Consideration 121: Geometric Constraint Depth Estimation
+- **122** [architecture, experiments]: Design Consideration 122: Self-Assembly on Model Weights
+- **123** [architecture, experiments]: Design Consideration 123: φ-Basis Backbone Replacement
+- **124** [φ-geometry, self-similarity]: Design Consideration 124: φ-Exponent Arithmetic
+- **125** [φ-geometry, implementation]: Exact DA2 Recreation with φ-Arithmetic
+- **126** [φ-geometry, experiments]: Design Consideration 126: φ-Basis Compounding for Speed
+- **127** [φ-geometry, architecture]: The Geometric Model Hypothesis
+- **128** [φ-geometry, encoding]: Design Consideration 128: Absolute φ-Lattice Weight Representation
+- **129** [φ-geometry, attention]: φ-Unraveled Transformer Engine: Design Consideration 129
+- **130** [φ-geometry, architecture]: φ-AIG Compression for Transformers
+- **131** [architecture, experiments]: Decoupling Encoder-Decoder for φ-Basis Compression
+- **132** [φ-geometry, attention]: Design Consideration 132: The φ-Sigmoid Discovery
+- **133** [φ-geometry, encoding]: Design Consideration 133: φ-Basis Floating-Point Unit (φ-FPU)
+- **134** [φ-geometry, attention]: Design Consideration 134: Discriminant Space Attention
+- **135** [attention, encoding]: Design Consideration 135: Attention Head Semantic Specialization
+- **136** [φ-geometry, attention]: φ-Encoding Duplicates Transformer Output
+- **137** [φ-geometry, encoding]: Design Consideration 137: φ as Universal Adapter
+- **138** [φ-geometry, architecture]: φ-Level MLP Restructuring
+- **139** [φ-geometry, self-similarity]: Design Consideration 139: The φ-Convergence Theorem
+- **140** [φ-geometry, navigation]: The Trivial AI Hypothesis
+- **141** [φ-geometry, navigation]: Design Consideration 141: The Irreducible Shape
+- **142** [φ-geometry, encoding]: Design Consideration 142: Holographic φ-Encoding
+- **143** [navigation, experiments]: Design Consideration 143: Zeta-Aligned Neural Architecture
+- **144** [φ-geometry, attention]: Design Consideration 144: Unified Zeta-Aligned Architecture
+- **145** [φ-geometry, encoding]: Design Consideration 145: The Fibonacci Correction Formula
+- **146** [φ-geometry, theory]: Design Consideration 146: The φ/Bandwidth Fundamental Limit
+- **147** [φ-geometry, encoding]: Sign Bit Analysis in TruthSpace
+- **148** [φ-geometry, encoding]: Design Consideration 148: Sierpinski-φ Quantization
+- **149** [φ-geometry, encoding]: Design Consideration 149: Hierarchical φ-Encoding for 100% Correlation
+- **150** [φ-geometry, encoding]: Design Consideration 150: Trivial AI with Integer SVD
+- **151** [φ-geometry, encoding]: LUT-Only Compression for Geometric AI Models
+- **152** [φ-geometry, architecture]: Design Consideration 152: φ-Level MLP Replacement
+- **153** [φ-geometry, encoding]: φ-Circuit Geometry
+- **154** [φ-geometry, encoding]: Computation IS Geometry All The Way Down
+- **155** [φ-geometry, encoding]: Design Consideration 155: Smart φ-Shape (Vector Graphics for Knowledge)
+- **156** [φ-geometry, zeta]: Design Consideration 156: Critical Strip as Level of Detail (LOD)
+- **157** [φ-geometry, attention]: Design Consideration 157: Adaptive LOD Token Generation
+- **158** [φ-geometry, attention]: SVD Quality Analysis: Limitations of Low-Rank Approximation for LLM Inference
+- **159** [φ-geometry, attention]: The Zeta Sonic Boom Hypothesis
+- **160** [φ-geometry, attention]: Unified Geometric Theory: Shape IS Information
+- **161** [navigation, theory]: Design Consideration 161: The Attention Spigot
+- **162** [architecture, experiments]: The Tetromino Weight Hypothesis
+- **163** [φ-geometry, encoding]: Design 163: The Rules of the φ-Lattice
+- **164** [navigation, encoding]: Design 164: Navigating the Embedding Space
+- **165** [navigation, encoding]: Design Consideration 165: σ=0.5 Sign Navigation
+- **166** [φ-geometry, navigation]: Design Consideration 166: Crystalline Flip Structure
+- **167** [navigation, encoding]: Self-Assembling Navigation
+- **168** [navigation, theory]: Design Consideration 168: Navigation vs Inference
+- **169** [architecture, experiments]: Design Consideration 169: Replacing Inference with Navigation
+- **170** [attention, implementation]: The Full-Rank Attention Limit in LLMs
+- **171** [attention, experiments]: 171: Dislodging the Full-Rank Basin
+- **172** [architecture, theory]: Bias-Free φ-Lattice Navigation
+- **173** [φ-geometry, attention]: Doc 173: Quantum Resonant Attention
+- **174** [φ-geometry, implementation]: φ-MLP Analysis and Spectral Parallel Generation
+- **175** [theory, experiments]: Autoregression as an Eigenvalue Problem
+- **176** [φ-geometry, attention]: Token Fixed Points Discovery
+- **177** [φ-geometry, attention]: Design Consideration 177: Transformer Disentanglement
+- **178** [encoding, navigation]: Design Consideration 178: The Spatial Encoder Pattern
+- **179** [φ-geometry, attention]: Geometric Transformer Replacement Progress Review
+- **180** [φ-geometry, navigation]: Design Consideration 180: Platonic Ideals and Shape-Based Memory
+- **181** [φ-geometry, navigation]: Design Consideration 181: Path to Full Geometric Speedup
+- **182** [φ-geometry, encoding]: φ-Shape Knowledge Base: Geometric Storage for World Knowledge
+- **183** [navigation, theory]: Design Consideration 183: Navigation Geometry
+- **184** [navigation, implementation]: Design Consideration 184: Trivial Navigation
+- **185** [encoding, implementation]: Design Consideration 185: Hidden State Caching and Compression
+- **186** [architecture, experiments]: Design Consideration 186: Rank-1 Transformer Replacement
+- **187** [architecture, experiments]: Transformer as Lookup Table
+- **188** [φ-geometry, attention]: Design Consideration 188: Context Geometry Analysis
+- **189** [experiments, theory]: Design Consideration 189: The Safe Dial Mechanism
+- **190** [architecture, experiments]: Design Consideration 190: Full Transformer Unwinding
+- **191** [φ-geometry, architecture]: The φ-Computer Proof
+- **192** [attention, implementation]: Doc 192: Boom-Newton Attention - O(N) Attention via Zero-Hunting
+- **193** [φ-geometry, attention]: MLP Optimization Analysis - The Memory Bandwidth Wall
+- **194** [navigation, experiments]: Doc 194: Designed vs Trained Models - The Path to True φ-Computation
+- **195** [φ-geometry, attention]: Bilinear MLP Precomputation - The O(d) Architecture
+- **196** [φ-geometry, attention]: Bottleneck Analysis - Memory Bandwidth is the Wall
+- **197** [architecture, experiments]: Doc 197: Perspective-Invariant Analog Computation
+- **198** [architecture, experiments]: Exploiting Structure - The Unified Approach
+- **199** [φ-geometry, attention]: φ-Complete Computation: Eliminating the Fallback
+- **200** [φ-geometry, experiments]: The Universal Bottleneck Discovery in Qwen2-7B
+- **201** [experiments, theory]: Automated φ-Discovery System
+- **202** [φ-geometry, attention]: The Recursive Discovery Bootstrap
+- **203** [navigation, experiments]: φ-Space Interface Design
+- **204** [navigation, theory]: Reverse Navigation and Validity Filtering
+- **205** [φ-geometry, encoding]: Doc 205: CRUD Operations on φ-Space
+- **206** [navigation, encoding]: Conceptual Nexus - Model Self-Control Interface

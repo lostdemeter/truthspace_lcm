@@ -173,9 +173,47 @@ The model's knowledge is encoded as:
 - The φ-structure provides the coordinate system
 - The Fibonacci sequence is the implicit ruler
 
+## Update: February 8, 2026 — The Hologram Is Literal
+
+### From Analogy to Mechanism
+
+Doc 142 described φ-encoding as holographic by analogy. Doc 245
+(Holographic Gate Field) proved this is **literal, not metaphorical**.
+
+In DDColor's ConvNeXt encoder, the GELU activation creates a spatially-
+structured gate field that implements holographic computation:
+
+| Doc 142 (Analogy)     | Doc 245 (Mechanism)                      |
+|-----------------------|------------------------------------------|
+| Reference beam = φ    | φ-lattice from DW conv (R²=0.982)        |
+| Signal = weight error | Image-specific features from input        |
+| Interference pattern  | GELU gate field (alive/dead per channel)  |
+| Reconstruction        | PW2 reads the gate-modulated signal       |
+
+### The Key Extension
+
+Doc 142 showed: weights are on the φ-grid (93.16% within 0.001).
+Doc 245 shows: **activations are on the φ-grid too** — gate transition
+boundaries align with φ-lattice positions (12-23% closer than random).
+
+Moreover, φ-lattice positions are **anchor points** (stable, low-variance),
+while information is encoded in the transitions between them. This is
+exactly the holographic principle: the reference beam provides the stable
+structure, and the signal modulates the space between reference points.
+
+### Practical Impact
+
+The mean Jacobian (averaged holographic reconstruction) reduces PW
+parameters by 93.7% with BETTER quality — because averaging the
+hologram denoises it, just as viewing a hologram under diffuse light
+gives a cleaner but less specific image.
+
+See: Doc 245 (Holographic Gate Field) for the complete analysis.
+
 ## References
 
 - Design 141: The Irreducible Shape (lattice of critical lines)
 - Design 140: The Trivial AI Hypothesis
 - Design 139: The φ-Convergence Theorem
+- Design 245: Holographic Gate Field (empirical proof)
 - ADDITIVE_ERROR_STEREO_SUMMARY.md: Holes as negligible noise
