@@ -25,8 +25,8 @@ result = pd.discover()
 print(result.archetype)  # 'collapse_map'
 
 nav = result.to_navigator()
-trace = nav.execute(list('shat'))
-print(trace.output_elements)  # ['ʃ', 'æ', 't']
+trace = nav.execute(list('thap'))
+print(trace.output_elements)  # ['θ', 'æ', 'p']
 ```
 
 PhaseDiscovery automatically found:
@@ -40,8 +40,8 @@ PhaseDiscovery automatically found:
 python -m phi_geometric discover pairs.tsv -o pipeline.json
 
 # Execute on new input
-python -m phi_geometric execute pipeline.json -i "s h a t"
-# Output: ʃ æ t
+python -m phi_geometric execute pipeline.json -i "t h a p"
+# Output: θ æ p
 
 # Inspect a saved pipeline
 python -m phi_geometric info pipeline.json
